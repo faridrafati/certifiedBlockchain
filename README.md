@@ -142,21 +142,21 @@ All smart contracts are deployed and verified on the Sepolia testnet (Chain ID: 
 
 | Contract | Address | Blockscout |
 |----------|---------|------------|
-| Adoption | `0x625E384A39d8A3C50FA8C5EbEf39a664E9e7eC17` | [View](https://eth-sepolia.blockscout.com/address/0x625E384A39d8A3C50FA8C5EbEf39a664E9e7eC17) |
-| Auction | `0xAc07aB3BEEFBB0D107e6f975d48527cF3C16a7E6` | [View](https://eth-sepolia.blockscout.com/address/0xAc07aB3BEEFBB0D107e6f975d48527cF3C16a7E6) |
-| Certificate | `0xca1daC5e14Df6CE19ed3a7185250bEB8A3c895F6` | [View](https://eth-sepolia.blockscout.com/address/0xca1daC5e14Df6CE19ed3a7185250bEB8A3c895F6) |
-| ChatBoxPlus | `0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59` | [View](https://eth-sepolia.blockscout.com/address/0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59) |
-| CryptoDoggies | `0xdbF365c5c131BcBCF20541926450436E2Dd8Bba7` | [View](https://eth-sepolia.blockscout.com/address/0xdbF365c5c131BcBCF20541926450436E2Dd8Bba7) |
-| DappToken | `0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86` | [View](https://eth-sepolia.blockscout.com/address/0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86) |
-| DappTokenSale | `0xD85E2446A1C3421612BE36cB6077B308F47D2B03` | [View](https://eth-sepolia.blockscout.com/address/0xD85E2446A1C3421612BE36cB6077B308F47D2B03) |
-| Email | `0xF0307B91AF329eAE1f1d24EaAd629108C21592DC` | [View](https://eth-sepolia.blockscout.com/address/0xF0307B91AF329eAE1f1d24EaAd629108C21592DC) |
-| GuessingGame | `0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84` | [View](https://eth-sepolia.blockscout.com/address/0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84) |
-| Poll | `0x67C446683398483d54E8c3FF3541a54a5447a6c1` | [View](https://eth-sepolia.blockscout.com/address/0x67C446683398483d54E8c3FF3541a54a5447a6c1) |
-| Task | `0xBC37Fe3301C9818Cb7193b510314A141Fc0adA81` | [View](https://eth-sepolia.blockscout.com/address/0xBC37Fe3301C9818Cb7193b510314A141Fc0adA81) |
-| TicTacToe | `0x0DA72f02B5c533A2399112292683CD5dAa15580B` | [View](https://eth-sepolia.blockscout.com/address/0x0DA72f02B5c533A2399112292683CD5dAa15580B) |
-| Voting | `0x0A917e204214FE1F6Fa9A9cAFdfE18B9184865d8` | [View](https://eth-sepolia.blockscout.com/address/0x0A917e204214FE1F6Fa9A9cAFdfE18B9184865d8) |
-| WeightedVoting | `0x89feB6297b6AEC69Bbb81A69a20209Fc89f9128E` | [View](https://eth-sepolia.blockscout.com/address/0x89feB6297b6AEC69Bbb81A69a20209Fc89f9128E) |
-| TicketSale | `0xa00f3Ebca957fDC1bC7FB13609cB616B17C879CE` | [View](https://eth-sepolia.blockscout.com/address/0xa00f3Ebca957fDC1bC7FB13609cB616B17C879CE) |
+| Adoption | `0x625E384A39d8A3C50FA8C5EbEf39a664E9e7eC17` | [View Contract](https://eth-sepolia.blockscout.com/address/0x625E384A39d8A3C50FA8C5EbEf39a664E9e7eC17?tab=contract) |
+| Auction | `0xAc07aB3BEEFBB0D107e6f975d48527cF3C16a7E6` | [View Contract](https://eth-sepolia.blockscout.com/address/0xAc07aB3BEEFBB0D107e6f975d48527cF3C16a7E6?tab=contract) |
+| Certificate | `0xca1daC5e14Df6CE19ed3a7185250bEB8A3c895F6` | [View Contract](https://eth-sepolia.blockscout.com/address/0xca1daC5e14Df6CE19ed3a7185250bEB8A3c895F6?tab=contract) |
+| ChatBoxPlus | `0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59` | [View Contract](https://eth-sepolia.blockscout.com/address/0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59?tab=contract) |
+| CryptoDoggies | `0xdbF365c5c131BcBCF20541926450436E2Dd8Bba7` | [View Contract](https://eth-sepolia.blockscout.com/address/0xdbF365c5c131BcBCF20541926450436E2Dd8Bba7?tab=contract) |
+| DappToken | `0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86` | [View Contract](https://eth-sepolia.blockscout.com/address/0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86?tab=contract) |
+| DappTokenSale | `0xD85E2446A1C3421612BE36cB6077B308F47D2B03` | [View Contract](https://eth-sepolia.blockscout.com/address/0xD85E2446A1C3421612BE36cB6077B308F47D2B03?tab=contract) |
+| Email | `0xF0307B91AF329eAE1f1d24EaAd629108C21592DC` | [View Contract](https://eth-sepolia.blockscout.com/address/0xF0307B91AF329eAE1f1d24EaAd629108C21592DC?tab=contract) |
+| GuessingGame | `0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84` | [View Contract](https://eth-sepolia.blockscout.com/address/0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84?tab=contract) |
+| Poll | `0x67C446683398483d54E8c3FF3541a54a5447a6c1` | [View Contract](https://eth-sepolia.blockscout.com/address/0x67C446683398483d54E8c3FF3541a54a5447a6c1?tab=contract) |
+| Task | `0xBC37Fe3301C9818Cb7193b510314A141Fc0adA81` | [View Contract](https://eth-sepolia.blockscout.com/address/0xBC37Fe3301C9818Cb7193b510314A141Fc0adA81?tab=contract) |
+| TicTacToe | `0x0DA72f02B5c533A2399112292683CD5dAa15580B` | [View Contract](https://eth-sepolia.blockscout.com/address/0x0DA72f02B5c533A2399112292683CD5dAa15580B?tab=contract) |
+| Voting | `0x0A917e204214FE1F6Fa9A9cAFdfE18B9184865d8` | [View Contract](https://eth-sepolia.blockscout.com/address/0x0A917e204214FE1F6Fa9A9cAFdfE18B9184865d8?tab=contract) |
+| WeightedVoting | `0x89feB6297b6AEC69Bbb81A69a20209Fc89f9128E` | [View Contract](https://eth-sepolia.blockscout.com/address/0x89feB6297b6AEC69Bbb81A69a20209Fc89f9128E?tab=contract) |
+| TicketSale | `0xa00f3Ebca957fDC1bC7FB13609cB616B17C879CE` | [View Contract](https://eth-sepolia.blockscout.com/address/0xa00f3Ebca957fDC1bC7FB13609cB616B17C879CE?tab=contract) |
 
 > **Network:** Sepolia Testnet
 > **Chain ID:** 11155111

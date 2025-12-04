@@ -4,11 +4,11 @@ import { Collapse } from 'react-bootstrap';
 import './components/css/hideshow.css';
 
 const CHAIN_CONFIGS = [
-  { chainId: '0x5', chainName: 'Goerli', explorerPrefix: 'goerli.' },
-  { chainId: '0x1', chainName: 'Mainnet', explorerPrefix: '' },
-  { chainId: '0xaa36a7', chainName: 'Sepolia', explorerPrefix: 'sepolia.' },
-  { chainId: '1337', chainName: 'Ganache', explorerPrefix: '' },
-  { chainId: '31337', chainName: 'Hardhat', explorerPrefix: '' },
+  { chainId: '0x5', chainName: 'Goerli', explorerUrl: 'https://goerli.etherscan.io' },
+  { chainId: '0x1', chainName: 'Mainnet', explorerUrl: 'https://etherscan.io' },
+  { chainId: '0xaa36a7', chainName: 'Sepolia', explorerUrl: 'https://eth-sepolia.blockscout.com' },
+  { chainId: '1337', chainName: 'Ganache', explorerUrl: null },
+  { chainId: '31337', chainName: 'Hardhat', explorerUrl: null },
 ];
 
 const HideShow = ({ owner, currentAccount, contractAddress, chainId }) => {
@@ -26,16 +26,22 @@ const HideShow = ({ owner, currentAccount, contractAddress, chainId }) => {
     const chain = CHAIN_CONFIGS.find((c) => c.chainId === chainId) || {
       chainId: chainId || 'Unknown',
       chainName: 'Unknown Network',
-      explorerPrefix: '',
+      explorerUrl: null,
     };
 
-    const accountUrl = chain.explorerPrefix
-      ? `https://${chain.explorerPrefix}etherscan.io/address/${currentAccount}`
-      : `https://etherscan.io/address/${currentAccount}`;
+    // Build explorer URLs based on chain
+    let accountUrl = null;
+    let contractUrl = null;
 
-    const contractUrl = chain.explorerPrefix
-      ? `https://${chain.explorerPrefix}etherscan.io/address/${contractAddress}#readContract`
-      : `https://etherscan.io/address/${contractAddress}#readContract`;
+    if (chain.explorerUrl) {
+      accountUrl = `${chain.explorerUrl}/address/${currentAccount}`;
+      // Use ?tab=contract for Blockscout (Sepolia), #readContract for Etherscan
+      if (chain.explorerUrl.includes('blockscout')) {
+        contractUrl = `${chain.explorerUrl}/address/${contractAddress}?tab=contract`;
+      } else {
+        contractUrl = `${chain.explorerUrl}/address/${contractAddress}#readContract`;
+      }
+    }
 
     return {
       chain,
