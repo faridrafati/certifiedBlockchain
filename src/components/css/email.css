@@ -1,0 +1,545 @@
+/* Email/Chat Styles */
+.email-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  color: white;
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+  animation: fadeInDown 0.6s ease-out;
+  text-align: center;
+}
+
+.hero-content h1 {
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+/* Email Content Layout */
+.email-content {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Compose Section */
+.compose-section {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  height: fit-content;
+  position: sticky;
+  top: 2rem;
+}
+
+.compose-section h3 {
+  color: #2d3748;
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.contact-select {
+  margin-bottom: 1.5rem !important;
+}
+
+.reply-context {
+  background: rgba(102, 126, 234, 0.1);
+  border-left: 4px solid #667eea;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.reply-context strong {
+  color: #667eea;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reply-context p {
+  margin: 0.5rem 0 0;
+  color: #4a5568;
+  font-style: italic;
+}
+
+.compose-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.send-button {
+  padding: 1rem 2rem !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.send-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.contacts-count {
+  margin-top: 1rem !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+}
+
+/* Messages Section */
+.messages-section {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.tabs-container {
+  border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.tabs-container .MuiTab-root {
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+}
+
+.tabs-container .Mui-selected {
+  color: #667eea !important;
+}
+
+.tabs-container .MuiTabs-indicator {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  height: 3px !important;
+}
+
+/* Messages List */
+.messages-list {
+  padding: 2rem;
+  max-height: 600px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.messages-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages-list::-webkit-scrollbar-track {
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 10px;
+}
+
+.messages-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+/* No Messages State */
+.no-messages {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #718096;
+}
+
+.no-messages-icon {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+  animation: float 3s ease-in-out infinite;
+}
+
+.no-messages h4 {
+  color: #2d3748;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.no-messages p {
+  font-size: 1.1rem;
+}
+
+/* Message Cards */
+.message-card {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+  animation: slideIn 0.4s ease-out;
+}
+
+.message-card:hover {
+  border-color: rgba(102, 126, 234, 0.3);
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.06) 100%);
+  transform: translateX(5px);
+  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+}
+
+.message-card.received {
+  border-left: 4px solid #667eea;
+}
+
+.message-card.sent {
+  border-left: 4px solid #48bb78;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.message-from,
+.message-to {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2d3748;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.message-from svg,
+.message-to svg {
+  color: #667eea;
+}
+
+.message-time {
+  color: #718096;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.message-content {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  color: #2d3748;
+  font-size: 1rem;
+  line-height: 1.6;
+  word-break: break-word;
+  margin-bottom: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.reply-button {
+  padding: 0.5rem 1rem !important;
+  font-weight: 600 !important;
+  border-radius: 8px !important;
+  text-transform: none !important;
+  color: #667eea !important;
+  border: 2px solid #667eea !important;
+  transition: all 0.3s ease !important;
+}
+
+.reply-button:hover {
+  background: #667eea !important;
+  color: white !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
+.clear-inbox-button {
+  margin-top: 1rem !important;
+  padding: 0.875rem 1.5rem !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.clear-inbox-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(229, 62, 62, 0.3) !important;
+}
+
+/* Registration Message */
+.registration-message {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.registration-message h3 {
+  color: #2d3748;
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .email-content {
+    grid-template-columns: 1fr;
+  }
+
+  .compose-section {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .email-container {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .compose-section,
+  .messages-section {
+    padding: 1.5rem;
+  }
+
+  .messages-list {
+    max-height: 400px;
+    padding: 1.5rem;
+  }
+
+  .message-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .message-time {
+    width: 100%;
+    text-align: left;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .compose-section h3 {
+    font-size: 1.3rem;
+  }
+
+  .compose-section {
+    padding: 1.25rem;
+  }
+
+  .message-card {
+    padding: 1.25rem;
+  }
+
+  .no-messages {
+    padding: 3rem 1rem;
+  }
+
+  .no-messages-icon {
+    font-size: 3.5rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .compose-section,
+  .messages-section,
+  .registration-message {
+    background: #1a202c;
+  }
+
+  .compose-section h3,
+  .no-messages h4,
+  .registration-message h3,
+  .message-from,
+  .message-to {
+    color: #e2e8f0;
+  }
+
+  .no-messages p,
+  .message-time {
+    color: #cbd5e0;
+  }
+
+  .message-card {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  }
+
+  .message-card:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
+  }
+
+  .message-content {
+    background: #2d3748;
+    color: #e2e8f0;
+  }
+
+  .reply-context {
+    background: rgba(102, 126, 234, 0.15);
+    color: #e2e8f0;
+  }
+
+  .reply-context p {
+    color: #cbd5e0;
+  }
+}
+
+/* MUI Overrides */
+.email-container .MuiButton-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+.email-container .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+
+.email-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #667eea !important;
+}
+
+.email-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #764ba2 !important;
+  border-width: 2px !important;
+}
+
+.email-container .MuiTextField-root {
+  margin-bottom: 0 !important;
+}
+
+.email-container .MuiSelect-select {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Accessibility */
+.send-button:focus,
+.reply-button:focus,
+.clear-inbox-button:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+.message-card:focus-within {
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* Print Styles */
+@media print {
+  .email-container {
+    max-width: 100%;
+  }
+
+  .hero-section,
+  .compose-section,
+  .messages-section {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .send-button,
+  .reply-button,
+  .clear-inbox-button {
+    display: none;
+  }
+
+  .compose-section form {
+    display: none;
+  }
+
+  .email-content {
+    grid-template-columns: 1fr;
+  }
+
+  .messages-list {
+    max-height: none;
+    overflow: visible;
+  }
+}

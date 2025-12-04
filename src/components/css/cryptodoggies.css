@@ -1,0 +1,821 @@
+/* CryptoDoggies Styles */
+.cryptodoggies-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  color: white;
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+  animation: fadeInDown 0.6s ease-out;
+  text-align: center;
+}
+
+.hero-content h1 {
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-icon {
+  font-size: 3rem !important;
+  animation: float 3s ease-in-out infinite;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+/* Content Layout */
+.doggies-content {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Card Header Section */
+.card-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-header-section h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-icon {
+  color: #667eea !important;
+}
+
+.refresh-btn {
+  color: #667eea !important;
+  transition: all 0.3s ease !important;
+}
+
+.refresh-btn:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  transform: rotate(180deg);
+}
+
+.divider {
+  margin: 1.5rem 0 !important;
+  background: rgba(102, 126, 234, 0.1) !important;
+}
+
+.divider-small {
+  margin: 0.75rem 0 !important;
+  background: rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Info Items */
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.info-label {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  color: #2d3748;
+  font-weight: 700;
+}
+
+.contract-address {
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem !important;
+  word-break: break-all;
+}
+
+.status-chip {
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  padding: 0.5rem 1rem !important;
+  height: auto !important;
+}
+
+/* Admin View Cards */
+.admin-actions-card,
+.transfer-ownership-card,
+.add-doggy-card,
+.doggies-table-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+  animation: scaleIn 0.5s ease-out;
+}
+
+.admin-actions-card .MuiCardContent-root,
+.transfer-ownership-card .MuiCardContent-root,
+.add-doggy-card .MuiCardContent-root,
+.doggies-table-card .MuiCardContent-root {
+  padding: 2rem !important;
+}
+
+/* Admin Actions */
+.admin-actions {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.admin-action-btn {
+  padding: 0.75rem 2rem !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+  white-space: nowrap;
+}
+
+.admin-action-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.pause-switch {
+  margin: 0 !important;
+}
+
+.switch-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #2d3748;
+}
+
+.switch-label svg {
+  font-size: 1.25rem;
+}
+
+/* Form Groups */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.submit-button {
+  padding: 0.875rem 2rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.submit-button:disabled {
+  background: rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Table Styles */
+.doggies-table {
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+}
+
+.doggies-table .MuiTableHead-root {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(118, 75, 162, 0.1) 100%
+  );
+}
+
+.doggies-table .MuiTableHead-root .MuiTableCell-root {
+  font-weight: 700;
+  color: #2d3748;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+}
+
+.doggies-table .MuiTableBody-root .MuiTableRow-root {
+  transition: all 0.3s ease;
+}
+
+.doggies-table .MuiTableBody-root .MuiTableRow-root:hover {
+  background: rgba(102, 126, 234, 0.05);
+  transform: scale(1.01);
+}
+
+.doggies-table .MuiTableCell-root {
+  padding: 1rem !important;
+  font-size: 0.9rem;
+}
+
+.dna-cell {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem !important;
+  color: #667eea;
+  font-weight: 600;
+}
+
+.address-cell {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem !important;
+  color: #718096;
+}
+
+/* Marketplace View */
+.marketplace-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(118, 75, 162, 0.1) 100%
+  );
+  border-radius: 20px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.marketplace-header h2 {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* Paused Notice */
+.paused-notice {
+  background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
+  color: white;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 40px rgba(245, 101, 101, 0.3);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.paused-notice .MuiCardContent-root {
+  padding: 2rem !important;
+  text-align: center;
+}
+
+.pause-icon {
+  font-size: 3rem !important;
+  margin-bottom: 1rem;
+  animation: float 2s ease-in-out infinite;
+}
+
+.paused-notice h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.paused-notice p {
+  margin: 0;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+/* Doggy Cards */
+.doggy-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  animation: scaleIn 0.5s ease-out;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.doggy-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+}
+
+.card-media {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(118, 75, 162, 0.1) 100%
+  );
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.doggy-canvas {
+  width: 100% !important;
+  max-width: 200px;
+  height: auto !important;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.doggy-canvas-small {
+  width: 60px !important;
+  height: auto !important;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  border-radius: 4px;
+}
+
+.doggy-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.doggy-info h4 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-align: center;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.info-row .info-label {
+  font-size: 0.85rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.info-row .info-value {
+  font-size: 0.9rem;
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.dna-text {
+  font-family: 'Courier New', monospace;
+  color: #667eea !important;
+  word-break: break-all;
+}
+
+.price-text {
+  color: #48bb78 !important;
+  font-weight: 700 !important;
+}
+
+.address-text {
+  font-family: 'Courier New', monospace;
+  font-size: 0.8rem !important;
+}
+
+.owned-chip {
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 0.75rem 1.5rem !important;
+  height: auto !important;
+  width: 100%;
+  border-radius: 12px !important;
+}
+
+.buy-button {
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.buy-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.buy-button:disabled {
+  background: rgba(102, 126, 234, 0.3) !important;
+}
+
+/* Empty State */
+.empty-state {
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.05) 0%,
+    rgba(118, 75, 162, 0.05) 100%
+  );
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  text-align: center;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-state .MuiCardContent-root {
+  padding: 0 !important;
+}
+
+.empty-icon {
+  font-size: 4rem !important;
+  color: rgba(102, 126, 234, 0.3);
+  margin-bottom: 1rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.empty-state h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+  color: #718096;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    box-shadow: 0 10px 40px rgba(245, 101, 101, 0.3);
+  }
+  50% {
+    box-shadow: 0 15px 50px rgba(245, 101, 101, 0.5);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .admin-actions {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .cryptodoggies-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .hero-section {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .admin-actions {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .admin-action-btn {
+    width: 100%;
+  }
+
+  .marketplace-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .cryptodoggies-container {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hero-icon {
+    font-size: 2.5rem !important;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .card-header-section h3 {
+    font-size: 1.25rem;
+  }
+
+  .marketplace-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .admin-actions-card .MuiCardContent-root,
+  .transfer-ownership-card .MuiCardContent-root,
+  .add-doggy-card .MuiCardContent-root,
+  .doggies-table-card .MuiCardContent-root {
+    padding: 1.5rem !important;
+  }
+
+  .doggies-table {
+    font-size: 0.85rem;
+  }
+
+  .doggies-table .MuiTableCell-root {
+    padding: 0.75rem !important;
+    font-size: 0.85rem;
+  }
+
+  .doggies-table .MuiTableHead-root .MuiTableCell-root {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-icon {
+    font-size: 2rem !important;
+  }
+
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+
+  .card-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .marketplace-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .doggy-info h4 {
+    font-size: 1.1rem;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .paused-notice h4 {
+    font-size: 1.25rem;
+  }
+
+  .paused-notice p {
+    font-size: 0.9rem;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem !important;
+  }
+
+  .empty-state h4 {
+    font-size: 1.25rem;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+
+  /* Make table horizontally scrollable on very small screens */
+  .doggies-table-card {
+    overflow-x: auto;
+  }
+
+  .doggies-table .MuiTableCell-root {
+    padding: 0.5rem !important;
+    font-size: 0.75rem !important;
+    white-space: nowrap;
+  }
+
+  .doggies-table .MuiTableHead-root .MuiTableCell-root {
+    font-size: 0.7rem !important;
+  }
+
+  .dna-cell,
+  .address-cell {
+    font-size: 0.7rem !important;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .admin-actions-card,
+  .transfer-ownership-card,
+  .add-doggy-card,
+  .doggies-table-card,
+  .doggy-card {
+    background: #1a202c;
+  }
+
+  .card-header-section h3,
+  .marketplace-header h2,
+  .doggy-info h4,
+  .info-value,
+  .empty-state h4 {
+    color: #e2e8f0;
+  }
+
+  .info-label,
+  .info-row .info-label,
+  .empty-state p {
+    color: #cbd5e0;
+  }
+
+  .doggies-table .MuiTableHead-root .MuiTableCell-root {
+    color: #e2e8f0;
+  }
+
+  .doggies-table .MuiTableBody-root .MuiTableRow-root:hover {
+    background: rgba(102, 126, 234, 0.15);
+  }
+
+  .card-media {
+    background: rgba(102, 126, 234, 0.15);
+  }
+
+  .empty-state {
+    background: rgba(102, 126, 234, 0.1);
+  }
+}
+
+/* MUI Overrides */
+.cryptodoggies-container .MuiButton-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+.cryptodoggies-container .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+
+.cryptodoggies-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #667eea !important;
+}
+
+.cryptodoggies-container
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #764ba2 !important;
+  border-width: 2px !important;
+}
+
+.cryptodoggies-container .MuiTextField-root {
+  margin-bottom: 0 !important;
+}
+
+.cryptodoggies-container .MuiIconButton-root {
+  transition: all 0.3s ease !important;
+}
+
+/* Accessibility */
+.submit-button:focus,
+.admin-action-btn:focus,
+.buy-button:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+.doggy-card:focus-within {
+  outline: 2px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .cryptodoggies-container {
+    max-width: 100%;
+  }
+
+  .hero-section,
+  .admin-actions-card,
+  .transfer-ownership-card,
+  .add-doggy-card,
+  .doggies-table-card,
+  .doggy-card {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .admin-actions,
+  .marketplace-header .refresh-btn,
+  .card-header-section .refresh-btn,
+  .submit-button,
+  .admin-action-btn,
+  .buy-button {
+    display: none;
+  }
+
+  .doggy-card {
+    page-break-inside: avoid;
+  }
+}

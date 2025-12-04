@@ -1,0 +1,717 @@
+/* Guessing Game Styles */
+.guessinggame-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  color: white;
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+  animation: fadeInDown 0.6s ease-out;
+  text-align: center;
+}
+
+.hero-content h1 {
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-icon {
+  font-size: 3rem !important;
+  animation: spin 4s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+/* Game Content */
+.game-content {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Card Header Section */
+.card-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-header-section h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-icon {
+  color: #667eea !important;
+}
+
+.refresh-btn {
+  color: #667eea !important;
+  transition: all 0.3s ease !important;
+}
+
+.refresh-btn:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  transform: rotate(180deg);
+}
+
+.divider {
+  margin: 1.5rem 0 !important;
+  background: rgba(102, 126, 234, 0.1) !important;
+}
+
+/* Betting Card */
+.betting-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: scaleIn 0.5s ease-out;
+}
+
+.betting-card .MuiCardContent-root {
+  padding: 2rem !important;
+}
+
+.game-description {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.game-description h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.game-description p {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #718096;
+}
+
+/* Form Elements */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-label {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  color: #2d3748 !important;
+  margin-bottom: 1rem !important;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.radio-option {
+  margin: 0 !important;
+  padding: 1rem 1.5rem;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.radio-option:hover {
+  background: rgba(102, 126, 234, 0.05);
+  border-color: rgba(102, 126, 234, 0.4);
+  transform: translateX(5px);
+}
+
+.higher-option .MuiRadio-root.Mui-checked {
+  color: #48bb78 !important;
+}
+
+.lower-option .MuiRadio-root.Mui-checked {
+  color: #f56565 !important;
+}
+
+.higher-option.Mui-checked {
+  background: rgba(72, 187, 120, 0.1);
+  border-color: #48bb78;
+}
+
+.lower-option.Mui-checked {
+  background: rgba(245, 101, 101, 0.1);
+  border-color: #f56565;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.radio-label.higher {
+  color: #48bb78;
+}
+
+.radio-label.lower {
+  color: #f56565;
+}
+
+.radio-label svg {
+  font-size: 1.5rem;
+}
+
+.submit-button {
+  padding: 0.875rem 2rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+  margin-top: 0.5rem !important;
+}
+
+.submit-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.submit-button:disabled {
+  background: rgba(102, 126, 234, 0.3) !important;
+}
+
+.withdraw-button {
+  padding: 0.875rem 2rem !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.withdraw-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(237, 137, 54, 0.4) !important;
+}
+
+/* Wins Card */
+.wins-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: scaleIn 0.5s ease-out 0.1s both;
+  height: 100%;
+}
+
+.wins-card .MuiCardContent-root {
+  padding: 2rem !important;
+}
+
+.card-header-wins {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card-header-wins h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.wins-icon {
+  color: #48bb78 !important;
+  font-size: 2rem !important;
+}
+
+.count-chip {
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  height: auto !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+/* Losses Card */
+.losses-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: scaleIn 0.5s ease-out 0.2s both;
+  height: 100%;
+}
+
+.losses-card .MuiCardContent-root {
+  padding: 2rem !important;
+}
+
+.card-header-losses {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.card-header-losses h3 {
+  flex: 1;
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.losses-icon {
+  color: #f56565 !important;
+  font-size: 2rem !important;
+}
+
+/* Events List */
+.events-list {
+  padding: 0 !important;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.events-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.events-list::-webkit-scrollbar-track {
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 10px;
+}
+
+.events-list::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+}
+
+.event-item {
+  padding: 1rem !important;
+  border-radius: 12px;
+  margin-bottom: 0.5rem;
+  background: rgba(102, 126, 234, 0.02);
+  transition: all 0.3s ease;
+  animation: slideIn 0.3s ease-out;
+}
+
+.event-item:hover {
+  background: rgba(102, 126, 234, 0.08);
+  transform: translateX(5px);
+}
+
+.event-icon {
+  font-size: 1.5rem !important;
+}
+
+.win-icon {
+  color: #48bb78 !important;
+}
+
+.loss-icon {
+  color: #f56565 !important;
+}
+
+.event-item .MuiListItemText-primary {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* Empty State */
+.empty-state {
+  padding: 3rem 2rem;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.05) 0%,
+    rgba(118, 75, 162, 0.05) 100%
+  );
+  border-radius: 12px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.empty-icon {
+  font-size: 4rem !important;
+  color: rgba(102, 126, 234, 0.3);
+  margin-bottom: 1rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .guessinggame-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .hero-section {
+    padding: 2.5rem 1.5rem;
+  }
+
+  .game-content {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .guessinggame-container {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-content h1 {
+    font-size: 1.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .hero-icon {
+    font-size: 2.5rem !important;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .betting-card .MuiCardContent-root,
+  .wins-card .MuiCardContent-root,
+  .losses-card .MuiCardContent-root {
+    padding: 1.5rem !important;
+  }
+
+  .card-header-section h3,
+  .card-header-wins h3,
+  .card-header-losses h3 {
+    font-size: 1.25rem;
+  }
+
+  .game-description h4 {
+    font-size: 1.25rem;
+  }
+
+  .game-description p {
+    font-size: 1rem;
+  }
+
+  .radio-option {
+    padding: 0.875rem 1.25rem;
+  }
+
+  .radio-label {
+    font-size: 0.95rem;
+  }
+
+  .events-list {
+    max-height: 300px;
+  }
+
+  .event-item {
+    padding: 0.75rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .hero-icon {
+    font-size: 2rem !important;
+  }
+
+  .hero-content p {
+    font-size: 0.9rem;
+  }
+
+  .card-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .card-header-wins,
+  .card-header-losses {
+    flex-wrap: wrap;
+  }
+
+  .game-description h4 {
+    font-size: 1.1rem;
+  }
+
+  .game-description p {
+    font-size: 0.9rem;
+  }
+
+  .radio-option {
+    padding: 0.75rem 1rem;
+  }
+
+  .radio-label {
+    font-size: 0.9rem;
+  }
+
+  .radio-label svg {
+    font-size: 1.25rem;
+  }
+
+  .wins-icon,
+  .losses-icon {
+    font-size: 1.5rem !important;
+  }
+
+  .card-header-wins h3,
+  .card-header-losses h3 {
+    font-size: 1.1rem;
+  }
+
+  .event-item .MuiListItemText-primary {
+    font-size: 0.9rem;
+  }
+
+  .event-icon {
+    font-size: 1.25rem !important;
+  }
+
+  .empty-state {
+    padding: 2rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 3rem !important;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .betting-card,
+  .wins-card,
+  .losses-card {
+    background: #1a202c;
+  }
+
+  .card-header-section h3,
+  .card-header-wins h3,
+  .card-header-losses h3,
+  .game-description h4,
+  .event-item .MuiListItemText-primary {
+    color: #e2e8f0;
+  }
+
+  .form-label,
+  .game-description p {
+    color: #cbd5e0 !important;
+  }
+
+  .radio-option {
+    border-color: rgba(102, 126, 234, 0.3);
+  }
+
+  .radio-option:hover {
+    background: rgba(102, 126, 234, 0.15);
+  }
+
+  .event-item {
+    background: rgba(102, 126, 234, 0.08);
+  }
+
+  .event-item:hover {
+    background: rgba(102, 126, 234, 0.15);
+  }
+
+  .empty-state {
+    background: rgba(102, 126, 234, 0.1);
+  }
+
+  .empty-state p {
+    color: #cbd5e0;
+  }
+}
+
+/* MUI Overrides */
+.guessinggame-container .MuiButton-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+.guessinggame-container .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+
+.guessinggame-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #667eea !important;
+}
+
+.guessinggame-container
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #764ba2 !important;
+  border-width: 2px !important;
+}
+
+.guessinggame-container .MuiTextField-root {
+  margin-bottom: 0 !important;
+}
+
+.guessinggame-container .MuiIconButton-root {
+  transition: all 0.3s ease !important;
+}
+
+.guessinggame-container .MuiFormControlLabel-root {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Accessibility */
+.submit-button:focus,
+.withdraw-button:focus {
+  outline: 3px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+.radio-option:focus-within {
+  outline: 2px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .guessinggame-container {
+    max-width: 100%;
+  }
+
+  .hero-section,
+  .betting-card,
+  .wins-card,
+  .losses-card {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .refresh-btn,
+  .submit-button,
+  .withdraw-button {
+    display: none;
+  }
+
+  .events-list {
+    max-height: none;
+    overflow: visible;
+  }
+}

@@ -1,0 +1,972 @@
+/* Root Container */
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.app-container::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+/* Utility Classes */
+.display-lineBreak {
+  white-space: pre-line;
+}
+
+/* Layout */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.footer {
+  margin-top: -150px;
+  height: 150px;
+  clear: both;
+  padding-top: 20px;
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+/* Header Styles */
+.App-header {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.App-link {
+  color: #61dafb;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.App-link:hover {
+  color: #4fa8d5;
+}
+
+/* MetaMask Styles */
+.metamaskPhoto {
+  height: 150px;
+  width: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: white;
+  padding: 1rem;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.metamaskPhoto:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 48px rgba(31, 38, 135, 0.5);
+}
+
+/* Card Styles */
+.card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 15px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 16px 64px rgba(31, 38, 135, 0.3);
+}
+
+.card:hover::before {
+  left: 100%;
+}
+
+/* Button Enhancements */
+.btn {
+  border-radius: 10px;
+  font-weight: 600;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #f2994a 0%, #f2c94c 100%);
+}
+
+.btn-danger {
+  background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+}
+
+/* Animations */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive Design */
+/* Loading States */
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #667eea;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Slide In Animation */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in-up {
+  animation: slideInUp 0.6s ease-out;
+}
+
+/* Scale In Animation */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.scale-in {
+  animation: scaleIn 0.4s ease-out;
+}
+
+/* Smooth Transitions */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem 0.5rem;
+  }
+
+  .metamaskPhoto {
+    height: 100px;
+    width: 100px;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ============================================ */
+/* DARK MODE SUPPORT - Enhanced Visibility Fixes */
+/* ============================================ */
+
+@media (prefers-color-scheme: dark) {
+  /* Global Dark Mode Base */
+  body {
+    background-color: #0f0f1a;
+    color: #e2e8f0;
+  }
+
+  /* MUI TextField Dark Mode Fixes */
+  .MuiTextField-root .MuiInputBase-input,
+  .MuiOutlinedInput-input {
+    color: #e2e8f0 !important;
+  }
+
+  .MuiTextField-root .MuiInputLabel-root,
+  .MuiInputLabel-root {
+    color: #a0aec0 !important;
+  }
+
+  .MuiTextField-root .MuiInputLabel-root.Mui-focused,
+  .MuiInputLabel-root.Mui-focused {
+    color: #667eea !important;
+  }
+
+  .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(160, 174, 192, 0.4) !important;
+  }
+
+  .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: #667eea !important;
+  }
+
+  .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: #764ba2 !important;
+  }
+
+  /* MUI Select Dark Mode */
+  .MuiSelect-select {
+    color: #e2e8f0 !important;
+  }
+
+  .MuiSelect-icon {
+    color: #a0aec0 !important;
+  }
+
+  .MuiMenu-paper,
+  .MuiPaper-root {
+    background-color: #1a202c !important;
+    color: #e2e8f0 !important;
+  }
+
+  .MuiMenuItem-root {
+    color: #e2e8f0 !important;
+  }
+
+  .MuiMenuItem-root:hover {
+    background-color: rgba(102, 126, 234, 0.15) !important;
+  }
+
+  .MuiMenuItem-root.Mui-selected {
+    background-color: rgba(102, 126, 234, 0.25) !important;
+  }
+
+  /* MUI FormControl and FormHelperText */
+  .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
+
+  .MuiFormHelperText-root.Mui-error {
+    color: #fc8181 !important;
+  }
+
+  /* MUI Chip Dark Mode */
+  .MuiChip-root {
+    background-color: rgba(102, 126, 234, 0.2) !important;
+    color: #e2e8f0 !important;
+  }
+
+  .MuiChip-deleteIcon {
+    color: #a0aec0 !important;
+  }
+
+  .MuiChip-deleteIcon:hover {
+    color: #fc8181 !important;
+  }
+
+  /* MUI Card Dark Mode */
+  .MuiCard-root {
+    background-color: #1a202c !important;
+    color: #e2e8f0 !important;
+  }
+
+  .MuiCardContent-root {
+    color: #e2e8f0 !important;
+  }
+
+  /* MUI Divider */
+  .MuiDivider-root {
+    border-color: rgba(160, 174, 192, 0.2) !important;
+  }
+
+  /* MUI Table Dark Mode */
+  .MuiTableCell-root {
+    color: #e2e8f0 !important;
+    border-color: rgba(160, 174, 192, 0.2) !important;
+  }
+
+  .MuiTableCell-head {
+    color: #a0aec0 !important;
+    background-color: rgba(102, 126, 234, 0.1) !important;
+  }
+
+  .MuiTableRow-root:hover {
+    background-color: rgba(102, 126, 234, 0.08) !important;
+  }
+
+  /* MUI Switch */
+  .MuiSwitch-track {
+    background-color: rgba(160, 174, 192, 0.3) !important;
+  }
+
+  /* MUI IconButton */
+  .MuiIconButton-root {
+    color: #a0aec0 !important;
+  }
+
+  .MuiIconButton-root:hover {
+    background-color: rgba(102, 126, 234, 0.15) !important;
+    color: #667eea !important;
+  }
+
+  /* MUI Badge */
+  .MuiBadge-badge {
+    background-color: #667eea !important;
+    color: white !important;
+  }
+
+  /* MUI Tooltip */
+  .MuiTooltip-tooltip {
+    background-color: #2d3748 !important;
+    color: #e2e8f0 !important;
+  }
+
+  /* MUI Dialog */
+  .MuiDialog-paper {
+    background-color: #1a202c !important;
+  }
+
+  .MuiDialogTitle-root {
+    color: #e2e8f0 !important;
+  }
+
+  .MuiDialogContent-root {
+    color: #cbd5e0 !important;
+  }
+
+  /* App Container Dark Mode Enhancement */
+  .app-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  }
+
+  .app-container::before {
+    background:
+      radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+  }
+
+  /* Card Styles Dark Mode */
+  .card {
+    background: rgba(26, 32, 44, 0.95) !important;
+    border: 1px solid rgba(102, 126, 234, 0.2) !important;
+  }
+
+  .card:hover {
+    box-shadow: 0 16px 64px rgba(102, 126, 234, 0.2) !important;
+    border-color: rgba(102, 126, 234, 0.4) !important;
+  }
+
+  /* Footer Dark Mode */
+  .footer {
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  /* Skeleton Loading Dark Mode */
+  .skeleton {
+    background: linear-gradient(90deg, #2d3748 25%, #4a5568 50%, #2d3748 75%);
+  }
+
+  /* Input placeholder text */
+  input::placeholder,
+  textarea::placeholder {
+    color: #718096 !important;
+  }
+
+  /* Links */
+  a {
+    color: #90cdf4;
+  }
+
+  a:hover {
+    color: #63b3ed;
+  }
+
+  /* Scrollbar Dark Mode */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1a202c;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #667eea;
+  }
+
+  /* Code blocks */
+  code, pre {
+    background-color: #2d3748;
+    color: #e2e8f0;
+  }
+
+  /* Selection */
+  ::selection {
+    background-color: rgba(102, 126, 234, 0.4);
+    color: #fff;
+  }
+}
+
+/* ============================================ */
+/* GLOBAL MOBILE RESPONSIVENESS */
+/* ============================================ */
+
+/* Base Mobile Improvements */
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+/* Prevent horizontal scroll on mobile */
+body {
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area insets for notched devices */
+.app-container {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Global Mobile Breakpoint - Tablets and Below */
+@media screen and (max-width: 991px) {
+  /* Hero sections */
+  .hero-section {
+    padding: 2rem 1.5rem !important;
+    margin-bottom: 2rem !important;
+    border-radius: 16px !important;
+  }
+
+  .hero-content h1 {
+    font-size: 1.75rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .hero-content p {
+    font-size: 1rem !important;
+  }
+
+  /* Grid layouts to single column */
+  .admin-content,
+  .voting-content,
+  .token-content,
+  .email-content,
+  .auction-content {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+  }
+
+  /* Cards */
+  .MuiCard-root,
+  .info-card,
+  .balance-card,
+  .transfer-card,
+  .candidates-section,
+  .vote-card,
+  .add-candidate-card,
+  .stats-card,
+  .compose-section,
+  .messages-section,
+  .results-card,
+  .authorization-card,
+  .status-section,
+  .voting-section,
+  .add-task-card,
+  .tasks-section,
+  .auction-item-card,
+  .current-bid-card,
+  .place-bid-card,
+  .control-card {
+    padding: 1.5rem !important;
+    border-radius: 16px !important;
+  }
+
+  /* Sticky elements should not be sticky on mobile */
+  .compose-section {
+    position: static !important;
+  }
+}
+
+/* Mobile Phones */
+@media screen and (max-width: 768px) {
+  /* Main container */
+  .container,
+  .dapptoken-container,
+  .voting-container,
+  .weighted-voting-container,
+  .email-container,
+  .task-container,
+  .auction-container,
+  .poll-container,
+  .certificate-container,
+  .chatbox-container {
+    padding: 1rem !important;
+  }
+
+  /* Typography scaling */
+  h1 {
+    font-size: 1.5rem !important;
+  }
+
+  h2 {
+    font-size: 1.35rem !important;
+  }
+
+  h3 {
+    font-size: 1.2rem !important;
+  }
+
+  h4 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Form elements - Full width on mobile */
+  .MuiTextField-root,
+  .MuiFormControl-root,
+  .MuiOutlinedInput-root {
+    width: 100% !important;
+  }
+
+  /* Buttons - Touch-friendly sizes */
+  .MuiButton-root {
+    min-height: 48px !important;
+    padding: 12px 20px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Full width buttons on mobile */
+  .submit-vote-button,
+  .add-candidate-button,
+  .send-button,
+  .transfer-button,
+  .add-task-button,
+  .bid-button,
+  .authorize-button,
+  .vote-button,
+  .modal-action-button {
+    width: 100% !important;
+  }
+
+  /* Cards grid - Single column */
+  .candidates-grid,
+  .stats-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  /* Messages list height */
+  .messages-list {
+    max-height: 350px !important;
+  }
+
+  /* Balance value scaling */
+  .balance-value {
+    font-size: 2rem !important;
+  }
+
+  /* Bid amount scaling */
+  .bid-amount {
+    font-size: 1.75rem !important;
+  }
+
+  /* Progress bars */
+  .progress-bar,
+  .vote-progress .progress-bar,
+  .result-progress,
+  .candidate-progress {
+    height: 35px !important;
+  }
+
+  /* Status badges */
+  .status-badge {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+
+  /* Quick amounts - Stack vertically */
+  .quick-amounts {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  .quick-amounts button {
+    width: 100% !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  /* Chips - Wrap on mobile */
+  .MuiChip-root {
+    margin: 0.25rem !important;
+  }
+
+  /* Image containers */
+  .item-image-container {
+    height: 250px !important;
+  }
+
+  /* Scrollable tables */
+  .MuiTableContainer-root {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* Small Mobile Phones */
+@media screen and (max-width: 480px) {
+  /* Even smaller padding */
+  .container,
+  .dapptoken-container,
+  .voting-container,
+  .weighted-voting-container,
+  .email-container,
+  .task-container,
+  .auction-container,
+  .poll-container,
+  .certificate-container,
+  .chatbox-container {
+    padding: 0.75rem !important;
+  }
+
+  /* Hero sections - Minimal */
+  .hero-section {
+    padding: 1.5rem 1rem !important;
+    margin-bottom: 1.5rem !important;
+    border-radius: 12px !important;
+  }
+
+  .hero-content h1 {
+    font-size: 1.35rem !important;
+  }
+
+  .hero-content p {
+    font-size: 0.9rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  /* Cards - Minimal padding */
+  .MuiCard-root,
+  .info-card,
+  .balance-card,
+  .transfer-card,
+  .candidates-section,
+  .vote-card,
+  .add-candidate-card,
+  .stats-card,
+  .compose-section,
+  .messages-section,
+  .results-card,
+  .authorization-card,
+  .status-section,
+  .voting-section,
+  .add-task-card,
+  .tasks-section,
+  .current-bid-card,
+  .place-bid-card,
+  .control-card,
+  .candidate-card,
+  .task-card,
+  .message-card,
+  .result-item,
+  .candidate-item {
+    padding: 1rem !important;
+  }
+
+  /* Section titles */
+  .section-title,
+  .card-header-section h3,
+  .balance-header h3,
+  .transfer-header h3 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Balance value */
+  .balance-value {
+    font-size: 1.5rem !important;
+  }
+
+  /* Stat values */
+  .stat-value {
+    font-size: 1.25rem !important;
+  }
+
+  /* Smaller icons on mobile */
+  .hero-icon {
+    font-size: 2rem !important;
+  }
+
+  .no-tasks-icon,
+  .no-messages-icon,
+  .no-candidates-icon {
+    font-size: 3rem !important;
+  }
+
+  /* Task/Message cards - Stack layout */
+  .task-card,
+  .message-card {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .task-icon {
+    width: 100% !important;
+    height: 40px !important;
+  }
+
+  /* Candidate info layout */
+  .candidate-info,
+  .result-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.5rem !important;
+  }
+
+  .candidate-number,
+  .result-rank {
+    font-size: 1.25rem !important;
+  }
+
+  .candidate-name,
+  .result-name {
+    font-size: 1rem !important;
+  }
+
+  /* Message header stacking */
+  .message-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  /* Buttons */
+  .MuiButton-root {
+    font-size: 0.875rem !important;
+    padding: 10px 16px !important;
+  }
+
+  /* Image containers - Smaller on phones */
+  .item-image-container {
+    height: 200px !important;
+  }
+
+  .sold-overlay {
+    font-size: 2.5rem !important;
+  }
+
+  /* Token chip */
+  .token-chip {
+    font-size: 0.9rem !important;
+    padding: 0.5rem 1rem !important;
+  }
+
+  /* Address containers */
+  .address-container {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+
+  .contract-address {
+    font-size: 0.75rem !important;
+  }
+
+  /* Registration message */
+  .registration-message {
+    padding: 2rem 1rem !important;
+  }
+
+  /* Footer adjustments */
+  .footer {
+    margin-top: -100px !important;
+    height: 100px !important;
+    padding-top: 15px !important;
+  }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  .MuiButton-root,
+  .MuiIconButton-root,
+  .nav-link,
+  .dropdown-item {
+    min-height: 44px !important;
+  }
+
+  /* Remove hover effects that don't work well on touch */
+  .card:hover,
+  .task-card:hover,
+  .message-card:hover,
+  .candidate-card:hover,
+  .result-item:hover,
+  .candidate-item:hover {
+    transform: none !important;
+  }
+
+  /* Keep shadow effects on tap */
+  .card:active,
+  .task-card:active,
+  .message-card:active {
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3) !important;
+  }
+}
+
+/* Landscape Mode on Mobile */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .hero-section {
+    padding: 1.5rem 1rem !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-content h1 {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .hero-content p {
+    display: none !important;
+  }
+
+  /* Reduce heights in landscape */
+  .messages-list {
+    max-height: 200px !important;
+  }
+
+  .item-image-container {
+    height: 180px !important;
+  }
+}
+
+/* Print optimization for mobile views */
+@media print {
+  /* Ensure all content prints properly */
+  .app-container {
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  .hero-section {
+    background: #f5f5f5 !important;
+    color: #333 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide interactive elements */
+  .MuiButton-root,
+  .MuiIconButton-root,
+  form,
+  .navbar-wrapper {
+    display: none !important;
+  }
+}

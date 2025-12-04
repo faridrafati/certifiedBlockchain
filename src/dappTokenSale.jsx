@@ -1,0 +1,645 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import Web3 from 'web3';
+import {
+  TextField,
+  Button,
+  Card,
+  CardContent,
+  Divider,
+  Grid,
+  Chip,
+  LinearProgress,
+  IconButton,
+  Tooltip,
+} from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SendIcon from '@mui/icons-material/Send';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import StopCircleIcon from '@mui/icons-material/StopCircle';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
+import { toast } from 'react-toastify';
+import detectEthereumProvider from '@metamask/detect-provider';
+import {
+  DAPPTOKENSALE_ABI,
+  DAPPTOKENSALE_ADDRESS,
+} from './components/config/DappTokenSaleConfig';
+import {
+  DAPPTOKEN_ABI,
+  DAPPTOKEN_ADDRESS,
+} from './components/config/DappTokenConfig';
+import HideShow from './HideShow.jsx';
+import LoadingSpinner from './components/LoadingSpinner';
+import './components/css/dapptokensale.css';
+
+const DappTokenSale = () => {
+  const [web3, setWeb3] = useState(null);
+  const [network, setNetwork] = useState('');
+  const [account, setAccount] = useState('');
+  const [tokenContract, setTokenContract] = useState(null);
+  const [saleContract, setSaleContract] = useState(null);
+  const [chainId, setChainId] = useState('');
+  const [currentAccount, setCurrentAccount] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  // Token state
+  const [tokenName, setTokenName] = useState('');
+  const [tokenSymbol, setTokenSymbol] = useState('');
+  const [tokenDecimals, setTokenDecimals] = useState(18);
+  const [totalSupply, setTotalSupply] = useState('0');
+  const [balance, setBalance] = useState('0');
+  const [contractBalance, setContractBalance] = useState('0');
+
+  // Sale state
+  const [tokenPrice, setTokenPrice] = useState('0');
+  const [tokensSold, setTokensSold] = useState('0');
+  const [buyAmount, setBuyAmount] = useState('');
+
+  // Transfer state
+  const [transferAddress, setTransferAddress] = useState('');
+  const [transferAmount, setTransferAmount] = useState('');
+
+  const checkMetamask = useCallback(async () => {
+    try {
+      const { ethereum } = window;
+      const provider = await detectEthereumProvider();
+
+      if (!provider) {
+        toast.error('Please install MetaMask!');
+        setLoading(false);
+        return;
+      }
+
+      const chain = await ethereum.request({ method: 'eth_chainId' });
+      setChainId(chain);
+
+      ethereum.on('chainChanged', () => window.location.reload());
+      ethereum.on('accountsChanged', (accounts) => {
+        if (accounts.length > 0) {
+          setCurrentAccount(accounts[0]);
+          setAccount(accounts[0]);
+          window.location.reload();
+        }
+      });
+    } catch (error) {
+      console.error('Error checking MetaMask:', error);
+      toast.error('Failed to connect to MetaMask');
+      setLoading(false);
+    }
+  }, []);
+
+  const getTokenInfo = useCallback(
+    async (tokenContractInstance, saleContractInstance, userAccount) => {
+      try {
+        // Get token properties
+        const name = await tokenContractInstance.methods.name().call();
+        const symbol = await tokenContractInstance.methods.symbol().call();
+        const decimals = await tokenContractInstance.methods.decimals().call();
+        const supply = await tokenContractInstance.methods.totalSupply().call();
+
+        setTokenName(name);
+        setTokenSymbol(symbol);
+        setTokenDecimals(parseInt(decimals));
+        setTotalSupply(
+          (parseInt(supply) / 10 ** parseInt(decimals)).toString()
+        );
+
+        // Get user balance
+        const userBalance = await tokenContractInstance.methods
+          .balanceOf(userAccount)
+          .call();
+        setBalance(
+          (parseInt(userBalance) / 10 ** parseInt(decimals)).toString()
+        );
+
+        // Get contract balance
+        const saleBalance = await tokenContractInstance.methods
+          .balanceOf(DAPPTOKENSALE_ADDRESS)
+          .call();
+        setContractBalance(
+          (parseInt(saleBalance) / 10 ** parseInt(decimals)).toString()
+        );
+
+        // Get sale info
+        const price = await saleContractInstance.methods.tokenPrice().call();
+        setTokenPrice(price);
+
+        const sold = await saleContractInstance.methods.tokensSold().call();
+        setTokensSold(sold);
+      } catch (error) {
+        console.error('Error getting token info:', error);
+        toast.error('Failed to load token information');
+      }
+    },
+    []
+  );
+
+  const initializeContract = useCallback(async () => {
+    try {
+      const web3Instance = new Web3(
+        Web3.givenProvider || 'http://localhost:8545'
+      );
+      setWeb3(web3Instance);
+
+      const networkType = await web3Instance.eth.net.getNetworkType();
+      const accounts = await web3Instance.eth.getAccounts();
+      const userAccount = accounts[0];
+
+      setNetwork(networkType);
+      setAccount(userAccount);
+      setCurrentAccount(userAccount);
+
+      // Initialize both contracts
+      const tokenContractInstance = new web3Instance.eth.Contract(
+        DAPPTOKEN_ABI,
+        DAPPTOKEN_ADDRESS
+      );
+      setTokenContract(tokenContractInstance);
+
+      const saleContractInstance = new web3Instance.eth.Contract(
+        DAPPTOKENSALE_ABI,
+        DAPPTOKENSALE_ADDRESS
+      );
+      setSaleContract(saleContractInstance);
+
+      await getTokenInfo(
+        tokenContractInstance,
+        saleContractInstance,
+        userAccount
+      );
+
+      setLoading(false);
+    } catch (error) {
+      console.error('Error initializing contract:', error);
+      toast.error('Failed to initialize smart contract');
+      setLoading(false);
+    }
+  }, [getTokenInfo]);
+
+  useEffect(() => {
+    checkMetamask();
+    initializeContract();
+  }, [checkMetamask, initializeContract]);
+
+  const handleRefresh = async () => {
+    if (!tokenContract || !saleContract || !account) return;
+    try {
+      await getTokenInfo(tokenContract, saleContract, account);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    }
+  };
+
+  const handleBuyTokens = async (e) => {
+    e.preventDefault();
+
+    if (!saleContract || !tokenContract || !account || !web3) {
+      toast.error('Please connect your wallet');
+      return;
+    }
+
+    if (!buyAmount || parseFloat(buyAmount) <= 0) {
+      toast.error('Please enter a valid amount');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const amountInWei = (parseFloat(buyAmount) * 10 ** tokenDecimals).toString();
+      const ethCost = (parseInt(tokenPrice) * parseFloat(amountInWei)).toString();
+
+      toast.info('Buying tokens. Please confirm in MetaMask...');
+
+      await saleContract.methods
+        .buyTokens(amountInWei)
+        .send({ from: account, value: ethCost, gas: '1000000' })
+        .on('transactionHash', (hash) => {
+          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+        })
+        .on('receipt', async () => {
+          toast.success('Tokens purchased successfully!');
+          setBuyAmount('');
+          await getTokenInfo(tokenContract, saleContract, account);
+        })
+        .on('error', (error) => {
+          console.error('Buy tokens error:', error);
+          toast.error(`Failed to buy tokens: ${error.message}`);
+        });
+    } catch (error) {
+      console.error('Buy tokens failed:', error);
+      toast.error(`Failed to buy tokens: ${error.message || 'Unknown error'}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleTransfer = async (e) => {
+    e.preventDefault();
+
+    if (!tokenContract || !account || !web3) {
+      toast.error('Please connect your wallet');
+      return;
+    }
+
+    if (!transferAddress.trim()) {
+      toast.error('Please enter a recipient address');
+      return;
+    }
+
+    if (!transferAmount || parseFloat(transferAmount) <= 0) {
+      toast.error('Please enter a valid amount');
+      return;
+    }
+
+    if (!web3.utils.isAddress(transferAddress)) {
+      toast.error('Invalid recipient address');
+      return;
+    }
+
+    if (parseFloat(transferAmount) > parseFloat(balance)) {
+      toast.error('Insufficient balance');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+
+      const amountInWei = (
+        parseFloat(transferAmount) *
+        10 ** tokenDecimals
+      ).toString();
+
+      toast.info('Transferring tokens. Please confirm in MetaMask...');
+
+      await tokenContract.methods
+        .transfer(transferAddress, amountInWei)
+        .send({ from: account, gas: '1000000' })
+        .on('transactionHash', (hash) => {
+          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+        })
+        .on('receipt', async () => {
+          toast.success('Tokens transferred successfully!');
+          setTransferAddress('');
+          setTransferAmount('');
+          await getTokenInfo(tokenContract, saleContract, account);
+        })
+        .on('error', (error) => {
+          console.error('Transfer error:', error);
+          toast.error(`Failed to transfer: ${error.message}`);
+        });
+    } catch (error) {
+      console.error('Transfer failed:', error);
+      toast.error(`Failed to transfer: ${error.message || 'Unknown error'}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleEndSale = async () => {
+    if (!saleContract || !account) {
+      toast.error('Please connect your wallet');
+      return;
+    }
+
+    const confirmed = window.confirm(
+      'Are you sure you want to end the token sale? This action cannot be undone.'
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setSubmitting(true);
+      toast.info('Ending token sale. Please confirm in MetaMask...');
+
+      await saleContract.methods
+        .endSale()
+        .send({ from: account, gas: '1000000' })
+        .on('transactionHash', (hash) => {
+          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+        })
+        .on('receipt', async () => {
+          toast.success('Token sale ended successfully!');
+          await getTokenInfo(tokenContract, saleContract, account);
+        })
+        .on('error', (error) => {
+          console.error('End sale error:', error);
+          toast.error(`Failed to end sale: ${error.message}`);
+        });
+    } catch (error) {
+      console.error('End sale failed:', error);
+      toast.error(`Failed to end sale: ${error.message || 'Unknown error'}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleAddToWallet = async () => {
+    if (!window.ethereum) {
+      toast.error('MetaMask is not installed');
+      return;
+    }
+
+    try {
+      await window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: DAPPTOKEN_ADDRESS,
+            symbol: tokenSymbol,
+            decimals: tokenDecimals,
+            image: '',
+          },
+        },
+      });
+
+      toast.success(`${tokenName} added to your wallet!`);
+    } catch (error) {
+      console.error('Add token failed:', error);
+      if (error.code !== 4001) {
+        toast.error(`Failed to add token: ${error.message}`);
+      }
+    }
+  };
+
+  if (loading) {
+    return <LoadingSpinner message="Loading token sale..." />;
+  }
+
+  const progress = Math.floor((parseInt(tokensSold) / parseInt(totalSupply)) * 100);
+  const priceInEth = web3 ? parseFloat(web3.utils.fromWei(tokenPrice, 'ether')) : 0;
+
+  return (
+    <div className="tokensale-container">
+      <section className="hero-section">
+        <div className="hero-content">
+          <h1 className="display-4 fw-bold mb-3">
+            <TrendingUpIcon className="hero-icon" />
+            {tokenName} Token Sale
+          </h1>
+          <p className="lead mb-4">
+            Participate in the {tokenSymbol} token crowdsale
+          </p>
+          <HideShow
+            currentAccount={currentAccount}
+            contractAddress={DAPPTOKENSALE_ADDRESS}
+            chainId={chainId}
+          />
+        </div>
+      </section>
+
+      <div className="sale-content">
+        {/* Buy Tokens Card */}
+        <Card className="buy-card">
+          <CardContent>
+            <div className="card-header-section">
+              <div className="header-with-icon">
+                <ShoppingCartIcon className="section-icon" />
+                <h3>Buy Tokens</h3>
+              </div>
+              <Tooltip title="Refresh Data">
+                <IconButton onClick={handleRefresh} className="refresh-btn">
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
+
+            <Divider className="divider" />
+
+            <div className="sale-info">
+              <div className="info-row">
+                <span className="info-label">Token Price:</span>
+                <Chip
+                  label={`${priceInEth} ETH per ${tokenSymbol}`}
+                  color="primary"
+                  className="price-chip"
+                />
+              </div>
+
+              <div className="info-row">
+                <span className="info-label">Your Balance:</span>
+                <span className="info-value">
+                  {parseFloat(balance).toLocaleString()} {tokenSymbol}
+                </span>
+              </div>
+            </div>
+
+            <Divider className="divider" />
+
+            <form onSubmit={handleBuyTokens}>
+              <div className="form-group">
+                <TextField
+                  label={`Amount (${tokenSymbol})`}
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={buyAmount}
+                  onChange={(e) => setBuyAmount(e.target.value)}
+                  placeholder="0.0"
+                  disabled={submitting}
+                  required
+                  inputProps={{
+                    min: '0',
+                    step: 'any',
+                  }}
+                  helperText={
+                    buyAmount
+                      ? `Cost: ${(parseFloat(buyAmount) * priceInEth).toFixed(6)} ETH`
+                      : 'Enter amount to see cost'
+                  }
+                />
+
+                <div className="quick-amounts">
+                  <span className="quick-label">Quick Buy:</span>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setBuyAmount('100')}
+                    disabled={submitting}
+                  >
+                    100
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setBuyAmount('500')}
+                    disabled={submitting}
+                  >
+                    500
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setBuyAmount('1000')}
+                    disabled={submitting}
+                  >
+                    1000
+                  </Button>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    onClick={() => setBuyAmount('5000')}
+                    disabled={submitting}
+                  >
+                    5000
+                  </Button>
+                </div>
+
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  type="submit"
+                  fullWidth
+                  disabled={submitting || !buyAmount}
+                  className="buy-button"
+                  startIcon={<ShoppingCartIcon />}
+                >
+                  {submitting ? 'Buying...' : 'Buy Tokens'}
+                </Button>
+              </div>
+            </form>
+
+            <Divider className="divider" />
+
+            <div className="progress-section">
+              <div className="progress-header">
+                <span className="progress-label">Sale Progress</span>
+                <span className="progress-percentage">{progress}%</span>
+              </div>
+
+              <LinearProgress
+                variant="determinate"
+                value={progress}
+                className="progress-bar"
+              />
+
+              <div className="progress-stats">
+                <span className="stat-item">
+                  <strong>{parseInt(tokensSold).toLocaleString()}</strong> sold
+                </span>
+                <span className="stat-divider">/</span>
+                <span className="stat-item">
+                  <strong>{parseFloat(contractBalance).toLocaleString()}</strong>{' '}
+                  available
+                </span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Wallet & Transfer Card */}
+        <Card className="wallet-card">
+          <CardContent>
+            <div className="card-header-section">
+              <div className="header-with-icon">
+                <SendIcon className="section-icon" />
+                <h3>My Wallet & Transfer</h3>
+              </div>
+            </div>
+
+            <Divider className="divider" />
+
+            <div className="balance-display">
+              <span className="balance-label">Your Token Balance</span>
+              <div className="balance-amount">
+                <span className="balance-value">
+                  {parseFloat(balance).toLocaleString()}
+                </span>
+                <Chip
+                  label={tokenSymbol}
+                  color="primary"
+                  className="token-chip"
+                />
+              </div>
+            </div>
+
+            <Button
+              variant="outlined"
+              color="primary"
+              fullWidth
+              size="large"
+              onClick={handleAddToWallet}
+              startIcon={<AddCircleIcon />}
+              className="add-wallet-btn"
+            >
+              Add {tokenSymbol} to MetaMask
+            </Button>
+
+            <Divider className="divider" />
+
+            <form onSubmit={handleTransfer}>
+              <div className="form-group">
+                <h4 className="section-subtitle">Transfer Tokens</h4>
+
+                <TextField
+                  label="Recipient Address"
+                  variant="outlined"
+                  fullWidth
+                  value={transferAddress}
+                  onChange={(e) => setTransferAddress(e.target.value)}
+                  placeholder="0x..."
+                  disabled={submitting}
+                  required
+                />
+
+                <TextField
+                  label={`Amount (${tokenSymbol})`}
+                  variant="outlined"
+                  fullWidth
+                  type="number"
+                  value={transferAmount}
+                  onChange={(e) => setTransferAmount(e.target.value)}
+                  placeholder="0.0"
+                  disabled={submitting}
+                  required
+                  inputProps={{
+                    min: '0',
+                    step: 'any',
+                  }}
+                  helperText={`Available: ${parseFloat(balance).toLocaleString()} ${tokenSymbol}`}
+                />
+
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="large"
+                  type="submit"
+                  fullWidth
+                  disabled={submitting || !transferAddress || !transferAmount}
+                  className="transfer-button"
+                  startIcon={<SendIcon />}
+                >
+                  {submitting ? 'Transferring...' : 'Transfer Tokens'}
+                </Button>
+              </div>
+            </form>
+
+            <Divider className="divider" />
+
+            <Button
+              variant="contained"
+              color="error"
+              size="large"
+              fullWidth
+              onClick={handleEndSale}
+              disabled={submitting}
+              className="end-sale-button"
+              startIcon={<StopCircleIcon />}
+            >
+              {submitting ? 'Ending Sale...' : 'End Token Sale'}
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+DappTokenSale.propTypes = {};
+
+export default DappTokenSale;

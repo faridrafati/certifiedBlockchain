@@ -1,0 +1,303 @@
+/* Contract Info Component Styles */
+.contract-info-wrapper {
+  margin-top: 1.5rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contract-info-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.contract-info-toggle:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.contract-info-toggle:active {
+  transform: translateY(0);
+}
+
+.toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.contract-info-toggle:hover .toggle-icon {
+  background: rgba(255, 255, 255, 0.35);
+  transform: rotate(90deg);
+}
+
+.toggle-text {
+  letter-spacing: 0.3px;
+}
+
+.contract-info-panel {
+  margin-top: 1rem;
+  animation: slideDown 0.3s ease-out;
+}
+
+.info-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.info-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  margin-bottom: 0.5rem;
+}
+
+.info-item:last-child {
+  margin-bottom: 0;
+}
+
+.info-item:hover {
+  background: rgba(102, 126, 234, 0.08);
+}
+
+.info-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.network-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.wallet-icon {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+}
+
+.contract-icon {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.info-item:hover .info-icon {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.info-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.info-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  color: #2d3748;
+  font-weight: 500;
+  word-break: break-all;
+}
+
+.info-link {
+  color: #667eea;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  font-family: 'Courier New', monospace;
+}
+
+.info-link:hover {
+  color: #764ba2;
+  text-decoration: none;
+}
+
+.info-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.3s ease;
+}
+
+.info-link:hover::after {
+  width: 100%;
+}
+
+.external-link-icon {
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 0.875rem;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.info-link:hover .external-link-icon {
+  opacity: 1;
+  transform: translate(2px, -2px);
+}
+
+.chain-id-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(102, 126, 234, 0.15);
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #667eea;
+  margin-left: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.owner-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-left: 0.5rem;
+  animation: glow 2s infinite;
+}
+
+/* Animations */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(132, 250, 176, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(132, 250, 176, 0.6);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .contract-info-toggle {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .info-card {
+    padding: 1rem;
+  }
+
+  .info-item {
+    padding: 0.75rem;
+  }
+
+  .info-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .info-label {
+    font-size: 0.8rem;
+  }
+
+  .info-value {
+    font-size: 0.9rem;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .info-card {
+    background: rgba(26, 32, 44, 0.95);
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .info-item:hover {
+    background: rgba(102, 126, 234, 0.15);
+  }
+
+  .info-label {
+    color: #cbd5e0;
+  }
+
+  .info-value {
+    color: #e2e8f0;
+  }
+
+  .info-link {
+    color: #90cdf4;
+  }
+
+  .info-link:hover {
+    color: #63b3ed;
+  }
+}
+
+/* Accessibility */
+.contract-info-toggle:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.info-link:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+  border-radius: 4px;
+}

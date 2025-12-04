@@ -1,0 +1,370 @@
+/* Pet Adoption Card Styles */
+.adoption-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  color: white;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+  animation: fadeInDown 0.6s ease-out;
+}
+
+.hero-content {
+  text-align: center;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-section .lead {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 700px;
+  margin: 0 auto 2rem;
+}
+
+/* Pets Grid */
+.pets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+  animation: fadeIn 0.8s ease-out;
+}
+
+/* Pet Card */
+.pet-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.pet-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Pet Card Header */
+.pet-card-header {
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #e1e8ed;
+}
+
+.pet-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-transform: capitalize;
+}
+
+.pet-card-header .badge {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 20px;
+  animation: pulse 2s infinite;
+}
+
+/* Pet Image */
+.pet-image-container {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.pet-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pet-card:hover .pet-image {
+  transform: scale(1.08);
+}
+
+/* Pet Card Body */
+.pet-card-body {
+  padding: 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Pet Info */
+.pet-info {
+  margin-bottom: 1rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.info-row:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.info-value {
+  color: #2d3748;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Adopt Button */
+.adopt-btn {
+  padding: 0.875rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.adopt-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.adopt-btn:active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5568d3 0%, #6a3c8f 100%);
+}
+
+.btn-success {
+  background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+  color: #2d3748;
+}
+
+.btn-warning {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: #2d3748;
+}
+
+.btn-secondary {
+  background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 100%);
+  color: white;
+}
+
+/* Legacy card styles for backward compatibility */
+.shadow {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+}
+
+.shadow:hover {
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+.card-title {
+    font-size: 1.5rem;
+    color: white;
+    font-weight: 1000;
+}
+
+.card-footer {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-img-top {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.card-text {
+    color: #636c72;
+    font-weight: 400;
+}
+
+.card-container {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+/* Loading Spinner */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+
+  .hero-section .lead {
+    font-size: 1rem;
+  }
+
+  .pets-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .pet-card-header {
+    padding: 1rem;
+  }
+
+  .pet-name {
+    font-size: 1.25rem;
+  }
+
+  .pet-image-container {
+    height: 240px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .pets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1025px) {
+  .pets-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1400px) {
+  .pets-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .pet-card {
+    background: #1a202c;
+    border-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .pet-card-header {
+    background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+    border-bottom-color: #2d3748;
+  }
+
+  .pet-name {
+    color: #e2e8f0;
+  }
+
+  .info-label {
+    color: #cbd5e0;
+  }
+
+  .info-value {
+    color: #e2e8f0;
+  }
+
+  .info-row {
+    border-bottom-color: #2d3748;
+  }
+}
+
+/* Accessibility */
+.adopt-btn:focus {
+  outline: 3px solid #667eea;
+  outline-offset: 2px;
+}
+
+.pet-image {
+  image-rendering: -webkit-optimize-contrast;
+}
+
+/* Print Styles */
+@media print {
+  .adopt-btn {
+    display: none;
+  }
+
+  .pet-card {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

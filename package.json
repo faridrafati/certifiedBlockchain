@@ -1,0 +1,69 @@
+{
+  "name": "certified-blockchain-vite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@metamask/detect-provider": "^2.0.0",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.10.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "@popperjs/core": "^2.11.8",
+    "apexcharts": "^4.0.0",
+    "bignumber": "^1.1.0",
+    "bootstrap": "^5.2.0",
+    "dotenv": "^16.0.3",
+    "ethers": "^6.12.1",
+    "font-awesome": "^4.7.0",
+    "joi-browser": "^13.4.0",
+    "jquery": "^3.6.0",
+    "js-sha256": "^0.9.0",
+    "jsonfile": "^6.1.0",
+    "lodash": "^4.17.21",
+    "pull-file-reader": "^1.0.2",
+    "react": "^18.2.0",
+    "react-apexcharts": "^1.4.0",
+    "react-bootstrap": "^2.7.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^18.2.0",
+    "react-drop-zone": "^4.3.3",
+    "react-file-icon": "^1.2.0",
+    "react-moment": "^1.1.2",
+    "react-router-dom": "^6.20.0",
+    "react-toastify": "^9.1.1",
+    "reactstrap": "^9.1.5",
+    "styled-components": "^5.3.6",
+    "web-vitals": "^2.1.4",
+    "web3": "^4.16.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^6.3.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

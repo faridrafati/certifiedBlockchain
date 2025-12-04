@@ -1,0 +1,405 @@
+/* Token Sale Styles */
+.tokensale-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  margin-bottom: 3rem;
+  color: white;
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+  animation: fadeInDown 0.6s ease-out;
+  text-align: center;
+}
+
+.hero-content h1 {
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-icon {
+  font-size: 3rem !important;
+}
+
+.hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+.sale-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 2rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.buy-card,
+.wallet-card {
+  background: white !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+  transition: all 0.3s ease !important;
+}
+
+.buy-card:hover,
+.wallet-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.2) !important;
+}
+
+.card-header-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.header-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.section-icon {
+  color: #667eea;
+  font-size: 2rem !important;
+}
+
+.card-header-section h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.refresh-btn {
+  color: #667eea !important;
+  transition: all 0.3s ease !important;
+}
+
+.refresh-btn:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  transform: rotate(180deg);
+}
+
+.divider {
+  margin: 1.5rem 0 !important;
+  background: rgba(102, 126, 234, 0.1) !important;
+}
+
+.sale-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 12px;
+}
+
+.info-label {
+  font-size: 1rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.price-chip {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  padding: 0.75rem 1.25rem !important;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.quick-amounts {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 1rem;
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 12px;
+}
+
+.quick-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #667eea;
+  text-transform: uppercase;
+}
+
+.quick-amounts button {
+  padding: 0.5rem 1rem !important;
+  font-weight: 700 !important;
+  border: 2px solid #667eea !important;
+  color: #667eea !important;
+  transition: all 0.3s ease !important;
+}
+
+.quick-amounts button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  transform: translateY(-2px);
+}
+
+.buy-button,
+.transfer-button,
+.end-sale-button {
+  padding: 1rem 2rem !important;
+  font-size: 1.1rem !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  transition: all 0.3s ease !important;
+}
+
+.buy-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.buy-button:hover:not(:disabled),
+.transfer-button:hover:not(:disabled),
+.end-sale-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+}
+
+.progress-section {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 16px;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.progress-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-percentage {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.progress-bar {
+  height: 12px !important;
+  border-radius: 10px !important;
+  background: rgba(102, 126, 234, 0.1) !important;
+  margin: 1rem 0 !important;
+}
+
+.progress-bar .MuiLinearProgress-bar {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 10px !important;
+}
+
+.progress-stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  font-size: 1rem;
+  color: #718096;
+}
+
+.stat-divider {
+  font-weight: 700;
+  color: #667eea;
+}
+
+.balance-display {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  border-radius: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.balance-label {
+  display: block;
+  font-size: 0.95rem;
+  color: #718096;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+}
+
+.balance-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.balance-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #667eea;
+}
+
+.token-chip {
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 1rem !important;
+}
+
+.add-wallet-btn {
+  padding: 1rem 2rem !important;
+  font-size: 1rem !important;
+  font-weight: 700 !important;
+  border-radius: 12px !important;
+  text-transform: uppercase !important;
+  border-width: 2px !important;
+  transition: all 0.3s ease !important;
+}
+
+.add-wallet-btn:hover {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%) !important;
+  transform: translateY(-2px);
+}
+
+.section-subtitle {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0 0 1rem;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 992px) {
+  .sale-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .tokensale-container {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 1.5rem;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .balance-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 1.75rem;
+    flex-direction: column;
+  }
+
+  .quick-amounts {
+    flex-direction: column;
+  }
+
+  .quick-amounts button {
+    width: 100%;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .buy-card,
+  .wallet-card {
+    background: #1a202c !important;
+  }
+
+  .card-header-section h3,
+  .info-value,
+  .section-subtitle,
+  .progress-label {
+    color: #e2e8f0;
+  }
+
+  .info-label,
+  .balance-label {
+    color: #cbd5e0;
+  }
+
+  .info-row,
+  .balance-display,
+  .progress-section,
+  .quick-amounts {
+    background: rgba(102, 126, 234, 0.1);
+  }
+}
+
+.tokensale-container .MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+
+.tokensale-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: #667eea !important;
+}
+
+.tokensale-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #764ba2 !important;
+  border-width: 2px !important;
+}
