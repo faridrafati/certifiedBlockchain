@@ -7,6 +7,7 @@ contract TicketSale is ERC721 {
     address public owner;
     uint256 public totalOccasions;
     uint256 public totalSupply;
+    bool private locked; // Reentrancy guard
 
     struct Occasion {
         uint256 id;
@@ -24,9 +25,21 @@ contract TicketSale is ERC721 {
     mapping(uint256 => mapping(uint256 => address)) public seatTaken;
     mapping(uint256 => uint256[]) seatsTaken;
 
+    // Events
+    event OccasionListed(uint256 indexed id, string name, uint256 cost, uint256 maxTickets);
+    event TicketMinted(uint256 indexed occasionId, uint256 indexed seat, address indexed buyer, uint256 tokenId);
+    event Withdrawal(address indexed owner, uint256 amount);
+
     modifier onlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Only owner can call this function");
         _;
+    }
+
+    modifier noReentrant() {
+        require(!locked, "Reentrant call detected");
+        locked = true;
+        _;
+        locked = false;
     }
 
     constructor(string [] memory _ticketSale) ERC721(_ticketSale[0], _ticketSale[1]) {
@@ -41,6 +54,10 @@ contract TicketSale is ERC721 {
         string memory _time,
         string memory _location
     ) public onlyOwner {
+        require(_maxTickets > 0, "Must have at least 1 ticket");
+        require(_cost > 0, "Cost must be greater than 0");
+        require(bytes(_name).length > 0, "Name cannot be empty");
+
         totalOccasions++;
         occasions[totalOccasions] = Occasion(
             totalOccasions,
@@ -52,33 +69,51 @@ contract TicketSale is ERC721 {
             _time,
             _location
         );
+
+        emit OccasionListed(totalOccasions, _name, _cost, _maxTickets);
     }
 
-    function mint(uint256 _id, uint256 _seat) public payable {
-        // Require that _id is not 0 or less than total occasions...
-        require(_id != 0);
-        require(_id <= totalOccasions);
+    function mint(uint256 _id, uint256 _seat) public payable noReentrant {
+        // Require that _id is valid
+        require(_id != 0, "Invalid occasion ID");
+        require(_id <= totalOccasions, "Occasion does not exist");
 
-        // Require that ETH sent is greater than cost...
-        require(msg.value >= occasions[_id].cost);
+        // Require that seat number is valid (must be >= 1)
+        require(_seat > 0, "Seat number must be greater than 0");
+        require(_seat <= occasions[_id].maxTickets, "Seat number exceeds maximum");
 
-        // Require that the seat is not taken, and the seat exists...
-        require(seatTaken[_id][_seat] == address(0));
-        require(_seat <= occasions[_id].maxTickets);
+        // Require tickets are available
+        require(occasions[_id].tickets > 0, "No tickets available");
 
-        occasions[_id].tickets -= 1; // <-- Update ticket count
+        // Require that ETH sent is sufficient
+        require(msg.value >= occasions[_id].cost, "Insufficient payment");
 
-        hasBought[_id][msg.sender] = true; // <-- Update buying status
-        seatTaken[_id][_seat] = msg.sender; // <-- Assign seat
+        // Require that the seat is not taken
+        require(seatTaken[_id][_seat] == address(0), "Seat already taken");
 
-        seatsTaken[_id].push(_seat); // <-- Update seats currently taken
+        occasions[_id].tickets -= 1; // Update ticket count
+
+        hasBought[_id][msg.sender] = true; // Update buying status
+        seatTaken[_id][_seat] = msg.sender; // Assign seat
+
+        seatsTaken[_id].push(_seat); // Update seats currently taken
 
         totalSupply++;
 
         _safeMint(msg.sender, totalSupply);
+
+        emit TicketMinted(_id, _seat, msg.sender, totalSupply);
+
+        // Refund excess payment
+        uint256 excess = msg.value - occasions[_id].cost;
+        if (excess > 0) {
+            (bool success, ) = payable(msg.sender).call{value: excess}("");
+            require(success, "Refund failed");
+        }
     }
 
     function getOccasion(uint256 _id) public view returns (Occasion memory) {
+        require(_id > 0 && _id <= totalOccasions, "Invalid occasion ID");
         return occasions[_id];
     }
 
@@ -86,8 +121,23 @@ contract TicketSale is ERC721 {
         return seatsTaken[_id];
     }
 
-    function withdraw() public onlyOwner {
-        (bool success, ) = owner.call{value: address(this).balance}("");
-        require(success);
+    function getAvailableTickets(uint256 _id) public view returns (uint256) {
+        require(_id > 0 && _id <= totalOccasions, "Invalid occasion ID");
+        return occasions[_id].tickets;
+    }
+
+    function withdraw() public onlyOwner noReentrant {
+        uint256 balance = address(this).balance;
+        require(balance > 0, "No funds to withdraw");
+
+        (bool success, ) = owner.call{value: balance}("");
+        require(success, "Withdrawal failed");
+
+        emit Withdrawal(owner, balance);
+    }
+
+    // Get owner address (for frontend compatibility)
+    function getOwner() public view returns (address) {
+        return owner;
     }
 }

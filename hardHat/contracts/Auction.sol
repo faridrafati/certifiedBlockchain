@@ -9,6 +9,26 @@ contract Auction {
     uint endTime;
     address owner;
     bool auctionEnded = false;
+    bool private locked; // Reentrancy guard
+
+    // Events for transparency
+    event BidPlaced(address indexed bidder, uint amount, uint totalBid);
+    event BidWithdrawn(address indexed bidder, uint amount);
+    event AuctionEndTimeSet(uint endTime);
+    event AuctionEnded(address winner, uint winningBid);
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function");
+        _;
+    }
+
+    modifier noReentrant() {
+        require(!locked, "Reentrant call detected");
+        locked = true;
+        _;
+        locked = false;
+    }
+
     constructor() {
         owner = msg.sender;
     }
@@ -18,9 +38,9 @@ contract Auction {
         //verify value is not zero
         uint calculateAmount = biddersData[msg.sender] + msg.value;
         // check session not ended
-        require(auctionEnded == false, "Aunction is Endded");
-        require(block.timestamp <= endTime, "Aunction is Endded");
-        require(msg.value > 0, "Bid Amo unt Cannot Be Zero");
+        require(auctionEnded == false, "Auction is Ended");
+        require(block.timestamp <= endTime, "Auction is Ended");
+        require(msg.value > 0, "Bid Amount Cannot Be Zero");
 
         //check Highest Bid
         require(
@@ -30,6 +50,8 @@ contract Auction {
         biddersData[msg.sender] = calculateAmount;
         highestBidAmount = calculateAmount;
         highestBidder = msg.sender;
+
+        emit BidPlaced(msg.sender, msg.value, calculateAmount);
     }
 
     function getOwnerAddress() public view returns (address) {
@@ -58,24 +80,55 @@ contract Auction {
         return highestBidder;
     }
 
-    // put endTime
-    function putEndTime(uint _endTime) public {
-        if (msg.sender == owner) {
-            endTime = _endTime;
+    // put endTime - now with require instead of if
+    function putEndTime(uint _endTime) public onlyOwner {
+        require(_endTime > block.timestamp, "End time must be in the future");
+        endTime = _endTime;
+        emit AuctionEndTimeSet(_endTime);
+    }
+
+    // end auction - now with require instead of if
+    function endAuction(bool _trueFalse) public onlyOwner {
+        auctionEnded = _trueFalse;
+        if (_trueFalse) {
+            emit AuctionEnded(highestBidder, highestBidAmount);
         }
     }
 
-    // put endTime
-    function endAuction(bool _trueFalse) public {
-        if (msg.sender == owner) {
-            auctionEnded = _trueFalse;
-        }
+    // withdraw Bid - FIXED: Only owner of bid can withdraw, with reentrancy protection
+    function withdrawBid() public noReentrant {
+        // Only allow withdrawal if auction has ended
+        require(auctionEnded == true, "Auction must be ended to withdraw");
+
+        // Highest bidder cannot withdraw (they won the auction)
+        require(msg.sender != highestBidder, "Winner cannot withdraw bid");
+
+        uint amount = biddersData[msg.sender];
+        require(amount > 0, "No bid to withdraw");
+
+        // Clear balance BEFORE transfer (prevents reentrancy)
+        biddersData[msg.sender] = 0;
+
+        // Transfer funds
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        require(success, "Transfer failed");
+
+        emit BidWithdrawn(msg.sender, amount);
     }
 
-    //withdraw Bid
-    function withdrawBid(address payable _address) public {
-        if (biddersData[_address] > 0) {
-            _address.transfer(biddersData[_address]);
-        }
+    // Owner can withdraw the winning bid after auction ends
+    function withdrawWinningBid() public onlyOwner noReentrant {
+        require(auctionEnded == true, "Auction must be ended");
+        require(highestBidAmount > 0, "No winning bid");
+
+        uint amount = biddersData[highestBidder];
+        require(amount > 0, "Already withdrawn");
+
+        // Clear the winner's bid
+        biddersData[highestBidder] = 0;
+
+        // Transfer to owner
+        (bool success, ) = payable(owner).call{value: amount}("");
+        require(success, "Transfer failed");
     }
 }

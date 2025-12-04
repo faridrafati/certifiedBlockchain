@@ -43,3 +43,4 @@ hardHat/node_modules/
 # Misc
 *.log
 .cache/
+nul
