@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
 import {
@@ -13,15 +13,18 @@ import {
   Box,
   Chip,
   IconButton,
+  Tooltip,
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import PersonIcon from '@mui/icons-material/Person';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { EMAIL_ABI, EMAIL_ADDRESS } from './components/config/EmailConfig';
 import HideShow from './HideShow.jsx';
 import LoadingSpinner from './components/LoadingSpinner';
+import ConfirmDialog from './components/ConfirmDialog';
 import './components/css/email.css';
 
 const Email = () => {
@@ -45,7 +48,18 @@ const Email = () => {
   const [currentTab, setCurrentTab] = useState(0);
   const [selectedMessage, setSelectedMessage] = useState(null);
 
+  // Confirm dialog state
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+  });
+
   const MAX_MESSAGE_LENGTH = 32;
+
+  // Ref for message input to focus on reply
+  const messageInputRef = useRef(null);
 
   const checkMetamask = useCallback(async () => {
     try {
@@ -76,6 +90,15 @@ const Email = () => {
     }
   }, []);
 
+  // Helper to convert bytes32 to readable string (removes null characters)
+  const bytes32ToString = (bytes32, web3Instance) => {
+    try {
+      return web3Instance.utils.toAscii(bytes32).replace(/\0/g, '').trim();
+    } catch {
+      return '';
+    }
+  };
+
   const loadMessages = useCallback(
     async (contractInstance, userAccount, web3Instance) => {
       try {
@@ -83,7 +106,8 @@ const Email = () => {
         const inboxSize = await contractInstance.methods
           .getMyInboxSize()
           .call({ from: userAccount });
-        const inboxCount = parseInt(inboxSize[1]);
+        // Convert BigInt to Number for cross-browser compatibility
+        const inboxCount = Number(inboxSize[1].toString());
 
         if (inboxCount > 0) {
           const inboxData = await contractInstance.methods
@@ -93,20 +117,22 @@ const Email = () => {
           const inbox = [];
           for (let i = 0; i < inboxCount; i++) {
             inbox.push({
-              content: web3Instance.utils.toAscii(inboxData[0][i]),
-              timestamp: parseInt(inboxData[1][i]),
+              content: bytes32ToString(inboxData[0][i], web3Instance),
+              timestamp: Number(inboxData[1][i].toString()),
               address: inboxData[2][i],
               type: 'received',
             });
           }
           setInboxMessages(inbox);
+        } else {
+          setInboxMessages([]);
         }
 
         // Load outbox
         const outboxSize = await contractInstance.methods
           .getMyInboxSize()
           .call({ from: userAccount });
-        const outboxCount = parseInt(outboxSize[0]);
+        const outboxCount = Number(outboxSize[0].toString());
 
         if (outboxCount > 0) {
           const outboxData = await contractInstance.methods
@@ -116,16 +142,45 @@ const Email = () => {
           const outbox = [];
           for (let i = 0; i < outboxCount; i++) {
             outbox.push({
-              content: web3Instance.utils.toAscii(outboxData[0][i]),
-              timestamp: parseInt(outboxData[1][i]),
+              content: bytes32ToString(outboxData[0][i], web3Instance),
+              timestamp: Number(outboxData[1][i].toString()),
               address: outboxData[2][i],
               type: 'sent',
             });
           }
           setOutboxMessages(outbox);
+        } else {
+          setOutboxMessages([]);
         }
       } catch (error) {
         console.error('Error loading messages:', error);
+      }
+    },
+    []
+  );
+
+  const handleRegisterUser = useCallback(
+    async (contractInstance, userAccount) => {
+      try {
+        toast.info('Registering user. Please confirm in MetaMask...');
+
+        await contractInstance.methods
+          .registerUser()
+          .send({ from: userAccount, gas: '1000000' })
+          .on('transactionHash', (hash) => {
+            toast.info(`Registration submitted: ${hash.substring(0, 10)}...`);
+          })
+          .on('receipt', () => {
+            toast.success('Registration successful! Your inbox is ready.');
+            setIsRegistered(true);
+          })
+          .on('error', (error) => {
+            console.error('Registration error:', error);
+            toast.error(`Registration failed: ${error.message}`);
+          });
+      } catch (error) {
+        console.error('Registration failed:', error);
+        toast.error(`Registration failed: ${error.message || 'Unknown error'}`);
       }
     },
     []
@@ -139,16 +194,21 @@ const Email = () => {
           .call({ from: userAccount });
 
         if (!registered) {
-          const confirmed = window.confirm(
-            'New user: We need to set up an inbox for you on the Ethereum blockchain. You will need to submit a transaction in MetaMask. You only need to do this once.'
-          );
-
-          if (confirmed) {
-            await handleRegisterUser(contractInstance, userAccount);
-          } else {
-            setLoading(false);
-            return false;
-          }
+          setConfirmDialog({
+            open: true,
+            title: 'New User Registration',
+            message:
+              'We need to set up an inbox for you on the Ethereum blockchain. You will need to submit a transaction in MetaMask. You only need to do this once.',
+            onConfirm: async () => {
+              setConfirmDialog((prev) => ({ ...prev, open: false }));
+              await handleRegisterUser(contractInstance, userAccount);
+            },
+            onCancel: () => {
+              setConfirmDialog((prev) => ({ ...prev, open: false }));
+              setLoading(false);
+            },
+          });
+          return false;
         }
 
         setIsRegistered(true);
@@ -158,32 +218,8 @@ const Email = () => {
         return false;
       }
     },
-    []
+    [handleRegisterUser]
   );
-
-  const handleRegisterUser = async (contractInstance, userAccount) => {
-    try {
-      toast.info('Registering user. Please confirm in MetaMask...');
-
-      await contractInstance.methods
-        .registerUser()
-        .send({ from: userAccount, gas: '1000000' })
-        .on('transactionHash', (hash) => {
-          toast.info(`Registration submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', () => {
-          toast.success('Registration successful! Your inbox is ready.');
-          setIsRegistered(true);
-        })
-        .on('error', (error) => {
-          console.error('Registration error:', error);
-          toast.error(`Registration failed: ${error.message}`);
-        });
-    } catch (error) {
-      console.error('Registration failed:', error);
-      toast.error(`Registration failed: ${error.message || 'Unknown error'}`);
-    }
-  };
 
   const initializeContract = useCallback(async () => {
     try {
@@ -244,6 +280,25 @@ const Email = () => {
     initializeContract();
   }, [checkMetamask, initializeContract]);
 
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract || !account || !web3 || !isRegistered) return;
+
+    const interval = setInterval(async () => {
+      // Refresh messages
+      loadMessages(contract, account, web3);
+      // Refresh registered users (contacts list)
+      try {
+        const properties = await contract.methods.getContractProperties().call();
+        setRegisteredUsers(properties[1]);
+      } catch (error) {
+        console.error('Error refreshing contacts:', error);
+      }
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, account, web3, isRegistered, loadMessages]);
+
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
@@ -269,7 +324,11 @@ const Email = () => {
 
     try {
       setSubmitting(true);
-      const messageHex = web3.utils.fromAscii(messageText);
+      // Convert to hex and pad to bytes32 (66 chars including 0x prefix)
+      const messageHex = web3.utils.padRight(
+        web3.utils.asciiToHex(messageText),
+        64
+      );
       toast.info('Sending message. Please confirm in MetaMask...');
 
       await contract.methods
@@ -295,54 +354,76 @@ const Email = () => {
     }
   };
 
-  const handleClearInbox = async () => {
+  const handleClearInbox = () => {
     if (!contract || !account) {
       toast.error('Please connect your wallet');
       return;
     }
 
-    const confirmed = window.confirm(
-      'Are you sure you want to clear your inbox? This action cannot be undone.'
-    );
+    setConfirmDialog({
+      open: true,
+      title: 'Clear Inbox',
+      message:
+        'Are you sure you want to clear your inbox? This action cannot be undone.',
+      onConfirm: async () => {
+        setConfirmDialog((prev) => ({ ...prev, open: false }));
+        try {
+          setSubmitting(true);
+          toast.info('Clearing inbox. Please confirm in MetaMask...');
 
-    if (!confirmed) return;
-
-    try {
-      setSubmitting(true);
-      toast.info('Clearing inbox. Please confirm in MetaMask...');
-
-      await contract.methods
-        .clearInbox()
-        .send({ from: account, gas: '1000000' })
-        .on('transactionHash', (hash) => {
-          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Inbox cleared successfully!');
-          setInboxMessages([]);
-          setCurrentTab(0);
-        })
-        .on('error', (error) => {
-          console.error('Clear inbox error:', error);
-          toast.error(`Failed to clear inbox: ${error.message}`);
-        });
-    } catch (error) {
-      console.error('Clear inbox failed:', error);
-      toast.error(`Failed to clear inbox: ${error.message || 'Unknown error'}`);
-    } finally {
-      setSubmitting(false);
-    }
+          await contract.methods
+            .clearInbox()
+            .send({ from: account, gas: '1000000' })
+            .on('transactionHash', (hash) => {
+              toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+            })
+            .on('receipt', async () => {
+              toast.success('Inbox cleared successfully!');
+              setInboxMessages([]);
+              setCurrentTab(0);
+            })
+            .on('error', (error) => {
+              console.error('Clear inbox error:', error);
+              toast.error(`Failed to clear inbox: ${error.message}`);
+            });
+        } catch (error) {
+          console.error('Clear inbox failed:', error);
+          toast.error(
+            `Failed to clear inbox: ${error.message || 'Unknown error'}`
+          );
+        } finally {
+          setSubmitting(false);
+        }
+      },
+    });
   };
 
   const handleReply = (message) => {
     setSelectedContact(message.address);
     setSelectedMessage(message);
     setCurrentTab(0);
-    toast.info(`Replying to ${message.address.substring(0, 8)}...`);
+    // Focus the message input after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      messageInputRef.current?.focus();
+    }, 100);
+  };
+
+  const handleRefresh = async () => {
+    if (!contract || !account || !web3 || !isRegistered) return;
+    try {
+      await loadMessages(contract, account, web3);
+      const properties = await contract.methods.getContractProperties().call();
+      setRegisteredUsers(properties[1]);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
   };
 
   const formatDateTime = (timestamp) => {
-    const date = new Date(timestamp);
+    // Blockchain timestamps are in seconds, JavaScript Date expects milliseconds
+    const date = new Date(timestamp * 1000);
     return {
       date: date.toLocaleDateString('en-US'),
       time: date.toLocaleTimeString('en-US', {
@@ -366,8 +447,21 @@ const Email = () => {
           </div>
         </section>
         <div className="registration-message">
-          <h3>Please refresh the page to complete registration</h3>
+          <h3>Please complete registration to continue</h3>
         </div>
+
+        <ConfirmDialog
+          open={confirmDialog.open}
+          title={confirmDialog.title}
+          message={confirmDialog.message}
+          onConfirm={confirmDialog.onConfirm}
+          onCancel={
+            confirmDialog.onCancel ||
+            (() => setConfirmDialog((prev) => ({ ...prev, open: false })))
+          }
+          confirmText="Confirm"
+          cancelText="Cancel"
+        />
       </div>
     );
   }
@@ -378,7 +472,14 @@ const Email = () => {
     <div className="email-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Secure, decentralized messaging on the Ethereum blockchain
           </p>
@@ -392,70 +493,6 @@ const Email = () => {
       </section>
 
       <div className="email-content">
-        {/* Compose Section */}
-        <div className="compose-section">
-          <h3>✉️ Compose Message</h3>
-
-          <FormControl fullWidth className="contact-select">
-            <InputLabel>Select Contact</InputLabel>
-            <Select
-              value={selectedContact}
-              onChange={(e) => setSelectedContact(e.target.value)}
-              label="Select Contact"
-              disabled={submitting}
-            >
-              {contacts.map((contact, index) => (
-                <MenuItem key={index} value={contact}>
-                  <PersonIcon fontSize="small" style={{ marginRight: '8px' }} />
-                  {contact.substring(0, 10)}...{contact.substring(38)}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {selectedMessage && (
-            <div className="reply-context">
-              <strong>Replying to:</strong>
-              <p>{selectedMessage.content}</p>
-            </div>
-          )}
-
-          <form onSubmit={handleSendMessage}>
-            <TextField
-              label="Message"
-              variant="outlined"
-              fullWidth
-              multiline
-              rows={4}
-              value={messageText}
-              onChange={(e) => setMessageText(e.target.value)}
-              placeholder="Type your message..."
-              disabled={submitting}
-              inputProps={{ maxLength: MAX_MESSAGE_LENGTH }}
-              helperText={`${messageText.length}/${MAX_MESSAGE_LENGTH} characters`}
-            />
-
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              type="submit"
-              fullWidth
-              disabled={submitting || !selectedContact || !messageText.trim()}
-              className="send-button"
-              startIcon={<SendIcon />}
-            >
-              {submitting ? 'Sending...' : 'Send Message'}
-            </Button>
-          </form>
-
-          <Chip
-            label={`${contacts.length} Contact${contacts.length !== 1 ? 's' : ''}`}
-            color="primary"
-            className="contacts-count"
-          />
-        </div>
-
         {/* Messages Section */}
         <div className="messages-section">
           <Box className="tabs-container">
@@ -560,7 +597,88 @@ const Email = () => {
             </div>
           )}
         </div>
+
+        {/* Compose Section */}
+        <div className="compose-section">
+          <h3>✉️ Compose Message</h3>
+
+          <FormControl fullWidth className="contact-select">
+            <InputLabel>Select Contact</InputLabel>
+            <Select
+              value={selectedContact}
+              onChange={(e) => {
+                setSelectedContact(e.target.value);
+                setSelectedMessage(null);
+              }}
+              label="Select Contact"
+              disabled={submitting}
+            >
+              {contacts.map((contact, index) => (
+                <MenuItem key={index} value={contact}>
+                  <PersonIcon fontSize="small" style={{ marginRight: '8px' }} />
+                  {contact.substring(0, 10)}...{contact.substring(38)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          {selectedMessage && (
+            <div className="reply-context">
+              <strong>Replying to:</strong>
+              <p>{selectedMessage.content}</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSendMessage}>
+            <TextField
+              label="Message"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={4}
+              value={messageText}
+              onChange={(e) => setMessageText(e.target.value)}
+              placeholder="Type your message..."
+              disabled={submitting}
+              inputProps={{ maxLength: MAX_MESSAGE_LENGTH }}
+              helperText={`${messageText.length}/${MAX_MESSAGE_LENGTH} characters`}
+              inputRef={messageInputRef}
+            />
+
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              type="submit"
+              fullWidth
+              disabled={submitting || !selectedContact || !messageText.trim()}
+              className="send-button"
+              startIcon={<SendIcon />}
+            >
+              {submitting ? 'Sending...' : 'Send Message'}
+            </Button>
+          </form>
+
+          <Chip
+            label={`${contacts.length} Contact${contacts.length !== 1 ? 's' : ''}`}
+            color="primary"
+            className="contacts-count"
+          />
+        </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmDialog.open}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={
+          confirmDialog.onCancel ||
+          (() => setConfirmDialog((prev) => ({ ...prev, open: false })))
+        }
+        confirmText="Confirm"
+        cancelText="Cancel"
+      />
     </div>
   );
 };

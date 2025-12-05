@@ -14,8 +14,10 @@ import {
   Chip,
   IconButton,
   Divider,
+  Tooltip,
 } from '@mui/material';
 import PollIcon from '@mui/icons-material/Poll';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -211,6 +213,28 @@ const Poll = () => {
     initializeContract();
   }, [checkMetamask, initializeContract]);
 
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract) return;
+
+    const interval = setInterval(() => {
+      getAllPolls(contract);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, getAllPolls]);
+
+  const handleRefresh = async () => {
+    if (!contract) return;
+    try {
+      await getAllPolls(contract);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
+  };
+
   const handleSelectPoll = (poll) => {
     setSelectedPoll(poll);
     setSelectedOption('');
@@ -349,7 +373,14 @@ const Poll = () => {
     <div className="poll-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">📊 Polling App</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">📊 Polling App</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Create and vote on decentralized polls on the blockchain
           </p>

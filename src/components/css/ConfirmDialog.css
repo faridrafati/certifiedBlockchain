@@ -1,0 +1,92 @@
+/* Confirm Dialog Styles */
+.confirm-dialog .confirm-dialog-paper {
+  border-radius: 16px;
+  padding: 0.5rem;
+  min-width: 320px;
+  max-width: 450px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: dialogFadeIn 0.3s ease-out;
+}
+
+.confirm-dialog-title {
+  font-weight: 700 !important;
+  font-size: 1.4rem !important;
+  color: #2d3748 !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.confirm-dialog-content {
+  padding-top: 0 !important;
+}
+
+.confirm-dialog-text {
+  font-size: 1rem !important;
+  color: #4a5568 !important;
+  line-height: 1.6 !important;
+}
+
+.confirm-dialog-actions {
+  padding: 1rem 1.5rem !important;
+  gap: 0.75rem;
+}
+
+.confirm-dialog-cancel-btn {
+  border-radius: 10px !important;
+  padding: 0.625rem 1.5rem !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  border-color: #cbd5e0 !important;
+  color: #4a5568 !important;
+}
+
+.confirm-dialog-cancel-btn:hover {
+  background-color: #f7fafc !important;
+  border-color: #a0aec0 !important;
+}
+
+.confirm-dialog-confirm-btn {
+  border-radius: 10px !important;
+  padding: 0.625rem 1.5rem !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+}
+
+.confirm-dialog-confirm-btn:hover {
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+@keyframes dialogFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .confirm-dialog .confirm-dialog-paper {
+    background-color: #1a202c;
+  }
+
+  .confirm-dialog-title {
+    color: #e2e8f0 !important;
+  }
+
+  .confirm-dialog-text {
+    color: #cbd5e0 !important;
+  }
+
+  .confirm-dialog-cancel-btn {
+    border-color: #4a5568 !important;
+    color: #cbd5e0 !important;
+  }
+
+  .confirm-dialog-cancel-btn:hover {
+    background-color: #2d3748 !important;
+  }
+}

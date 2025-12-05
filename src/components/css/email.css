@@ -17,6 +17,35 @@
   text-align: center;
 }
 
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-title-row h1 {
+  margin: 0 !important;
+}
+
+.hero-refresh-btn {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.3s ease !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0;
+}
+
+.hero-refresh-btn svg {
+  font-size: 1.5rem !important;
+}
+
+.hero-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: rotate(180deg);
+}
+
 .hero-content h1 {
   margin-bottom: 1rem;
   font-weight: 800;
@@ -447,6 +476,19 @@
     color: #cbd5e0;
   }
 
+  /* Tabs dark mode */
+  .tabs-container {
+    border-bottom-color: rgba(102, 126, 234, 0.2);
+  }
+
+  .tabs-container .MuiTab-root {
+    color: #a0aec0 !important;
+  }
+
+  .tabs-container .Mui-selected {
+    color: #667eea !important;
+  }
+
   .message-card {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
   }
@@ -467,6 +509,40 @@
 
   .reply-context p {
     color: #cbd5e0;
+  }
+
+  /* Input fields dark mode */
+  .email-container .MuiOutlinedInput-input {
+    color: #e2e8f0 !important;
+  }
+
+  .email-container .MuiInputLabel-root {
+    color: #a0aec0 !important;
+  }
+
+  .email-container .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(160, 174, 192, 0.3) !important;
+  }
+
+  .email-container .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
+
+  .email-container .MuiSelect-icon {
+    color: #a0aec0 !important;
+  }
+
+  /* Menu items dark mode */
+  .MuiMenu-paper {
+    background: #2d3748 !important;
+  }
+
+  .MuiMenuItem-root {
+    color: #e2e8f0 !important;
+  }
+
+  .MuiMenuItem-root:hover {
+    background: rgba(102, 126, 234, 0.2) !important;
   }
 }
 

@@ -105,16 +105,20 @@ const DappToken = () => {
         const decimals = await contractInstance.methods.decimals().call();
         const supply = await contractInstance.methods.totalSupply().call();
 
+        // Convert BigInt to string first for cross-browser compatibility
+        const decimalsNum = Number(decimals.toString());
+        const supplyNum = Number(supply.toString());
+
         setTokenName(name);
         setTokenSymbol(symbol);
-        setTokenDecimals(parseInt(decimals));
-        setTotalSupply((parseInt(supply) / 10 ** parseInt(decimals)).toString());
+        setTokenDecimals(decimalsNum);
+        setTotalSupply((supplyNum / 10 ** decimalsNum).toString());
 
         // Get user balance
         const userBalance = await contractInstance.methods
           .balanceOf(userAccount)
           .call();
-        setBalance((parseInt(userBalance) / 10 ** parseInt(decimals)).toString());
+        setBalance((Number(userBalance.toString()) / 10 ** decimalsNum).toString());
       } catch (error) {
         console.error('Error getting token info:', error);
         toast.error('Failed to load token information');
@@ -175,6 +179,17 @@ const DappToken = () => {
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract || !account) return;
+
+    const interval = setInterval(() => {
+      getTokenInfo(contract, account);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, account, getTokenInfo]);
 
   const handleRefresh = async () => {
     if (!contract || !account) return;
@@ -290,10 +305,17 @@ const DappToken = () => {
     <div className="dapptoken-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">
-            <AccountBalanceWalletIcon className="hero-icon" />
-            {tokenName}
-          </h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">
+              <AccountBalanceWalletIcon className="hero-icon" />
+              {tokenName}
+            </h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             ERC-20 Token Wallet - Manage your {tokenSymbol} tokens
           </p>
@@ -321,10 +343,19 @@ const DappToken = () => {
             <Divider className="divider" />
 
             <Grid container spacing={3}>
-              <Grid item xs={12} sm={6}>
+              {/* Row 1: Token Name */}
+              <Grid item xs={12}>
                 <div className="info-item">
                   <span className="info-label">Token Name</span>
                   <span className="info-value">{tokenName}</span>
+                </div>
+              </Grid>
+
+              {/* Row 2: Decimals and Symbol */}
+              <Grid item xs={12} sm={6}>
+                <div className="info-item">
+                  <span className="info-label">Decimals</span>
+                  <span className="info-value">{tokenDecimals}</span>
                 </div>
               </Grid>
 
@@ -335,14 +366,8 @@ const DappToken = () => {
                 </div>
               </Grid>
 
-              <Grid item xs={12} sm={6}>
-                <div className="info-item">
-                  <span className="info-label">Decimals</span>
-                  <span className="info-value">{tokenDecimals}</span>
-                </div>
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
+              {/* Row 3: Total Supply */}
+              <Grid item xs={12}>
                 <div className="info-item">
                   <span className="info-label">Total Supply</span>
                   <span className="info-value">
@@ -351,6 +376,7 @@ const DappToken = () => {
                 </div>
               </Grid>
 
+              {/* Row 4: Contract Address */}
               <Grid item xs={12}>
                 <div className="info-item">
                   <span className="info-label">Contract Address</span>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, IconButton, Tooltip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import car from './components/images/car.png';
@@ -128,10 +129,11 @@ const Auction = () => {
       const eTime = await contractInstance.methods.getEndTime().call();
       const aEnded = await contractInstance.methods.getAuctionEnded().call();
 
-      setHighestBid(hBid);
+      // Convert BigInt to string/number for cross-browser compatibility
+      setHighestBid(hBid.toString());
       setHighestBidder(hBidder);
-      setAccountBid(accBid);
-      setEndTime(eTime);
+      setAccountBid(accBid.toString());
+      setEndTime(Number(eTime.toString()));
       setAuctionEnded(aEnded);
       setLoading(false);
     } catch (error) {
@@ -145,6 +147,17 @@ const Auction = () => {
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract || !account) return;
+
+    const interval = setInterval(() => {
+      initializeContract();
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, account, initializeContract]);
 
   const handlePutBid = async () => {
     if (!contract || !account) {
@@ -275,6 +288,17 @@ const Auction = () => {
     }
   };
 
+  const handleRefresh = async () => {
+    if (!contract) return;
+    try {
+      await initializeContract();
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
+  };
+
   if (loading) {
     return (
       <div className="container text-center py-5">
@@ -286,8 +310,8 @@ const Auction = () => {
     );
   }
 
-  const now = parseInt(Date.now() / 1000);
-  const isEnded = auctionEnded || parseInt(now) > parseInt(endTime);
+  const now = Math.floor(Date.now() / 1000);
+  const isEnded = auctionEnded || now > endTime;
   const isBidder = highestBidder.toLowerCase() === account.toLowerCase();
   const isOwner = owner.toLowerCase() === account.toLowerCase();
 
@@ -297,7 +321,14 @@ const Auction = () => {
       <div className="auction-container">
         <section className="hero-section">
           <div className="hero-content">
-            <h1 className="display-4 fw-bold mb-3">Blockchain Auction</h1>
+            <div className="hero-title-row">
+              <h1 className="display-4 fw-bold mb-3">Blockchain Auction</h1>
+              <Tooltip title="Refresh Data">
+                <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
             <p className="lead mb-4">
               Participate in a transparent, decentralized auction powered by smart contracts.
             </p>
@@ -394,7 +425,14 @@ const Auction = () => {
     <div className="auction-container admin-view">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">Auction Admin Panel</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">Auction Admin Panel</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">Manage your blockchain auction</p>
           <HideShow
             currentAccount={currentAccount}

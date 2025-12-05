@@ -17,6 +17,35 @@
   text-align: center;
 }
 
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-title-row h1 {
+  margin: 0 !important;
+}
+
+.hero-refresh-btn {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.3s ease !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0;
+}
+
+.hero-refresh-btn svg {
+  font-size: 1.5rem !important;
+}
+
+.hero-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: rotate(180deg);
+}
+
 .hero-content h1 {
   margin-bottom: 1rem;
   font-weight: 800;

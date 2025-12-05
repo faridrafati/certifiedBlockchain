@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, IconButton } from '@mui/material';
+import { TextField, Button, IconButton, Tooltip } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { toast } from 'react-toastify';
@@ -132,6 +133,28 @@ const Task = () => {
     initializeContract();
   }, [checkMetamask, initializeContract]);
 
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract) return;
+
+    const interval = setInterval(() => {
+      loadTasks(contract);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, loadTasks]);
+
+  const handleRefresh = async () => {
+    if (!contract) return;
+    try {
+      await loadTasks(contract, account);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
+  };
+
   const handleAddTask = async (e) => {
     e.preventDefault();
 
@@ -220,7 +243,14 @@ const Task = () => {
     <div className="task-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">📝 Todo Manager</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">📝 Todo Manager</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Manage your tasks on the blockchain with transparency and permanence
           </p>

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
+import { TextField, Button, MenuItem, Select, FormControl, InputLabel, IconButton, Tooltip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { VOTING_ABI, VOTING_ADDRESS } from './components/config/VotingConfig';
@@ -57,9 +58,9 @@ const Voting = () => {
 
   const loadCandidates = useCallback(async (contractInstance) => {
     try {
-      const numCandidates = parseInt(
-        await contractInstance.methods.numberOfCandidates().call()
-      );
+      // Convert BigInt to Number for cross-browser compatibility
+      const numCandidatesResult = await contractInstance.methods.numberOfCandidates().call();
+      const numCandidates = Number(numCandidatesResult.toString());
       setNumberOfCandidates(numCandidates);
 
       const candidateList = [];
@@ -140,6 +141,28 @@ const Voting = () => {
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract) return;
+
+    const interval = setInterval(() => {
+      loadCandidates(contract);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, loadCandidates]);
+
+  const handleRefresh = async () => {
+    if (!contract) return;
+    try {
+      await loadCandidates(contract);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
+  };
 
   const handleVote = async (e) => {
     e.preventDefault();
@@ -240,7 +263,14 @@ const Voting = () => {
     <div className="voting-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">🗳️ Democratic Voting System</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">🗳️ Democratic Voting System</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Participate in transparent, blockchain-based democratic voting
           </p>

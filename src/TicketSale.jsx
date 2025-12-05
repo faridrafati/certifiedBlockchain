@@ -105,17 +105,18 @@ const TicketSale = () => {
             const occasion = await contractInstance.methods.getOccasion(i).call();
             const seatsTaken = await contractInstance.methods.getSeatsTaken(i).call();
 
+            // Convert BigInt to Number for cross-browser compatibility
             occasionsList.push({
-              id: Number(occasion.id),
+              id: Number(occasion.id.toString()),
               name: occasion.name,
               cost: web3Instance.utils.fromWei(occasion.cost.toString(), 'ether'),
               costWei: occasion.cost.toString(),
-              tickets: Number(occasion.tickets),
-              maxTickets: Number(occasion.maxTickets),
+              tickets: Number(occasion.tickets.toString()),
+              maxTickets: Number(occasion.maxTickets.toString()),
               date: occasion.date,
               time: occasion.time,
               location: occasion.location,
-              seatsTaken: seatsTaken.map(s => Number(s)),
+              seatsTaken: seatsTaken.map(s => Number(s.toString())),
             });
           } catch (err) {
             console.error(`Error loading occasion ${i}:`, err);
@@ -204,6 +205,18 @@ const TicketSale = () => {
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract || !web3) return;
+
+    const interval = setInterval(() => {
+      loadOccasions(contract, web3);
+      loadContractBalance(web3, TICKETSALE_ADDRESS);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, web3, loadOccasions, loadContractBalance]);
 
   const handleRefresh = async () => {
     if (!contract || !web3) return;
@@ -367,10 +380,17 @@ const TicketSale = () => {
     <div className="ticketsale-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">
-            <EventIcon className="hero-icon" />
-            Event Tickets
-          </h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">
+              <EventIcon className="hero-icon" />
+              Event Tickets
+            </h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Buy tickets for events secured on the blockchain
           </p>

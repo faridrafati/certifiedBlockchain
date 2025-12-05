@@ -17,6 +17,35 @@
   text-align: center;
 }
 
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.hero-title-row h1 {
+  margin: 0 !important;
+}
+
+.hero-refresh-btn {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.3s ease !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0;
+}
+
+.hero-refresh-btn svg {
+  font-size: 1.5rem !important;
+}
+
+.hero-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: rotate(180deg);
+}
+
 .hero-content h1 {
   margin-bottom: 1rem;
   font-weight: 800;
@@ -27,6 +56,113 @@
   font-size: 1.2rem;
   opacity: 0.95;
   margin-bottom: 1.5rem;
+}
+
+/* Registration Form */
+.chatbox-stable-container > .row,
+.chatbox-stable-container .row.align-items-center,
+.chatbox-stable-container .row.align-items-center.h-100 {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 500px;
+  height: auto !important;
+  margin: 0;
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+.chatbox-stable-container .card.col-6,
+.chatbox-stable-container .card.col-6.mx-auto {
+  flex: 0 0 auto !important;
+  width: auto !important;
+  max-width: 500px;
+  min-width: 350px;
+  margin: 0 auto;
+}
+
+.chatbox-stable-container .card {
+  display: block !important;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border: none;
+  max-width: 500px;
+  width: 100%;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.chatbox-stable-container .card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 20px 20px 0 0 !important;
+  padding: 1.5rem 2rem;
+  border: none;
+}
+
+.chatbox-stable-container .card-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.chatbox-stable-container .card-body {
+  padding: 2rem;
+}
+
+.chatbox-stable-container .card-body .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.chatbox-stable-container .card-body .form-control {
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  border: 2px solid rgba(102, 126, 234, 0.2);
+  transition: all 0.3s ease;
+}
+
+.chatbox-stable-container .card-body .form-control:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.chatbox-stable-container .card-body .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.chatbox-stable-container .card-body .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.chatbox-stable-container .card-footer {
+  background: rgba(102, 126, 234, 0.05);
+  border-radius: 0 0 20px 20px;
+  padding: 1.5rem 2rem;
+  border: none;
+}
+
+.chatbox-stable-container .card-footer b {
+  color: #667eea;
+  font-size: 1rem;
+}
+
+.chatbox-stable-container .card-footer p {
+  margin-bottom: 0.5rem;
+  color: #718096;
+}
+
+.chatbox-stable-container .card-footer hr {
+  border-color: rgba(102, 126, 234, 0.2);
+  margin: 1rem 0;
 }
 
 /* Chat Content Layout */
@@ -459,6 +595,35 @@
 }
 
 @media (max-width: 480px) {
+  .chatbox-stable-container > .row,
+  .chatbox-stable-container .row.align-items-center,
+  .chatbox-stable-container .row.align-items-center.h-100 {
+    min-height: 400px;
+    padding: 1rem;
+  }
+
+  .chatbox-stable-container .card.col-6,
+  .chatbox-stable-container .card.col-6.mx-auto {
+    min-width: 280px;
+    max-width: 100%;
+  }
+
+  .chatbox-stable-container .card-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .chatbox-stable-container .card-header h1 {
+    font-size: 1.25rem;
+  }
+
+  .chatbox-stable-container .card-body {
+    padding: 1.25rem;
+  }
+
+  .chatbox-stable-container .card-footer {
+    padding: 1rem 1.25rem;
+  }
+
   .hero-content h1 {
     font-size: 1.75rem;
   }
@@ -506,6 +671,24 @@
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
+  .chatbox-stable-container .card {
+    background: #1a202c;
+  }
+
+  .chatbox-stable-container .card-body .form-control {
+    background: #2d3748;
+    border-color: rgba(102, 126, 234, 0.3);
+    color: #e2e8f0;
+  }
+
+  .chatbox-stable-container .card-footer {
+    background: rgba(102, 126, 234, 0.1);
+  }
+
+  .chatbox-stable-container .card-footer p {
+    color: #cbd5e0;
+  }
+
   .chat-sidebar,
   .chat-main {
     background: #1a202c;

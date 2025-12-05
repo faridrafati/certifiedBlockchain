@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, Chip } from '@mui/material';
+import { TextField, Button, Chip, IconButton, Tooltip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
@@ -104,7 +105,7 @@ const WeightedVoting = () => {
       for (let i = 0; i < 3; i++) {
         candidatesList.push({
           name: list[2 * i],
-          voteCount: list[2 * i + 1],
+          voteCount: String(list[2 * i + 1] || 0),
         });
       }
 
@@ -182,6 +183,30 @@ const WeightedVoting = () => {
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract || !account) return;
+
+    const interval = setInterval(() => {
+      loadCandidates(contract);
+      checkAuthorizationStatus(contract, account);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, account, loadCandidates, checkAuthorizationStatus]);
+
+  const handleRefresh = async () => {
+    if (!contract || !account) return;
+    try {
+      await loadCandidates(contract);
+      await checkAuthorizationStatus(contract, account);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
+  };
 
   const handleAuthorizeVoter = async (e) => {
     e.preventDefault();
@@ -344,7 +369,14 @@ const WeightedVoting = () => {
       <div className="weighted-voting-container">
         <section className="hero-section">
           <div className="hero-content">
-            <h1 className="display-4 fw-bold mb-3">⚖️ Weighted Voting Admin</h1>
+            <div className="hero-title-row">
+              <h1 className="display-4 fw-bold mb-3">⚖️ Weighted Voting Admin</h1>
+              <Tooltip title="Refresh Data">
+                <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
             <p className="lead mb-4">
               Manage weighted voting with custom voter authorization
             </p>
@@ -372,7 +404,7 @@ const WeightedVoting = () => {
                     <div className="result-header">
                       <span className="result-rank">#{index + 1}</span>
                       <span className="result-name">{candidate.name}</span>
-                      <span className="result-votes">{candidate.voteCount} votes</span>
+                      <span className="candidate-votes">{candidate.voteCount} votes</span>
                     </div>
                     <div className="result-progress">
                       <div
@@ -450,7 +482,14 @@ const WeightedVoting = () => {
     <div className="weighted-voting-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">⚖️ Weighted Voting</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">⚖️ Weighted Voting</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Cast your weighted vote for your preferred candidate
           </p>
@@ -499,9 +538,7 @@ const WeightedVoting = () => {
                     <div className="candidate-number">#{index + 1}</div>
                     <div className="candidate-details">
                       <h4 className="candidate-name">{candidate.name}</h4>
-                      <span className="candidate-votes">
-                        {candidate.voteCount} votes
-                      </span>
+                      <span className="candidate-votes">{candidate.voteCount} votes</span>
                     </div>
                   </div>
 

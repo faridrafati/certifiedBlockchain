@@ -31,6 +31,7 @@ import {
 } from './components/config/DappTokenConfig';
 import HideShow from './HideShow.jsx';
 import LoadingSpinner from './components/LoadingSpinner';
+import ConfirmDialog from './components/ConfirmDialog';
 import './components/css/dapptokensale.css';
 
 const DappTokenSale = () => {
@@ -63,6 +64,14 @@ const DappTokenSale = () => {
 
   // Admin state
   const [admin, setAdmin] = useState('');
+
+  // Confirm dialog state
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+  });
 
   // Helper functions for number formatting
   const formatNumberWithCommas = (value) => {
@@ -128,19 +137,21 @@ const DappTokenSale = () => {
         const decimals = await tokenContractInstance.methods.decimals().call();
         const supply = await tokenContractInstance.methods.totalSupply().call();
 
+        // Convert BigInt to string first for cross-browser compatibility
+        const decimalsNum = Number(decimals.toString());
+        const supplyNum = Number(supply.toString());
+
         setTokenName(name);
         setTokenSymbol(symbol);
-        setTokenDecimals(parseInt(decimals));
-        setTotalSupply(
-          (parseInt(supply) / 10 ** parseInt(decimals)).toString()
-        );
+        setTokenDecimals(decimalsNum);
+        setTotalSupply((supplyNum / 10 ** decimalsNum).toString());
 
         // Get user balance
         const userBalance = await tokenContractInstance.methods
           .balanceOf(userAccount)
           .call();
         setBalance(
-          (parseInt(userBalance) / 10 ** parseInt(decimals)).toString()
+          (Number(userBalance.toString()) / 10 ** decimalsNum).toString()
         );
 
         // Get contract balance
@@ -148,7 +159,7 @@ const DappTokenSale = () => {
           .balanceOf(DAPPTOKENSALE_ADDRESS)
           .call();
         setContractBalance(
-          (parseInt(saleBalance) / 10 ** parseInt(decimals)).toString()
+          (Number(saleBalance.toString()) / 10 ** decimalsNum).toString()
         );
 
         // Get sale info
@@ -242,6 +253,17 @@ const DappTokenSale = () => {
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!tokenContract || !saleContract || !account) return;
+
+    const interval = setInterval(() => {
+      getTokenInfo(tokenContract, saleContract, account);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [tokenContract, saleContract, account, getTokenInfo]);
 
   const handleRefresh = async () => {
     if (!tokenContract || !saleContract || !account) return;
@@ -362,39 +384,44 @@ const DappTokenSale = () => {
     }
   };
 
-  const handleEndSale = async () => {
+  const handleEndSale = () => {
     if (!saleContract || !account) {
       toast.error('Please connect your wallet');
       return;
     }
 
-    const confirmed = window.confirm(
-      'Are you sure you want to end the token sale? This action cannot be undone.'
-    );
+    setConfirmDialog({
+      open: true,
+      title: 'End Token Sale',
+      message:
+        'Are you sure you want to end the token sale? This action cannot be undone.',
+      onConfirm: async () => {
+        setConfirmDialog((prev) => ({ ...prev, open: false }));
+        try {
+          setSubmitting(true);
+          toast.info('Ending token sale. Please confirm in MetaMask...');
 
-    if (!confirmed) return;
+          const receipt = await saleContract.methods
+            .endSale()
+            .send({ from: account, gas: '1000000' })
+            .on('transactionHash', (hash) => {
+              toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+            });
 
-    try {
-      setSubmitting(true);
-      toast.info('Ending token sale. Please confirm in MetaMask...');
-
-      const receipt = await saleContract.methods
-        .endSale()
-        .send({ from: account, gas: '1000000' })
-        .on('transactionHash', (hash) => {
-          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        });
-
-      if (receipt.status) {
-        toast.success('Token sale ended successfully!');
-        await getTokenInfo(tokenContract, saleContract, account);
-      }
-    } catch (error) {
-      console.error('End sale failed:', error);
-      toast.error(`Failed to end sale: ${error.message || 'Unknown error'}`);
-    } finally {
-      setSubmitting(false);
-    }
+          if (receipt.status) {
+            toast.success('Token sale ended successfully!');
+            await getTokenInfo(tokenContract, saleContract, account);
+          }
+        } catch (error) {
+          console.error('End sale failed:', error);
+          toast.error(
+            `Failed to end sale: ${error.message || 'Unknown error'}`
+          );
+        } finally {
+          setSubmitting(false);
+        }
+      },
+    });
   };
 
   const handleAddToWallet = async () => {
@@ -439,10 +466,17 @@ const DappTokenSale = () => {
     <div className="tokensale-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">
-            <TrendingUpIcon className="hero-icon" />
-            {tokenName} Token Sale
-          </h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">
+              <TrendingUpIcon className="hero-icon" />
+              {tokenName} Token Sale
+            </h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Participate in the {tokenSymbol} token crowdsale
           </p>
@@ -453,6 +487,52 @@ const DappTokenSale = () => {
           />
         </div>
       </section>
+
+      {/* Token Information Panel */}
+      <Card className="token-info-card">
+        <CardContent>
+          <h3 className="token-info-title">Token Information</h3>
+          <Divider className="divider" />
+          <div className="token-info-grid">
+            {/* Row 1: Token Name */}
+            <div className="token-info-row">
+              <div className="token-info-item full-width">
+                <span className="token-info-label">Token Name</span>
+                <span className="token-info-value">{tokenName}</span>
+              </div>
+            </div>
+            {/* Row 2: Decimals and Symbol */}
+            <div className="token-info-row">
+              <div className="token-info-item">
+                <span className="token-info-label">Decimals</span>
+                <span className="token-info-value">{tokenDecimals}</span>
+              </div>
+              <div className="token-info-item">
+                <span className="token-info-label">Symbol</span>
+                <span className="token-info-value">{tokenSymbol}</span>
+              </div>
+            </div>
+            {/* Row 3: Total Supply */}
+            <div className="token-info-row">
+              <div className="token-info-item full-width">
+                <span className="token-info-label">Total Supply</span>
+                <span className="token-info-value">
+                  {parseFloat(totalSupply).toLocaleString()} {tokenSymbol}
+                </span>
+              </div>
+            </div>
+            {/* Row 4: Contract Address */}
+            <div className="token-info-row">
+              <div className="token-info-item full-width">
+                <span className="token-info-label">Contract Address</span>
+                <span className="token-info-value address">
+                  {DAPPTOKEN_ADDRESS}
+                </span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <div className="sale-content">
         {/* Buy Tokens Card */}
@@ -694,6 +774,16 @@ const DappTokenSale = () => {
           </CardContent>
         </Card>
       </div>
+
+      <ConfirmDialog
+        open={confirmDialog.open}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog((prev) => ({ ...prev, open: false }))}
+        confirmText="Confirm"
+        cancelText="Cancel"
+      />
     </div>
   );
 };

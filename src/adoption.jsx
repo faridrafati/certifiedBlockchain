@@ -219,18 +219,18 @@ const Adoption = () => {
     const petAdopter = adopters[petIndex];
 
     if (adoptingIndex === petIndex) {
-      return { className: 'btn-warning', text: 'Adopting...', disabled: true };
+      return { className: 'warning', text: 'Adopting...', disabled: true };
     }
 
     if (petAdopter === ZERO_ADDRESS) {
-      return { className: 'btn-primary', text: 'Adopt Me', disabled: false };
+      return { className: 'primary', text: 'Adopt Me', disabled: false };
     }
 
     if (account && petAdopter.toLowerCase() === account.toLowerCase()) {
-      return { className: 'btn-success', text: 'You Own This Pet', disabled: true };
+      return { className: 'success', text: 'You Own This Pet', disabled: true };
     }
 
-    return { className: 'btn-secondary', text: 'Already Adopted', disabled: true };
+    return { className: 'secondary', text: 'Already Adopted', disabled: true };
   };
 
   if (loading) {

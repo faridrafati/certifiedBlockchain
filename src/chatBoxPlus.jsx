@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, IconButton, Badge, Chip } from '@mui/material';
+import { TextField, Button, IconButton, Badge, Chip, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
@@ -20,6 +20,7 @@ import {
 import HideShow from './HideShow.jsx';
 import LoginForm from './loginForm';
 import LoadingSpinner from './components/LoadingSpinner';
+import ConfirmDialog from './components/ConfirmDialog';
 import _ from 'lodash';
 import './components/css/chatboxplus.css';
 
@@ -59,6 +60,14 @@ const ChatBoxPlus = () => {
   const [winner, setWinner] = useState('');
   const [winCount, setWinCount] = useState(0);
   const [loseCount, setLoseCount] = useState(0);
+
+  // Confirm dialog state
+  const [confirmDialog, setConfirmDialog] = useState({
+    open: false,
+    title: '',
+    message: '',
+    onConfirm: null,
+  });
 
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
   const MAX_MESSAGE_LENGTH = 32;
@@ -191,12 +200,14 @@ const ChatBoxPlus = () => {
 
         // Process inbox
         for (let i = 0; i < inboxSize; i++) {
-          if (parseInt(inboxData[1][i]) !== 0) {
+          // Convert BigInt to Number for cross-browser compatibility
+          const timestamp = Number(inboxData[1][i].toString());
+          if (timestamp !== 0) {
             messagesList.push({
               from: inboxData[2][i],
               to: userAccount,
               message: bytes32toAscii(inboxData[0][i]),
-              time: parseInt(inboxData[1][i]),
+              time: timestamp,
             });
           }
         }
@@ -208,12 +219,14 @@ const ChatBoxPlus = () => {
 
         // Process outbox
         for (let i = 0; i < outboxSize; i++) {
-          if (parseInt(outboxData[1][i]) !== 0) {
+          // Convert BigInt to Number for cross-browser compatibility
+          const timestamp = Number(outboxData[1][i].toString());
+          if (timestamp !== 0) {
             messagesList.push({
               from: userAccount,
               to: outboxData[2][i],
               message: bytes32toAscii(outboxData[0][i]),
-              time: parseInt(outboxData[1][i]),
+              time: timestamp,
             });
           }
         }
@@ -267,8 +280,9 @@ const ChatBoxPlus = () => {
           .getMyInboxSize()
           .call({ from: userAccount });
 
-        const outboxSize = parseInt(value[0]);
-        const inboxSize = parseInt(value[1]);
+        // Convert BigInt to Number for cross-browser compatibility
+        const outboxSize = Number(value[0].toString());
+        const inboxSize = Number(value[1].toString());
 
         setMyOutboxSize(outboxSize);
         setMyInboxSize(inboxSize);
@@ -378,8 +392,9 @@ const ChatBoxPlus = () => {
         setGameExists(gameExistsFlag);
 
         if (gameExistsFlag) {
+          // Convert BigInt to Number for cross-browser compatibility
           const game = await contractInstance.methods
-            .game(parseInt(gameIndex[1]))
+            .game(Number(gameIndex[1].toString()))
             .call();
 
           const activePlayerAddr = game.activePlayer;
@@ -395,7 +410,7 @@ const ChatBoxPlus = () => {
           setWinner(winnerAddr);
 
           const size = await contractInstance.methods.boardSize().call();
-          setBoardSize(parseInt(size));
+          setBoardSize(Number(size.toString()));
 
           const boardData = await contractInstance.methods
             .getBoard(secondPlayerAddr)
@@ -509,13 +524,13 @@ const ChatBoxPlus = () => {
     initializeContract();
   }, [checkMetamask, initializeContract]);
 
-  // Setup polling interval
+  // Auto-refresh every 12 seconds (Ethereum block time)
   useEffect(() => {
     if (!isRegistered) return;
 
     const interval = setInterval(() => {
       getUpdateTotalChats();
-    }, 1000);
+    }, 12000);
 
     return () => clearInterval(interval);
   }, [isRegistered, getUpdateTotalChats]);
@@ -602,42 +617,47 @@ const ChatBoxPlus = () => {
     }
   };
 
-  const handleClearInbox = async () => {
+  const handleClearInbox = () => {
     if (!contract || !account) {
       toast.error('Please connect your wallet');
       return;
     }
 
-    const confirmed = window.confirm(
-      'Are you sure you want to clear your inbox? This action cannot be undone.'
-    );
+    setConfirmDialog({
+      open: true,
+      title: 'Clear Inbox',
+      message:
+        'Are you sure you want to clear your inbox? This action cannot be undone.',
+      onConfirm: async () => {
+        setConfirmDialog((prev) => ({ ...prev, open: false }));
+        try {
+          setSubmitting(true);
+          toast.info('Clearing inbox. Please confirm in MetaMask...');
 
-    if (!confirmed) return;
-
-    try {
-      setSubmitting(true);
-      toast.info('Clearing inbox. Please confirm in MetaMask...');
-
-      await contract.methods
-        .clearInbox()
-        .send({ from: account, gas: '1000000' })
-        .on('transactionHash', (hash) => {
-          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Inbox cleared successfully!');
-          await getUpdateMessages(contract, account);
-        })
-        .on('error', (error) => {
-          console.error('Clear inbox error:', error);
-          toast.error(`Failed to clear inbox: ${error.message}`);
-        });
-    } catch (error) {
-      console.error('Clear inbox failed:', error);
-      toast.error(`Failed to clear inbox: ${error.message || 'Unknown error'}`);
-    } finally {
-      setSubmitting(false);
-    }
+          await contract.methods
+            .clearInbox()
+            .send({ from: account, gas: '1000000' })
+            .on('transactionHash', (hash) => {
+              toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+            })
+            .on('receipt', async () => {
+              toast.success('Inbox cleared successfully!');
+              await getUpdateMessages(contract, account);
+            })
+            .on('error', (error) => {
+              console.error('Clear inbox error:', error);
+              toast.error(`Failed to clear inbox: ${error.message}`);
+            });
+        } catch (error) {
+          console.error('Clear inbox failed:', error);
+          toast.error(
+            `Failed to clear inbox: ${error.message || 'Unknown error'}`
+          );
+        } finally {
+          setSubmitting(false);
+        }
+      },
+    });
   };
 
   const handleEditContactList = async (index) => {
@@ -848,7 +868,9 @@ const ChatBoxPlus = () => {
       <div className="chatbox-container">
         <section className="hero-section">
           <div className="hero-content">
-            <h1 className="display-4 fw-bold mb-3">💬 Chat Box Plus</h1>
+            <div className="hero-title-row">
+              <h1 className="display-4 fw-bold mb-3">💬 Chat Box Plus</h1>
+            </div>
             <p className="lead mb-4">
               Blockchain chat with integrated tic-tac-toe game
             </p>
@@ -861,6 +883,16 @@ const ChatBoxPlus = () => {
           </div>
         </section>
         <LoginForm register={handleRegisterUser} />
+
+        <ConfirmDialog
+          open={confirmDialog.open}
+          title={confirmDialog.title}
+          message={confirmDialog.message}
+          onConfirm={confirmDialog.onConfirm}
+          onCancel={() => setConfirmDialog((prev) => ({ ...prev, open: false }))}
+          confirmText="Confirm"
+          cancelText="Cancel"
+        />
       </div>
     );
   }
@@ -890,7 +922,14 @@ const ChatBoxPlus = () => {
     <div className="chatbox-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">💬 Chat Box Plus</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">💬 Chat Box Plus</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Blockchain chat with integrated tic-tac-toe game
           </p>
@@ -1196,6 +1235,16 @@ const ChatBoxPlus = () => {
           )}
         </div>
       </div>
+
+      <ConfirmDialog
+        open={confirmDialog.open}
+        title={confirmDialog.title}
+        message={confirmDialog.message}
+        onConfirm={confirmDialog.onConfirm}
+        onCancel={() => setConfirmDialog((prev) => ({ ...prev, open: false }))}
+        confirmText="Confirm"
+        cancelText="Cancel"
+      />
     </div>
   );
 };

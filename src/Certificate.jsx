@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button } from '@mui/material';
+import { TextField, Button, IconButton, Tooltip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { sha256 } from 'js-sha256';
@@ -194,6 +195,28 @@ const Certificate = () => {
     initializeContract();
   }, [checkMetamask, initializeContract]);
 
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract) return;
+
+    const interval = setInterval(() => {
+      getAllCertificates(contract);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, getAllCertificates]);
+
+  const handleRefresh = async () => {
+    if (!contract) return;
+    try {
+      await getAllCertificates(contract);
+      toast.success('Data refreshed!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+      toast.error('Failed to refresh data');
+    }
+  };
+
   const handleCheckCertificate = async (e) => {
     e.preventDefault();
 
@@ -328,7 +351,14 @@ const Certificate = () => {
       <div className="certificate-container">
         <section className="hero-section">
           <div className="hero-content">
-            <h1 className="display-4 fw-bold mb-3">🎓 Certificate Verification</h1>
+            <div className="hero-title-row">
+              <h1 className="display-4 fw-bold mb-3">🎓 Certificate Verification</h1>
+              <Tooltip title="Refresh Data">
+                <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                  <RefreshIcon />
+                </IconButton>
+              </Tooltip>
+            </div>
             <p className="lead mb-4">
               Verify the authenticity of blockchain-secured certificates
             </p>
@@ -443,7 +473,14 @@ const Certificate = () => {
     <div className="certificate-container admin-view">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">🎓 Certificate Admin Panel</h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">🎓 Certificate Admin Panel</h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">Manage and issue blockchain certificates</p>
           <HideShow
             currentAccount={currentAccount}

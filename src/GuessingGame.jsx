@@ -252,6 +252,17 @@ const GuessingGame = () => {
     initializeContract();
   }, [checkMetamask, initializeContract]);
 
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  useEffect(() => {
+    if (!contract || !account || !web3) return;
+
+    const interval = setInterval(() => {
+      getPlayersData(contract, account, web3);
+    }, 12000);
+
+    return () => clearInterval(interval);
+  }, [contract, account, web3, getPlayersData]);
+
   const handleRefresh = async () => {
     if (!contract || !account || !web3) return;
     try {
@@ -361,10 +372,17 @@ const GuessingGame = () => {
     <div className="guessinggame-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">
-            <CasinoIcon className="hero-icon" />
-            Guessing Game
-          </h1>
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">
+              <CasinoIcon className="hero-icon" />
+              Guessing Game
+            </h1>
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Higher or Lower? Test your luck on the blockchain!
           </p>
