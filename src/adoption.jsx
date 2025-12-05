@@ -8,6 +8,15 @@ import { ADOPTION_ABI, ADOPTION_ADDRESS } from './components/config/AdoptionConf
 import HideShow from './HideShow.jsx';
 import './components/css/card.css';
 
+// Import all pet images using Vite's import.meta.glob
+const petImages = import.meta.glob('./components/images/*.jpeg', { eager: true });
+
+// Helper function to get image URL from pet picture path
+const getPetImage = (picturePath) => {
+  const fullPath = `./components/${picturePath}`;
+  return petImages[fullPath]?.default || '';
+};
+
 const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
 
 const Adoption = () => {
@@ -26,7 +35,17 @@ const Adoption = () => {
   // Initialize Web3
   const initWeb = useCallback(async (web3Instance) => {
     try {
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 
@@ -129,7 +148,14 @@ const Adoption = () => {
     try {
       setLoading(true);
 
-      const web3Instance = new Web3(Web3.givenProvider || 'http://localhost:8545');
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
       await checkMetamask();
@@ -223,7 +249,7 @@ const Adoption = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="display-4 fw-bold mb-3">Pet Adoption DApp</h1>
-          <p className="lead text-muted mb-4">
+          <p className="lead mb-4">
             Find your perfect companion on the blockchain. Each adoption is secured by smart contracts.
           </p>
           <HideShow
@@ -250,7 +276,7 @@ const Adoption = () => {
 
               <div className="pet-image-container">
                 <img
-                  src={require(`./components/${pet.picture}`)}
+                  src={getPetImage(pet.picture)}
                   className="pet-image"
                   alt={pet.name}
                   loading="lazy"

@@ -48,6 +48,25 @@ const DappToken = () => {
   const [transferAddress, setTransferAddress] = useState('');
   const [transferAmount, setTransferAmount] = useState('');
 
+  // Helper functions for number formatting
+  const formatNumberWithCommas = (value) => {
+    if (!value) return '';
+    const parts = value.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  };
+
+  const parseFormattedNumber = (value) => {
+    return value.replace(/,/g, '');
+  };
+
+  const handleAmountChange = (e) => {
+    const value = e.target.value.replace(/,/g, '');
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setTransferAmount(formatNumberWithCommas(value));
+    }
+  };
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -106,12 +125,29 @@ const DappToken = () => {
 
   const initializeContract = useCallback(async () => {
     try {
-      const web3Instance = new Web3(
-        Web3.givenProvider || 'http://localhost:8545'
-      );
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      // Request account access
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 
@@ -163,7 +199,9 @@ const DappToken = () => {
       return;
     }
 
-    if (!transferAmount || parseFloat(transferAmount) <= 0) {
+    const rawAmount = parseFormattedNumber(transferAmount);
+
+    if (!rawAmount || parseFloat(rawAmount) <= 0) {
       toast.error('Please enter a valid amount');
       return;
     }
@@ -173,7 +211,7 @@ const DappToken = () => {
       return;
     }
 
-    if (parseFloat(transferAmount) > parseFloat(balance)) {
+    if (parseFloat(rawAmount) > parseFloat(balance)) {
       toast.error('Insufficient balance');
       return;
     }
@@ -181,30 +219,27 @@ const DappToken = () => {
     try {
       setSubmitting(true);
 
-      // Convert amount to wei (with decimals)
-      const amountInWei = (
-        parseFloat(transferAmount) *
-        10 ** tokenDecimals
-      ).toString();
+      // Convert amount to wei (with decimals) using BigInt to avoid scientific notation
+      const [wholePart, decimalPart = ''] = rawAmount.split('.');
+      const paddedDecimal = decimalPart.padEnd(tokenDecimals, '0').slice(0, tokenDecimals);
+      const amountInWei = BigInt(wholePart + paddedDecimal).toString();
 
       toast.info('Transferring tokens. Please confirm in MetaMask...');
 
-      await contract.methods
+      const receipt = await contract.methods
         .transfer(transferAddress, amountInWei)
         .send({ from: account, gas: '1000000' })
         .on('transactionHash', (hash) => {
           toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Tokens transferred successfully!');
-          setTransferAddress('');
-          setTransferAmount('');
-          await getTokenInfo(contract, account);
-        })
-        .on('error', (error) => {
-          console.error('Transfer error:', error);
-          toast.error(`Failed to transfer: ${error.message}`);
         });
+
+      if (receipt.status) {
+        toast.success('Tokens transferred successfully!');
+        setTransferAddress('');
+        setTransferAmount('');
+        // Refresh balance after successful transfer
+        await getTokenInfo(contract, account);
+      }
     } catch (error) {
       console.error('Transfer failed:', error);
       toast.error(`Failed to transfer: ${error.message || 'Unknown error'}`);
@@ -404,16 +439,12 @@ const DappToken = () => {
                   label={`Amount (${tokenSymbol})`}
                   variant="outlined"
                   fullWidth
-                  type="number"
+                  type="text"
                   value={transferAmount}
-                  onChange={(e) => setTransferAmount(e.target.value)}
+                  onChange={handleAmountChange}
                   placeholder="0.0"
                   disabled={submitting}
                   required
-                  inputProps={{
-                    min: '0',
-                    step: 'any',
-                  }}
                   helperText={`Available: ${parseFloat(balance).toLocaleString()} ${tokenSymbol}`}
                 />
 
@@ -423,7 +454,7 @@ const DappToken = () => {
                     size="small"
                     variant="outlined"
                     onClick={() =>
-                      setTransferAmount((parseFloat(balance) * 0.25).toString())
+                      setTransferAmount(formatNumberWithCommas((parseFloat(balance) * 0.25).toString()))
                     }
                     disabled={submitting}
                   >
@@ -433,7 +464,7 @@ const DappToken = () => {
                     size="small"
                     variant="outlined"
                     onClick={() =>
-                      setTransferAmount((parseFloat(balance) * 0.5).toString())
+                      setTransferAmount(formatNumberWithCommas((parseFloat(balance) * 0.5).toString()))
                     }
                     disabled={submitting}
                   >
@@ -443,7 +474,7 @@ const DappToken = () => {
                     size="small"
                     variant="outlined"
                     onClick={() =>
-                      setTransferAmount((parseFloat(balance) * 0.75).toString())
+                      setTransferAmount(formatNumberWithCommas((parseFloat(balance) * 0.75).toString()))
                     }
                     disabled={submitting}
                   >
@@ -452,7 +483,7 @@ const DappToken = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => setTransferAmount(balance)}
+                    onClick={() => setTransferAmount(formatNumberWithCommas(balance))}
                     disabled={submitting}
                   >
                     Max

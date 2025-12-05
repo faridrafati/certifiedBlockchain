@@ -419,6 +419,23 @@
   .quick-amounts {
     background: rgba(102, 126, 234, 0.1);
   }
+
+  /* Fix input text visibility in dark mode */
+  .dapptoken-container .MuiOutlinedInput-input {
+    color: #e2e8f0 !important;
+  }
+
+  .dapptoken-container .MuiInputLabel-root {
+    color: #cbd5e0 !important;
+  }
+
+  .dapptoken-container .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(226, 232, 240, 0.3) !important;
+  }
+
+  .dapptoken-container .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
 }
 
 /* MUI Overrides */

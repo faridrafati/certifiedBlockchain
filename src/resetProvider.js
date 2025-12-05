@@ -101,7 +101,17 @@ class resetProvider extends Component {
 
   initWeb = async () => {
     let {web3,} = this.state;
-    const network = await web3.eth.net.getNetworkType();
+    const chainId = await web3.eth.getChainId();
+    const networkNames = {
+      1n: 'mainnet',
+      5n: 'goerli',
+      11155111n: 'sepolia',
+      137n: 'polygon',
+      80001n: 'mumbai',
+      56n: 'bsc',
+      97n: 'bsc-testnet',
+    };
+    const network = networkNames[chainId] || `chain-${chainId}`;
     const accounts = await web3.eth.getAccounts();
     let account = accounts[0];
     this.setState({web3,network,account});

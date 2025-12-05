@@ -187,10 +187,27 @@ const Email = () => {
 
   const initializeContract = useCallback(async () => {
     try {
-      const web3Instance = new Web3(Web3.givenProvider || 'http://localhost:8545');
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 

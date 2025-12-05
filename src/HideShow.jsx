@@ -11,7 +11,7 @@ const CHAIN_CONFIGS = [
   { chainId: '31337', chainName: 'Hardhat', explorerUrl: null },
 ];
 
-const HideShow = ({ owner, currentAccount, contractAddress, chainId }) => {
+const HideShow = ({ owner = undefined, currentAccount = undefined, contractAddress = undefined, chainId = undefined }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   const toggleCollapse = () => {
@@ -173,13 +173,6 @@ HideShow.propTypes = {
   currentAccount: PropTypes.string,
   contractAddress: PropTypes.string,
   chainId: PropTypes.string,
-};
-
-HideShow.defaultProps = {
-  owner: undefined,
-  currentAccount: undefined,
-  contractAddress: undefined,
-  chainId: undefined,
 };
 
 export default HideShow;

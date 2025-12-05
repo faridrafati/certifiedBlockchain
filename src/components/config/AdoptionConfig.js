@@ -1,2 +1,2 @@
-export const ADOPTION_ADDRESS = "0x625E384A39d8A3C50FA8C5EbEf39a664E9e7eC17";
+export const ADOPTION_ADDRESS = import.meta.env.VITE_ADOPTION_ADDRESS;
 export const ADOPTION_ABI = [{"inputs":[{"internalType":"uint256","name":"_petId","type":"uint256"}],"name":"adopt","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"adopters","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getAdopters","outputs":[{"internalType":"address[16]","name":"","type":"address[16]"}],"stateMutability":"view","type":"function"}]

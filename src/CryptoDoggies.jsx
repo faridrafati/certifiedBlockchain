@@ -134,36 +134,61 @@ const CryptoDoggies = () => {
   const getAllTokens = useCallback(
     async (contractInstance, web3Instance) => {
       try {
+        // Check if getAllTokens method exists in the ABI
+        if (!contractInstance.methods.getAllTokens) {
+          console.warn('getAllTokens method not available in contract ABI');
+          toast.warning('Contract ABI is incomplete. Token listing not available.');
+          setDoggies([]);
+          return;
+        }
+
         const allTokens = await contractInstance.methods.getAllTokens().call();
-        const isPaused = await contractInstance.methods.paused().call();
+
+        let isPaused = false;
+        try {
+          isPaused = await contractInstance.methods.paused().call();
+        } catch (err) {
+          console.warn('Could not get paused status:', err);
+        }
 
         const doggiesData = [];
-        for (let i = 0; i < allTokens[0].length; i++) {
-          doggiesData.push({
-            name: allTokens[0][i],
-            dna: allTokens[1][i],
-            price: web3Instance.utils.fromWei(allTokens[2][i], 'ether'),
-            nextPrice: web3Instance.utils.fromWei(allTokens[3][i], 'ether'),
-            owner: allTokens[4][i],
-          });
+        if (allTokens && allTokens[0] && allTokens[0].length > 0) {
+          for (let i = 0; i < allTokens[0].length; i++) {
+            doggiesData.push({
+              name: allTokens[0][i],
+              dna: allTokens[1][i],
+              price: web3Instance.utils.fromWei(allTokens[2][i], 'ether'),
+              nextPrice: web3Instance.utils.fromWei(allTokens[3][i], 'ether'),
+              owner: allTokens[4][i],
+            });
+          }
         }
 
         setDoggies(doggiesData);
         setPaused(isPaused);
 
         // Generate images after state is set
-        setTimeout(() => {
-          for (let i = 0; i < allTokens[0].length; i++) {
-            generateDoggyImage(
-              replaceAt(doggiesData[i].dna, 2, '00'),
-              4,
-              `doggy-canvas-${i}`
-            );
-          }
-        }, 100);
+        if (doggiesData.length > 0) {
+          setTimeout(() => {
+            for (let i = 0; i < doggiesData.length; i++) {
+              generateDoggyImage(
+                replaceAt(doggiesData[i].dna, 2, '00'),
+                4,
+                `doggy-canvas-${i}`
+              );
+            }
+          }, 100);
+        }
       } catch (error) {
         console.error('Error getting tokens:', error);
-        toast.error('Failed to load doggies');
+        if (error.message?.includes('execution reverted') || error.message?.includes('call revert')) {
+          toast.error('Contract not found on this network. Please switch to the correct network.');
+        } else if (error.message?.includes('is not a function')) {
+          toast.warning('Contract ABI is incomplete. Please update the ABI configuration.');
+        } else {
+          toast.error('Failed to load doggies');
+        }
+        setDoggies([]);
       }
     },
     [generateDoggyImage]
@@ -171,12 +196,27 @@ const CryptoDoggies = () => {
 
   const initializeContract = useCallback(async () => {
     try {
-      const web3Instance = new Web3(
-        Web3.givenProvider || 'http://localhost:8545'
-      );
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 

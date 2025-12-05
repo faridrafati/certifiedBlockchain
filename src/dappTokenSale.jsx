@@ -61,6 +61,35 @@ const DappTokenSale = () => {
   const [transferAddress, setTransferAddress] = useState('');
   const [transferAmount, setTransferAmount] = useState('');
 
+  // Admin state
+  const [admin, setAdmin] = useState('');
+
+  // Helper functions for number formatting
+  const formatNumberWithCommas = (value) => {
+    if (!value) return '';
+    const parts = value.toString().split('.');
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.join('.');
+  };
+
+  const parseFormattedNumber = (value) => {
+    return value.replace(/,/g, '');
+  };
+
+  const handleBuyAmountChange = (e) => {
+    const value = e.target.value.replace(/,/g, '');
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setBuyAmount(formatNumberWithCommas(value));
+    }
+  };
+
+  const handleTransferAmountChange = (e) => {
+    const value = e.target.value.replace(/,/g, '');
+    if (value === '' || /^\d*\.?\d*$/.test(value)) {
+      setTransferAmount(formatNumberWithCommas(value));
+    }
+  };
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -126,8 +155,24 @@ const DappTokenSale = () => {
         const price = await saleContractInstance.methods.tokenPrice().call();
         setTokenPrice(price);
 
-        const sold = await saleContractInstance.methods.tokensSold().call();
-        setTokensSold(sold);
+        // Try getTokensSold() first (new contract), fallback to tokensSold() (old contract)
+        let sold;
+        try {
+          sold = await saleContractInstance.methods.getTokensSold().call();
+        } catch {
+          // Fallback for old contract that doesn't have getTokensSold()
+          sold = await saleContractInstance.methods.tokensSold().call();
+        }
+        setTokensSold(sold.toString());
+
+        // Try to get admin address (new contract only)
+        try {
+          const adminAddress = await saleContractInstance.methods.getAdmin().call();
+          setAdmin(adminAddress);
+        } catch {
+          // Old contract doesn't have getAdmin()
+          setAdmin('');
+        }
       } catch (error) {
         console.error('Error getting token info:', error);
         toast.error('Failed to load token information');
@@ -138,12 +183,27 @@ const DappTokenSale = () => {
 
   const initializeContract = useCallback(async () => {
     try {
-      const web3Instance = new Web3(
-        Web3.givenProvider || 'http://localhost:8545'
-      );
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 
@@ -201,7 +261,9 @@ const DappTokenSale = () => {
       return;
     }
 
-    if (!buyAmount || parseFloat(buyAmount) <= 0) {
+    const rawBuyAmount = parseFormattedNumber(buyAmount);
+
+    if (!rawBuyAmount || parseFloat(rawBuyAmount) <= 0) {
       toast.error('Please enter a valid amount');
       return;
     }
@@ -209,26 +271,27 @@ const DappTokenSale = () => {
     try {
       setSubmitting(true);
 
-      const amountInWei = (parseFloat(buyAmount) * 10 ** tokenDecimals).toString();
-      const ethCost = (parseInt(tokenPrice) * parseFloat(amountInWei)).toString();
+      // User enters whole token amount (e.g., 1000 means 1000 full tokens)
+      // Contract handles decimals internally: tokenAmount = numberOfTokens * 10^decimals
+      // Cost calculation: msg.value == numberOfTokens * tokenPrice
+      const numberOfTokens = Math.floor(parseFloat(rawBuyAmount));
+      const ethCost = (BigInt(tokenPrice) * BigInt(numberOfTokens)).toString();
 
       toast.info('Buying tokens. Please confirm in MetaMask...');
 
-      await saleContract.methods
-        .buyTokens(amountInWei)
+      const receipt = await saleContract.methods
+        .buyTokens(numberOfTokens)
         .send({ from: account, value: ethCost, gas: '1000000' })
         .on('transactionHash', (hash) => {
           toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Tokens purchased successfully!');
-          setBuyAmount('');
-          await getTokenInfo(tokenContract, saleContract, account);
-        })
-        .on('error', (error) => {
-          console.error('Buy tokens error:', error);
-          toast.error(`Failed to buy tokens: ${error.message}`);
         });
+
+      if (receipt.status) {
+        toast.success('Tokens purchased successfully!');
+        setBuyAmount('');
+        // Refresh balance after successful purchase
+        await getTokenInfo(tokenContract, saleContract, account);
+      }
     } catch (error) {
       console.error('Buy tokens failed:', error);
       toast.error(`Failed to buy tokens: ${error.message || 'Unknown error'}`);
@@ -250,7 +313,9 @@ const DappTokenSale = () => {
       return;
     }
 
-    if (!transferAmount || parseFloat(transferAmount) <= 0) {
+    const rawTransferAmount = parseFormattedNumber(transferAmount);
+
+    if (!rawTransferAmount || parseFloat(rawTransferAmount) <= 0) {
       toast.error('Please enter a valid amount');
       return;
     }
@@ -260,7 +325,7 @@ const DappTokenSale = () => {
       return;
     }
 
-    if (parseFloat(transferAmount) > parseFloat(balance)) {
+    if (parseFloat(rawTransferAmount) > parseFloat(balance)) {
       toast.error('Insufficient balance');
       return;
     }
@@ -268,29 +333,27 @@ const DappTokenSale = () => {
     try {
       setSubmitting(true);
 
-      const amountInWei = (
-        parseFloat(transferAmount) *
-        10 ** tokenDecimals
-      ).toString();
+      // Convert amount to wei (with decimals) using BigInt to avoid scientific notation
+      const [wholePart, decimalPart = ''] = rawTransferAmount.split('.');
+      const paddedDecimal = decimalPart.padEnd(tokenDecimals, '0').slice(0, tokenDecimals);
+      const amountInWei = BigInt(wholePart + paddedDecimal).toString();
 
       toast.info('Transferring tokens. Please confirm in MetaMask...');
 
-      await tokenContract.methods
+      const receipt = await tokenContract.methods
         .transfer(transferAddress, amountInWei)
         .send({ from: account, gas: '1000000' })
         .on('transactionHash', (hash) => {
           toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Tokens transferred successfully!');
-          setTransferAddress('');
-          setTransferAmount('');
-          await getTokenInfo(tokenContract, saleContract, account);
-        })
-        .on('error', (error) => {
-          console.error('Transfer error:', error);
-          toast.error(`Failed to transfer: ${error.message}`);
         });
+
+      if (receipt.status) {
+        toast.success('Tokens transferred successfully!');
+        setTransferAddress('');
+        setTransferAmount('');
+        // Refresh balance after successful transfer
+        await getTokenInfo(tokenContract, saleContract, account);
+      }
     } catch (error) {
       console.error('Transfer failed:', error);
       toast.error(`Failed to transfer: ${error.message || 'Unknown error'}`);
@@ -315,20 +378,17 @@ const DappTokenSale = () => {
       setSubmitting(true);
       toast.info('Ending token sale. Please confirm in MetaMask...');
 
-      await saleContract.methods
+      const receipt = await saleContract.methods
         .endSale()
         .send({ from: account, gas: '1000000' })
         .on('transactionHash', (hash) => {
           toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Token sale ended successfully!');
-          await getTokenInfo(tokenContract, saleContract, account);
-        })
-        .on('error', (error) => {
-          console.error('End sale error:', error);
-          toast.error(`Failed to end sale: ${error.message}`);
         });
+
+      if (receipt.status) {
+        toast.success('Token sale ended successfully!');
+        await getTokenInfo(tokenContract, saleContract, account);
+      }
     } catch (error) {
       console.error('End sale failed:', error);
       toast.error(`Failed to end sale: ${error.message || 'Unknown error'}`);
@@ -370,7 +430,9 @@ const DappTokenSale = () => {
     return <LoadingSpinner message="Loading token sale..." />;
   }
 
-  const progress = Math.floor((parseInt(tokensSold) / parseInt(totalSupply)) * 100);
+  // Calculate progress based on tokens sold vs total allocated to sale (sold + available)
+  const totalAllocated = parseFloat(tokensSold) + parseFloat(contractBalance);
+  const progress = totalAllocated > 0 ? Math.floor((parseFloat(tokensSold) / totalAllocated) * 100) : 0;
   const priceInEth = web3 ? parseFloat(web3.utils.fromWei(tokenPrice, 'ether')) : 0;
 
   return (
@@ -436,19 +498,15 @@ const DappTokenSale = () => {
                   label={`Amount (${tokenSymbol})`}
                   variant="outlined"
                   fullWidth
-                  type="number"
+                  type="text"
                   value={buyAmount}
-                  onChange={(e) => setBuyAmount(e.target.value)}
+                  onChange={handleBuyAmountChange}
                   placeholder="0.0"
                   disabled={submitting}
                   required
-                  inputProps={{
-                    min: '0',
-                    step: 'any',
-                  }}
                   helperText={
                     buyAmount
-                      ? `Cost: ${(parseFloat(buyAmount) * priceInEth).toFixed(6)} ETH`
+                      ? `Cost: ${(parseFloat(parseFormattedNumber(buyAmount)) * parseFloat(tokenPrice) / Math.pow(10, 18)).toFixed(6)} ETH`
                       : 'Enter amount to see cost'
                   }
                 />
@@ -474,18 +532,18 @@ const DappTokenSale = () => {
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => setBuyAmount('1000')}
+                    onClick={() => setBuyAmount(formatNumberWithCommas('1000'))}
                     disabled={submitting}
                   >
-                    1000
+                    1,000
                   </Button>
                   <Button
                     size="small"
                     variant="outlined"
-                    onClick={() => setBuyAmount('5000')}
+                    onClick={() => setBuyAmount(formatNumberWithCommas('5000'))}
                     disabled={submitting}
                   >
-                    5000
+                    5,000
                   </Button>
                 </div>
 
@@ -520,7 +578,7 @@ const DappTokenSale = () => {
 
               <div className="progress-stats">
                 <span className="stat-item">
-                  <strong>{parseInt(tokensSold).toLocaleString()}</strong> sold
+                  <strong>{parseFloat(tokensSold).toLocaleString()}</strong> sold
                 </span>
                 <span className="stat-divider">/</span>
                 <span className="stat-item">
@@ -591,16 +649,12 @@ const DappTokenSale = () => {
                   label={`Amount (${tokenSymbol})`}
                   variant="outlined"
                   fullWidth
-                  type="number"
+                  type="text"
                   value={transferAmount}
-                  onChange={(e) => setTransferAmount(e.target.value)}
+                  onChange={handleTransferAmountChange}
                   placeholder="0.0"
                   disabled={submitting}
                   required
-                  inputProps={{
-                    min: '0',
-                    step: 'any',
-                  }}
                   helperText={`Available: ${parseFloat(balance).toLocaleString()} ${tokenSymbol}`}
                 />
 
@@ -619,20 +673,24 @@ const DappTokenSale = () => {
               </div>
             </form>
 
-            <Divider className="divider" />
+            {admin && account && admin.toLowerCase() === account.toLowerCase() && (
+              <>
+                <Divider className="divider" />
 
-            <Button
-              variant="contained"
-              color="error"
-              size="large"
-              fullWidth
-              onClick={handleEndSale}
-              disabled={submitting}
-              className="end-sale-button"
-              startIcon={<StopCircleIcon />}
-            >
-              {submitting ? 'Ending Sale...' : 'End Token Sale'}
-            </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  size="large"
+                  fullWidth
+                  onClick={handleEndSale}
+                  disabled={submitting}
+                  className="end-sale-button"
+                  startIcon={<StopCircleIcon />}
+                >
+                  {submitting ? 'Ending Sale...' : 'End Token Sale (Admin Only)'}
+                </Button>
+              </>
+            )}
           </CardContent>
         </Card>
       </div>

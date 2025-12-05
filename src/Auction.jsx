@@ -77,10 +77,27 @@ const Auction = () => {
 
   const initializeContract = useCallback(async () => {
     try {
-      const web3Instance = new Web3(Web3.givenProvider || 'http://localhost:8545');
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 
@@ -281,7 +298,7 @@ const Auction = () => {
         <section className="hero-section">
           <div className="hero-content">
             <h1 className="display-4 fw-bold mb-3">Blockchain Auction</h1>
-            <p className="lead text-muted mb-4">
+            <p className="lead mb-4">
               Participate in a transparent, decentralized auction powered by smart contracts.
             </p>
             <HideShow
@@ -378,7 +395,7 @@ const Auction = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="display-4 fw-bold mb-3">Auction Admin Panel</h1>
-          <p className="lead text-muted mb-4">Manage your blockchain auction</p>
+          <p className="lead mb-4">Manage your blockchain auction</p>
           <HideShow
             currentAccount={currentAccount}
             contractAddress={AUCTION_ADDRESS}

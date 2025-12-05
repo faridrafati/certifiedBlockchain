@@ -74,15 +74,17 @@ const WeightedVoting = () => {
       let status;
       let enableButton = false;
 
-      if (isAuthorized[0] === '0') {
+      // Convert weight to number for proper comparison (Web3 may return BigInt or string)
+      const weight = parseInt(isAuthorized[0].toString()) || 0;
+      const hasVoted = isAuthorized[1] === true || isAuthorized[1] === 'true';
+
+      if (weight === 0) {
         status = 'not_authorized';
+      } else if (!hasVoted) {
+        status = 'authorized_can_vote';
+        enableButton = true;
       } else {
-        if (isAuthorized[1] === false) {
-          status = 'authorized_can_vote';
-          enableButton = true;
-        } else {
-          status = 'authorized_voted';
-        }
+        status = 'authorized_voted';
       }
 
       setAuthorizationStatus(status);
@@ -115,10 +117,27 @@ const WeightedVoting = () => {
 
   const initializeContract = useCallback(async () => {
     try {
-      const web3Instance = new Web3(Web3.givenProvider || 'http://localhost:8545');
+      if (!window.ethereum) {
+        toast.error('Please install MetaMask to use this application');
+        setLoading(false);
+        return;
+      }
+
+      await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const web3Instance = new Web3(window.ethereum);
       setWeb3(web3Instance);
 
-      const networkType = await web3Instance.eth.net.getNetworkType();
+      const chainId = await web3Instance.eth.getChainId();
+      const networkNames = {
+        1n: 'mainnet',
+        5n: 'goerli',
+        11155111n: 'sepolia',
+        137n: 'polygon',
+        80001n: 'mumbai',
+        56n: 'bsc',
+        97n: 'bsc-testnet',
+      };
+      const networkType = networkNames[chainId] || `chain-${chainId}`;
       const accounts = await web3Instance.eth.getAccounts();
       const userAccount = accounts[0];
 
@@ -192,22 +211,20 @@ const WeightedVoting = () => {
       setSubmitting(true);
       toast.info('Authorizing voter. Please confirm in MetaMask...');
 
-      await contract.methods
+      const receipt = await contract.methods
         .authorizeVoter(voterAddress, weight)
         .send({ from: account, gas: '1000000' })
         .on('transactionHash', (hash) => {
           toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success(`Voter authorized with weight ${weight}!`);
-          setVoterAddress('');
-          setVoterWeight('1');
-          await loadCandidates(contract);
-        })
-        .on('error', (error) => {
-          console.error('Authorization error:', error);
-          toast.error(`Authorization failed: ${error.message}`);
         });
+
+      if (receipt.status) {
+        toast.success(`Voter authorized with weight ${weight}!`);
+        setVoterAddress('');
+        setVoterWeight('1');
+        // Refresh candidates after authorization
+        await loadCandidates(contract);
+      }
     } catch (error) {
       console.error('Authorization failed:', error);
       toast.error(`Authorization failed: ${error.message || 'Unknown error'}`);
@@ -222,8 +239,31 @@ const WeightedVoting = () => {
       return;
     }
 
-    if (!canVote) {
-      toast.error('You are not authorized to vote or have already voted');
+    // Re-check authorization status before voting
+    try {
+      const isAuthorized = await contract.methods
+        .isAuthorizedVoter()
+        .call({ from: account });
+
+      const weight = parseInt(isAuthorized[0].toString()) || 0;
+      const hasVoted = isAuthorized[1] === true || isAuthorized[1] === 'true';
+
+      if (weight === 0) {
+        toast.error('You are not authorized to vote. Please contact the contract owner.');
+        setCanVote(false);
+        setAuthorizationStatus('not_authorized');
+        return;
+      }
+
+      if (hasVoted) {
+        toast.error('You have already voted.');
+        setCanVote(false);
+        setAuthorizationStatus('authorized_voted');
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking authorization before vote:', error);
+      toast.error('Failed to verify authorization status');
       return;
     }
 
@@ -231,21 +271,19 @@ const WeightedVoting = () => {
       setSubmitting(true);
       toast.info('Submitting vote. Please confirm in MetaMask...');
 
-      await contract.methods
+      const receipt = await contract.methods
         .voteForCandidate(candidateIndex)
         .send({ from: account, gas: '1000000' })
         .on('transactionHash', (hash) => {
           toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
-        })
-        .on('receipt', async () => {
-          toast.success('Vote cast successfully!');
-          await loadCandidates(contract);
-          await checkAuthorizationStatus(contract, account);
-        })
-        .on('error', (error) => {
-          console.error('Voting error:', error);
-          toast.error(`Voting failed: ${error.message}`);
         });
+
+      if (receipt.status) {
+        toast.success('Vote cast successfully!');
+        // Refresh candidates and authorization status after successful vote
+        await loadCandidates(contract);
+        await checkAuthorizationStatus(contract, account);
+      }
     } catch (error) {
       console.error('Vote failed:', error);
       toast.error(`Vote failed: ${error.message || 'Unknown error'}`);
