@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
 import { TextField, Button, IconButton, Chip, Tooltip } from '@mui/material';
@@ -45,6 +45,14 @@ const ChatBoxStable = () => {
   const [searchValue, setSearchValue] = useState('');
   const [showListedContact, setShowListedContact] = useState(false);
 
+  // Refs to track data for non-reactive updates
+  const contactsRef = useRef([]);
+  const messagesRef = useRef([]);
+  const isUpdatingRef = useRef(false);
+  const getUpdateMessagesRef = useRef(null);
+  const hasInitializedRef = useRef(false);
+  const web3Ref = useRef(null);
+
   // Confirm dialog state
   const [confirmDialog, setConfirmDialog] = useState({
     open: false,
@@ -87,9 +95,13 @@ const ChatBoxStable = () => {
 
   const bytes32toAscii = useCallback(
     (content) => {
-      if (!web3) return '';
-      const ascii = web3.utils.toAscii(content);
-      return ascii.replace(/[^a-zA-Z0-9 ]/g, '');
+      const w3 = web3Ref.current || web3;
+      if (!w3) return '';
+      try {
+        return w3.utils.toAscii(content).replace(/\0/g, '').trim();
+      } catch {
+        return '';
+      }
     },
     [web3]
   );
@@ -108,9 +120,11 @@ const ChatBoxStable = () => {
             name: bytes32toAscii(contractProperties[2][i]),
             listed: false,
             lastActivity: '',
+            lastActivityTime: 0,
           });
         }
 
+        contactsRef.current = contactsList;
         setContacts(contactsList);
         setOwner(contractProperties[0]);
       } catch (error) {
@@ -163,6 +177,7 @@ const ChatBoxStable = () => {
               }
             }
           }
+          contactsRef.current = updatedContacts;
           return updatedContacts;
         });
       } catch (error) {
@@ -235,30 +250,47 @@ const ChatBoxStable = () => {
       sorted[i].beautyTime = `${date} | ${time}`;
     }
 
-    // Update last activity for contacts
-    const updatedContacts = contactsList.map((contact) => ({
-      ...contact,
-      lastActivity: '',
-    }));
-
+    // Calculate new last activity for each contact (store both formatted and raw timestamp)
+    const lastActivityMap = {};
     for (let j = 0; j < sorted.length; j++) {
-      for (let i = 0; i < updatedContacts.length; i++) {
+      for (let i = 0; i < contactsList.length; i++) {
         if (
           (sorted[j].from === userAccount &&
-            sorted[j].to === updatedContacts[i].address) ||
+            sorted[j].to === contactsList[i].address) ||
           (sorted[j].to === userAccount &&
-            sorted[j].from === updatedContacts[i].address)
+            sorted[j].from === contactsList[i].address)
         ) {
-          updatedContacts[i].lastActivity = sorted[j].beautyTime;
+          lastActivityMap[contactsList[i].address] = {
+            formatted: sorted[j].beautyTime,
+            timestamp: sorted[j].time,
+          };
         }
       }
     }
+
+    // Only update contacts if lastActivity actually changed
+    const updatedContacts = contactsList.map((contact) => {
+      const newActivity = lastActivityMap[contact.address];
+      // If no new activity found, preserve existing lastActivity
+      if (!newActivity || contact.lastActivity === newActivity.formatted) {
+        return contact; // Return same reference if unchanged or no new activity
+      }
+      return {
+        ...contact,
+        lastActivity: newActivity.formatted,
+        lastActivityTime: newActivity.timestamp,
+      };
+    });
 
     return { messages: sorted, contacts: updatedContacts };
   }, []);
 
   const getUpdateMessages = useCallback(
     async (contractInstance, userAccount) => {
+      // Prevent overlapping updates
+      if (isUpdatingRef.current) return;
+      isUpdatingRef.current = true;
+
       try {
         const value = await contractInstance.methods
           .getMyInboxSize()
@@ -268,9 +300,6 @@ const ChatBoxStable = () => {
         const outboxSize = Number(value[0].toString());
         const inboxSize = Number(value[1].toString());
 
-        setMyOutboxSize(outboxSize);
-        setMyInboxSize(inboxSize);
-
         const messagesList = await retrieveMessages(
           contractInstance,
           userAccount,
@@ -279,15 +308,40 @@ const ChatBoxStable = () => {
         );
 
         const { messages: sortedMessages, contacts: updatedContacts } =
-          sortMessages(messagesList, contacts, userAccount);
+          sortMessages(messagesList, contactsRef.current, userAccount);
 
-        setMessages(sortedMessages);
-        setContacts(updatedContacts);
+        // Only update state if values actually changed
+        setMyOutboxSize((prev) => (prev !== outboxSize ? outboxSize : prev));
+        setMyInboxSize((prev) => (prev !== inboxSize ? inboxSize : prev));
+
+        // Only update messages if they changed (compare by length and last message time)
+        const messagesChanged =
+          sortedMessages.length !== messagesRef.current.length ||
+          (sortedMessages.length > 0 &&
+            messagesRef.current.length > 0 &&
+            sortedMessages[sortedMessages.length - 1]?.time !==
+              messagesRef.current[messagesRef.current.length - 1]?.time);
+
+        if (messagesChanged) {
+          messagesRef.current = sortedMessages;
+          setMessages(sortedMessages);
+        }
+
+        // Only update contacts if they actually changed
+        const hasContactsChanged = updatedContacts.some(
+          (contact, i) => contact !== contactsRef.current[i]
+        );
+        if (hasContactsChanged) {
+          contactsRef.current = updatedContacts;
+          setContacts(updatedContacts);
+        }
       } catch (error) {
         console.error('Error updating messages:', error);
+      } finally {
+        isUpdatingRef.current = false;
       }
     },
-    [retrieveMessages, sortMessages, contacts]
+    [retrieveMessages, sortMessages]
   );
 
   const initializeContract = useCallback(async () => {
@@ -300,6 +354,7 @@ const ChatBoxStable = () => {
 
       await window.ethereum.request({ method: 'eth_requestAccounts' });
       const web3Instance = new Web3(window.ethereum);
+      web3Ref.current = web3Instance; // Set ref synchronously for immediate use
       setWeb3(web3Instance);
 
       const chainId = await web3Instance.eth.getChainId();
@@ -351,20 +406,30 @@ const ChatBoxStable = () => {
   ]);
 
   useEffect(() => {
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
     checkMetamask();
     initializeContract();
   }, [checkMetamask, initializeContract]);
+
+  // Auto-refresh every 12 seconds (Ethereum block time)
+  // Keep ref updated with latest getUpdateMessages
+  useEffect(() => {
+    getUpdateMessagesRef.current = getUpdateMessages;
+  }, [getUpdateMessages]);
 
   // Auto-refresh every 12 seconds (Ethereum block time)
   useEffect(() => {
     if (!isRegistered || !contract || !account) return;
 
     const interval = setInterval(() => {
-      getUpdateMessages(contract, account);
+      if (getUpdateMessagesRef.current) {
+        getUpdateMessagesRef.current(contract, account);
+      }
     }, 12000);
 
     return () => clearInterval(interval);
-  }, [isRegistered, contract, account, getUpdateMessages]);
+  }, [isRegistered, contract, account]);
 
   const handleRegisterUser = async (username) => {
     if (!contract || !account || !web3) {
@@ -376,7 +441,10 @@ const ChatBoxStable = () => {
       setSubmitting(true);
       toast.info('Registering user. Please confirm in MetaMask...');
 
-      const usernameHex = web3.utils.fromAscii(username);
+      const usernameHex = web3.utils.padRight(
+        web3.utils.asciiToHex(username),
+        64
+      );
 
       await contract.methods
         .registerUser(usernameHex)
@@ -413,15 +481,18 @@ const ChatBoxStable = () => {
       return;
     }
 
-    if (contacts.length === 0 || selectedContactIndex >= contacts.length) {
+    if (filteredContacts.length === 0 || selectedContactIndex >= filteredContacts.length) {
       toast.error('Please select a contact');
       return;
     }
 
     try {
       setSubmitting(true);
-      const receiver = contacts[selectedContactIndex].address;
-      const messageHex = web3.utils.fromAscii(inputValue);
+      const receiver = filteredContacts[selectedContactIndex].address;
+      const messageHex = web3.utils.padRight(
+        web3.utils.asciiToHex(inputValue),
+        64
+      );
 
       toast.info('Sending message. Please confirm in MetaMask...');
 
@@ -542,8 +613,9 @@ const ChatBoxStable = () => {
 
     try {
       setSubmitting(true);
-      const contactAddress = contacts[index].address;
-      const newListedStatus = !contacts[index].listed;
+      // Use filteredContacts since index comes from the filtered/sorted list
+      const contactAddress = filteredContacts[index].address;
+      const newListedStatus = !filteredContacts[index].listed;
 
       toast.info('Updating contact list. Please confirm in MetaMask...');
 
@@ -558,10 +630,14 @@ const ChatBoxStable = () => {
             `Contact ${newListedStatus ? 'added to' : 'removed from'} favorites!`
           );
 
-          // Update local state
+          // Update local state - find the correct index in the original contacts array
           setContacts((prevContacts) => {
             const updated = [...prevContacts];
-            updated[index].listed = newListedStatus;
+            const originalIndex = updated.findIndex(c => c.address === contactAddress);
+            if (originalIndex !== -1) {
+              updated[originalIndex].listed = newListedStatus;
+            }
+            contactsRef.current = updated;
             return updated;
           });
         })
@@ -596,6 +672,49 @@ const ChatBoxStable = () => {
     }
   };
 
+  // Memoize filtered contacts to prevent recalculation on every render
+  // Must be before any early returns to maintain hook order
+  const filteredContacts = useMemo(() => {
+    // Separate current user from other contacts
+    const myContact = contacts.find(
+      (contact) => contact.address.toLowerCase() === account.toLowerCase()
+    );
+    let otherContacts = contacts.filter(
+      (contact) => contact.address.toLowerCase() !== account.toLowerCase()
+    );
+
+    if (showListedContact) {
+      otherContacts = _.filter(otherContacts, (contact) => contact.listed);
+    }
+    otherContacts = _.filter(
+      otherContacts,
+      (contact) =>
+        contact.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        contact.address.toLowerCase().includes(searchValue.toLowerCase())
+    );
+
+    // Sort other contacts by last activity (most recent first)
+    otherContacts = _.orderBy(
+      otherContacts,
+      [(contact) => contact.lastActivityTime || 0],
+      ['desc']
+    );
+
+    // Always put current user at top
+    let result = myContact ? [myContact, ...otherContacts] : otherContacts;
+
+    if (result.length === 0) {
+      result = [{ address: '0x0', name: 'No contacts found', listed: false }];
+    }
+
+    return result;
+  }, [contacts, account, showListedContact, searchValue]);
+
+  const currentContact =
+    filteredContacts.length > selectedContactIndex
+      ? filteredContacts[selectedContactIndex]
+      : null;
+
   if (loading) {
     return <LoadingSpinner message="Loading chat system..." />;
   }
@@ -619,7 +738,7 @@ const ChatBoxStable = () => {
             />
           </div>
         </section>
-        <LoginForm register={handleRegisterUser} />
+        <LoginForm register={handleRegisterUser} submitting={submitting} />
 
         <ConfirmDialog
           open={confirmDialog.open}
@@ -633,29 +752,6 @@ const ChatBoxStable = () => {
       </div>
     );
   }
-
-  // Filter contacts
-  let filteredContacts = [...contacts];
-  if (showListedContact) {
-    filteredContacts = _.filter(filteredContacts, (contact) => contact.listed);
-  }
-  filteredContacts = _.filter(
-    filteredContacts,
-    (contact) =>
-      contact.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-      contact.address.toLowerCase().includes(searchValue.toLowerCase())
-  );
-
-  if (filteredContacts.length === 0) {
-    filteredContacts = [
-      { address: '0x0', name: 'No contacts found', listed: false },
-    ];
-  }
-
-  const currentContact =
-    filteredContacts.length > selectedContactIndex
-      ? filteredContacts[selectedContactIndex]
-      : null;
 
   return (
     <div className="chatbox-stable-container">
@@ -741,50 +837,65 @@ const ChatBoxStable = () => {
           </div>
 
           <div className="contacts-list">
-            {filteredContacts.map((contact, index) => (
-              <div
-                key={index}
-                className={`contact-item ${
-                  selectedContactIndex === index ? 'active' : ''
-                }`}
-                onClick={() => setSelectedContactIndex(index)}
-              >
-                <div className="contact-avatar">
-                  <PersonIcon />
-                </div>
-                <div className="contact-info">
-                  <div className="contact-header">
-                    <h6>
-                      {contact.address === account
-                        ? `${contact.name} (Saved Messages)`
-                        : contact.name}
-                    </h6>
-                    <IconButton
-                      size="small"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditContactList(index);
-                      }}
-                      disabled={submitting || contact.address === '0x0'}
-                      className="favorite-btn"
-                    >
-                      {contact.listed ? (
-                        <StarIcon className="star-filled" />
-                      ) : (
-                        <StarBorderIcon />
-                      )}
-                    </IconButton>
+            {filteredContacts.map((contact, index) => {
+              const isMe = contact.address.toLowerCase() === account.toLowerCase();
+              return (
+                <div
+                  key={contact.address}
+                  className={`contact-item ${
+                    selectedContactIndex === index ? 'active' : ''
+                  } ${isMe ? 'me-contact' : ''}`}
+                  onClick={() => setSelectedContactIndex(index)}
+                >
+                  <div className={`contact-avatar ${isMe ? 'me-avatar' : ''}`}>
+                    <PersonIcon />
                   </div>
-                  <p className="contact-address">
-                    {contact.address.substring(0, 10)}...
-                    {contact.address.substring(38)}
-                  </p>
-                  {contact.lastActivity && (
-                    <span className="last-activity">{contact.lastActivity}</span>
-                  )}
+                  <div className="contact-info">
+                    <div className="contact-header">
+                      <h6>
+                        {isMe ? (
+                          <>
+                            <Chip
+                              label="Me"
+                              size="small"
+                              color="primary"
+                              className="me-chip"
+                            />
+                            {contact.name} (Saved Messages)
+                          </>
+                        ) : (
+                          contact.name
+                        )}
+                      </h6>
+                      {!isMe && (
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEditContactList(index);
+                          }}
+                          disabled={submitting || contact.address === '0x0'}
+                          className="favorite-btn"
+                        >
+                          {contact.listed ? (
+                            <StarIcon className="star-filled" />
+                          ) : (
+                            <StarBorderIcon />
+                          )}
+                        </IconButton>
+                      )}
+                    </div>
+                    <p className="contact-address">
+                      {contact.address.substring(0, 10)}...
+                      {contact.address.substring(38)}
+                    </p>
+                    {contact.lastActivity && (
+                      <span className="last-activity">{contact.lastActivity}</span>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

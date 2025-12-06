@@ -21,8 +21,8 @@ class LoginForm extends Form {
 
   render() {
     return (
-      <div className="row align-items-center h-100">
-        <div className="card col-6 mx-auto card-block">
+      <div className="registration-form-wrapper">
+        <div className="card">
           <div className="card-header">
             <h1>Registering Form</h1>
           </div>
@@ -40,7 +40,6 @@ class LoginForm extends Form {
           </div>
         </div>
       </div>
-      
     );
   }
 }

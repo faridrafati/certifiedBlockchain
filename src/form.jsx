@@ -49,9 +49,13 @@ class Form extends Component {
   };
 
   renderButton(label) {
+    const isSubmitting = this.props.submitting;
     return (
-      <button disabled={this.validate()} className="btn btn-primary mb-3">
-        {label}
+      <button
+        disabled={this.validate() || isSubmitting}
+        className="btn btn-primary mb-3"
+      >
+        {isSubmitting ? "Submitting..." : label}
       </button>
     );
   }

@@ -15,6 +15,7 @@ const ModalForm = ({ message, buttonName, onClick }) => {
   const handleClose = () => {
     switch (buttonName) {
       case 'Connect':
+      case 'Login':
         onClick();
         setShow(false);
         break;
@@ -37,6 +38,8 @@ const ModalForm = ({ message, buttonName, onClick }) => {
     switch (buttonName) {
       case 'Connect':
         return 'primary';
+      case 'Login':
+        return 'success';
       case 'Install':
         return 'warning';
       case 'Refresh':
@@ -53,6 +56,14 @@ const ModalForm = ({ message, buttonName, onClick }) => {
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px' }}>
             <path d="M10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2Z" stroke="currentColor" strokeWidth="2"/>
             <path d="M6 10L9 13L14 8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        );
+      case 'Login':
+        return (
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px' }}>
+            <path d="M8 16H4C3.44772 16 3 15.5523 3 15V5C3 4.44772 3.44772 4 4 4H8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            <path d="M12 14L16 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M16 10H7" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
         );
       case 'Install':
@@ -77,8 +88,8 @@ const ModalForm = ({ message, buttonName, onClick }) => {
   return (
     <Modal
       show={show}
-      onHide={buttonName === 'Install' ? undefined : handleClose}
-      backdrop={buttonName === 'Install' ? 'static' : true}
+      onHide={buttonName === 'Install' || buttonName === 'Login' ? undefined : handleClose}
+      backdrop={buttonName === 'Install' || buttonName === 'Login' ? 'static' : true}
       keyboard={false}
       centered
       className="metamask-modal"
@@ -96,6 +107,7 @@ const ModalForm = ({ message, buttonName, onClick }) => {
 
           <h3 className="modal-title">
             {buttonName === 'Connect' && 'Connect Your Wallet'}
+            {buttonName === 'Login' && 'Wallet Locked'}
             {buttonName === 'Install' && 'MetaMask Required'}
             {buttonName === 'Refresh' && 'Account Changed'}
             {buttonName === 'Ok' && 'Welcome!'}
@@ -112,6 +124,16 @@ const ModalForm = ({ message, buttonName, onClick }) => {
                 <path d="M8 4V8M8 11V11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
               </svg>
               <span>MetaMask is a secure cryptocurrency wallet that enables you to interact with blockchain applications.</span>
+            </div>
+          )}
+
+          {buttonName === 'Login' && (
+            <div className="info-box warning">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 1L15 14H1L8 1Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/>
+                <path d="M8 6V9M8 11V11.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              </svg>
+              <span>Your session has been disconnected. Please unlock your MetaMask wallet and click Login to continue.</span>
             </div>
           )}
         </div>

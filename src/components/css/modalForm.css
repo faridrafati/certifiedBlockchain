@@ -101,6 +101,15 @@
   line-height: 1.5;
 }
 
+.info-box.warning {
+  background: rgba(220, 53, 69, 0.1);
+  border-left-color: #dc3545;
+}
+
+.info-box.warning svg {
+  color: #dc3545;
+}
+
 .metamask-modal-footer {
   padding: 1.5rem 2rem;
   border-top: 1px solid #e2e8f0;
@@ -156,6 +165,18 @@
 .modal-action-button.btn-info:hover {
   background: linear-gradient(135deg, #3d9ce3 0%, #00d9e5 100%);
   box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+  transform: translateY(-2px);
+}
+
+.modal-action-button.btn-success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  color: white;
+  box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
+}
+
+.modal-action-button.btn-success:hover {
+  background: linear-gradient(135deg, #0e8377 0%, #2dd66a 100%);
+  box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
   transform: translateY(-2px);
 }
 

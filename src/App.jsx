@@ -39,6 +39,30 @@ function App() {
     checkMetamask();
   }, []);
 
+  // Periodic check for wallet lock status (some MetaMask versions don't fire events reliably)
+  useEffect(() => {
+    if (!modalNeed && currentAccount) {
+      const checkWalletStatus = async () => {
+        try {
+          const { ethereum } = window;
+          if (ethereum) {
+            const accounts = await ethereum.request({ method: 'eth_accounts' });
+            if (accounts.length === 0) {
+              // Wallet was locked
+              handleAccountsChanged(accounts, false);
+            }
+          }
+        } catch (err) {
+          console.error('Error checking wallet status:', err);
+        }
+      };
+
+      // Check every 3 seconds
+      const intervalId = setInterval(checkWalletStatus, 3000);
+      return () => clearInterval(intervalId);
+    }
+  }, [modalNeed, currentAccount]);
+
   const startApp = (provider) => {
     if (provider !== window.ethereum) {
       console.error('Multiple wallets detected. Please use only one.');
@@ -85,14 +109,14 @@ function App() {
       // Handle account changes
       try {
         const accounts = await ethereum.request({ method: 'eth_accounts' });
-        handleAccountsChanged(accounts);
+        handleAccountsChanged(accounts, true); // Initial check
       } catch (err) {
         console.error('Error fetching accounts:', err);
       }
 
+      // Listen for account changes (wallet lock/unlock, account switch)
       ethereum.on('accountsChanged', (accounts) => {
-        handleAccountsChanged(accounts);
-        window.location.reload();
+        handleAccountsChanged(accounts, false);
       });
 
       setIsLoading(false);
@@ -107,19 +131,28 @@ function App() {
     setChainId(newChainId);
   };
 
-  const handleAccountsChanged = (accounts) => {
+  const handleAccountsChanged = (accounts, isInitialCheck = false) => {
     if (accounts.length === 0) {
-      setButtonName('Connect');
-      setMessage('Please connect to MetaMask!');
+      // Wallet is locked or disconnected
+      const wasConnected = currentAccount !== null;
       setCurrentAccount(null);
       setModalNeed(true);
+
+      if (wasConnected || !isInitialCheck) {
+        // User was connected but locked their wallet - show Login
+        setButtonName('Login');
+        setMessage('Your wallet is locked. Please unlock MetaMask and login to continue.');
+      } else {
+        // Initial state - user never connected
+        setButtonName('Connect');
+        setMessage('Please connect to MetaMask!');
+      }
     } else {
-      setButtonName('');
-      if (accounts[0] !== currentAccount) {
-        setCurrentAccount(accounts[0]);
-        setButtonName('Refresh');
-        setMessage(`Your Account Address is: ${accounts[0]}`);
+      const newAccount = accounts[0];
+      if (newAccount !== currentAccount) {
+        setCurrentAccount(newAccount);
         setModalNeed(false);
+        toast.success('Wallet connected successfully!');
       }
     }
   };
@@ -137,7 +170,7 @@ function App() {
       const account = accounts[0];
       setCurrentAccount(account);
       setModalNeed(false);
-      toast.success('Successfully connected to MetaMask!');
+      // Toast is handled by handleAccountsChanged listener
     } catch (err) {
       if (err.code === 4001) {
         console.log('Please connect to MetaMask.');

@@ -3,6 +3,8 @@
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem 1rem;
+  overflow: visible !important;
+  min-height: 100vh;
 }
 
 /* Hero Section */
@@ -59,74 +61,88 @@
 }
 
 /* Registration Form */
-.chatbox-stable-container > .row,
-.chatbox-stable-container .row.align-items-center,
-.chatbox-stable-container .row.align-items-center.h-100 {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: center !important;
-  min-height: 500px;
-  height: auto !important;
-  margin: 0;
+.chatbox-stable-container .registration-form-wrapper {
+  display: flex;
+  justify-content: center;
   padding: 2rem 1rem;
   width: 100%;
 }
 
-.chatbox-stable-container .card.col-6,
-.chatbox-stable-container .card.col-6.mx-auto {
-  flex: 0 0 auto !important;
-  width: auto !important;
-  max-width: 500px;
-  min-width: 350px;
-  margin: 0 auto;
-}
-
-.chatbox-stable-container .card {
+.chatbox-stable-container .registration-form-wrapper .card {
   display: block !important;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  border: none;
-  max-width: 500px;
-  width: 100%;
+  overflow: hidden !important;
+  background: #1e2a3a !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2) !important;
+  border: none !important;
+  width: 100% !important;
+  max-width: 500px !important;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  transform: none !important;
   animation: fadeInUp 0.6s ease-out;
 }
 
-.chatbox-stable-container .card-header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  border-radius: 20px 20px 0 0 !important;
-  padding: 1.5rem 2rem;
-  border: none;
+.chatbox-stable-container .registration-form-wrapper .card::before {
+  display: none !important;
+  content: none !important;
 }
 
-.chatbox-stable-container .card-header h1 {
+.chatbox-stable-container .registration-form-wrapper .card-header {
+  display: block !important;
+  position: relative !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  border-radius: 20px 20px 0 0 !important;
+  padding: 1.5rem 2rem !important;
+  border: none !important;
+}
+
+.chatbox-stable-container .registration-form-wrapper .card-header h1 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
 }
 
-.chatbox-stable-container .card-body {
-  padding: 2rem;
+.chatbox-stable-container .registration-form-wrapper .card-body {
+  display: block !important;
+  position: relative !important;
+  padding: 2rem !important;
+  background: #1e2a3a !important;
+  height: auto !important;
 }
 
-.chatbox-stable-container .card-body .form-group {
+.chatbox-stable-container .registration-form-wrapper .card-body form {
+  display: block;
+}
+
+.chatbox-stable-container .registration-form-wrapper .card-body .form-group {
   margin-bottom: 1.5rem;
 }
 
-.chatbox-stable-container .card-body .form-control {
+.chatbox-stable-container .registration-form-wrapper .card-body .form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.chatbox-stable-container .registration-form-wrapper .card-body .form-control {
   border-radius: 12px;
   padding: 0.75rem 1rem;
   border: 2px solid rgba(102, 126, 234, 0.2);
   transition: all 0.3s ease;
+  width: 100%;
+  display: block;
 }
 
-.chatbox-stable-container .card-body .form-control:focus {
+.chatbox-stable-container .registration-form-wrapper .card-body .form-control:focus {
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
-.chatbox-stable-container .card-body .btn-primary {
+.chatbox-stable-container .registration-form-wrapper .card-body .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
   border-radius: 12px;
@@ -136,31 +152,46 @@
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
   width: 100%;
+  color: white;
 }
 
-.chatbox-stable-container .card-body .btn-primary:hover {
+.chatbox-stable-container .registration-form-wrapper .card-body .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
 }
 
-.chatbox-stable-container .card-footer {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 0 0 20px 20px;
-  padding: 1.5rem 2rem;
-  border: none;
+.chatbox-stable-container .registration-form-wrapper .card-footer {
+  display: block !important;
+  position: relative !important;
+  background: #263244 !important;
+  border-radius: 0 0 20px 20px !important;
+  padding: 1.5rem 2rem 2rem 2rem !important;
+  border: none !important;
+  height: auto !important;
+  min-height: fit-content !important;
+  overflow: hidden !important;
+  word-wrap: break-word !important;
+  box-sizing: border-box !important;
 }
 
-.chatbox-stable-container .card-footer b {
-  color: #667eea;
+.chatbox-stable-container .registration-form-wrapper .card-footer b {
+  color: #a3bffa !important;
   font-size: 1rem;
-}
-
-.chatbox-stable-container .card-footer p {
+  display: block;
   margin-bottom: 0.5rem;
-  color: #718096;
 }
 
-.chatbox-stable-container .card-footer hr {
+.chatbox-stable-container .registration-form-wrapper .card-footer p,
+.chatbox-stable-container .registration-form-wrapper .card-footer p.text-muted {
+  margin-bottom: 0.5rem;
+  color: #e2e8f0 !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  white-space: normal !important;
+  max-width: 100% !important;
+}
+
+.chatbox-stable-container .registration-form-wrapper .card-footer hr {
   border-color: rgba(102, 126, 234, 0.2);
   margin: 1rem 0;
 }
@@ -250,7 +281,7 @@
   padding: 1rem;
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease, border-left 0.3s ease;
   margin-bottom: 0.5rem;
   background: rgba(102, 126, 234, 0.02);
 }
@@ -273,6 +304,63 @@
   );
   border-left: 4px solid #667eea;
   box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+}
+
+/* Me Contact Styling */
+.contact-item.me-contact {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.1) 0%,
+    rgba(5, 150, 105, 0.1) 100%
+  );
+  border-left: 4px solid #10b981;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.contact-item.me-contact::after {
+  content: '';
+  position: absolute;
+  bottom: -0.5rem;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.3), transparent);
+}
+
+.contact-item.me-contact:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.15) 0%,
+    rgba(5, 150, 105, 0.15) 100%
+  );
+}
+
+.contact-item.me-contact.active {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 185, 129, 0.2) 0%,
+    rgba(5, 150, 105, 0.2) 100%
+  );
+  border-left: 4px solid #059669;
+}
+
+.me-avatar {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+}
+
+.me-chip {
+  margin-right: 0.5rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+}
+
+.contact-header h6 {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
 }
 
 .contact-avatar {
@@ -330,9 +418,11 @@
 }
 
 .last-activity {
-  font-size: 0.7rem;
+  display: block;
+  font-size: 0.65rem;
   color: #a0aec0;
   font-style: italic;
+  margin-top: 0.2rem;
 }
 
 /* Chat Main Area */
@@ -473,6 +563,20 @@
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.input-container .MuiTextField-root.Mui-disabled,
+.input-container .MuiOutlinedInput-root.Mui-disabled {
+  opacity: 0.6;
+}
+
+.input-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+  color: rgba(255, 255, 255, 0.5) !important;
+  -webkit-text-fill-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.input-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 
 .send-button {
@@ -671,22 +775,40 @@
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
-  .chatbox-stable-container .card {
-    background: #1a202c;
+  .chatbox-stable-container .registration-form-wrapper .card {
+    background: #1e2a3a !important;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4) !important;
   }
 
-  .chatbox-stable-container .card-body .form-control {
-    background: #2d3748;
-    border-color: rgba(102, 126, 234, 0.3);
-    color: #e2e8f0;
+  .chatbox-stable-container .registration-form-wrapper .card-body {
+    background: #1e2a3a !important;
   }
 
-  .chatbox-stable-container .card-footer {
-    background: rgba(102, 126, 234, 0.1);
+  .chatbox-stable-container .registration-form-wrapper .card-body .form-group label {
+    color: #e2e8f0 !important;
   }
 
-  .chatbox-stable-container .card-footer p {
-    color: #cbd5e0;
+  .chatbox-stable-container .registration-form-wrapper .card-body .form-control {
+    background: #2d3748 !important;
+    border-color: rgba(102, 126, 234, 0.3) !important;
+    color: #e2e8f0 !important;
+  }
+
+  .chatbox-stable-container .registration-form-wrapper .card-footer {
+    background: #263244 !important;
+  }
+
+  .chatbox-stable-container .registration-form-wrapper .card-footer b {
+    color: #a3bffa !important;
+  }
+
+  .chatbox-stable-container .registration-form-wrapper .card-footer p,
+  .chatbox-stable-container .registration-form-wrapper .card-footer p.text-muted {
+    color: #e2e8f0 !important;
+  }
+
+  .chatbox-stable-container .registration-form-wrapper .card-footer hr {
+    border-color: rgba(255, 255, 255, 0.15) !important;
   }
 
   .chat-sidebar,
