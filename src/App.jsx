@@ -207,7 +207,7 @@ function App() {
         theme="colored"
       />
 
-      {modalNeed ? (
+      {modalNeed && (
         <div className="fade-in">
           <ModalForm
             message={message}
@@ -215,33 +215,33 @@ function App() {
             onClick={onClickConnect}
           />
         </div>
-      ) : (
-        <div className="fade-in">
-          <NavBar />
-          <main className="container mt-4">
-            <Routes>
-              <Route path="/petAdoption" element={<Adoption />} />
-              <Route path="/token" element={<DappToken />} />
-              <Route path="/crowdSale" element={<DappTokenSale />} />
-              <Route path="/voting" element={<Voting />} />
-              <Route path="/weightedVoting" element={<WeightedVoting />} />
-              <Route path="/chat" element={<Email />} />
-              <Route path="/chatBox" element={<Navigate to="/chatBoxStable" replace />} />
-              <Route path="/chatBoxStable" element={<ChatBoxStable />} />
-              <Route path="/todo" element={<Task />} />
-              <Route path="/auction" element={<Auction />} />
-              <Route path="/certificate" element={<Certificate />} />
-              <Route path="/pollSurvey" element={<Poll />} />
-              <Route path="/doggiesShop" element={<CryptoDoggies />} />
-              <Route path="/guessing" element={<GuessingGame />} />
-              <Route path="/ticketSale" element={<TicketSale />} />
-              <Route path="/not-found" element={<NotFound />} />
-              <Route path="/" element={<Navigate to="/token" replace />} />
-              <Route path="*" element={<Navigate to="/not-found" replace />} />
-            </Routes>
-          </main>
-        </div>
       )}
+
+      <div className={`fade-in app-content ${modalNeed ? 'blurred-content' : ''}`}>
+        <NavBar />
+        <main className="container mt-4">
+          <Routes>
+            <Route path="/petAdoption" element={<Adoption />} />
+            <Route path="/token" element={<DappToken />} />
+            <Route path="/crowdSale" element={<DappTokenSale />} />
+            <Route path="/voting" element={<Voting />} />
+            <Route path="/weightedVoting" element={<WeightedVoting />} />
+            <Route path="/chat" element={<Email />} />
+            <Route path="/chatBox" element={<Navigate to="/chatBoxStable" replace />} />
+            <Route path="/chatBoxStable" element={<ChatBoxStable />} />
+            <Route path="/todo" element={<Task />} />
+            <Route path="/auction" element={<Auction />} />
+            <Route path="/certificate" element={<Certificate />} />
+            <Route path="/pollSurvey" element={<Poll />} />
+            <Route path="/doggiesShop" element={<CryptoDoggies />} />
+            <Route path="/guessing" element={<GuessingGame />} />
+            <Route path="/ticketSale" element={<TicketSale />} />
+            <Route path="/not-found" element={<NotFound />} />
+            <Route path="/" element={<Navigate to="/token" replace />} />
+            <Route path="*" element={<Navigate to="/not-found" replace />} />
+          </Routes>
+        </main>
+      </div>
     </div>
   );
 }

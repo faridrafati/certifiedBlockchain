@@ -89,7 +89,7 @@ const ModalForm = ({ message, buttonName, onClick }) => {
     <Modal
       show={show}
       onHide={buttonName === 'Install' || buttonName === 'Login' ? undefined : handleClose}
-      backdrop={buttonName === 'Install' || buttonName === 'Login' ? 'static' : true}
+      backdrop={false}
       keyboard={false}
       centered
       className="metamask-modal"
