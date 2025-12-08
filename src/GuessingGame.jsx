@@ -35,7 +35,7 @@ import {
   GUESSINGGAME_ABI,
   GUESSINGGAME_ADDRESS,
 } from './components/config/GuessingGameConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/guessinggame.css';
 
@@ -383,15 +383,14 @@ const GuessingGame = () => {
               </IconButton>
             </Tooltip>
           </div>
+          <ContractInfo
+            contractAddress={GUESSINGGAME_ADDRESS}
+            account={account}
+            network={import.meta.env.VITE_NETWORK_ID}
+          />
           <p className="lead mb-4">
             Higher or Lower? Test your luck on the blockchain!
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={GUESSINGGAME_ADDRESS}
-            chainId={chainId}
-            owner={isOwner ? owner : undefined}
-          />
         </div>
       </section>
 

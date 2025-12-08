@@ -19,7 +19,6 @@ import {
   CHATBOXPLUS_ABI,
   CHATBOXPLUS_ADDRESS,
 } from './components/config/ChatBoxPlusConfig';
-import HideShow from './HideShow.jsx';
 import LoginForm from './loginForm';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
@@ -1050,12 +1049,6 @@ const ChatBoxStable = () => {
             <p className="lead mb-4">
               Secure blockchain messaging on Ethereum
             </p>
-            <HideShow
-              currentAccount={currentAccount}
-              contractAddress={CHATBOXPLUS_ADDRESS}
-              chainId={chainId}
-              owner={owner}
-            />
           </div>
         </section>
         <LoginForm register={handleRegisterUser} submitting={submitting} />
@@ -1095,12 +1088,6 @@ const ChatBoxStable = () => {
           <p className="lead mb-4">
             Secure blockchain messaging on Ethereum
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={CHATBOXPLUS_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

@@ -37,7 +37,7 @@ import {
   CRYPTODOGGIES_ADDRESS,
 } from './components/config/CryptoDoggiesConfig';
 import doggyidparser from './components/doggyidparser';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/cryptodoggies.css';
 
@@ -500,17 +500,16 @@ const CryptoDoggies = () => {
             <PetsIcon className="hero-icon" />
             {isOwner ? 'CryptoDoggies - Admin Panel' : 'Doggies Shop'}
           </h1>
+          <ContractInfo
+            contractAddress={CRYPTODOGGIES_ADDRESS}
+            account={account}
+            network={import.meta.env.VITE_NETWORK_ID}
+          />
           <p className="lead mb-4">
             {isOwner
               ? 'Manage your NFT doggies collection'
               : 'Collect and trade unique NFT doggies on the blockchain'}
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={CRYPTODOGGIES_ADDRESS}
-            chainId={chainId}
-            owner={isOwner ? owner : undefined}
-          />
         </div>
       </section>
 

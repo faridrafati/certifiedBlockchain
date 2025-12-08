@@ -31,7 +31,7 @@ import {
   TICKETSALE_ABI,
   TICKETSALE_ADDRESS,
 } from './components/config/TicketSaleConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/ticketsale.css';
 
@@ -391,15 +391,14 @@ const TicketSale = () => {
               </IconButton>
             </Tooltip>
           </div>
+          <ContractInfo
+            contractAddress={TICKETSALE_ADDRESS}
+            account={account}
+            network={import.meta.env.VITE_NETWORK_ID}
+          />
           <p className="lead mb-4">
             Buy tickets for events secured on the blockchain
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={TICKETSALE_ADDRESS}
-            chainId={chainId}
-            owner={isOwner ? owner : undefined}
-          />
         </div>
       </section>
 

@@ -23,8 +23,8 @@ import {
   DAPPTOKEN_ABI,
   DAPPTOKEN_ADDRESS,
 } from './components/config/DappTokenConfig';
-import HideShow from './HideShow.jsx';
 import LoadingSpinner from './components/LoadingSpinner';
+import ContractInfo from './components/ContractInfo';
 import './components/css/dapptoken.css';
 
 const DappToken = () => {
@@ -310,6 +310,12 @@ const DappToken = () => {
               <AccountBalanceWalletIcon className="hero-icon" />
               {tokenName}
             </h1>
+            <ContractInfo
+              contractAddress={DAPPTOKEN_ADDRESS}
+              contractName={`${tokenName} Token`}
+              network={import.meta.env.VITE_NETWORK_ID}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -319,11 +325,6 @@ const DappToken = () => {
           <p className="lead mb-4">
             ERC-20 Token Wallet - Manage your {tokenSymbol} tokens
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={DAPPTOKEN_ADDRESS}
-            chainId={chainId}
-          />
         </div>
       </section>
 

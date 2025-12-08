@@ -6,7 +6,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { VOTING_ABI, VOTING_ADDRESS } from './components/config/VotingConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/voting.css';
 
@@ -265,6 +265,13 @@ const Voting = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">🗳️ Democratic Voting System</h1>
+            <ContractInfo
+              contractAddress={VOTING_ADDRESS}
+              contractName="Voting Contract"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -274,12 +281,6 @@ const Voting = () => {
           <p className="lead mb-4">
             Participate in transparent, blockchain-based democratic voting
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={VOTING_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

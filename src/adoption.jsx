@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import pets from './components/pets.json';
 import { ADOPTION_ABI, ADOPTION_ADDRESS } from './components/config/AdoptionConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import './components/css/card.css';
 
 // Import all pet images using Vite's import.meta.glob
@@ -249,15 +249,14 @@ const Adoption = () => {
       <section className="hero-section">
         <div className="hero-content">
           <h1 className="display-4 fw-bold mb-3">Pet Adoption DApp</h1>
+          <ContractInfo
+            contractAddress={ADOPTION_ADDRESS}
+            account={account}
+            network={import.meta.env.VITE_NETWORK_ID}
+          />
           <p className="lead mb-4">
             Find your perfect companion on the blockchain. Each adoption is secured by smart contracts.
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={ADOPTION_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

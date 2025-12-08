@@ -29,9 +29,9 @@ import {
   DAPPTOKEN_ABI,
   DAPPTOKEN_ADDRESS,
 } from './components/config/DappTokenConfig';
-import HideShow from './HideShow.jsx';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
+import ContractInfo from './components/ContractInfo';
 import './components/css/dapptokensale.css';
 
 const DappTokenSale = () => {
@@ -471,6 +471,12 @@ const DappTokenSale = () => {
               <TrendingUpIcon className="hero-icon" />
               {tokenName} Token Sale
             </h1>
+            <ContractInfo
+              contractAddress={DAPPTOKENSALE_ADDRESS}
+              contractName={`${tokenName} Token Sale`}
+              network={import.meta.env.VITE_NETWORK_ID}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -480,11 +486,6 @@ const DappTokenSale = () => {
           <p className="lead mb-4">
             Participate in the {tokenSymbol} token crowdsale
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={DAPPTOKENSALE_ADDRESS}
-            chainId={chainId}
-          />
         </div>
       </section>
 

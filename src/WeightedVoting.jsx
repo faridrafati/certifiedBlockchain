@@ -9,7 +9,7 @@ import {
   WEIGHTEDVOTING_ABI,
   WEIGHTEDVOTING_ADDRESS,
 } from './components/config/WeightedVotingConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/weightedvoting.css';
 
@@ -371,6 +371,13 @@ const WeightedVoting = () => {
           <div className="hero-content">
             <div className="hero-title-row">
               <h1 className="display-4 fw-bold mb-3">⚖️ Weighted Voting Admin</h1>
+              <ContractInfo
+                contractAddress={WEIGHTEDVOTING_ADDRESS}
+                contractName="Weighted Voting Contract"
+                network={import.meta.env.VITE_NETWORK_ID}
+                owner={owner}
+                account={account}
+              />
               <Tooltip title="Refresh Data">
                 <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                   <RefreshIcon />
@@ -380,12 +387,6 @@ const WeightedVoting = () => {
             <p className="lead mb-4">
               Manage weighted voting with custom voter authorization
             </p>
-            <HideShow
-              currentAccount={currentAccount}
-              contractAddress={WEIGHTEDVOTING_ADDRESS}
-              chainId={chainId}
-              owner={owner}
-            />
           </div>
         </section>
 
@@ -484,6 +485,13 @@ const WeightedVoting = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">⚖️ Weighted Voting</h1>
+            <ContractInfo
+              contractAddress={WEIGHTEDVOTING_ADDRESS}
+              contractName="Weighted Voting Contract"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -493,12 +501,6 @@ const WeightedVoting = () => {
           <p className="lead mb-4">
             Cast your weighted vote for your preferred candidate
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={WEIGHTEDVOTING_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

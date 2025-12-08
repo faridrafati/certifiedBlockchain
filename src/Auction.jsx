@@ -8,7 +8,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import car from './components/images/car.png';
 import sold from './components/images/sold.png';
 import { AUCTION_ABI, AUCTION_ADDRESS } from './components/config/AuctionConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import './components/css/auction.css';
 
 const Auction = () => {
@@ -323,6 +323,13 @@ const Auction = () => {
           <div className="hero-content">
             <div className="hero-title-row">
               <h1 className="display-4 fw-bold mb-3">Blockchain Auction</h1>
+              <ContractInfo
+                contractAddress={AUCTION_ADDRESS}
+                contractName="Auction Contract"
+                network={import.meta.env.VITE_NETWORK_ID}
+                owner={owner}
+                account={account}
+              />
               <Tooltip title="Refresh Data">
                 <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                   <RefreshIcon />
@@ -332,12 +339,6 @@ const Auction = () => {
             <p className="lead mb-4">
               Participate in a transparent, decentralized auction powered by smart contracts.
             </p>
-            <HideShow
-              currentAccount={currentAccount}
-              contractAddress={AUCTION_ADDRESS}
-              chainId={chainId}
-              owner={owner}
-            />
           </div>
         </section>
 
@@ -427,6 +428,13 @@ const Auction = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">Auction Admin Panel</h1>
+            <ContractInfo
+              contractAddress={AUCTION_ADDRESS}
+              contractName="Auction Contract"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -434,12 +442,6 @@ const Auction = () => {
             </Tooltip>
           </div>
           <p className="lead mb-4">Manage your blockchain auction</p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={AUCTION_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

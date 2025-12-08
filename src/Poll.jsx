@@ -26,7 +26,7 @@ import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import Chart from 'react-apexcharts';
 import { POLL_ABI, POLL_ADDRESS } from './components/config/PollConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/poll.css';
 
@@ -375,6 +375,12 @@ const Poll = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">📊 Polling App</h1>
+            <ContractInfo
+              contractAddress={POLL_ADDRESS}
+              contractName="Poll Contract"
+              network={import.meta.env.VITE_NETWORK_ID}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -384,11 +390,6 @@ const Poll = () => {
           <p className="lead mb-4">
             Create and vote on decentralized polls on the blockchain
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={POLL_ADDRESS}
-            chainId={chainId}
-          />
         </div>
       </section>
 

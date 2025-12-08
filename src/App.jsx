@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ToastContainer, toast } from 'react-toastify';
@@ -33,6 +33,7 @@ function App() {
   const [buttonName, setButtonName] = useState('Ok');
   const [modalNeed, setModalNeed] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const hasShownConnectedToast = useRef(false);
 
   useEffect(() => {
     checkMetamask();
@@ -136,6 +137,7 @@ function App() {
       const wasConnected = currentAccount !== null;
       setCurrentAccount(null);
       setModalNeed(true);
+      hasShownConnectedToast.current = false;
 
       if (wasConnected || !isInitialCheck) {
         // User was connected but locked their wallet - show Login
@@ -151,7 +153,12 @@ function App() {
       if (newAccount !== currentAccount) {
         setCurrentAccount(newAccount);
         setModalNeed(false);
-        toast.success('Wallet connected successfully!');
+
+        // Only show toast once to prevent duplicate toasts on page load
+        if (!hasShownConnectedToast.current) {
+          toast.success('Wallet connected successfully!');
+          hasShownConnectedToast.current = true;
+        }
       }
     }
   };

@@ -9,7 +9,7 @@ import { sha256 } from 'js-sha256';
 import logoPhoto from './components/images/image007.png';
 import certPhoto from './components/images/image008.png';
 import { CERTIFICATE_ABI, CERTIFICATE_ADDRESS } from './components/config/CertificateConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/certificate.css';
 
@@ -353,6 +353,13 @@ const Certificate = () => {
           <div className="hero-content">
             <div className="hero-title-row">
               <h1 className="display-4 fw-bold mb-3">🎓 Certificate Verification</h1>
+              <ContractInfo
+                contractAddress={CERTIFICATE_ADDRESS}
+                contractName="Certificate Contract"
+                network={import.meta.env.VITE_NETWORK_ID}
+                owner={owner}
+                account={account}
+              />
               <Tooltip title="Refresh Data">
                 <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                   <RefreshIcon />
@@ -362,12 +369,6 @@ const Certificate = () => {
             <p className="lead mb-4">
               Verify the authenticity of blockchain-secured certificates
             </p>
-            <HideShow
-              currentAccount={currentAccount}
-              contractAddress={CERTIFICATE_ADDRESS}
-              chainId={chainId}
-              owner={owner}
-            />
           </div>
         </section>
 
@@ -475,6 +476,13 @@ const Certificate = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">🎓 Certificate Admin Panel</h1>
+            <ContractInfo
+              contractAddress={CERTIFICATE_ADDRESS}
+              contractName="Certificate Contract"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -482,12 +490,6 @@ const Certificate = () => {
             </Tooltip>
           </div>
           <p className="lead mb-4">Manage and issue blockchain certificates</p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={CERTIFICATE_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

@@ -23,7 +23,6 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { EMAIL_ABI, EMAIL_ADDRESS } from './components/config/EmailConfig';
-import HideShow from './HideShow.jsx';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
 import ContractInfo from './components/ContractInfo';
@@ -35,7 +34,6 @@ const Email = () => {
   const [account, setAccount] = useState('');
   const [contract, setContract] = useState(null);
   const [owner, setOwner] = useState('');
-  const [chainId, setChainId] = useState('');
   const [currentAccount, setCurrentAccount] = useState('');
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -558,12 +556,6 @@ const Email = () => {
           <p className="lead mb-4">
             Secure, decentralized messaging on the Ethereum blockchain
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={EMAIL_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 

@@ -9,7 +9,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { TASK_ABI, TASK_ADDRESS } from './components/config/TaskConfig';
-import HideShow from './HideShow.jsx';
+import ContractInfo from './components/ContractInfo';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/task.css';
 
@@ -245,6 +245,13 @@ const Task = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">📝 Todo Manager</h1>
+            <ContractInfo
+              contractAddress={TASK_ADDRESS}
+              contractName="Task Contract"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -254,12 +261,6 @@ const Task = () => {
           <p className="lead mb-4">
             Manage your tasks on the blockchain with transparency and permanence
           </p>
-          <HideShow
-            currentAccount={currentAccount}
-            contractAddress={TASK_ADDRESS}
-            chainId={chainId}
-            owner={owner}
-          />
         </div>
       </section>
 
