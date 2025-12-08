@@ -1,4 +1,14 @@
 /* MetaMask Modal Styles */
+
+/* Modal Backdrop */
+.metamask-modal ~ .modal-backdrop,
+.modal-backdrop.show {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  opacity: 1 !important;
+}
+
 .metamask-modal .modal-content {
   border: none;
   border-radius: 24px;

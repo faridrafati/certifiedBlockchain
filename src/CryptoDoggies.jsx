@@ -496,15 +496,22 @@ const CryptoDoggies = () => {
     <div className="cryptodoggies-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">
-            <PetsIcon className="hero-icon" />
-            {isOwner ? 'CryptoDoggies - Admin Panel' : 'Doggies Shop'}
-          </h1>
-          <ContractInfo
-            contractAddress={CRYPTODOGGIES_ADDRESS}
-            account={account}
-            network={import.meta.env.VITE_NETWORK_ID}
-          />
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">
+              🐾 Doggies Shop
+            </h1>
+            <ContractInfo
+              contractAddress={CRYPTODOGGIES_ADDRESS}
+              contractName="Doggies Shop"
+              account={account}
+              network={import.meta.env.VITE_NETWORK_ID}
+            />
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             {isOwner
               ? 'Manage your NFT doggies collection'
@@ -730,18 +737,6 @@ const CryptoDoggies = () => {
         ) : (
           // Public Marketplace View
           <>
-            <div className="marketplace-header">
-              <h2>
-                <ShoppingCartIcon className="section-icon" />
-                Doggy Marketplace
-              </h2>
-              <Tooltip title="Refresh Data">
-                <IconButton onClick={handleRefresh} className="refresh-btn">
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-
             {paused && (
               <Card className="paused-notice">
                 <CardContent>

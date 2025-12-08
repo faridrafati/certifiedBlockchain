@@ -382,20 +382,20 @@ const TicketSale = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">
-              <EventIcon className="hero-icon" />
-              Event Tickets
+              📅 Event Tickets
             </h1>
+            <ContractInfo
+              contractAddress={TICKETSALE_ADDRESS}
+              contractName="Event Tickets"
+              account={account}
+              network={import.meta.env.VITE_NETWORK_ID}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
               </IconButton>
             </Tooltip>
           </div>
-          <ContractInfo
-            contractAddress={TICKETSALE_ADDRESS}
-            account={account}
-            network={import.meta.env.VITE_NETWORK_ID}
-          />
           <p className="lead mb-4">
             Buy tickets for events secured on the blockchain
           </p>

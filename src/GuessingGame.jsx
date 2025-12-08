@@ -374,20 +374,20 @@ const GuessingGame = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">
-              <CasinoIcon className="hero-icon" />
-              Guessing Game
+              🎲 Guessing Game
             </h1>
+            <ContractInfo
+              contractAddress={GUESSINGGAME_ADDRESS}
+              contractName="Guessing Game"
+              account={account}
+              network={import.meta.env.VITE_NETWORK_ID}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
               </IconButton>
             </Tooltip>
           </div>
-          <ContractInfo
-            contractAddress={GUESSINGGAME_ADDRESS}
-            account={account}
-            network={import.meta.env.VITE_NETWORK_ID}
-          />
           <p className="lead mb-4">
             Higher or Lower? Test your luck on the blockchain!
           </p>
