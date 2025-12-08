@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
+import { IconButton, Tooltip } from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import pets from './components/pets.json';
@@ -175,6 +177,17 @@ const Adoption = () => {
     initialize();
   }, [initialize]);
 
+  // Refresh adoption data
+  const handleRefresh = async () => {
+    if (!contract || !account) return;
+    try {
+      await getAllAdopters(contract, account);
+      toast.success('Refreshed successfully!');
+    } catch (error) {
+      console.error('Refresh failed:', error);
+    }
+  };
+
   // Adopt a pet
   const handleAdopt = async (petIndex) => {
     if (!contract || !account) {
@@ -248,12 +261,19 @@ const Adoption = () => {
     <div className="container adoption-container">
       <section className="hero-section">
         <div className="hero-content">
-          <h1 className="display-4 fw-bold mb-3">Pet Adoption DApp</h1>
-          <ContractInfo
-            contractAddress={ADOPTION_ADDRESS}
-            account={account}
-            network={import.meta.env.VITE_NETWORK_ID}
-          />
+          <div className="hero-title-row">
+            <h1 className="display-4 fw-bold mb-3">Pet Adoption DApp</h1>
+            <ContractInfo
+              contractAddress={ADOPTION_ADDRESS}
+              account={account}
+              network={import.meta.env.VITE_NETWORK_ID}
+            />
+            <Tooltip title="Refresh Data">
+              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
+                <RefreshIcon />
+              </IconButton>
+            </Tooltip>
+          </div>
           <p className="lead mb-4">
             Each adoption is secured by smart contracts.
           </p>

@@ -72,9 +72,6 @@ const Email = () => {
         return;
       }
 
-      const chain = await ethereum.request({ method: 'eth_chainId' });
-      setChainId(chain);
-
       ethereum.on('chainChanged', () => window.location.reload());
       ethereum.on('accountsChanged', (accounts) => {
         if (accounts.length > 0) {
