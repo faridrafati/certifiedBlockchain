@@ -59,14 +59,19 @@ const ContractInfo = ({
   const getEtherscanUrl = (address) => {
     const networkId = network;
     const baseUrls = {
-      '1': 'https://etherscan.io',
-      '5': 'https://goerli.etherscan.io',
-      '11155111': 'https://sepolia.etherscan.io',
-      '137': 'https://polygonscan.com',
-      '80001': 'https://mumbai.polygonscan.com',
+      '1': 'https://etherscan.io/address/',
+      '5': 'https://goerli.etherscan.io/address/',
+      '11155111': 'https://eth-sepolia.blockscout.com/address/',
+      '137': 'https://polygonscan.com/address/',
+      '80001': 'https://mumbai.polygonscan.com/address/',
     };
-    const baseUrl = baseUrls[networkId] || 'https://etherscan.io';
-    return `${baseUrl}/address/${address}`;
+    const baseUrl = baseUrls[networkId] || 'https://etherscan.io/address/';
+
+    // For Sepolia Blockscout, add ?tab=contract
+    if (networkId === '11155111') {
+      return `${baseUrl}${address}?tab=contract`;
+    }
+    return `${baseUrl}${address}`;
   };
 
   return (

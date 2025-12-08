@@ -529,6 +529,13 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
+/* Global Hero Section Styles */
+.hero-section {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* Prevent horizontal scroll on mobile */
 body {
   overflow-x: hidden;
