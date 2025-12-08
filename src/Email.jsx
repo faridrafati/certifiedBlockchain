@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
@@ -25,6 +26,7 @@ import { EMAIL_ABI, EMAIL_ADDRESS } from './components/config/EmailConfig';
 import HideShow from './HideShow.jsx';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
+import ContractInfo from './components/ContractInfo';
 import './components/css/email.css';
 
 const Email = () => {
@@ -116,12 +118,16 @@ const Email = () => {
 
           const inbox = [];
           for (let i = 0; i < inboxCount; i++) {
-            inbox.push({
-              content: bytes32ToString(inboxData[0][i], web3Instance),
-              timestamp: Number(inboxData[1][i].toString()),
-              address: inboxData[2][i],
-              type: 'received',
-            });
+            // Check if message is deleted (inboxData[3] is the deleted flag array if contract supports it)
+            const isDeleted = inboxData.length > 3 && inboxData[3] ? inboxData[3][i] : false;
+            if (!isDeleted) {
+              inbox.push({
+                content: bytes32ToString(inboxData[0][i], web3Instance),
+                timestamp: Number(inboxData[1][i].toString()),
+                address: inboxData[2][i],
+                type: 'received',
+              });
+            }
           }
           setInboxMessages(inbox);
         } else {
@@ -141,12 +147,16 @@ const Email = () => {
 
           const outbox = [];
           for (let i = 0; i < outboxCount; i++) {
-            outbox.push({
-              content: bytes32ToString(outboxData[0][i], web3Instance),
-              timestamp: Number(outboxData[1][i].toString()),
-              address: outboxData[2][i],
-              type: 'sent',
-            });
+            // Check if message is deleted (outboxData[3] is the deleted flag array if contract supports it)
+            const isDeleted = outboxData.length > 3 && outboxData[3] ? outboxData[3][i] : false;
+            if (!isDeleted) {
+              outbox.push({
+                content: bytes32ToString(outboxData[0][i], web3Instance),
+                timestamp: Number(outboxData[1][i].toString()),
+                address: outboxData[2][i],
+                type: 'sent',
+              });
+            }
           }
           setOutboxMessages(outbox);
         } else {
@@ -160,7 +170,7 @@ const Email = () => {
   );
 
   const handleRegisterUser = useCallback(
-    async (contractInstance, userAccount) => {
+    async (contractInstance, userAccount, web3Instance) => {
       try {
         toast.info('Registering user. Please confirm in MetaMask...');
 
@@ -170,9 +180,14 @@ const Email = () => {
           .on('transactionHash', (hash) => {
             toast.info(`Registration submitted: ${hash.substring(0, 10)}...`);
           })
-          .on('receipt', () => {
+          .on('receipt', async () => {
             toast.success('Registration successful! Your inbox is ready.');
             setIsRegistered(true);
+            // Load messages immediately after registration
+            await loadMessages(contractInstance, userAccount, web3Instance);
+            // Refresh registered users list
+            const properties = await contractInstance.methods.getContractProperties().call();
+            setRegisteredUsers(properties[1]);
           })
           .on('error', (error) => {
             console.error('Registration error:', error);
@@ -183,11 +198,11 @@ const Email = () => {
         toast.error(`Registration failed: ${error.message || 'Unknown error'}`);
       }
     },
-    []
+    [loadMessages]
   );
 
   const checkRegistration = useCallback(
-    async (contractInstance, userAccount) => {
+    async (contractInstance, userAccount, web3Instance) => {
       try {
         const registered = await contractInstance.methods
           .checkUserRegistration()
@@ -201,7 +216,7 @@ const Email = () => {
               'We need to set up an inbox for you on the Ethereum blockchain. You will need to submit a transaction in MetaMask. You only need to do this once.',
             onConfirm: async () => {
               setConfirmDialog((prev) => ({ ...prev, open: false }));
-              await handleRegisterUser(contractInstance, userAccount);
+              await handleRegisterUser(contractInstance, userAccount, web3Instance);
             },
             onCancel: () => {
               setConfirmDialog((prev) => ({ ...prev, open: false }));
@@ -260,7 +275,7 @@ const Email = () => {
       setRegisteredUsers(properties[1]);
 
       // Check registration
-      const registered = await checkRegistration(contractInstance, userAccount);
+      const registered = await checkRegistration(contractInstance, userAccount, web3Instance);
 
       if (registered) {
         // Load messages
@@ -362,14 +377,14 @@ const Email = () => {
 
     setConfirmDialog({
       open: true,
-      title: 'Clear Inbox',
+      title: 'Clear All Messages',
       message:
-        'Are you sure you want to clear your inbox? This action cannot be undone.',
+        'Are you sure you want to clear ALL your messages? This will delete all sent and received messages. This action cannot be undone.',
       onConfirm: async () => {
         setConfirmDialog((prev) => ({ ...prev, open: false }));
         try {
           setSubmitting(true);
-          toast.info('Clearing inbox. Please confirm in MetaMask...');
+          toast.info('Clearing all messages. Please confirm in MetaMask...');
 
           await contract.methods
             .clearInbox()
@@ -378,19 +393,63 @@ const Email = () => {
               toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
             })
             .on('receipt', async () => {
-              toast.success('Inbox cleared successfully!');
+              toast.success('All messages cleared successfully!');
               setInboxMessages([]);
+              setOutboxMessages([]);
               setCurrentTab(0);
             })
             .on('error', (error) => {
               console.error('Clear inbox error:', error);
-              toast.error(`Failed to clear inbox: ${error.message}`);
+              toast.error(`Failed to clear messages: ${error.message}`);
             });
         } catch (error) {
           console.error('Clear inbox failed:', error);
           toast.error(
-            `Failed to clear inbox: ${error.message || 'Unknown error'}`
+            `Failed to clear messages: ${error.message || 'Unknown error'}`
           );
+        } finally {
+          setSubmitting(false);
+        }
+      },
+    });
+  };
+
+  const handleClearConversation = (contactAddress) => {
+    if (!contract || !account) {
+      toast.error('Please connect your wallet');
+      return;
+    }
+    if (!contactAddress) {
+      toast.error('Please select a contact');
+      return;
+    }
+    const shortAddress = `${contactAddress.substring(0, 10)}...${contactAddress.substring(38)}`;
+    setConfirmDialog({
+      open: true,
+      title: 'Clear Conversation',
+      message: `Are you sure you want to clear your conversation with ${shortAddress}? This action cannot be undone.`,
+      onConfirm: async () => {
+        setConfirmDialog((prev) => ({ ...prev, open: false }));
+        try {
+          setSubmitting(true);
+          toast.info('Clearing conversation. Please confirm in MetaMask...');
+          await contract.methods
+            .clearConversationWith(contactAddress)
+            .send({ from: account, gas: '1000000' })
+            .on('transactionHash', (hash) => {
+              toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+            })
+            .on('receipt', async () => {
+              toast.success(`Conversation with ${shortAddress} cleared!`);
+              await loadMessages(contract, account, web3);
+            })
+            .on('error', (error) => {
+              console.error('Clear conversation error:', error);
+              toast.error(`Failed to clear conversation: ${error.message}`);
+            });
+        } catch (error) {
+          console.error('Clear conversation failed:', error);
+          toast.error(`Failed to clear conversation: ${error.message || 'Unknown error'}`);
         } finally {
           setSubmitting(false);
         }
@@ -442,7 +501,16 @@ const Email = () => {
       <div className="email-container">
         <section className="hero-section">
           <div className="hero-content">
-            <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
+            <div className="hero-title-row">
+              <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
+              <ContractInfo
+                contractAddress={EMAIL_ADDRESS}
+                contractName="Blockchain Email"
+                network={import.meta.env.VITE_NETWORK_ID}
+                owner={owner}
+                account={currentAccount}
+              />
+            </div>
             <p className="lead mb-4">Registration required to continue</p>
           </div>
         </section>
@@ -474,6 +542,13 @@ const Email = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
+            <ContractInfo
+              contractAddress={EMAIL_ADDRESS}
+              contractName="Blockchain Email"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -529,8 +604,20 @@ const Email = () => {
                               {message.address.substring(38)}
                             </span>
                           </div>
-                          <div className="message-time">
-                            {date} {time}
+                          <div className="message-header-right">
+                            <div className="message-time">
+                              {date} {time}
+                            </div>
+                            <Tooltip title="Clear conversation with this contact">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleClearConversation(message.address)}
+                                disabled={submitting}
+                                className="clear-conversation-btn"
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
                           </div>
                         </div>
                         <div className="message-content">{message.content}</div>
@@ -554,7 +641,7 @@ const Email = () => {
                     startIcon={<DeleteSweepIcon />}
                     className="clear-inbox-button"
                   >
-                    Clear Inbox
+                    Clear All Messages
                   </Button>
                 </>
               )}
@@ -584,8 +671,20 @@ const Email = () => {
                               {message.address.substring(38)}
                             </span>
                           </div>
-                          <div className="message-time">
-                            {date} {time}
+                          <div className="message-header-right">
+                            <div className="message-time">
+                              {date} {time}
+                            </div>
+                            <Tooltip title="Clear conversation with this contact">
+                              <IconButton
+                                size="small"
+                                onClick={() => handleClearConversation(message.address)}
+                                disabled={submitting}
+                                className="clear-conversation-btn"
+                              >
+                                <DeleteIcon fontSize="small" />
+                              </IconButton>
+                            </Tooltip>
                           </div>
                         </div>
                         <div className="message-content">{message.content}</div>

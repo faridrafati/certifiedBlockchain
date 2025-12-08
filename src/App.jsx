@@ -19,7 +19,6 @@ import Task from './Task';
 import Poll from './Poll';
 import Email from './Email';
 import CryptoDoggies from './CryptoDoggies';
-import ChatBox from './chatBoxPlus';
 import ChatBoxStable from './chatBoxStable';
 import Voting from './Voting';
 import WeightedVoting from './WeightedVoting';
@@ -220,7 +219,7 @@ function App() {
               <Route path="/voting" element={<Voting />} />
               <Route path="/weightedVoting" element={<WeightedVoting />} />
               <Route path="/chat" element={<Email />} />
-              <Route path="/chatBox" element={<ChatBox />} />
+              <Route path="/chatBox" element={<Navigate to="/chatBoxStable" replace />} />
               <Route path="/chatBoxStable" element={<ChatBoxStable />} />
               <Route path="/todo" element={<Task />} />
               <Route path="/auction" element={<Auction />} />

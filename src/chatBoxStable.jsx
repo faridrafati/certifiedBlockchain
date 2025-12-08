@@ -5,11 +5,14 @@ import { TextField, Button, IconButton, Chip, Tooltip } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
+import DeleteIcon from '@mui/icons-material/Delete';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import ClearAllIcon from '@mui/icons-material/ClearAll';
 import SearchIcon from '@mui/icons-material/Search';
 import PersonIcon from '@mui/icons-material/Person';
+import SportsEsportsIcon from '@mui/icons-material/SportsEsports';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import {
@@ -20,6 +23,7 @@ import HideShow from './HideShow.jsx';
 import LoginForm from './loginForm';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
+import ContractInfo from './components/ContractInfo';
 import _ from 'lodash';
 import './components/css/chatboxstable.css';
 
@@ -44,6 +48,19 @@ const ChatBoxStable = () => {
   const [inputValue, setInputValue] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [showListedContact, setShowListedContact] = useState(false);
+
+  // Game state (Tic-Tac-Toe)
+  const [showGame, setShowGame] = useState(false);
+  const [gameExists, setGameExists] = useState(false);
+  const [gameBoard, setGameBoard] = useState(Array(3).fill(null).map(() => Array(3).fill('0x0000000000000000000000000000000000000000')));
+  const [gameActive, setGameActive] = useState(false);
+  const [activePlayer, setActivePlayer] = useState('');
+  const [gameWinner, setGameWinner] = useState('');
+  const [isMyTurn, setIsMyTurn] = useState(false);
+  const [player1Address, setPlayer1Address] = useState('');
+  const [player2Address, setPlayer2Address] = useState('');
+  const [winCount, setWinCount] = useState(0);
+  const [loseCount, setLoseCount] = useState(0);
 
   // Refs to track data for non-reactive updates
   const contactsRef = useRef([]);
@@ -197,11 +214,12 @@ const ChatBoxStable = () => {
 
         const messagesList = [];
 
-        // Process inbox
+        // Process inbox - inboxData[3] is the deleted flag array
         for (let i = 0; i < inboxSize; i++) {
           // Convert BigInt to Number for cross-browser compatibility
           const timestamp = Number(inboxData[1][i].toString());
-          if (timestamp !== 0) {
+          const isDeleted = inboxData[3] ? inboxData[3][i] : false;
+          if (timestamp !== 0 && !isDeleted) {
             messagesList.push({
               from: inboxData[2][i],
               to: userAccount,
@@ -216,11 +234,12 @@ const ChatBoxStable = () => {
           .sentMessages()
           .call({ from: userAccount });
 
-        // Process outbox
+        // Process outbox - outboxData[3] is the deleted flag array
         for (let i = 0; i < outboxSize; i++) {
           // Convert BigInt to Number for cross-browser compatibility
           const timestamp = Number(outboxData[1][i].toString());
-          if (timestamp !== 0) {
+          const isDeleted = outboxData[3] ? outboxData[3][i] : false;
+          if (timestamp !== 0 && !isDeleted) {
             messagesList.push({
               from: userAccount,
               to: outboxData[2][i],
@@ -527,14 +546,14 @@ const ChatBoxStable = () => {
 
     setConfirmDialog({
       open: true,
-      title: 'Clear Inbox',
+      title: 'Clear All Messages',
       message:
-        'Are you sure you want to clear your inbox? This action cannot be undone.',
+        'Are you sure you want to clear ALL your messages? This will delete all sent and received messages. This action cannot be undone.',
       onConfirm: async () => {
         setConfirmDialog((prev) => ({ ...prev, open: false }));
         try {
           setSubmitting(true);
-          toast.info('Clearing inbox. Please confirm in MetaMask...');
+          toast.info('Clearing all messages. Please confirm in MetaMask...');
 
           await contract.methods
             .clearInbox()
@@ -543,17 +562,66 @@ const ChatBoxStable = () => {
               toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
             })
             .on('receipt', async () => {
-              toast.success('Inbox cleared successfully!');
+              toast.success('All messages cleared successfully!');
               await getUpdateMessages(contract, account);
             })
             .on('error', (error) => {
               console.error('Clear inbox error:', error);
-              toast.error(`Failed to clear inbox: ${error.message}`);
+              toast.error(`Failed to clear messages: ${error.message}`);
             });
         } catch (error) {
           console.error('Clear inbox failed:', error);
           toast.error(
-            `Failed to clear inbox: ${error.message || 'Unknown error'}`
+            `Failed to clear messages: ${error.message || 'Unknown error'}`
+          );
+        } finally {
+          setSubmitting(false);
+        }
+      },
+    });
+  };
+
+  const handleClearConversation = () => {
+    if (!contract || !account) {
+      toast.error('Please connect your wallet');
+      return;
+    }
+
+    if (!currentContact || currentContact.address === '0x0') {
+      toast.error('Please select a valid contact');
+      return;
+    }
+
+    const contactName = currentContact.name || currentContact.address.substring(0, 10);
+
+    setConfirmDialog({
+      open: true,
+      title: 'Clear Conversation',
+      message: `Are you sure you want to clear your conversation with ${contactName}? This action cannot be undone.`,
+      onConfirm: async () => {
+        setConfirmDialog((prev) => ({ ...prev, open: false }));
+        try {
+          setSubmitting(true);
+          toast.info('Clearing conversation. Please confirm in MetaMask...');
+
+          await contract.methods
+            .clearConversationWith(currentContact.address)
+            .send({ from: account, gas: '1000000' })
+            .on('transactionHash', (hash) => {
+              toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+            })
+            .on('receipt', async () => {
+              toast.success(`Conversation with ${contactName} cleared!`);
+              await getUpdateMessages(contract, account);
+            })
+            .on('error', (error) => {
+              console.error('Clear conversation error:', error);
+              toast.error(`Failed to clear conversation: ${error.message}`);
+            });
+        } catch (error) {
+          console.error('Clear conversation failed:', error);
+          toast.error(
+            `Failed to clear conversation: ${error.message || 'Unknown error'}`
           );
         } finally {
           setSubmitting(false);
@@ -672,6 +740,243 @@ const ChatBoxStable = () => {
     }
   };
 
+  // Get game events from blockchain
+  const getGameEvents = useCallback(async (contactAddress) => {
+    if (!contract || !web3Ref.current || !account || !contactAddress || contactAddress === '0x0') {
+      return [];
+    }
+
+    try {
+      const latestBlock = await web3Ref.current.eth.getBlockNumber();
+      // Look back ~10000 blocks or from block 0
+      const fromBlock = latestBlock > 10000n ? latestBlock - 10000n : 0n;
+
+      const events = await contract.getPastEvents('GameWinner', {
+        filter: {},
+        fromBlock: fromBlock,
+        toBlock: latestBlock,
+      });
+
+      return events;
+    } catch (error) {
+      console.error('Error getting game events:', error);
+      return [];
+    }
+  }, [contract, account]);
+
+  // Calculate win/loss record against a specific opponent
+  const calculateWinLoss = useCallback(async (contactAddress) => {
+    if (!account || !contactAddress || contactAddress === '0x0') {
+      setWinCount(0);
+      setLoseCount(0);
+      return;
+    }
+
+    try {
+      const events = await getGameEvents(contactAddress);
+      let wins = 0;
+      let losses = 0;
+
+      for (const event of events) {
+        const winner = event.returnValues.winner;
+        const loser = event.returnValues.looser;
+
+        // Check if this game involves both players
+        if (
+          (winner.toLowerCase() === account.toLowerCase() && loser.toLowerCase() === contactAddress.toLowerCase()) ||
+          (winner.toLowerCase() === contactAddress.toLowerCase() && loser.toLowerCase() === account.toLowerCase())
+        ) {
+          if (winner.toLowerCase() === account.toLowerCase()) {
+            wins++;
+          } else {
+            losses++;
+          }
+        }
+      }
+
+      setWinCount(wins);
+      setLoseCount(losses);
+    } catch (error) {
+      console.error('Error calculating win/loss:', error);
+      setWinCount(0);
+      setLoseCount(0);
+    }
+  }, [account, getGameEvents]);
+
+  // Game functions
+  const loadGameState = useCallback(async (contactAddress) => {
+    if (!contract || !account || !contactAddress || contactAddress === '0x0') {
+      setGameExists(false);
+      setGameBoard(Array(3).fill(null).map(() => Array(3).fill(ZERO_ADDRESS)));
+      setGameActive(false);
+      setActivePlayer('');
+      setGameWinner('');
+      setIsMyTurn(false);
+      setPlayer1Address('');
+      setPlayer2Address('');
+      return;
+    }
+
+    try {
+      // Check if game exists
+      const gameIndex = await contract.methods
+        .gameIndexFunction(contactAddress)
+        .call({ from: account });
+
+      const exists = gameIndex[0];
+      setGameExists(exists);
+
+      if (exists) {
+        // Get game data
+        const gameData = await contract.methods
+          .game(gameIndex[1])
+          .call({ from: account });
+
+        setGameActive(gameData.gameActive);
+        setActivePlayer(gameData.activePlayer);
+        setGameWinner(gameData.winner);
+        setIsMyTurn(gameData.activePlayer.toLowerCase() === account.toLowerCase());
+        setPlayer1Address(gameData.player1);
+        setPlayer2Address(gameData.player2);
+
+        // Get board
+        const board = await contract.methods
+          .getBoard(contactAddress)
+          .call({ from: account });
+        setGameBoard(board);
+      } else {
+        setGameBoard(Array(3).fill(null).map(() => Array(3).fill(ZERO_ADDRESS)));
+        setGameActive(false);
+        setActivePlayer('');
+        setGameWinner('');
+        setIsMyTurn(false);
+        setPlayer1Address('');
+        setPlayer2Address('');
+      }
+    } catch (error) {
+      console.error('Error loading game state:', error);
+    }
+  }, [contract, account, ZERO_ADDRESS]);
+
+  const handleCreateGame = async () => {
+    if (!contract || !account || !currentContact || currentContact.address === '0x0') {
+      toast.error('Please select a valid contact');
+      return;
+    }
+
+    if (currentContact.address.toLowerCase() === account.toLowerCase()) {
+      toast.error('Cannot play against yourself');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      toast.info('Creating game. Please confirm in MetaMask...');
+
+      await contract.methods
+        .createGame(currentContact.address)
+        .send({ from: account, gas: '1000000' })
+        .on('transactionHash', (hash) => {
+          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+        })
+        .on('receipt', async () => {
+          toast.success('Game created! You can start playing.');
+          await loadGameState(currentContact.address);
+        })
+        .on('error', (error) => {
+          console.error('Create game error:', error);
+          toast.error(`Failed to create game: ${error.message}`);
+        });
+    } catch (error) {
+      console.error('Create game failed:', error);
+      toast.error(`Failed to create game: ${error.message || 'Unknown error'}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleSetStone = async (x, y) => {
+    if (!contract || !account || !currentContact) {
+      toast.error('Please select a contact');
+      return;
+    }
+
+    if (!isMyTurn) {
+      toast.error("It's not your turn!");
+      return;
+    }
+
+    if (gameBoard[x][y] !== ZERO_ADDRESS) {
+      toast.error('This cell is already occupied');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      toast.info('Making move. Please confirm in MetaMask...');
+
+      await contract.methods
+        .setStone(x, y, currentContact.address)
+        .send({ from: account, gas: '1000000' })
+        .on('transactionHash', (hash) => {
+          toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+        })
+        .on('receipt', async () => {
+          toast.success('Move made!');
+          await loadGameState(currentContact.address);
+        })
+        .on('error', (error) => {
+          console.error('Set stone error:', error);
+          toast.error(`Failed to make move: ${error.message}`);
+        });
+    } catch (error) {
+      console.error('Set stone failed:', error);
+      toast.error(`Failed to make move: ${error.message || 'Unknown error'}`);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleResetGame = async () => {
+    if (!contract || !account || !currentContact || currentContact.address === '0x0') {
+      toast.error('Please select a valid contact');
+      return;
+    }
+
+    setConfirmDialog({
+      open: true,
+      title: 'Reset Game',
+      message: 'Are you sure you want to reset the game? This will clear the board and start a new game.',
+      onConfirm: async () => {
+        setConfirmDialog((prev) => ({ ...prev, open: false }));
+        try {
+          setSubmitting(true);
+          toast.info('Resetting game. Please confirm in MetaMask...');
+
+          await contract.methods
+            .resetGame(currentContact.address)
+            .send({ from: account, gas: '1000000' })
+            .on('transactionHash', (hash) => {
+              toast.info(`Transaction submitted: ${hash.substring(0, 10)}...`);
+            })
+            .on('receipt', async () => {
+              toast.success('Game reset! New game started.');
+              await loadGameState(currentContact.address);
+            })
+            .on('error', (error) => {
+              console.error('Reset game error:', error);
+              toast.error(`Failed to reset game: ${error.message}`);
+            });
+        } catch (error) {
+          console.error('Reset game failed:', error);
+          toast.error(`Failed to reset game: ${error.message || 'Unknown error'}`);
+        } finally {
+          setSubmitting(false);
+        }
+      },
+    });
+  };
+
   // Memoize filtered contacts to prevent recalculation on every render
   // Must be before any early returns to maintain hook order
   const filteredContacts = useMemo(() => {
@@ -715,6 +1020,14 @@ const ChatBoxStable = () => {
       ? filteredContacts[selectedContactIndex]
       : null;
 
+  // Load game state when contact changes
+  useEffect(() => {
+    if (showGame && currentContact && currentContact.address !== '0x0') {
+      loadGameState(currentContact.address);
+      calculateWinLoss(currentContact.address);
+    }
+  }, [showGame, currentContact, loadGameState, calculateWinLoss]);
+
   if (loading) {
     return <LoadingSpinner message="Loading chat system..." />;
   }
@@ -726,6 +1039,13 @@ const ChatBoxStable = () => {
           <div className="hero-content">
             <div className="hero-title-row">
               <h1 className="display-4 fw-bold mb-3">💬 Chat Box</h1>
+              <ContractInfo
+                contractAddress={CHATBOXPLUS_ADDRESS}
+                contractName="Chat Box"
+                network={import.meta.env.VITE_NETWORK_ID}
+                owner={owner}
+                account={currentAccount}
+              />
             </div>
             <p className="lead mb-4">
               Secure blockchain messaging on Ethereum
@@ -759,6 +1079,13 @@ const ChatBoxStable = () => {
         <div className="hero-content">
           <div className="hero-title-row">
             <h1 className="display-4 fw-bold mb-3">💬 Chat Box</h1>
+            <ContractInfo
+              contractAddress={CHATBOXPLUS_ADDRESS}
+              contractName="Chat Box"
+              network={import.meta.env.VITE_NETWORK_ID}
+              owner={owner}
+              account={account}
+            />
             <Tooltip title="Refresh Data">
               <IconButton onClick={handleRefresh} className="hero-refresh-btn">
                 <RefreshIcon />
@@ -789,16 +1116,6 @@ const ChatBoxStable = () => {
                 className="action-btn"
               >
                 <RefreshIcon />
-              </IconButton>
-
-              <IconButton
-                size="small"
-                onClick={handleClearInbox}
-                disabled={submitting}
-                title="Clear Inbox"
-                className="action-btn"
-              >
-                <DeleteSweepIcon />
               </IconButton>
 
               <IconButton
@@ -910,43 +1227,186 @@ const ChatBoxStable = () => {
                     : currentContact.name
                   : 'Select a contact'}
               </h5>
-              <Chip
-                label={`${myInboxSize} received · ${myOutboxSize} sent`}
-                color="primary"
-                size="small"
-                className="message-stats"
-              />
-            </div>
-
-            <div className="messages-area">
-              {messages.map((message, index) => {
-                if (
-                  !currentContact ||
-                  (message.from === account &&
-                    message.to === currentContact.address) ||
-                  (message.to === account &&
-                    message.from === currentContact.address)
-                ) {
-                  const isSent = message.from === account;
-
-                  return (
-                    <div
-                      key={index}
-                      className={`message ${isSent ? 'sent' : 'received'}`}
+              <div className="chat-header-actions">
+                <Chip
+                  label={`${myInboxSize} received · ${myOutboxSize} sent`}
+                  color="primary"
+                  size="small"
+                  className="message-stats"
+                />
+                <Tooltip title={showGame ? 'Show Chat' : 'Play Tic-Tac-Toe'}>
+                  <span>
+                    <IconButton
+                      size="small"
+                      onClick={() => setShowGame(!showGame)}
+                      disabled={!currentContact || currentContact.address === '0x0' || currentContact.address === account}
+                      className={`game-toggle-btn ${showGame ? 'active' : ''}`}
                     >
-                      <div className="message-bubble">
-                        <p>{message.message}</p>
-                        <span className="message-time">
-                          {message.beautyTime}
-                        </span>
-                      </div>
-                    </div>
-                  );
-                }
-                return null;
-              })}
+                      <SportsEsportsIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+                <Tooltip title="Clear this conversation">
+                  <span>
+                    <IconButton
+                      size="small"
+                      onClick={handleClearConversation}
+                      disabled={submitting || !currentContact || currentContact.address === '0x0'}
+                      className="clear-conversation-btn"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+                <Tooltip title="Clear all messages">
+                  <span>
+                    <IconButton
+                      size="small"
+                      onClick={handleClearInbox}
+                      disabled={submitting}
+                      className="clear-all-btn"
+                    >
+                      <DeleteSweepIcon />
+                    </IconButton>
+                  </span>
+                </Tooltip>
+              </div>
             </div>
 
+            {showGame ? (
+              /* Game Board UI */
+              <div className="game-area">
+                <div className="game-status">
+                  {!gameExists ? (
+                    <div className="no-game">
+                      <p>No game exists with this contact</p>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleCreateGame}
+                        disabled={submitting}
+                        startIcon={<SportsEsportsIcon />}
+                      >
+                        Start New Game
+                      </Button>
+                    </div>
+                  ) : (
+                    <>
+                      {gameWinner && gameWinner !== ZERO_ADDRESS ? (
+                        <Chip
+                          label={`Winner: ${gameWinner.toLowerCase() === account.toLowerCase() ? 'You!' : currentContact?.name || 'Opponent'}`}
+                          color={gameWinner.toLowerCase() === account.toLowerCase() ? 'success' : 'error'}
+                          className="game-winner-chip"
+                        />
+                      ) : !gameActive && gameExists ? (
+                        <Chip label="Game ended in a draw!" color="warning" />
+                      ) : (
+                        <Chip
+                          label={isMyTurn ? "Your turn!" : `${currentContact?.name || 'Opponent'}'s turn`}
+                          color={isMyTurn ? 'success' : 'default'}
+                        />
+                      )}
+                      <div className="game-actions">
+                        <Tooltip title="Reset Game">
+                          <span>
+                            <IconButton
+                              onClick={handleResetGame}
+                              disabled={submitting}
+                              className="reset-game-btn"
+                            >
+                              <RestartAltIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                        <Tooltip title="Refresh Game">
+                          <span>
+                            <IconButton
+                              onClick={() => loadGameState(currentContact?.address)}
+                              disabled={submitting}
+                            >
+                              <RefreshIcon />
+                            </IconButton>
+                          </span>
+                        </Tooltip>
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                {gameExists && (
+                  <div className="game-board">
+                    {gameBoard.map((row, rowIndex) => (
+                      <div key={rowIndex} className="game-row">
+                        {row.map((cell, colIndex) => {
+                          const isEmpty = cell === ZERO_ADDRESS;
+                          const isPlayer1Cell = !isEmpty && player1Address && cell.toLowerCase() === player1Address.toLowerCase();
+                          return (
+                            <button
+                              key={colIndex}
+                              className={`game-cell ${isEmpty ? 'empty' : ''} ${isPlayer1Cell ? 'player1' : 'player2'}`}
+                              onClick={() => handleSetStone(rowIndex, colIndex)}
+                              disabled={!isEmpty || !isMyTurn || !gameActive || submitting}
+                            >
+                              {isEmpty ? '' : isPlayer1Cell ? 'X' : 'O'}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {gameExists && (winCount > 0 || loseCount > 0) && (
+                  <div className="game-score">
+                    <Chip label={`Wins: ${winCount}`} color="success" size="small" className="score-chip" />
+                    <Chip label={`Losses: ${loseCount}`} color="error" size="small" className="score-chip" />
+                  </div>
+                )}
+
+                {gameExists && (
+                  <div className="game-legend">
+                    <span className="legend-item">
+                      <span className="legend-symbol player1">X</span> = {player1Address && player1Address.toLowerCase() === account.toLowerCase() ? 'You' : currentContact?.name || 'Opponent'}
+                    </span>
+                    <span className="legend-item">
+                      <span className="legend-symbol player2">O</span> = {player2Address && player2Address.toLowerCase() === account.toLowerCase() ? 'You' : currentContact?.name || 'Opponent'}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              /* Messages Area */
+              <div className="messages-area">
+                {messages.map((message, index) => {
+                  if (
+                    !currentContact ||
+                    (message.from === account &&
+                      message.to === currentContact.address) ||
+                    (message.to === account &&
+                      message.from === currentContact.address)
+                  ) {
+                    const isSent = message.from === account;
+
+                    return (
+                      <div
+                        key={index}
+                        className={`message ${isSent ? 'sent' : 'received'}`}
+                      >
+                        <div className="message-bubble">
+                          <p>{message.message}</p>
+                          <span className="message-time">
+                            {message.beautyTime}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                })}
+              </div>
+            )}
+
+            {!showGame && (
             <div className="chat-input-area">
               <Chip
                 label={`${inputValue.length}/${MAX_MESSAGE_LENGTH}`}
@@ -981,6 +1441,7 @@ const ChatBoxStable = () => {
                 </Button>
               </div>
             </div>
+            )}
           </div>
         </div>
       </div>

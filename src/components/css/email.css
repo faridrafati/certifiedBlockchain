@@ -248,6 +248,12 @@
   gap: 0.5rem;
 }
 
+.message-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .message-from,
 .message-to {
   display: flex;
@@ -296,6 +302,27 @@
   color: white !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
+}
+
+.message-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.clear-conversation-btn {
+  color: #718096 !important;
+  transition: all 0.3s ease !important;
+}
+
+.clear-conversation-btn:hover {
+  color: #e53e3e !important;
+  background: rgba(229, 62, 62, 0.1) !important;
+}
+
+.clear-conversation-btn:disabled {
+  color: rgba(113, 128, 150, 0.4) !important;
 }
 
 .clear-inbox-button {

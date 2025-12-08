@@ -172,12 +172,6 @@ const NavBar = () => {
                       Cert Chat
                     </NavLink>
                   </li>
-                  <li>
-                    <NavLink className="dropdown-item" to="/chatBox">
-                      <span className="dropdown-icon">🎮</span>
-                      Chat Game
-                    </NavLink>
-                  </li>
                 </ul>
               </li>
 

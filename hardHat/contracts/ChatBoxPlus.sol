@@ -27,6 +27,7 @@ contract ChatBoxPlus {
         bytes32 content;
         uint256 timestamp;
         bool XOMessage;
+        bool deleted;
     }
 
     struct ContractProperties {
@@ -66,6 +67,31 @@ contract ChatBoxPlus {
 
     function clearInbox() public {
         delete userInboxes[msg.sender];
+    }
+
+    function clearOutbox() public {
+        Inbox storage senderInbox = userInboxes[msg.sender];
+        for (uint256 i = 0; i < senderInbox.numSentMessages; i++) {
+            senderInbox.sentMessages[i].deleted = true;
+        }
+    }
+
+    function clearConversationWith(address contact) public {
+        Inbox storage myInbox = userInboxes[msg.sender];
+
+        // Mark received messages from this contact as deleted
+        for (uint256 i = 0; i < myInbox.numReceivedMessages; i++) {
+            if (myInbox.receivedMessages[i].sender == contact) {
+                myInbox.receivedMessages[i].deleted = true;
+            }
+        }
+
+        // Mark sent messages to this contact as deleted
+        for (uint256 i = 0; i < myInbox.numSentMessages; i++) {
+            if (myInbox.sentMessages[i].receiver == contact) {
+                myInbox.sentMessages[i].deleted = true;
+            }
+        }
     }
 
     function registerUser(bytes32 _username) public {
@@ -114,20 +140,23 @@ contract ChatBoxPlus {
         returns (
             bytes32[maxMessageLength] memory,
             uint256[] memory,
-            address[] memory
+            address[] memory,
+            bool[maxMessageLength] memory
         )
     {
         Inbox storage receiversInbox = userInboxes[msg.sender];
         bytes32[maxMessageLength] memory content;
         address[] memory sender = new address[](maxMessageLength);
         uint256[] memory timestamp = new uint256[](maxMessageLength);
+        bool[maxMessageLength] memory deleted;
         for (uint256 m = 0; m < maxMessageLength - 1; m++) {
             Message memory message = receiversInbox.receivedMessages[m];
             content[m] = message.content;
             sender[m] = message.sender;
             timestamp[m] = message.timestamp;
+            deleted[m] = message.deleted;
         }
-        return (content, timestamp, sender);
+        return (content, timestamp, sender, deleted);
     }
 
     function sentMessages()
@@ -136,20 +165,23 @@ contract ChatBoxPlus {
         returns (
             bytes32[maxMessageLength] memory,
             uint256[] memory,
-            address[] memory
+            address[] memory,
+            bool[maxMessageLength] memory
         )
     {
         Inbox storage sentsInbox = userInboxes[msg.sender];
         bytes32[maxMessageLength] memory content;
         address[] memory receiver = new address[](maxMessageLength);
         uint256[] memory timestamp = new uint256[](maxMessageLength);
+        bool[maxMessageLength] memory deleted;
         for (uint256 m = 0; m < maxMessageLength - 1; m++) {
             Message memory message = sentsInbox.sentMessages[m];
             content[m] = message.content;
             receiver[m] = message.receiver;
             timestamp[m] = message.timestamp;
+            deleted[m] = message.deleted;
         }
-        return (content, timestamp, receiver);
+        return (content, timestamp, receiver, deleted);
     }
 
     function editMyContactList(address _address, bool _add) public {
