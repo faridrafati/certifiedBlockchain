@@ -59,20 +59,20 @@ const NavBar = () => {
 
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul className="navbar-nav ms-auto">
-              {/* Tokens Dropdown */}
+              {/* Finance Dropdown */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
                   href="#"
-                  id="tokensDropdown"
+                  id="financeDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <span className="nav-icon">💰</span>
-                  Tokens
+                  Finance
                 </a>
-                <ul className="dropdown-menu" aria-labelledby="tokensDropdown">
+                <ul className="dropdown-menu" aria-labelledby="financeDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/token">
                       <span className="dropdown-icon">👛</span>
@@ -85,23 +85,35 @@ const NavBar = () => {
                       Token CrowdSale
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/auction">
+                      <span className="dropdown-icon">⚡</span>
+                      Auction
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/ticketSale">
+                      <span className="dropdown-icon">🎟️</span>
+                      Ticket Sale
+                    </NavLink>
+                  </li>
                 </ul>
               </li>
 
-              {/* Voting Dropdown */}
+              {/* Governance Dropdown */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
                   href="#"
-                  id="votingDropdown"
+                  id="governanceDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   <span className="nav-icon">🗳️</span>
-                  Voting
+                  Governance
                 </a>
-                <ul className="dropdown-menu" aria-labelledby="votingDropdown">
+                <ul className="dropdown-menu" aria-labelledby="governanceDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/voting">
                       <span className="dropdown-icon">✅</span>
@@ -112,6 +124,41 @@ const NavBar = () => {
                     <NavLink className="dropdown-item" to="/weightedVoting">
                       <span className="dropdown-icon">⚖️</span>
                       Weighted Voting
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/pollSurvey">
+                      <span className="dropdown-icon">📊</span>
+                      Poll Survey
+                    </NavLink>
+                  </li>
+                </ul>
+              </li>
+
+              {/* Communication Dropdown */}
+              <li className="nav-item dropdown">
+                <a
+                  className="nav-link dropdown-toggle"
+                  href="#"
+                  id="communicationDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <span className="nav-icon">💬</span>
+                  Communication
+                </a>
+                <ul className="dropdown-menu" aria-labelledby="communicationDropdown">
+                  <li>
+                    <NavLink className="dropdown-item" to="/chat">
+                      <span className="dropdown-icon">📧</span>
+                      Blockchain Email
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/chatBoxStable">
+                      <span className="dropdown-icon">💬</span>
+                      Chat Box
                     </NavLink>
                   </li>
                 </ul>
@@ -146,62 +193,33 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              {/* Chat Dropdown */}
+              {/* Services Dropdown */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
                   href="#"
-                  id="chatDropdown"
+                  id="servicesDropdown"
                   role="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">💬</span>
-                  Chat
+                  <span className="nav-icon">📋</span>
+                  Services
                 </a>
-                <ul className="dropdown-menu" aria-labelledby="chatDropdown">
+                <ul className="dropdown-menu" aria-labelledby="servicesDropdown">
                   <li>
-                    <NavLink className="dropdown-item" to="/chat">
-                      <span className="dropdown-icon">📧</span>
-                      Cert Email
+                    <NavLink className="dropdown-item" to="/certificate">
+                      <span className="dropdown-icon">🎓</span>
+                      Certificate
                     </NavLink>
                   </li>
                   <li>
-                    <NavLink className="dropdown-item" to="/chatBoxStable">
-                      <span className="dropdown-icon">💬</span>
-                      Cert Chat
+                    <NavLink className="dropdown-item" to="/todo">
+                      <span className="dropdown-icon">✓</span>
+                      Task Manager
                     </NavLink>
                   </li>
                 </ul>
-              </li>
-
-              {/* Direct Links */}
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/auction">
-                  <span className="nav-icon">⚡</span>
-                  Auction
-                </NavLink>
-              </li>
-
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/certificate">
-                  <span className="nav-icon">🎓</span>
-                  Certificate
-                </NavLink>
-              </li>
-
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/pollSurvey">
-                  <span className="nav-icon">📊</span>
-                  Poll
-                </NavLink>
-              </li>
-
-              <li className="nav-item">
-                <NavLink className="nav-link" to="/todo">
-                  <span className="nav-icon">✓</span>
-                  Tasks
-                </NavLink>
               </li>
 
               {/* Games Dropdown */}
@@ -222,29 +240,6 @@ const NavBar = () => {
                     <NavLink className="dropdown-item" to="/guessing">
                       <span className="dropdown-icon">🎯</span>
                       Guessing Game
-                    </NavLink>
-                  </li>
-                </ul>
-              </li>
-
-              {/* Tickets Dropdown */}
-              <li className="nav-item dropdown">
-                <a
-                  className="nav-link dropdown-toggle"
-                  href="#"
-                  id="ticketDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <span className="nav-icon">🎫</span>
-                  Tickets
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="ticketDropdown">
-                  <li>
-                    <NavLink className="dropdown-item" to="/ticketSale">
-                      <span className="dropdown-icon">🎟️</span>
-                      Ticket Sale
                     </NavLink>
                   </li>
                 </ul>

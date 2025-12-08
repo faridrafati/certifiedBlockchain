@@ -255,7 +255,7 @@ const Adoption = () => {
             network={import.meta.env.VITE_NETWORK_ID}
           />
           <p className="lead mb-4">
-            Find your perfect companion on the blockchain. Each adoption is secured by smart contracts.
+            Each adoption is secured by smart contracts.
           </p>
         </div>
       </section>
