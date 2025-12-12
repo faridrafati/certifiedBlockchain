@@ -172,6 +172,22 @@ const Auction = () => {
       return;
     }
 
+    // Calculate the new total bid and validate it exceeds the highest bid
+    const bidAmountWei = BigInt(web3.utils.toWei(bidInput, 'finney'));
+    const currentAccountBid = BigInt(accountBid);
+    const currentHighestBid = BigInt(highestBid);
+    const newTotalBid = currentAccountBid + bidAmountWei;
+
+    if (newTotalBid <= currentHighestBid) {
+      const minimumNeeded = currentHighestBid - currentAccountBid + BigInt(1);
+      const minimumInFinney = web3.utils.fromWei(minimumNeeded.toString(), 'finney');
+      const minimumInEth = web3.utils.fromWei(minimumNeeded.toString(), 'ether');
+      toast.error(
+        `Your bid must exceed the highest bid. You need at least ${parseFloat(minimumInFinney).toFixed(2)} finney (${parseFloat(minimumInEth).toFixed(6)} ETH) to become the highest bidder.`
+      );
+      return;
+    }
+
     try {
       setSubmitting(true);
       toast.info('Placing bid. Please confirm in MetaMask...');

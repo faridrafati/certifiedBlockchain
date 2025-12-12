@@ -8,6 +8,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import pets from './components/pets.json';
 import { ADOPTION_ABI, ADOPTION_ADDRESS } from './components/config/AdoptionConfig';
 import ContractInfo from './components/ContractInfo';
+import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/card.css';
 
 // Import all pet images using Vite's import.meta.glob
@@ -247,14 +248,7 @@ const Adoption = () => {
   };
 
   if (loading) {
-    return (
-      <div className="container text-center py-5">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-        <p className="mt-3">Loading pets...</p>
-      </div>
-    );
+    return <LoadingSpinner message="Loading Pet Adoption..." />;
   }
 
   return (
@@ -265,6 +259,8 @@ const Adoption = () => {
             <h1 className="display-4 fw-bold mb-3">Pet Adoption DApp</h1>
             <ContractInfo
               contractAddress={ADOPTION_ADDRESS}
+              contractName="Pet Adoption"
+              owner={owner}
               account={account}
               network={import.meta.env.VITE_NETWORK_ID}
             />

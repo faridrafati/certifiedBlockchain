@@ -1,78 +1,80 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.24;
+
+/**
+ * @title CryptoDoggies
+ * @notice NFT marketplace for collectible doggies with auto-pricing
+ * @dev Optimized version with security improvements from Slither analysis
+ */
 
 contract AccessControl {
-
     address payable public owner;
+    bool public paused;
 
-    bool public paused = false;
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    event Paused(address account);
+    event Unpaused(address account);
 
     constructor() {
         owner = payable(msg.sender);
+        emit OwnershipTransferred(address(0), msg.sender);
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Not owner");
         _;
-    }
-
-    function setOwner(address _newOwner) public onlyOwner {
-        require(_newOwner != address(0));
-        owner = payable(_newOwner);
     }
 
     modifier whenNotPaused() {
-        require(!paused);
+        require(!paused, "Contract paused");
         _;
     }
 
-    modifier whenPaused {
-        require(paused);
+    modifier whenPaused() {
+        require(paused, "Contract not paused");
         _;
     }
 
-    function pause() public onlyOwner whenNotPaused {
+    function setOwner(address newOwner) external onlyOwner {
+        require(newOwner != address(0), "Invalid address");
+        address previousOwner = owner;
+        owner = payable(newOwner);
+        emit OwnershipTransferred(previousOwner, newOwner);
+    }
+
+    function pause() external onlyOwner whenNotPaused {
         paused = true;
+        emit Paused(msg.sender);
     }
 
-    function unpause() public onlyOwner whenPaused {
+    function unpause() external onlyOwner whenPaused {
         paused = false;
+        emit Unpaused(msg.sender);
     }
 }
 
+interface IERC721 {
+    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);
+    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);
 
-interface ERC721 {
-    event Transfer(address indexed _from, address indexed _to, uint256 _tokenId);
-    event Approval(address indexed _owner, address indexed _approved, uint256 _tokenId);
-
-    function totalSupply() view external returns (uint256 _totalSupply);
-
-    function balanceOf(address _owner) external view returns (uint256 _balance);
-
-    function ownerOf(uint256 _tokenId) external view returns (address _owner);
-
-    function approve(address _to, uint256 _tokenId) external;
-
-    function transferFrom(address _from, address _to, uint256 _tokenId) external;
-
-    function transfer(address _to, uint256 _tokenId) external;
-
-    function implementsERC721() external view returns (bool _implementsERC721);
-
-    function takeOwnership(uint256 _tokenId) external;
+    function totalSupply() external view returns (uint256);
+    function balanceOf(address tokenOwner) external view returns (uint256);
+    function ownerOf(uint256 tokenId) external view returns (address);
+    function approve(address to, uint256 tokenId) external;
+    function transferFrom(address from, address to, uint256 tokenId) external;
+    function transfer(address to, uint256 tokenId) external;
+    function implementsERC721() external view returns (bool);
+    function takeOwnership(uint256 tokenId) external;
 }
 
-
-interface DetailedERC721 is ERC721 {
-    function name() external view returns (string memory _name);
-    function symbol() external view returns (string memory _symbol);
+interface IERC721Metadata is IERC721 {
+    function name() external view returns (string memory);
+    function symbol() external view returns (string memory);
 }
 
-
-contract CryptoDoggies is AccessControl, DetailedERC721 {
-    using SafeMath for uint256;
-
-    event TokenCreated(uint256 tokenId, string name, bytes5 dna, uint256 price, address owner);
+contract CryptoDoggies is AccessControl, IERC721Metadata {
+    // Events
+    event TokenCreated(uint256 indexed tokenId, string name, bytes5 dna, uint256 price, address indexed tokenOwner);
     event TokenSold(
         uint256 indexed tokenId,
         string name,
@@ -81,266 +83,101 @@ contract CryptoDoggies is AccessControl, DetailedERC721 {
         uint256 newPrice,
         address indexed oldOwner,
         address indexed newOwner
-        );
+    );
 
-    mapping (uint256 => address) private tokenIdToOwner;
-    mapping (uint256 => uint256) private tokenIdToPrice;
-    mapping (address => uint256) private ownershipTokenCount;
-    mapping (uint256 => address) private tokenIdToApproved;
-
+    // Structs
     struct Doggy {
         string name;
         bytes5 dna;
     }
 
-    Doggy[] private doggies;
+    // State variables
+    mapping(uint256 => address) private _tokenOwners;
+    mapping(uint256 => uint256) private _tokenPrices;
+    mapping(address => uint256) private _ownerTokenCount;
+    mapping(uint256 => address) private _tokenApprovals;
 
-    uint256 private startingPrice = 0.01 ether;
-    bool private erc721Enabled = false;
+    Doggy[] private _doggies;
+    bool private _erc721Enabled;
 
+    // Constants (gas optimization - Slither recommendation)
+    uint256 private constant STARTING_PRICE = 0.01 ether;
+    uint256 private constant INCREASE_LIMIT_1 = 0.02 ether;
+    uint256 private constant INCREASE_LIMIT_2 = 0.5 ether;
+    uint256 private constant INCREASE_LIMIT_3 = 2.0 ether;
+    uint256 private constant INCREASE_LIMIT_4 = 5.0 ether;
+    uint256 private constant PLATFORM_FEE_PERCENT = 6;
+
+    // Modifiers
     modifier onlyERC721() {
-        require(erc721Enabled);
+        require(_erc721Enabled, "ERC721 not enabled");
         _;
     }
 
-    function createToken(string memory _name, address _owner, uint256 _price) public onlyOwner {
-        require(_owner != address(0));
-        require(_price >= startingPrice);
-
-        bytes5 _dna = _generateRandomDna();
-        _createToken(_name, _dna, _owner, _price);
+    modifier validToken(uint256 tokenId) {
+        require(tokenId < _doggies.length, "Invalid token");
+        _;
     }
 
-    function createToken(string memory _name) public onlyOwner {
-        bytes5 _dna = _generateRandomDna();
-        _createToken(_name, _dna, address(this), startingPrice);
+    // Admin functions
+    function createToken(string calldata tokenName, address tokenOwner, uint256 price) external onlyOwner {
+        require(tokenOwner != address(0), "Invalid owner");
+        require(price >= STARTING_PRICE, "Price too low");
+        _createToken(tokenName, tokenOwner, price);
     }
 
-    function _generateRandomDna() private view returns (bytes5) { //view
-        uint256 lastBlockNumber = block.number - 1;
-        bytes32 hashVal = bytes32(blockhash(lastBlockNumber));
-        bytes5 dna = bytes5((hashVal) << 216);
-        return dna;
+    function createToken(string calldata tokenName) external onlyOwner {
+        _createToken(tokenName, address(this), STARTING_PRICE);
     }
 
-    function _createToken(string memory _name, bytes5 _dna, address _owner, uint256 _price) private {
-        Doggy memory _doggy = Doggy({
-            name: _name,
-            dna: _dna
-        });
-        doggies.push(_doggy);
-        uint256 newTokenId = doggies.length-1;
-        tokenIdToPrice[newTokenId] = _price;
-
-        emit TokenCreated(newTokenId, _name, _dna, _price, _owner);
-
-        _transfer(address(0), _owner, newTokenId);
+    function enableERC721() external onlyOwner {
+        _erc721Enabled = true;
     }
 
-    function getToken(uint256 _tokenId) public view returns (
-        string memory _tokenName,
-        bytes5 _dna,
-        uint256 _price,
-        uint256 _nextPrice,
-        address _owner
-    ) {
-        _tokenName = doggies[_tokenId].name;
-        _dna = doggies[_tokenId].dna;
-        _price = tokenIdToPrice[_tokenId];
-        _nextPrice = nextPriceOf(_tokenId);
-        _owner = tokenIdToOwner[_tokenId];
+    function withdrawBalance(address payable to, uint256 amount) external onlyOwner {
+        uint256 balance = address(this).balance;
+        require(amount <= balance, "Insufficient balance");
+
+        uint256 withdrawAmount = amount == 0 ? balance : amount;
+        address payable recipient = to == address(0) ? owner : to;
+
+        (bool success, ) = recipient.call{value: withdrawAmount}("");
+        require(success, "Transfer failed");
     }
 
-    function getAllTokens() public view returns (
-        string[] memory,
-        bytes5[] memory,
-        uint256[] memory,
-        uint256[] memory,
-        address[] memory
-    ) {
-        uint256 total = totalSupply();
-        string[] memory tokenName = new string[](total);
-        bytes5[] memory dna = new bytes5[](total);
-        uint256[] memory prices = new uint256[](total);
-        uint256[] memory nextPrices = new uint256[](total);
-        address[] memory owners = new address[](total);
+    // Internal functions
+    function _createToken(string calldata tokenName, address tokenOwner, uint256 price) private {
+        bytes5 dna = _generateRandomDna();
 
-        for (uint256 i = 0; i < total; i++) {
-            tokenName[i] = doggies[i].name;
-            dna[i] = doggies[i].dna; 
-            prices[i] = tokenIdToPrice[i];
-            nextPrices[i] = nextPriceOf(i);
-            owners[i] = tokenIdToOwner[i];
+        _doggies.push(Doggy({
+            name: tokenName,
+            dna: dna
+        }));
+
+        uint256 newTokenId = _doggies.length - 1;
+        _tokenPrices[newTokenId] = price;
+
+        emit TokenCreated(newTokenId, tokenName, dna, price, tokenOwner);
+        _transfer(address(0), tokenOwner, newTokenId);
+    }
+
+    function _generateRandomDna() private view returns (bytes5) {
+        bytes32 hashVal = blockhash(block.number - 1);
+        return bytes5(hashVal << 216);
+    }
+
+    function _transfer(address from, address to, uint256 tokenId) private {
+        if (to != address(0)) {
+            _ownerTokenCount[to]++;
+        }
+        _tokenOwners[tokenId] = to;
+
+        if (from != address(0)) {
+            _ownerTokenCount[from]--;
+            delete _tokenApprovals[tokenId];
         }
 
-        return (tokenName,dna, prices, nextPrices, owners);
-    }
-
-    function tokensOf(address _owner) public view returns(uint256[] memory) {
-        uint256 tokenCount = balanceOf(_owner);
-        if (tokenCount == 0) {
-            return new uint256[](0);
-        } else {
-            uint256[] memory result = new uint256[](tokenCount);
-            uint256 total = totalSupply();
-            uint256 resultIndex = 0;
-
-            for (uint256 i = 0; i < total; i++) {
-                if (tokenIdToOwner[i] == _owner) {
-                    result[resultIndex] = i;
-                    resultIndex++;
-                }
-            }
-            return result;
-        }
-    }
-
-    function withdrawBalance(address payable _to, uint256 _amount) public payable  onlyOwner {
-        require(_amount <= address(this).balance);
-
-        if (_amount == 0) {
-            _amount = address(this).balance;
-        }
-
-        if (_to == address(0)) {
-            owner.transfer(_amount);
-        } else {
-            _to.transfer(_amount);
-        }
-    }
-
-    function purchase(uint256 _tokenId) public payable whenNotPaused {
-        address oldOwner = ownerOf(_tokenId);
-        address newOwner = msg.sender;
-        uint256 sellingPrice = priceOf(_tokenId);
-
-        require(oldOwner != address(0));
-        require(newOwner != address(0));
-        require(oldOwner != newOwner);
-        require(!_isContract(newOwner));
-        require(sellingPrice > 0);
-        require(msg.value >= sellingPrice);
-
-        _transfer(oldOwner, newOwner, _tokenId);
-        tokenIdToPrice[_tokenId] = nextPriceOf(_tokenId);
-        emit TokenSold(
-            _tokenId,
-            doggies[_tokenId].name,
-            doggies[_tokenId].dna,
-            sellingPrice,
-            priceOf(_tokenId),
-            oldOwner,
-            newOwner
-        );
-
-        uint256 excess = msg.value.sub(sellingPrice);
-        uint256 contractCut = sellingPrice.mul(6).div(100); // 6% cut
-
-        if (oldOwner != address(this)) {
-            payable(oldOwner).transfer(sellingPrice.sub(contractCut));
-        }
-
-        if (excess > 0) {
-            payable(newOwner).transfer(excess);
-        }
-    }
-
-    function priceOf(uint256 _tokenId) public view returns (uint256 _price) {
-        return tokenIdToPrice[_tokenId];
-    }
-
-    uint256 private increaseLimit1 = 0.02 ether;
-    uint256 private increaseLimit2 = 0.5 ether;
-    uint256 private increaseLimit3 = 2.0 ether;
-    uint256 private increaseLimit4 = 5.0 ether;
-
-    function nextPriceOf(uint256 _tokenId) public view returns (uint256 _nextPrice) {
-        uint256 _price = priceOf(_tokenId);
-        if (_price < increaseLimit1) {
-            return _price.mul(200).div(95);
-        } else if (_price < increaseLimit2) {
-            return _price.mul(135).div(96);
-        } else if (_price < increaseLimit3) {
-            return _price.mul(125).div(97);
-        } else if (_price < increaseLimit4) {
-            return _price.mul(117).div(97);
-        } else {
-            return _price.mul(115).div(98);
-        }
-    }
-
-    function enableERC721() public onlyOwner {
-        erc721Enabled = true;
-    }
-
-    function totalSupply() public view returns (uint256 _totalSupply) {
-        _totalSupply = doggies.length;
-    }
-
-    function balanceOf(address _owner) public view returns (uint256 _balance) {
-        _balance = ownershipTokenCount[_owner];
-    }
-
-    function ownerOf(uint256 _tokenId) public view returns (address _owner) {
-        _owner = tokenIdToOwner[_tokenId];
-    }
-
-    function approve(address _to, uint256 _tokenId) public whenNotPaused onlyERC721 {
-        require(_owns(msg.sender, _tokenId));
-        tokenIdToApproved[_tokenId] = _to;
-        emit Approval(msg.sender, _to, _tokenId);
-    }
-
-    function transferFrom(address _from, address _to, uint256 _tokenId) public whenNotPaused onlyERC721 {
-        require(_to != address(0));
-        require(_owns(_from, _tokenId));
-        require(_approved(msg.sender, _tokenId));
-
-        _transfer(_from, _to, _tokenId);
-    }
-
-    function transfer(address _to, uint256 _tokenId) public whenNotPaused onlyERC721 {
-        require(_to != address(0));
-        require(_owns(msg.sender, _tokenId));
-
-        _transfer(msg.sender, _to, _tokenId);
-    }
-
-    function implementsERC721() public view whenNotPaused returns (bool) {
-        return erc721Enabled;
-    }
-
-    function takeOwnership(uint256 _tokenId) public whenNotPaused onlyERC721 {
-        require(_approved(msg.sender, _tokenId));
-        _transfer(tokenIdToOwner[_tokenId], msg.sender, _tokenId);
-    }
-
-    function name() public pure returns (string memory _name) {
-        _name = "CryptoDoggies";
-    }
-
-    function symbol() public pure returns (string memory _symbol) {
-        _symbol = "CDT";
-    }
-
-    function _owns(address _claimant, uint256 _tokenId) private view returns (bool) {
-        return tokenIdToOwner[_tokenId] == _claimant;
-    }
-
-    function _approved(address _to, uint256 _tokenId) private view returns (bool) {
-        return tokenIdToApproved[_tokenId] == _to;
-    }
-
-    function _transfer(address _from, address _to, uint256 _tokenId) private {
-        ownershipTokenCount[_to]++;
-        tokenIdToOwner[_tokenId] = _to;
-
-        if (_from != address(0)) {
-            ownershipTokenCount[_from]--;
-            delete tokenIdToApproved[_tokenId];
-        }
-
-        emit Transfer(_from, _to, _tokenId);
+        emit Transfer(from, to, tokenId);
     }
 
     function _isContract(address addr) private view returns (bool) {
@@ -348,35 +185,189 @@ contract CryptoDoggies is AccessControl, DetailedERC721 {
         assembly { size := extcodesize(addr) }
         return size > 0;
     }
-}
 
+    function _owns(address claimant, uint256 tokenId) private view returns (bool) {
+        return _tokenOwners[tokenId] == claimant;
+    }
 
-library SafeMath {
+    function _approved(address spender, uint256 tokenId) private view returns (bool) {
+        return _tokenApprovals[tokenId] == spender;
+    }
 
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {
-            return 0;
+    // Public functions
+    function purchase(uint256 tokenId) external payable whenNotPaused validToken(tokenId) {
+        address oldOwner = _tokenOwners[tokenId];
+        address newOwner = msg.sender;
+        uint256 sellingPrice = _tokenPrices[tokenId];
+
+        require(oldOwner != address(0), "Token not owned");
+        require(newOwner != address(0), "Invalid buyer");
+        require(oldOwner != newOwner, "Already owner");
+        require(!_isContract(newOwner), "Contracts cannot buy");
+        require(sellingPrice > 0, "Not for sale");
+        require(msg.value >= sellingPrice, "Insufficient payment");
+
+        _transfer(oldOwner, newOwner, tokenId);
+
+        uint256 newPrice = nextPriceOf(tokenId);
+        _tokenPrices[tokenId] = newPrice;
+
+        emit TokenSold(
+            tokenId,
+            _doggies[tokenId].name,
+            _doggies[tokenId].dna,
+            sellingPrice,
+            newPrice,
+            oldOwner,
+            newOwner
+        );
+
+        uint256 excess = msg.value - sellingPrice;
+        uint256 platformFee = (sellingPrice * PLATFORM_FEE_PERCENT) / 100;
+
+        // Pay previous owner (if not contract)
+        if (oldOwner != address(this)) {
+            uint256 sellerProceeds = sellingPrice - platformFee;
+            (bool success, ) = payable(oldOwner).call{value: sellerProceeds}("");
+            require(success, "Seller payment failed");
         }
-        uint256 c = a * b;
-        assert(c / a == b);
-        return c;
+
+        // Refund excess
+        if (excess > 0) {
+            (bool refundSuccess, ) = payable(newOwner).call{value: excess}("");
+            require(refundSuccess, "Refund failed");
+        }
     }
 
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        assert(b > 0); // Solidity automatically throws when dividing by 0
-        uint256 c = a / b;
-        assert(a == b * c + a % b); // There is no case in which this doesn't hold
-        return c;
+    // View functions
+    function getToken(uint256 tokenId) external view validToken(tokenId) returns (
+        string memory tokenName,
+        bytes5 dna,
+        uint256 price,
+        uint256 nextPrice,
+        address tokenOwner
+    ) {
+        Doggy storage doggy = _doggies[tokenId];
+        return (
+            doggy.name,
+            doggy.dna,
+            _tokenPrices[tokenId],
+            nextPriceOf(tokenId),
+            _tokenOwners[tokenId]
+        );
     }
 
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        assert(b <= a);
-        return a - b;
+    function getAllTokens() external view returns (
+        string[] memory names,
+        bytes5[] memory dnas,
+        uint256[] memory prices,
+        uint256[] memory nextPrices,
+        address[] memory owners
+    ) {
+        uint256 total = _doggies.length;
+        names = new string[](total);
+        dnas = new bytes5[](total);
+        prices = new uint256[](total);
+        nextPrices = new uint256[](total);
+        owners = new address[](total);
+
+        for (uint256 i = 0; i < total; i++) {
+            names[i] = _doggies[i].name;
+            dnas[i] = _doggies[i].dna;
+            prices[i] = _tokenPrices[i];
+            nextPrices[i] = nextPriceOf(i);
+            owners[i] = _tokenOwners[i];
+        }
     }
 
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        uint256 c = a + b;
-        assert(c >= a);
-        return c;
+    function tokensOf(address tokenOwner) external view returns (uint256[] memory) {
+        uint256 tokenCount = _ownerTokenCount[tokenOwner];
+        if (tokenCount == 0) {
+            return new uint256[](0);
+        }
+
+        uint256[] memory result = new uint256[](tokenCount);
+        uint256 total = _doggies.length;
+        uint256 resultIndex = 0;
+
+        for (uint256 i = 0; i < total && resultIndex < tokenCount; i++) {
+            if (_tokenOwners[i] == tokenOwner) {
+                result[resultIndex++] = i;
+            }
+        }
+        return result;
     }
+
+    function priceOf(uint256 tokenId) public view validToken(tokenId) returns (uint256) {
+        return _tokenPrices[tokenId];
+    }
+
+    function nextPriceOf(uint256 tokenId) public view validToken(tokenId) returns (uint256) {
+        uint256 price = _tokenPrices[tokenId];
+
+        if (price < INCREASE_LIMIT_1) {
+            return (price * 200) / 95;  // ~110% increase
+        } else if (price < INCREASE_LIMIT_2) {
+            return (price * 135) / 96;  // ~40% increase
+        } else if (price < INCREASE_LIMIT_3) {
+            return (price * 125) / 97;  // ~29% increase
+        } else if (price < INCREASE_LIMIT_4) {
+            return (price * 117) / 97;  // ~21% increase
+        } else {
+            return (price * 115) / 98;  // ~17% increase
+        }
+    }
+
+    // ERC721 Implementation
+    function totalSupply() external view override returns (uint256) {
+        return _doggies.length;
+    }
+
+    function balanceOf(address tokenOwner) external view override returns (uint256) {
+        require(tokenOwner != address(0), "Invalid address");
+        return _ownerTokenCount[tokenOwner];
+    }
+
+    function ownerOf(uint256 tokenId) external view override validToken(tokenId) returns (address) {
+        return _tokenOwners[tokenId];
+    }
+
+    function approve(address to, uint256 tokenId) external override whenNotPaused onlyERC721 validToken(tokenId) {
+        require(_owns(msg.sender, tokenId), "Not owner");
+        _tokenApprovals[tokenId] = to;
+        emit Approval(msg.sender, to, tokenId);
+    }
+
+    function transferFrom(address from, address to, uint256 tokenId) external override whenNotPaused onlyERC721 validToken(tokenId) {
+        require(to != address(0), "Invalid recipient");
+        require(_owns(from, tokenId), "Not owner");
+        require(_approved(msg.sender, tokenId) || msg.sender == from, "Not approved");
+        _transfer(from, to, tokenId);
+    }
+
+    function transfer(address to, uint256 tokenId) external override whenNotPaused onlyERC721 validToken(tokenId) {
+        require(to != address(0), "Invalid recipient");
+        require(_owns(msg.sender, tokenId), "Not owner");
+        _transfer(msg.sender, to, tokenId);
+    }
+
+    function implementsERC721() external view override returns (bool) {
+        return _erc721Enabled;
+    }
+
+    function takeOwnership(uint256 tokenId) external override whenNotPaused onlyERC721 validToken(tokenId) {
+        require(_approved(msg.sender, tokenId), "Not approved");
+        _transfer(_tokenOwners[tokenId], msg.sender, tokenId);
+    }
+
+    function name() external pure override returns (string memory) {
+        return "CryptoDoggies";
+    }
+
+    function symbol() external pure override returns (string memory) {
+        return "CDT";
+    }
+
+    // Fallback to receive ETH
+    receive() external payable {}
 }

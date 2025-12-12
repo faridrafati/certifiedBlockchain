@@ -429,6 +429,7 @@ const GuessingGame = () => {
             <ContractInfo
               contractAddress={GUESSINGGAME_ADDRESS}
               contractName="Guessing Game"
+              owner={owner}
               account={account}
               network={import.meta.env.VITE_NETWORK_ID}
             />

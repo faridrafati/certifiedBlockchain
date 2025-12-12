@@ -163,7 +163,9 @@ const ContractInfo = ({
 
             {account && (
               <div className="info-row">
-                <span className="info-label">Your Address</span>
+                <span className="info-label">
+                  Your Address{owner && account?.toLowerCase() === owner?.toLowerCase() && ' (Owner)'}
+                </span>
                 <div className="info-value-row">
                   <a
                     href={getEtherscanUrl(account)}

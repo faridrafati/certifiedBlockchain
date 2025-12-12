@@ -462,6 +462,29 @@
     color: #a0aec0 !important;
   }
 
+  /* Native Date/Time Input - calendar and clock icons */
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator,
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(0.1) saturate(0.5) hue-rotate(180deg);
+    cursor: pointer;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator:hover,
+  input[type="time"]::-webkit-calendar-picker-indicator:hover,
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(0.5) sepia(0.5) saturate(2) hue-rotate(200deg);
+  }
+
+  /* MUI Date/Time picker icon button */
+  .MuiInputAdornment-root .MuiIconButton-root {
+    color: rgba(160, 174, 192, 0.7) !important;
+  }
+
+  .MuiInputAdornment-root .MuiIconButton-root:hover {
+    color: #667eea !important;
+  }
+
   /* MUI IconButton */
   .MuiIconButton-root {
     color: #a0aec0 !important;

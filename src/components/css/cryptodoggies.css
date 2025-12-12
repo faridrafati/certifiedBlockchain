@@ -802,6 +802,29 @@
   .cryptodoggies-container .MuiFormControlLabel-label {
     color: #e2e8f0 !important;
   }
+
+  /* DNA text visibility in dark mode */
+  .dna-text,
+  .dna-cell,
+  .info-value.dna-text,
+  .info-row .info-value.dna-text,
+  span.dna-text {
+    color: #c4b5fd !important;
+  }
+
+  /* Address text visibility in dark mode */
+  .address-text,
+  .address-cell,
+  .info-value.address-text,
+  .info-row .info-value.address-text,
+  span.address-text {
+    color: #cbd5e1 !important;
+  }
+
+  /* Table cell text in dark mode */
+  .doggies-table .MuiTableBody-root .MuiTableCell-root {
+    color: #e2e8f0 !important;
+  }
 }
 
 /* MUI Overrides */

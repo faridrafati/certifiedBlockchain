@@ -474,6 +474,7 @@ const DappTokenSale = () => {
             <ContractInfo
               contractAddress={DAPPTOKENSALE_ADDRESS}
               contractName={`${tokenName} Token Sale`}
+              owner={admin}
               network={import.meta.env.VITE_NETWORK_ID}
               account={account}
             />

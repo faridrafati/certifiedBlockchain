@@ -864,6 +864,16 @@
   .certificate-container .MuiInputLabel-root.Mui-disabled {
     color: rgba(203, 213, 224, 0.5) !important;
   }
+
+  /* Date picker styling in dark mode */
+  .certificate-container input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7) sepia(0.1) saturate(0.5) hue-rotate(180deg);
+    cursor: pointer;
+  }
+
+  .certificate-container input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    filter: invert(0.5) sepia(0.5) saturate(2) hue-rotate(200deg);
+  }
 }
 
 /* MUI Overrides */

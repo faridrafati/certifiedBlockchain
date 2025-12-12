@@ -309,8 +309,68 @@
 }
 
 .ticket-card:hover {
-  transform: translateY(-8px);
   box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+}
+
+/* Card Color Variations */
+.ticket-card.card-color-1 {
+  border-top: 4px solid #667eea;
+}
+.ticket-card.card-color-1 .ticket-info h4 {
+  color: #667eea;
+}
+.ticket-card.card-color-1:hover {
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+}
+
+.ticket-card.card-color-2 {
+  border-top: 4px solid #48bb78;
+}
+.ticket-card.card-color-2 .ticket-info h4 {
+  color: #38a169;
+}
+.ticket-card.card-color-2:hover {
+  box-shadow: 0 15px 50px rgba(72, 187, 120, 0.3);
+}
+
+.ticket-card.card-color-3 {
+  border-top: 4px solid #ed8936;
+}
+.ticket-card.card-color-3 .ticket-info h4 {
+  color: #dd6b20;
+}
+.ticket-card.card-color-3:hover {
+  box-shadow: 0 15px 50px rgba(237, 137, 54, 0.3);
+}
+
+.ticket-card.card-color-4 {
+  border-top: 4px solid #e53e3e;
+}
+.ticket-card.card-color-4 .ticket-info h4 {
+  color: #c53030;
+}
+.ticket-card.card-color-4:hover {
+  box-shadow: 0 15px 50px rgba(229, 62, 62, 0.3);
+}
+
+.ticket-card.card-color-5 {
+  border-top: 4px solid #9f7aea;
+}
+.ticket-card.card-color-5 .ticket-info h4 {
+  color: #805ad5;
+}
+.ticket-card.card-color-5:hover {
+  box-shadow: 0 15px 50px rgba(159, 122, 234, 0.3);
+}
+
+.ticket-card.card-color-6 {
+  border-top: 4px solid #38b2ac;
+}
+.ticket-card.card-color-6 .ticket-info h4 {
+  color: #319795;
+}
+.ticket-card.card-color-6:hover {
+  box-shadow: 0 15px 50px rgba(56, 178, 172, 0.3);
 }
 
 .card-media {
@@ -337,10 +397,22 @@
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
+.ticket-card .MuiCardContent-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem !important;
+}
+
 .ticket-info {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  flex: 1;
+}
+
+.card-bottom-section {
+  margin-top: auto;
 }
 
 .ticket-info h4 {
@@ -353,21 +425,30 @@
 
 .info-row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0;
+  gap: 0.5rem;
+}
+
+.info-row .info-icon {
+  color: #667eea;
+  font-size: 1.1rem !important;
+  flex-shrink: 0;
 }
 
 .info-row .info-label {
   font-size: 0.85rem;
   color: #718096;
   font-weight: 600;
+  flex-shrink: 0;
 }
 
 .info-row .info-value {
   font-size: 0.9rem;
   color: #2d3748;
   font-weight: 600;
+  margin-left: auto;
+  text-align: right;
 }
 
 .dna-text {
@@ -700,6 +781,19 @@
     color: #cbd5e0;
   }
 
+  /* Event card info - light colors for dark mode */
+  .info-row .info-label {
+    color: #a0aec0;
+  }
+
+  .info-row .info-value {
+    color: #e2e8f0;
+  }
+
+  .info-row .info-icon {
+    color: #a78bfa;
+  }
+
   .tickets-table .MuiTableHead-root .MuiTableCell-root {
     color: #e2e8f0;
   }
@@ -714,6 +808,49 @@
 
   .empty-state {
     background: rgba(102, 126, 234, 0.1);
+  }
+
+  /* Card Color Variations Dark Mode */
+  .ticket-card.card-color-1 .ticket-info h4 {
+    color: #818cf8;
+  }
+  .ticket-card.card-color-1 {
+    border-top-color: #818cf8;
+  }
+
+  .ticket-card.card-color-2 .ticket-info h4 {
+    color: #68d391;
+  }
+  .ticket-card.card-color-2 {
+    border-top-color: #68d391;
+  }
+
+  .ticket-card.card-color-3 .ticket-info h4 {
+    color: #f6ad55;
+  }
+  .ticket-card.card-color-3 {
+    border-top-color: #f6ad55;
+  }
+
+  .ticket-card.card-color-4 .ticket-info h4 {
+    color: #fc8181;
+  }
+  .ticket-card.card-color-4 {
+    border-top-color: #fc8181;
+  }
+
+  .ticket-card.card-color-5 .ticket-info h4 {
+    color: #b794f4;
+  }
+  .ticket-card.card-color-5 {
+    border-top-color: #b794f4;
+  }
+
+  .ticket-card.card-color-6 .ticket-info h4 {
+    color: #4fd1c5;
+  }
+  .ticket-card.card-color-6 {
+    border-top-color: #4fd1c5;
   }
 
   /* Fix MUI TextField input text visibility in dark mode */
@@ -799,6 +936,740 @@
 .ticket-card:focus-within {
   outline: 2px solid rgba(102, 126, 234, 0.5);
   outline-offset: 2px;
+}
+
+/* Seat Selection Dialog */
+.seat-dialog .MuiPaper-root {
+  border-radius: 20px !important;
+  max-width: 700px !important;
+}
+
+.seat-dialog-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+.seat-dialog-title .dialog-icon {
+  font-size: 1.75rem !important;
+}
+
+.seat-dialog-content {
+  padding: 1.5rem !important;
+  background: #f8fafc;
+}
+
+.dialog-event-name {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Stage */
+.stage-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+  perspective: 400px;
+}
+
+.stage {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 3rem;
+  border-radius: 0 0 100px 100px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  transform: rotateX(10deg);
+}
+
+/* Seat Map */
+.seat-map-container {
+  display: flex;
+  justify-content: center;
+  overflow-x: auto;
+  padding: 0.5rem;
+}
+
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.seats {
+  display: flex;
+  gap: 0.35rem;
+  justify-content: center;
+}
+
+.row-number {
+  width: 24px;
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #718096;
+}
+
+/* Individual Seat */
+.seat {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px 6px 8px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.seat svg {
+  font-size: 1.25rem !important;
+}
+
+.seat.available {
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e0 100%);
+  color: #718096;
+}
+
+.seat.available:hover {
+  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.seat.taken {
+  background: linear-gradient(180deg, #fc8181 0%, #e53e3e 100%);
+  color: white;
+  cursor: not-allowed;
+}
+
+.seat.selected,
+.seat.available.selected {
+  background: linear-gradient(180deg, #48bb78 0%, #38a169 100%) !important;
+  color: white !important;
+  transform: scale(1.15);
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.5);
+}
+
+.seat.selected svg,
+.seat.available.selected svg {
+  color: white !important;
+}
+
+.seat.mine {
+  background: linear-gradient(180deg, #63b3ed 0%, #3182ce 100%);
+  color: white;
+  cursor: default;
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.4);
+}
+
+.seat.mine svg {
+  color: white !important;
+}
+
+/* Legend */
+.seat-legend {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.seat-icon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px 5px 7px 7px;
+}
+
+.seat-icon svg {
+  font-size: 1.1rem !important;
+}
+
+.seat-icon.available {
+  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e0 100%);
+  color: #718096;
+}
+
+.seat-icon.taken {
+  background: linear-gradient(180deg, #fc8181 0%, #e53e3e 100%);
+  color: white;
+}
+
+.seat-icon.selected {
+  background: linear-gradient(180deg, #48bb78 0%, #38a169 100%);
+  color: white;
+}
+
+.seat-icon.mine {
+  background: linear-gradient(180deg, #63b3ed 0%, #3182ce 100%);
+  color: white;
+}
+
+/* Transfer Hint */
+.transfer-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg, rgba(99, 179, 237, 0.15) 0%, rgba(49, 130, 206, 0.15) 100%);
+  border: 1px solid rgba(49, 130, 206, 0.3);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: #3182ce;
+}
+
+.transfer-hint .hint-icon {
+  font-size: 1.1rem !important;
+  color: #3182ce;
+}
+
+/* Selected Seat Info */
+.selected-seat-info {
+  text-align: center;
+  margin-top: 1.25rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.selected-seat-info p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #4a5568;
+}
+
+.selected-seat-info strong {
+  color: #38a169;
+}
+
+.selected-seat-info .seat-count {
+  color: #667eea;
+  font-weight: 600;
+}
+
+/* Dialog Actions */
+.seat-dialog-actions {
+  padding: 1rem 1.5rem !important;
+  gap: 0.75rem !important;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.seat-dialog-actions .MuiButton-contained {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 10px !important;
+  padding: 0.5rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+.seat-dialog-actions .MuiButton-contained:hover:not(:disabled) {
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Admin Stats */
+.admin-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.stat-item svg {
+  color: #667eea;
+}
+
+/* Price Display */
+.price-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.price-label {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 600;
+}
+
+.price-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #48bb78;
+}
+
+/* Sold Out Chip */
+.soldout-chip {
+  width: 100%;
+  font-weight: 700 !important;
+  font-size: 1rem !important;
+  padding: 0.75rem 1.5rem !important;
+  height: auto !important;
+  border-radius: 12px !important;
+}
+
+/* My Tickets Info on Event Card */
+.my-tickets-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  background: linear-gradient(135deg, rgba(99, 179, 237, 0.15) 0%, rgba(49, 130, 206, 0.15) 100%);
+  border-radius: 10px;
+  border: 1px solid rgba(49, 130, 206, 0.3);
+}
+
+.my-tickets-info.clickable {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.my-tickets-info.clickable:hover {
+  background: linear-gradient(135deg, rgba(99, 179, 237, 0.25) 0%, rgba(49, 130, 206, 0.25) 100%);
+  border-color: rgba(49, 130, 206, 0.5);
+  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.3);
+}
+
+.my-tickets-info .my-tickets-icon {
+  color: #3182ce;
+  font-size: 1.25rem !important;
+}
+
+.my-tickets-info span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3182ce;
+}
+
+/* Success Dialog */
+.success-dialog .MuiPaper-root {
+  border-radius: 20px !important;
+}
+
+.success-dialog-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+  color: white !important;
+  padding: 1.25rem 1.5rem !important;
+  font-size: 1.25rem !important;
+}
+
+.success-dialog-title .success-icon {
+  font-size: 2rem !important;
+}
+
+.success-dialog-content {
+  padding: 1.5rem !important;
+  text-align: center;
+}
+
+.success-details {
+  background: linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(56, 161, 105, 0.1) 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.success-details h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+}
+
+.success-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(72, 187, 120, 0.2);
+}
+
+.success-info-row:last-child {
+  border-bottom: none;
+}
+
+.success-label {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.success-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.success-value.price {
+  color: #38a169;
+  font-size: 1.1rem;
+}
+
+.success-message {
+  margin: 1rem 0 0 0;
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+.success-dialog-actions {
+  padding: 1rem 1.5rem !important;
+}
+
+.success-dialog-actions .MuiButton-contained {
+  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
+  border-radius: 10px !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+/* Transfer Dialog */
+.transfer-dialog .MuiPaper-root {
+  border-radius: 20px !important;
+}
+
+.transfer-dialog-title {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: white !important;
+  padding: 1.25rem 1.5rem !important;
+  font-size: 1.25rem !important;
+}
+
+.transfer-dialog-title .transfer-icon {
+  font-size: 1.75rem !important;
+}
+
+.transfer-dialog-content {
+  padding: 1.5rem !important;
+}
+
+.transfer-details {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+
+.transfer-details h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  text-align: center;
+}
+
+.transfer-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+}
+
+.transfer-label {
+  font-size: 0.9rem;
+  color: #718096;
+  font-weight: 500;
+}
+
+.transfer-value {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #667eea;
+}
+
+.transfer-dialog-actions {
+  padding: 1rem 1.5rem !important;
+  gap: 0.75rem !important;
+}
+
+.transfer-dialog-actions .MuiButton-contained {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 10px !important;
+  padding: 0.5rem 1.5rem !important;
+  font-weight: 600 !important;
+}
+
+/* Make mine seats clickable for transfer */
+.seat.mine {
+  cursor: pointer;
+}
+
+.seat.mine:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.5);
+}
+
+/* Seat Dialog Dark Mode */
+@media (prefers-color-scheme: dark) {
+  .seat-dialog .MuiPaper-root {
+    background: #1a202c !important;
+  }
+
+  .seat-dialog-content {
+    background: #2d3748 !important;
+  }
+
+  .dialog-event-name {
+    color: #e2e8f0;
+  }
+
+  .seat.available {
+    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    color: #a0aec0;
+  }
+
+  .seat.available:hover {
+    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+
+  .seat.selected,
+  .seat.available.selected {
+    background: linear-gradient(180deg, #48bb78 0%, #38a169 100%) !important;
+    color: white !important;
+  }
+
+  .seat.taken {
+    background: linear-gradient(180deg, #fc8181 0%, #c53030 100%);
+    color: white;
+  }
+
+  .seat-legend {
+    border-top-color: #4a5568;
+  }
+
+  .legend-item {
+    color: #cbd5e0;
+  }
+
+  .seat-icon.available {
+    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+    color: #a0aec0;
+  }
+
+  .seat-icon.taken {
+    background: linear-gradient(180deg, #fc8181 0%, #c53030 100%);
+    color: white;
+  }
+
+  .seat-icon.selected {
+    background: linear-gradient(180deg, #48bb78 0%, #38a169 100%);
+    color: white;
+  }
+
+  .seat-icon.mine {
+    background: linear-gradient(180deg, #63b3ed 0%, #2b6cb0 100%);
+    color: white;
+  }
+
+  .selected-seat-info {
+    background: #1a202c;
+  }
+
+  /* Success Dialog Dark Mode */
+  .success-dialog .MuiPaper-root {
+    background: #1a202c !important;
+  }
+
+  .success-dialog-content {
+    background: #2d3748 !important;
+  }
+
+  .success-details {
+    background: rgba(72, 187, 120, 0.15);
+  }
+
+  .success-details h3 {
+    color: #e2e8f0;
+  }
+
+  .success-info-row {
+    border-bottom-color: rgba(72, 187, 120, 0.3);
+  }
+
+  .success-label {
+    color: #a0aec0;
+  }
+
+  .success-value {
+    color: #e2e8f0;
+  }
+
+  .success-message {
+    color: #a0aec0;
+  }
+
+  .success-dialog-actions {
+    background: #2d3748 !important;
+  }
+
+  /* Transfer Dialog Dark Mode */
+  .transfer-dialog .MuiPaper-root {
+    background: #1a202c !important;
+  }
+
+  .transfer-dialog-content {
+    background: #2d3748 !important;
+  }
+
+  .transfer-details {
+    background: rgba(102, 126, 234, 0.15);
+  }
+
+  .transfer-details h3 {
+    color: #e2e8f0;
+  }
+
+  .transfer-label {
+    color: #a0aec0;
+  }
+
+  .transfer-value {
+    color: #a78bfa;
+  }
+
+  .transfer-dialog-actions {
+    background: #2d3748 !important;
+  }
+
+  /* My Tickets Info Dark Mode */
+  .my-tickets-info {
+    background: linear-gradient(135deg, rgba(99, 179, 237, 0.2) 0%, rgba(49, 130, 206, 0.2) 100%);
+    border-color: rgba(99, 179, 237, 0.4);
+  }
+
+  .my-tickets-info .my-tickets-icon {
+    color: #63b3ed;
+  }
+
+  .my-tickets-info span {
+    color: #63b3ed;
+  }
+
+  /* Transfer Hint Dark Mode */
+  .transfer-hint {
+    background: linear-gradient(135deg, rgba(99, 179, 237, 0.2) 0%, rgba(49, 130, 206, 0.2) 100%);
+    border-color: rgba(99, 179, 237, 0.4);
+    color: #63b3ed;
+  }
+
+  .transfer-hint .hint-icon {
+    color: #63b3ed;
+  }
+
+  .selected-seat-info p {
+    color: #cbd5e0;
+  }
+
+  .seat-dialog-actions {
+    background: #2d3748 !important;
+    border-top-color: #4a5568 !important;
+  }
+
+  .row-number {
+    color: #a0aec0;
+  }
+
+  .stat-item {
+    color: #e2e8f0;
+  }
+}
+
+/* Responsive Seat Dialog */
+@media (max-width: 600px) {
+  .seat-dialog .MuiPaper-root {
+    margin: 1rem !important;
+    max-height: calc(100% - 2rem) !important;
+  }
+
+  .seat {
+    width: 26px;
+    height: 26px;
+  }
+
+  .seat svg {
+    font-size: 1rem !important;
+  }
+
+  .seats {
+    gap: 0.25rem;
+  }
+
+  .seat-row {
+    gap: 0.35rem;
+  }
+
+  .seat-legend {
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    font-size: 0.75rem;
+  }
+
+  .seat-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .seat-icon svg {
+    font-size: 0.9rem !important;
+  }
+
+  .stage {
+    padding: 0.5rem 2rem;
+    font-size: 0.75rem;
+  }
 }
 
 /* Print Styles */
