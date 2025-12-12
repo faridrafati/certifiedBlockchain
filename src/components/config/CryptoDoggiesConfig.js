@@ -1,3 +1,39 @@
+/**
+ * @file CryptoDoggiesConfig.js
+ * @description Configuration for NFT Collectible Pixel Dogs smart contract
+ * @author CertifiedBlockchain
+ *
+ * Contains the deployed contract address and ABI for the CryptoDoggies contract.
+ * ERC-721 NFT marketplace for collectible pixel art dogs.
+ *
+ * Contract Functions:
+ * - createToken(name): Create new doggy NFT (owner only)
+ * - createToken(name, owner, price): Create with custom params
+ * - purchase(tokenId): Buy doggy NFT (payable)
+ * - getToken(id): Get doggy details (name, dna, price, nextPrice, owner)
+ * - getAllTokens(): Get all doggies in bulk
+ * - tokensOf(owner): Get token IDs owned by address
+ * - priceOf/nextPriceOf(id): Get current/next price
+ *
+ * Admin Functions:
+ * - pause/unpause(): Control contract state
+ * - setOwner(address): Transfer ownership
+ * - withdrawBalance(to, amount): Withdraw ETH
+ * - enableERC721(): Enable ERC-721 functionality
+ *
+ * Price Mechanics:
+ * - Prices auto-increase after each sale
+ * - Previous owner receives sale proceeds
+ *
+ * Events:
+ * - TokenCreated, TokenSold, Transfer, Approval
+ * - Paused, Unpaused, OwnershipTransferred
+ *
+ * Used By: CryptoDoggies.jsx
+ *
+ * Environment Variable: VITE_CRYPTODOGGIES_ADDRESS
+ */
+
 export const CRYPTODOGGIES_ADDRESS = import.meta.env.VITE_CRYPTODOGGIES_ADDRESS;
 export const CRYPTODOGGIES_ABI = [
   // Events

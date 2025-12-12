@@ -1,3 +1,26 @@
+/**
+ * @file loginForm.jsx
+ * @description User registration form for blockchain email system
+ * @author CertifiedBlockchain
+ *
+ * This component handles new user registration for the Email DApp:
+ * - Validates username input using Joi schema
+ * - Creates a blockchain inbox for the user
+ * - One-time registration process
+ *
+ * Features:
+ * - Form validation with Joi
+ * - Extends reusable Form base class
+ * - Clear instructions for new users
+ * - MetaMask transaction required for registration
+ *
+ * Used By: Email.jsx (for new user onboarding)
+ * Parent Component: Form (./form.jsx)
+ *
+ * @example
+ * <LoginForm register={handleUserRegistration} />
+ */
+
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./form";

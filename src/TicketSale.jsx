@@ -1,3 +1,25 @@
+/**
+ * @file TicketSale.jsx
+ * @description NFT-based event ticketing system with visual seat selection
+ * @author CertifiedBlockchain
+ *
+ * This component provides a complete event ticketing platform where:
+ * - Event organizers (contract owner) can create events with customizable details
+ * - Users can visually select and purchase seats as NFTs
+ * - Ticket holders can transfer their tickets to other wallets
+ * - Admin can withdraw collected funds
+ *
+ * Features:
+ * - Visual interactive seat map with real-time availability
+ * - Multi-seat selection and batch purchasing
+ * - ERC721 NFT tickets with transfer capability
+ * - Auto-refresh every 12 seconds (Ethereum block time)
+ * - Responsive design with Material-UI components
+ *
+ * Smart Contract: TicketSale.sol (ERC721)
+ * CSS: ./components/css/ticketsale.css
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import Web3 from 'web3';
 import {

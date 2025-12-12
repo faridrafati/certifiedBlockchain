@@ -1,3 +1,25 @@
+/**
+ * @file chartUpdate.jsx
+ * @description Demo/test component for ApexCharts with dynamic updates
+ * @author CertifiedBlockchain
+ *
+ * Demonstrates real-time chart updates using react-apexcharts.
+ * Displays a line/column chart with random data updates.
+ *
+ * Features:
+ * - ApexCharts integration with React
+ * - Random data generation on button click
+ * - Weekly data visualization (Sun-Sun)
+ *
+ * Dependencies:
+ * - react-apexcharts
+ * - apexcharts
+ *
+ * @component
+ * @example
+ * <ChartUpdate />
+ */
+
 import React, { Component } from 'react';
 import Chart from 'react-apexcharts'
 

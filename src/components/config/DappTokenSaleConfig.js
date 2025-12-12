@@ -1,3 +1,35 @@
+/**
+ * @file DappTokenSaleConfig.js
+ * @description Configuration for Token Crowdsale (ICO) smart contract
+ * @author CertifiedBlockchain
+ *
+ * Contains the deployed contract address and ABI for the DappTokenSale contract.
+ * The address is loaded from environment variables for deployment flexibility.
+ *
+ * Contract Functions:
+ * - buyTokens(numberOfTokens): Purchase tokens (payable)
+ * - endSale(): End sale and return unsold tokens (admin only)
+ * - getAdmin(): Get admin address
+ * - getTokensSold(): Get total tokens sold
+ * - tokenPrice(): Get price per token in wei
+ * - tokensSold(): Legacy getter for tokens sold
+ * - tokenContract(): Get DappToken contract address
+ *
+ * Events:
+ * - Sell: Emitted when tokens are purchased
+ * - SaleEnded: Emitted when sale ends (tokens/ETH returned)
+ *
+ * Custom Errors:
+ * - OnlyAdmin, IncorrectETHAmount, NotEnoughTokens
+ * - ZeroPrice, ZeroTokensPurchase, TransferFailed
+ *
+ * Payment: msg.value = numberOfTokens * tokenPrice
+ *
+ * Used By: dappTokenSale.jsx
+ *
+ * Environment Variable: VITE_DAPPTOKENSALE_ADDRESS
+ */
+
 export const DAPPTOKENSALE_ADDRESS = import.meta.env.VITE_DAPPTOKENSALE_ADDRESS;
 export const DAPPTOKENSALE_ABI = [
   {

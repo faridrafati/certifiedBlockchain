@@ -1,3 +1,29 @@
+/**
+ * @file pollForm.jsx
+ * @description Form component for creating new polls
+ * @author CertifiedBlockchain
+ *
+ * Provides a form interface for creating blockchain polls with:
+ * - Question text
+ * - Image URL for poll visual
+ * - Up to 3 voting options
+ *
+ * Features:
+ * - Joi validation for all fields
+ * - Real-time validation feedback
+ * - Required fields: question, image, option1, option2
+ * - Optional: option3
+ *
+ * Used By: Poll.jsx
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Function} props.submitCreatePollHandler - Callback to create poll
+ *
+ * @example
+ * <PollForm submitCreatePollHandler={handleCreatePoll} />
+ */
+
 import React, { Component } from 'react';
 import Joi from "joi-browser";
 import Input from "./components/pollCommon/input";

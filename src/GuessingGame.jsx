@@ -1,3 +1,36 @@
+/**
+ * @file GuessingGame.jsx
+ * @description Blockchain betting game - Higher or Lower than 5
+ * @author CertifiedBlockchain
+ *
+ * This component implements a simple gambling game where:
+ * - Players bet ETH on whether a mystery number will be higher or lower than 5
+ * - The smart contract generates a random number (1-10)
+ * - Winners receive 2x their bet, losers lose their bet
+ * - All bets and results are recorded as blockchain events
+ *
+ * Features:
+ * - Real-time game status (online/offline)
+ * - Maximum bet limit enforcement
+ * - Win/loss history tracking via blockchain events
+ * - Contract balance visibility
+ * - Admin withdrawal functionality (owner only)
+ *
+ * Smart Contract: GuessingGame.sol
+ * CSS: ./components/css/guessinggame.css
+ *
+ * Game Rules:
+ * - "Higher": Wins if mystery number > 5 (6, 7, 8, 9, 10)
+ * - "Lower": Wins if mystery number <= 5 (1, 2, 3, 4, 5)
+ *
+ * @example
+ * // Players can bet and view their history
+ * <GuessingGame />
+ *
+ * // Contract owner can also withdraw contract balance
+ * <GuessingGame />
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

@@ -1,3 +1,32 @@
+/**
+ * @file Certificate.jsx
+ * @description Blockchain-based certificate issuance and verification system
+ * @author CertifiedBlockchain
+ *
+ * This component provides a certificate management platform where:
+ * - Certificate issuers (contract owner) can create blockchain-secured certificates
+ * - Anyone can verify certificate authenticity using a credential ID
+ * - All certificates are permanently stored on the blockchain
+ *
+ * Features:
+ * - SHA-256 based credential ID generation
+ * - Beautiful certificate display with organization branding
+ * - Admin panel for certificate issuance with form validation
+ * - Public verification interface
+ * - Auto-generated unique credential IDs
+ * - Blockscout integration for on-chain verification
+ *
+ * Smart Contract: Certificate.sol
+ * CSS: ./components/css/certificate.css
+ *
+ * @example
+ * // Public users can verify certificates
+ * <Certificate /> // Shows verification interface
+ *
+ * // Admin (contract owner) sees management panel
+ * <Certificate /> // Shows admin panel with issuance form
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

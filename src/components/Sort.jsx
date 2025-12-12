@@ -1,3 +1,21 @@
+/**
+ * @file Sort.jsx
+ * @description Filter/Sort component for tokenmaster event listings
+ * @author CertifiedBlockchain
+ *
+ * Provides dropdown filters for browsing events by:
+ * - Genre (event type)
+ * - Dates (when events occur)
+ * - Distance (proximity to user)
+ *
+ * Used in the TicketSale listing pages to help users
+ * find relevant events.
+ *
+ * @component
+ * @example
+ * <Sort />
+ */
+
 // Assets
 import down from '../assets/angle-down-solid.svg'
 

@@ -1,3 +1,33 @@
+/**
+ * @file Poll.jsx
+ * @description Decentralized polling and survey system with real-time results
+ * @author CertifiedBlockchain
+ *
+ * This component provides a blockchain-based polling platform where:
+ * - Anyone can create polls with 3 options
+ * - Users vote once per poll (enforced by smart contract)
+ * - Results are displayed in real-time with interactive charts
+ * - All votes are permanently recorded on-chain
+ *
+ * Features:
+ * - Create polls with optional image support
+ * - One vote per wallet per poll (sybil-resistant)
+ * - Interactive ApexCharts visualization
+ * - Real-time vote tracking with auto-refresh
+ * - Visual indicators for voted/unvoted polls
+ * - Dark mode optimized chart styling
+ *
+ * Smart Contract: Poll.sol
+ * CSS: ./components/css/poll.css
+ *
+ * Dependencies:
+ * - react-apexcharts: For interactive bar chart visualization
+ *
+ * @example
+ * // Anyone can create and vote on polls
+ * <Poll />
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

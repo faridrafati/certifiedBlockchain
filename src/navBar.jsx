@@ -1,14 +1,51 @@
+/**
+ * @file navBar.jsx
+ * @description Navigation bar component for the CertifiedBlockchain DApp
+ * @author CertifiedBlockchain
+ *
+ * A responsive navigation component that provides access to all DApp features
+ * organized into categorized dropdown menus.
+ *
+ * Categories:
+ * - Finance: Token Wallet, CrowdSale, Auction, Ticket Sale
+ * - Governance: Voting, Weighted Voting, Poll Survey
+ * - Communication: Blockchain Email, Chat Box
+ * - Shopping: Pet Adoption, Crypto Doggies NFT
+ * - Services: Certificate, Task Manager
+ * - Games: Guessing Game
+ *
+ * Features:
+ * - Responsive design (mobile hamburger menu)
+ * - Custom branded logo
+ * - Bootstrap-based dropdowns
+ * - Active link highlighting via NavLink
+ */
+
 import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './components/css/navbar.css';
 
+/**
+ * Navigation Bar Component
+ *
+ * Renders the main navigation bar with dropdown menus for all DApp features.
+ * Uses Bootstrap for responsive behavior and React Router for navigation.
+ *
+ * @component
+ * @returns {JSX.Element} The navigation bar component
+ *
+ * @example
+ * <NavBar />
+ */
 const NavBar = () => {
   return (
     <div className="navbar-wrapper">
       <nav className="navbar navbar-dark navbar-expand-lg custom-navbar">
         <div className="container-fluid">
+          {/* Brand Logo and Name */}
           <Link className="navbar-brand brand-logo" to="/">
+            {/* Custom SVG Logo */}
             <svg
               width="32"
               height="32"
@@ -45,6 +82,7 @@ const NavBar = () => {
             <span className="brand-text">Blockchain DApp</span>
           </Link>
 
+          {/* Mobile Toggle Button */}
           <button
             className="navbar-toggler"
             type="button"
@@ -57,9 +95,11 @@ const NavBar = () => {
             <span className="navbar-toggler-icon"></span>
           </button>
 
+          {/* Collapsible Navigation Menu */}
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <ul className="navbar-nav ms-auto">
-              {/* Finance Dropdown */}
+
+              {/* Finance Dropdown - Token, CrowdSale, Auction, Tickets */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -100,7 +140,7 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              {/* Governance Dropdown */}
+              {/* Governance Dropdown - Voting Systems */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -135,7 +175,7 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              {/* Communication Dropdown */}
+              {/* Communication Dropdown - Email and Chat */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -164,7 +204,7 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              {/* Shopping Dropdown */}
+              {/* Shopping Dropdown - Pet Adoption and NFT Shop */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"
@@ -193,7 +233,7 @@ const NavBar = () => {
                 </ul>
               </li>
 
-              {/* Services Dropdown */}
+              {/* Services Dropdown - Certificate and Task Management */}
               <li className="nav-item dropdown">
                 <a
                   className="nav-link dropdown-toggle"

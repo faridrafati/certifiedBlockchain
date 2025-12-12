@@ -1,3 +1,36 @@
+/**
+ * @file form.jsx
+ * @description Reusable form base class with Joi validation
+ * @author CertifiedBlockchain
+ *
+ * Abstract base class that provides common form functionality:
+ * - Joi schema-based validation (full form and per-property)
+ * - Form submission handling with validation
+ * - Input change handling with real-time validation
+ * - Reusable render methods for inputs, selects, and buttons
+ *
+ * Usage:
+ * Extend this class and provide:
+ * - state.data: Object with form field values
+ * - schema: Joi validation schema
+ * - doSubmit(): Method called on valid form submission
+ *
+ * Child Components:
+ * - loginForm.jsx (Email registration)
+ *
+ * Dependencies:
+ * - joi-browser for validation
+ * - ./input.jsx for text inputs
+ * - ./select.jsx for dropdown selects
+ *
+ * @example
+ * class MyForm extends Form {
+ *   state = { data: { name: '' }, errors: {} };
+ *   schema = { name: Joi.string().required() };
+ *   doSubmit = () => { console.log(this.state.data); };
+ * }
+ */
+
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";

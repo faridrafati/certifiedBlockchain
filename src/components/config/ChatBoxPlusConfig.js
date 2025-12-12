@@ -1,3 +1,33 @@
+/**
+ * @file ChatBoxPlusConfig.js
+ * @description Configuration for Chat + TicTacToe smart contract
+ * @author CertifiedBlockchain
+ *
+ * Contains the deployed contract address and ABI for the ChatBoxPlus contract.
+ * This is an enhanced messaging contract with integrated TicTacToe game.
+ *
+ * Messaging Functions:
+ * - registerUser(username): Register with bytes32 username
+ * - sendMessage(receiver, content): Send bytes32 message
+ * - receiveMessages/sentMessages(): Get inbox/outbox (64 messages max)
+ * - editMyContactList(address, add): Manage contacts (64 max)
+ * - clearInbox/clearOutbox/clearConversationWith(): Clear messages
+ *
+ * TicTacToe Functions:
+ * - createGame(opponent): Start new game with opponent
+ * - setStone(x, y, opponent): Make move on 3x3 board
+ * - getBoard(opponent): Get current game state
+ * - resetGame(opponent): Reset game with opponent
+ * - gameIndexFunction(opponent): Check active game status
+ *
+ * Events:
+ * - GameWinner: Emitted when game is won
+ *
+ * Used By: chatBoxStable.jsx
+ *
+ * Environment Variable: VITE_CHATBOXPLUS_ADDRESS
+ */
+
 export const CHATBOXPLUS_ADDRESS = import.meta.env.VITE_CHATBOXPLUS_ADDRESS;
 export const CHATBOXPLUS_ABI = [
 	{

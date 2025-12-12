@@ -1,3 +1,25 @@
+/**
+ * @file notFound.jsx
+ * @description 404 Not Found error page with animations
+ * @author CertifiedBlockchain
+ *
+ * This component displays when users navigate to non-existent routes.
+ * Provides helpful suggestions and quick links to popular pages.
+ *
+ * Features:
+ * - Animated 404 display with rotating SVG circle
+ * - Floating background elements for visual interest
+ * - Helpful suggestions for users
+ * - Go Home and Go Back navigation buttons
+ * - Quick links to popular DApp pages
+ *
+ * CSS: ./components/css/notFound.css
+ *
+ * @example
+ * // In React Router configuration:
+ * <Route path="*" element={<NotFound />} />
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './components/css/notFound.css';

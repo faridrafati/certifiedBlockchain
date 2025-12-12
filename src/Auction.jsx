@@ -1,3 +1,34 @@
+/**
+ * @file Auction.jsx
+ * @description Decentralized auction platform with ETH bidding
+ * @author CertifiedBlockchain
+ *
+ * This component provides a secure auction system where:
+ * - Users can place bids in ETH (using finney for precision)
+ * - Bids are cumulative - each new bid adds to your previous total
+ * - Highest bidder wins when auction ends
+ * - Admin can control auction timing and withdraw losing bids
+ *
+ * Features:
+ * - Real-time bid tracking with auto-refresh
+ * - Visual auction status (active/ended) with countdown
+ * - Cumulative bidding system for competitive auctions
+ * - Admin controls for auction management
+ * - Reentrancy-protected withdrawals (smart contract level)
+ *
+ * Smart Contract: Auction.sol
+ * CSS: ./components/css/auction.css
+ *
+ * Currency: 1 ETH = 1000 finney (for precise bidding)
+ *
+ * @example
+ * // Regular user sees bidding interface
+ * <Auction />
+ *
+ * // Contract owner sees admin controls
+ * <Auction /> // Additional controls for end time, withdrawals
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

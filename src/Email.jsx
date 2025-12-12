@@ -1,3 +1,38 @@
+/**
+ * @file Email.jsx
+ * @description Decentralized messaging system on Ethereum blockchain
+ * @author CertifiedBlockchain
+ *
+ * This component provides a blockchain-based email/messaging system where:
+ * - Users must register once to create their blockchain inbox
+ * - Messages are stored as bytes32 (max 32 characters)
+ * - All registered users appear as contacts
+ * - Messages are immutable once sent (stored on-chain)
+ *
+ * Features:
+ * - User registration with blockchain inbox creation
+ * - Inbox and Sent tabs for message organization
+ * - Reply functionality with context preservation
+ * - Clear inbox/conversation features
+ * - Contact list from registered users
+ * - Auto-refresh every 12 seconds
+ *
+ * Smart Contract: Email.sol
+ * CSS: ./components/css/email.css
+ *
+ * Technical Notes:
+ * - Messages stored as bytes32 (32 character limit)
+ * - Uses asciiToHex/toAscii for encoding/decoding
+ * - Timestamps stored in Unix format (seconds)
+ *
+ * @example
+ * // First-time users see registration dialog
+ * <Email />
+ *
+ * // Registered users see full email interface
+ * <Email /> // With inbox, sent, and compose sections
+ */
+
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

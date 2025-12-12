@@ -1,3 +1,31 @@
+/**
+ * @file details.jsx
+ * @description Poll voting detail view with radio button options
+ * @author CertifiedBlockchain
+ *
+ * Displays a single poll's question and options for voting.
+ * Users select an option via radio buttons and submit their vote.
+ *
+ * Features:
+ * - Dynamic radio button generation from poll options
+ * - Filters out empty options
+ * - Disabled state when user has already voted
+ * - Submit button validation (must select option)
+ *
+ * Used By: Poll.jsx
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {Object} props.selectedPoll - Poll data object
+ * @param {string} props.selectedPoll.question - Poll question text
+ * @param {Array} props.selectedPoll.items - Voting options
+ * @param {boolean} props.selectedPoll.voted - Whether user has voted
+ * @param {Function} props.submitVote - Callback to submit vote
+ *
+ * @example
+ * <Details selectedPoll={poll} submitVote={handleVote} />
+ */
+
 import React, { Component } from 'react';
 
 

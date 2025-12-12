@@ -1,3 +1,33 @@
+/**
+ * @file Task.jsx
+ * @description Blockchain-based personal task/todo manager
+ * @author CertifiedBlockchain
+ *
+ * This component provides a decentralized task management system where:
+ * - Each user has their own private task list
+ * - Tasks are permanently stored on the blockchain
+ * - Users can add tasks with descriptions and deadlines
+ * - Tasks can be marked as completed (deleted)
+ *
+ * Features:
+ * - Per-wallet task isolation (each user sees only their tasks)
+ * - DateTime picker for task deadlines
+ * - Clean task card UI with delete functionality
+ * - Automatic date parsing from task text
+ * - Auto-refresh every 12 seconds
+ *
+ * Smart Contract: Task.sol
+ * CSS: ./components/css/task.css
+ *
+ * Task Storage Format:
+ * - Task text includes deadline: "Task description @ YYYY-MM-DDTHH:MM"
+ * - The UI parses this format to display date separately
+ *
+ * @example
+ * // Each wallet manages their own tasks
+ * <Task />
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

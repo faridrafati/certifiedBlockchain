@@ -1,3 +1,26 @@
+/**
+ * @file Navigation.jsx
+ * @description Navigation bar component for tokenmaster ticketing system
+ * @author CertifiedBlockchain
+ *
+ * Top navigation bar with branding, search, category links, and wallet connection.
+ * Uses ethers.js for wallet connection via MetaMask.
+ *
+ * Features:
+ * - Brand logo and title
+ * - Search input for events
+ * - Category navigation links (Concerts, Sports, Arts & Theater)
+ * - Wallet connect button with address display
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.account - Connected wallet address
+ * @param {Function} props.setAccount - Callback to update account state
+ *
+ * @example
+ * <Navigation account={account} setAccount={setAccount} />
+ */
+
 import { ethers } from 'ethers'
 
 const Navigation = ({ account, setAccount }) => {

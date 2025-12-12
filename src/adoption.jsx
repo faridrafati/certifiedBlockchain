@@ -1,3 +1,33 @@
+/**
+ * @file adoption.jsx
+ * @description Blockchain-based pet adoption tracking system
+ * @author CertifiedBlockchain
+ *
+ * This component provides a pet adoption platform where:
+ * - Users can adopt pets from a predefined list (pets.json)
+ * - Each adoption is recorded on the blockchain
+ * - Adopters are permanently linked to their pets
+ * - Already adopted pets show their owner's address
+ *
+ * Features:
+ * - Visual pet cards with images, breed, age, and location
+ * - One-click adoption with MetaMask confirmation
+ * - Real-time adoption status tracking
+ * - Owner indication for adopted pets
+ * - Auto-refresh capability
+ *
+ * Smart Contract: Adoption.sol
+ * CSS: ./components/css/card.css
+ *
+ * Data Source:
+ * - Pet data loaded from ./components/pets.json
+ * - Pet images from ./components/images/*.jpeg
+ *
+ * @example
+ * // Users can adopt available pets
+ * <Adoption />
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

@@ -1,3 +1,34 @@
+/**
+ * @file dappToken.jsx
+ * @description ERC-20 token wallet interface for managing DApp tokens
+ * @author CertifiedBlockchain
+ *
+ * This component provides a complete ERC-20 token wallet where:
+ * - Users can view their token balance and token information
+ * - Transfer tokens to any Ethereum address
+ * - Add the token to MetaMask for tracking
+ * - View real-time balance updates
+ *
+ * Features:
+ * - Token information display (name, symbol, decimals, total supply)
+ * - Balance tracking with auto-refresh every 12 seconds
+ * - Token transfer with validation and confirmation
+ * - Quick amount buttons (25%, 50%, 75%, Max)
+ * - MetaMask wallet_watchAsset integration
+ * - Copy contract address functionality
+ *
+ * Smart Contract: DappToken.sol (ERC-20)
+ * CSS: ./components/css/dapptoken.css
+ *
+ * Technical Notes:
+ * - Uses BigInt for precise token calculations
+ * - Handles decimal conversion for display and transfers
+ * - Number formatting with commas for readability
+ *
+ * @example
+ * <DappToken />
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

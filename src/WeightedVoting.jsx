@@ -1,3 +1,37 @@
+/**
+ * @file WeightedVoting.jsx
+ * @description Weighted voting system with voter authorization
+ * @author CertifiedBlockchain
+ *
+ * This component implements a controlled voting system where:
+ * - Only authorized voters can participate (authorized by contract owner)
+ * - Each voter has a "weight" that determines their voting power
+ * - Voters can only vote once (enforced by smart contract)
+ * - Fixed 3 candidates are pre-defined in the contract
+ *
+ * Features:
+ * - Voter authorization system with custom weights
+ * - One vote per authorized wallet
+ * - Real-time vote tracking with progress bars
+ * - Authorization status indicators
+ * - Admin panel for authorizing new voters
+ *
+ * Smart Contract: WeightedVoting.sol
+ * CSS: ./components/css/weightedvoting.css
+ *
+ * Authorization States:
+ * - not_authorized: User cannot vote, needs owner authorization
+ * - authorized_can_vote: User is authorized and can vote
+ * - authorized_voted: User has already cast their vote
+ *
+ * @example
+ * // Authorized voters see voting interface
+ * <WeightedVoting />
+ *
+ * // Contract owner sees authorization panel
+ * <WeightedVoting /> // Can authorize voters with custom weights
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

@@ -1,3 +1,37 @@
+/**
+ * @file App.jsx
+ * @description Main application component for the CertifiedBlockchain DApp
+ * @author CertifiedBlockchain
+ *
+ * This is the root component of the decentralized application (DApp).
+ * It handles MetaMask wallet connection, account management, and routing
+ * to all blockchain-based features.
+ *
+ * Features:
+ * - MetaMask wallet detection and connection
+ * - Account change handling (lock/unlock, account switch)
+ * - Chain/network change detection
+ * - Modal for wallet connection states
+ * - Toast notifications for user feedback
+ * - Routing to all blockchain components
+ *
+ * Routes:
+ * - /token: DappToken wallet
+ * - /crowdSale: Token sale interface
+ * - /voting: Democratic voting system
+ * - /weightedVoting: Weighted voting system
+ * - /chat: Blockchain email
+ * - /chatBoxStable: Chat application
+ * - /todo: Task manager
+ * - /auction: Auction platform
+ * - /certificate: Certificate verification
+ * - /pollSurvey: Poll/survey system
+ * - /doggiesShop: NFT marketplace
+ * - /guessing: Guessing game
+ * - /petAdoption: Pet adoption tracker
+ * - /ticketSale: Event ticketing
+ */
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import detectEthereumProvider from '@metamask/detect-provider';
@@ -26,20 +60,39 @@ import DappToken from './dappToken';
 import DappTokenSale from './dappTokenSale';
 import TicketSale from './TicketSale';
 
+/**
+ * Main Application Component
+ *
+ * @component
+ * @returns {JSX.Element} The main application with routing and wallet connection
+ *
+ * @example
+ * // In index.jsx
+ * <BrowserRouter>
+ *   <App />
+ * </BrowserRouter>
+ */
 function App() {
+  // State for wallet connection and UI
   const [currentAccount, setCurrentAccount] = useState(null);
   const [chainId, setChainId] = useState('');
   const [message, setMessage] = useState('Please Wait');
   const [buttonName, setButtonName] = useState('Ok');
   const [modalNeed, setModalNeed] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Ref to prevent duplicate toast notifications
   const hasShownConnectedToast = useRef(false);
 
+  // Initialize MetaMask connection on component mount
   useEffect(() => {
     checkMetamask();
   }, []);
 
-  // Periodic check for wallet lock status (some MetaMask versions don't fire events reliably)
+  /**
+   * Periodic check for wallet lock status
+   * Some MetaMask versions don't fire events reliably when wallet is locked
+   */
   useEffect(() => {
     if (!modalNeed && currentAccount) {
       const checkWalletStatus = async () => {
@@ -63,6 +116,11 @@ function App() {
     }
   }, [modalNeed, currentAccount]);
 
+  /**
+   * Initializes the application with the detected provider
+   * Warns user if multiple wallets are detected
+   * @param {Object} provider - The detected Ethereum provider
+   */
   const startApp = (provider) => {
     if (provider !== window.ethereum) {
       console.error('Multiple wallets detected. Please use only one.');
@@ -70,10 +128,15 @@ function App() {
     }
   };
 
+  /**
+   * Main MetaMask detection and initialization function
+   * Checks for MetaMask, sets up event listeners for account/chain changes
+   */
   const checkMetamask = async () => {
     try {
       const { ethereum } = window;
 
+      // Check if MetaMask is installed
       if (!ethereum) {
         setButtonName('Install');
         setMessage('1. Please install MetaMask first!\n2. Then connect app to MetaMask.');
@@ -101,6 +164,7 @@ function App() {
         console.error('Error fetching chain ID:', err);
       }
 
+      // Listen for chain/network changes (will reload page)
       ethereum.on('chainChanged', (newChainId) => {
         handleChainChanged(newChainId);
         window.location.reload();
@@ -127,10 +191,21 @@ function App() {
     }
   };
 
+  /**
+   * Handles blockchain network/chain changes
+   * @param {string} newChainId - The new chain ID in hex format
+   */
   const handleChainChanged = (newChainId) => {
     setChainId(newChainId);
   };
 
+  /**
+   * Handles account changes from MetaMask
+   * Manages wallet lock/unlock states and account switching
+   *
+   * @param {string[]} accounts - Array of connected account addresses
+   * @param {boolean} isInitialCheck - True if this is the initial connection check
+   */
   const handleAccountsChanged = (accounts, isInitialCheck = false) => {
     if (accounts.length === 0) {
       // Wallet is locked or disconnected
@@ -163,6 +238,10 @@ function App() {
     }
   };
 
+  /**
+   * Handles the connect/login button click
+   * Requests MetaMask to connect accounts
+   */
   const onClickConnect = async () => {
     const { ethereum } = window;
 
@@ -188,12 +267,14 @@ function App() {
     }
   };
 
+  // Show loading spinner while initializing
   if (isLoading) {
     return <LoadingSpinner message="Initializing Web3 Application..." />;
   }
 
   return (
     <div className="app-container">
+      {/* Toast notifications container */}
       <ToastContainer
         position="bottom-right"
         autoClose={4000}
@@ -207,6 +288,7 @@ function App() {
         theme="colored"
       />
 
+      {/* Wallet connection modal */}
       {modalNeed && (
         <div className="fade-in">
           <ModalForm
@@ -217,25 +299,39 @@ function App() {
         </div>
       )}
 
+      {/* Main application content */}
       <div className={`fade-in app-content ${modalNeed ? 'blurred-content' : ''}`}>
         <NavBar />
         <main className="container mt-4">
           <Routes>
-            <Route path="/petAdoption" element={<Adoption />} />
+            {/* Finance Routes */}
             <Route path="/token" element={<DappToken />} />
             <Route path="/crowdSale" element={<DappTokenSale />} />
+            <Route path="/auction" element={<Auction />} />
+            <Route path="/ticketSale" element={<TicketSale />} />
+
+            {/* Governance Routes */}
             <Route path="/voting" element={<Voting />} />
             <Route path="/weightedVoting" element={<WeightedVoting />} />
+            <Route path="/pollSurvey" element={<Poll />} />
+
+            {/* Communication Routes */}
             <Route path="/chat" element={<Email />} />
             <Route path="/chatBox" element={<Navigate to="/chatBoxStable" replace />} />
             <Route path="/chatBoxStable" element={<ChatBoxStable />} />
-            <Route path="/todo" element={<Task />} />
-            <Route path="/auction" element={<Auction />} />
-            <Route path="/certificate" element={<Certificate />} />
-            <Route path="/pollSurvey" element={<Poll />} />
+
+            {/* Shopping Routes */}
+            <Route path="/petAdoption" element={<Adoption />} />
             <Route path="/doggiesShop" element={<CryptoDoggies />} />
+
+            {/* Services Routes */}
+            <Route path="/certificate" element={<Certificate />} />
+            <Route path="/todo" element={<Task />} />
+
+            {/* Games Routes */}
             <Route path="/guessing" element={<GuessingGame />} />
-            <Route path="/ticketSale" element={<TicketSale />} />
+
+            {/* Utility Routes */}
             <Route path="/not-found" element={<NotFound />} />
             <Route path="/" element={<Navigate to="/token" replace />} />
             <Route path="*" element={<Navigate to="/not-found" replace />} />

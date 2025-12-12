@@ -1,3 +1,45 @@
+/**
+ * @file chatBoxStable.jsx
+ * @description Full-featured blockchain chat application with TicTacToe game
+ * @author CertifiedBlockchain
+ *
+ * This component provides a comprehensive chat platform where:
+ * - Users register with a username stored on blockchain
+ * - Messages are stored as bytes32 (32 character limit)
+ * - Contacts can be added to favorites for easy access
+ * - Includes an integrated TicTacToe game with betting
+ *
+ * Features:
+ * - User registration system with custom usernames
+ * - Contact list with favorites/starring functionality
+ * - Conversation view with sent/received messages
+ * - Search functionality across contacts
+ * - Clear conversation/inbox options
+ * - "Saved Messages" (messaging yourself)
+ * - TicTacToe game with win/loss tracking
+ *
+ * Smart Contract: ChatBoxPlus.sol (includes TicTacToe.sol)
+ * CSS: ./components/css/chatboxstable.css
+ *
+ * Technical Notes:
+ * - Messages encoded as bytes32 (32 char max)
+ * - Uses lodash for sorting and filtering
+ * - Real-time updates via 12-second polling
+ * - Game board stored as 3x3 address array
+ *
+ * TicTacToe Game:
+ * - Create games with any contact
+ * - Turn-based gameplay on blockchain
+ * - Win/loss history from GameWinner events
+ *
+ * @example
+ * // First-time users see registration form
+ * <ChatBoxStable />
+ *
+ * // Registered users see full chat interface
+ * <ChatBoxStable /> // With contacts, messages, and game option
+ */
+
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

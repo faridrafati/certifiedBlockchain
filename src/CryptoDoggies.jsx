@@ -1,3 +1,38 @@
+/**
+ * @file CryptoDoggies.jsx
+ * @description NFT marketplace for collectible pixel art doggies
+ * @author CertifiedBlockchain
+ *
+ * This component provides a complete NFT marketplace where:
+ * - Users can buy and collect unique pixel art doggies
+ * - Each doggy has a unique DNA that generates its appearance
+ * - Prices automatically increase after each purchase (bonding curve)
+ * - Admin can mint new doggies with custom names, prices, and owners
+ *
+ * Features:
+ * - Procedurally generated pixel art from DNA using Canvas
+ * - Automatic price escalation (next price after purchase)
+ * - Pausable marketplace (admin control)
+ * - Ownership transfer on purchase
+ * - Withdrawal functionality for contract owner
+ * - Admin table view of all doggies
+ *
+ * Smart Contract: CryptoDoggies.sol (ERC721)
+ * CSS: ./components/css/cryptodoggies.css
+ *
+ * Technical Notes:
+ * - Uses doggyidparser.js to convert DNA to pixel art
+ * - Canvas rendering for doggy images
+ * - Automatic image generation on token load
+ *
+ * @example
+ * // Public users see marketplace
+ * <CryptoDoggies />
+ *
+ * // Contract owner sees admin panel
+ * <CryptoDoggies /> // With create, pause, withdraw controls
+ */
+
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Web3 from 'web3';
 import {

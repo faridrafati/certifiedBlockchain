@@ -1,3 +1,31 @@
+/**
+ * @file EmailConfig.js
+ * @description Configuration for Decentralized Email/Messaging smart contract
+ * @author CertifiedBlockchain
+ *
+ * Contains the deployed contract address and ABI for the Email contract.
+ * The address is loaded from environment variables for deployment flexibility.
+ *
+ * Contract Functions:
+ * - registerUser(): Create inbox for new user
+ * - sendMessage(receiver, content): Send bytes32 message
+ * - receiveMessages(): Get inbox messages (bytes32[16])
+ * - sentMessages(): Get outbox messages (bytes32[16])
+ * - clearInbox/clearOutbox/clearConversationWith(): Clear messages
+ * - checkUserRegistration(): Check if user is registered
+ * - getMyInboxSize(): Get inbox/outbox counts
+ * - getContractProperties(): Get owner and registered users
+ *
+ * Technical Notes:
+ * - Messages stored as bytes32 (32 character limit)
+ * - Max 16 messages per inbox/outbox
+ * - Uses Web3 asciiToHex/toAscii for encoding
+ *
+ * Used By: Email.jsx
+ *
+ * Environment Variable: VITE_EMAIL_ADDRESS
+ */
+
 export const EMAIL_ADDRESS = import.meta.env.VITE_EMAIL_ADDRESS;
 export const EMAIL_ABI = [
 	{

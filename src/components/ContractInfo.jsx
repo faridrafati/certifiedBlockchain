@@ -1,3 +1,49 @@
+/**
+ * @file ContractInfo.jsx
+ * @description Smart contract information dialog component
+ * @author CertifiedBlockchain
+ *
+ * Displays detailed information about a smart contract in a modal dialog.
+ * Used throughout the application to show contract details and provide
+ * quick access to block explorers.
+ *
+ * Features:
+ * - Network identification and display
+ * - Contract address with copy-to-clipboard
+ * - Owner address display (if available)
+ * - User's current address with owner indicator
+ * - Direct links to Etherscan/block explorers
+ * - Support for multiple networks (Mainnet, Goerli, Sepolia, Polygon, Mumbai)
+ * - Additional custom information fields
+ *
+ * CSS: ./css/ContractInfo.css
+ *
+ * Supported Networks:
+ * - Ethereum Mainnet (1)
+ * - Goerli Testnet (5)
+ * - Sepolia Testnet (11155111)
+ * - Polygon Mainnet (137)
+ * - Mumbai Testnet (80001)
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.contractAddress - Smart contract address
+ * @param {string} [props.contractName='Smart Contract'] - Display name
+ * @param {string} [props.network='Unknown'] - Network ID
+ * @param {string} [props.owner] - Contract owner address
+ * @param {string} [props.account] - Current user's address
+ * @param {Array} [props.additionalInfo=[]] - Extra info items [{label, value}]
+ *
+ * @example
+ * <ContractInfo
+ *   contractAddress="0x..."
+ *   contractName="Pet Adoption"
+ *   network="11155111"
+ *   owner="0x..."
+ *   account="0x..."
+ * />
+ */
+
 import React, { useState } from 'react';
 import {
   IconButton,

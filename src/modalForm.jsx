@@ -1,3 +1,38 @@
+/**
+ * @file modalForm.jsx
+ * @description MetaMask wallet connection and status modal dialog
+ * @author CertifiedBlockchain
+ *
+ * This component displays wallet-related prompts and actions:
+ * - Connect: Prompt to connect MetaMask wallet
+ * - Login: Prompt when wallet is locked
+ * - Install: Prompt to install MetaMask browser extension
+ * - Refresh: Prompt when account has changed
+ * - Ok: Generic acknowledgment
+ *
+ * Features:
+ * - Animated MetaMask logo with pulse effect
+ * - Context-aware button actions and colors
+ * - Static backdrop prevents accidental dismissal
+ * - Direct link to MetaMask download
+ * - Warning/info boxes for additional context
+ *
+ * CSS: ./components/css/modalForm.css
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} props.message - Message to display in modal
+ * @param {string} props.buttonName - Action button text (Connect/Login/Install/Refresh/Ok)
+ * @param {Function} props.onClick - Callback function for button action
+ *
+ * @example
+ * <ModalForm
+ *   message="Please connect your wallet to continue"
+ *   buttonName="Connect"
+ *   onClick={handleConnect}
+ * />
+ */
+
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Button from 'react-bootstrap/Button';

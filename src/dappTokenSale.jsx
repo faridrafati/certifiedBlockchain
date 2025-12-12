@@ -1,3 +1,38 @@
+/**
+ * @file dappTokenSale.jsx
+ * @description Token crowdsale (ICO) platform for purchasing DApp tokens
+ * @author CertifiedBlockchain
+ *
+ * This component provides a complete ICO interface where:
+ * - Users can purchase tokens with ETH at a fixed price
+ * - View sale progress and tokens available
+ * - Transfer owned tokens to other addresses
+ * - Admin can end the sale (returns unsold tokens)
+ *
+ * Features:
+ * - Token purchase with ETH (price per token displayed)
+ * - Real-time sale progress bar
+ * - Quick buy buttons (100, 500, 1000, 5000 tokens)
+ * - Token transfer functionality
+ * - Auto-refresh every 12 seconds
+ * - Admin panel for ending sale
+ * - MetaMask token import
+ *
+ * Smart Contracts:
+ * - DappTokenSale.sol (Crowdsale logic)
+ * - DappToken.sol (ERC-20 token)
+ *
+ * CSS: ./components/css/dapptokensale.css
+ *
+ * Sale Mechanics:
+ * - Users pay: numberOfTokens * tokenPrice (in wei)
+ * - Tokens transferred from sale contract to buyer
+ * - Sale can be ended by admin (unsold tokens returned)
+ *
+ * @example
+ * <DappTokenSale />
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

@@ -1,3 +1,35 @@
+/**
+ * @file Voting.jsx
+ * @description Democratic voting system for candidate elections
+ * @author CertifiedBlockchain
+ *
+ * This component implements a straightforward voting system where:
+ * - Each wallet can vote multiple times (unlimited voting)
+ * - Contract owner can add candidates by their Ethereum address
+ * - All votes are publicly recorded on the blockchain
+ * - Real-time vote counting with percentage visualization
+ *
+ * Features:
+ * - Dynamic candidate list with vote progress bars
+ * - Visual vote distribution percentages
+ * - Admin panel for adding new candidates
+ * - Auto-refresh every 12 seconds
+ * - Responsive candidate card grid
+ *
+ * Smart Contract: Voting.sol
+ * CSS: ./components/css/voting.css
+ *
+ * Note: This is a simple democratic voting model where users can
+ * vote multiple times. For one-vote-per-user, see WeightedVoting.
+ *
+ * @example
+ * // Anyone can vote for candidates
+ * <Voting />
+ *
+ * // Contract owner can add candidates
+ * <Voting /> // Shows "Add Candidate" form for owner
+ */
+
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';

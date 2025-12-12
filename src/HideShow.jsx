@@ -1,3 +1,44 @@
+/**
+ * @file HideShow.jsx
+ * @description Collapsible contract information panel component
+ * @author CertifiedBlockchain
+ *
+ * Displays blockchain contract details in an expandable/collapsible panel.
+ * Shows network info, user wallet address, and contract address with
+ * links to block explorers.
+ *
+ * Features:
+ * - Toggle visibility with smooth collapse animation
+ * - Multi-chain support (Goerli, Mainnet, Sepolia, Ganache, Hardhat)
+ * - Etherscan/Blockscout explorer links
+ * - Owner badge indicator
+ * - Truncated address display with copy functionality
+ *
+ * Supported Networks:
+ * - Goerli (0x5)
+ * - Mainnet (0x1)
+ * - Sepolia (0xaa36a7)
+ * - Ganache (1337)
+ * - Hardhat (31337)
+ *
+ * CSS: ./components/css/hideshow.css
+ *
+ * @component
+ * @param {Object} props - Component props
+ * @param {string} [props.owner] - Contract owner address
+ * @param {string} [props.currentAccount] - Connected wallet address
+ * @param {string} [props.contractAddress] - Smart contract address
+ * @param {string} [props.chainId] - Current network chain ID
+ *
+ * @example
+ * <HideShow
+ *   owner="0x..."
+ *   currentAccount="0x..."
+ *   contractAddress="0x..."
+ *   chainId="0xaa36a7"
+ * />
+ */
+
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'react-bootstrap';
