@@ -746,6 +746,62 @@
   .empty-state {
     background: rgba(102, 126, 234, 0.1);
   }
+
+  /* Fix MUI TextField input text visibility in dark mode */
+  .cryptodoggies-container .MuiTextField-root .MuiInputBase-input,
+  .cryptodoggies-container .MuiOutlinedInput-input,
+  .cryptodoggies-container .MuiInputBase-input {
+    color: #e2e8f0 !important;
+  }
+
+  .cryptodoggies-container .MuiTextField-root .MuiInputLabel-root,
+  .cryptodoggies-container .MuiInputLabel-root {
+    color: #a0aec0 !important;
+  }
+
+  .cryptodoggies-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
+  .cryptodoggies-container .MuiInputLabel-root.Mui-focused {
+    color: #667eea !important;
+  }
+
+  .cryptodoggies-container .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(160, 174, 192, 0.4) !important;
+  }
+
+  .cryptodoggies-container .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
+
+  /* Disabled input styling in dark mode - 50% opacity for disabled look */
+  .cryptodoggies-container .MuiOutlinedInput-root.Mui-disabled {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  .cryptodoggies-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+    color: rgba(226, 232, 240, 0.5) !important;
+    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
+  }
+
+  .cryptodoggies-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(226, 232, 240, 0.15) !important;
+  }
+
+  .cryptodoggies-container .MuiInputLabel-root.Mui-disabled {
+    color: rgba(203, 213, 224, 0.5) !important;
+  }
+
+  /* Switch styling in dark mode - unchecked state */
+  .cryptodoggies-container .MuiSwitch-switchBase {
+    color: rgba(160, 174, 192, 0.9) !important;
+  }
+
+  .cryptodoggies-container .MuiSwitch-track {
+    background-color: rgba(160, 174, 192, 0.3) !important;
+  }
+
+  .cryptodoggies-container .MuiFormControlLabel-label {
+    color: #e2e8f0 !important;
+  }
 }
 
 /* MUI Overrides */

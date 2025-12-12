@@ -438,6 +438,30 @@
     background-color: rgba(160, 174, 192, 0.3) !important;
   }
 
+  .MuiSwitch-switchBase {
+    color: rgba(160, 174, 192, 0.9) !important;
+  }
+
+  /* MUI Radio - unchecked state in dark mode */
+  .MuiRadio-root {
+    color: rgba(160, 174, 192, 0.7) !important;
+  }
+
+  /* MUI Checkbox - unchecked state in dark mode */
+  .MuiCheckbox-root {
+    color: rgba(160, 174, 192, 0.7) !important;
+  }
+
+  /* MUI FormControlLabel text in dark mode */
+  .MuiFormControlLabel-label {
+    color: #e2e8f0 !important;
+  }
+
+  /* MUI FormLabel in dark mode */
+  .MuiFormLabel-root {
+    color: #a0aec0 !important;
+  }
+
   /* MUI IconButton */
   .MuiIconButton-root {
     color: #a0aec0 !important;

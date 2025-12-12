@@ -33,6 +33,8 @@ const Auction = () => {
   const [submitting, setSubmitting] = useState(false);
 
   const formatDateTime = (timestamp) => {
+    // Convert BigInt to Number if needed
+    const ts = typeof timestamp === 'bigint' ? Number(timestamp) : timestamp;
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: '2-digit',
@@ -40,7 +42,7 @@ const Auction = () => {
       hour: '2-digit',
       minute: '2-digit',
       second: '2-digit',
-    }).format(timestamp * 1000);
+    }).format(ts * 1000);
   };
 
   const dateToTimestamp = (dateString) => {
@@ -453,11 +455,34 @@ const Auction = () => {
               alt={isEnded ? 'Sold' : 'Auction Item'}
               className="auction-item-image"
             />
+            {isEnded && <div className="sold-overlay">SOLD</div>}
           </div>
           <div className="auction-status">
             <span className={`status-badge ${isEnded ? 'ended' : 'active'}`}>
               {auctionEnded ? 'Auction Ended' : 'Auction Active'}
             </span>
+            <p className="end-time">
+              {isEnded
+                ? `Ended: ${formatDateTime(endTime)}`
+                : `Ends: ${formatDateTime(endTime)}`}
+            </p>
+          </div>
+
+          <div className="admin-bid-info">
+            <div className="admin-bid-section">
+              <h4>💰 Total Deposited Bid</h4>
+              <div className="admin-bid-amount">
+                {web3 ? web3.utils.fromWei(highestBid, 'ether') : '0'} ETH
+              </div>
+              {highestBidder !== '0x0000000000000000000000000000000000000000' && (
+                <div className="admin-bidder-info">
+                  <p className="admin-bidder-label">Highest Bidder:</p>
+                  <p className="admin-bidder-address">
+                    {highestBidder.substring(0, 6)}...{highestBidder.substring(38)}
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 

@@ -27,6 +27,7 @@ const Certificate = () => {
   // Certificate state
   const [certificateInput, setCertificateInput] = useState('');
   const [showCertificate, setShowCertificate] = useState(false);
+  const [verificationAttempted, setVerificationAttempted] = useState(false);
   const [displayedCertificate, setDisplayedCertificate] = useState({
     credentialID: '',
     name: '',
@@ -51,11 +52,13 @@ const Certificate = () => {
 
   // Date formatting functions
   const formatDateTime = (timestamp) => {
+    // Convert BigInt to Number if needed
+    const ts = typeof timestamp === 'bigint' ? Number(timestamp) : timestamp;
     return new Intl.DateTimeFormat('en-US', {
       year: 'numeric',
       month: '2-digit',
       day: '2-digit',
-    }).format(timestamp * 1000);
+    }).format(ts * 1000);
   };
 
   const dateToTimestamp = (dateString) => {
@@ -232,6 +235,7 @@ const Certificate = () => {
 
     try {
       setSubmitting(true);
+      setVerificationAttempted(true);
       const foundCertificate = await contract.methods
         .checkCertificate(certificateInput)
         .call();
@@ -407,8 +411,11 @@ const Certificate = () => {
         {showCertificate && (
           <div className="certificate-display">
             <div className="certificate-document">
-              <div className="certificate-header">
-                <h1 className="certificate-title">COURSE CERTIFICATE</h1>
+              {/* Header */}
+              <h1 className="certificate-title">COURSE CERTIFICATE</h1>
+
+              {/* Logo */}
+              <div className="certificate-logo-container">
                 <img
                   src={logoPhoto}
                   alt="Organization Logo"
@@ -416,49 +423,59 @@ const Certificate = () => {
                 />
               </div>
 
+              {/* Certificate content */}
               <p className="certificate-intro">This is to certify that</p>
 
               <h2 className="certificate-name">{displayedCertificate.name}</h2>
 
-              <div className="certificate-body">
-                <div className="certificate-image-container">
-                  <img
-                    src={certPhoto}
-                    alt="Certificate"
-                    className="certificate-image"
-                  />
-                </div>
-                <p className="certificate-reason">
-                  {displayedCertificate.reasonForAward}
-                </p>
-                <h3 className="certificate-course">
-                  {displayedCertificate.courseName}
-                </h3>
-              </div>
+              <p className="certificate-achievement">
+                {displayedCertificate.reasonForAward || 'Has successfully completed the course by demonstrating theoretical understanding of'}
+              </p>
+
+              <h3 className="certificate-course">
+                {displayedCertificate.courseName}
+              </h3>
 
               <div className="certificate-footer">
                 <p className="certificate-org">
                   {displayedCertificate.issuingOrganization}
                 </p>
                 <p className="certificate-date">
-                  Issued: {formatDateTime(displayedCertificate.issueDate)}
+                  Issued {formatDateTime(displayedCertificate.issueDate).split(',')[0]}
                 </p>
                 <p className="certificate-date">
-                  Expires: {formatDateTime(displayedCertificate.expirationDate)}
+                  Expired {formatDateTime(displayedCertificate.expirationDate).split(',')[0]}
                 </p>
-                <p className="certificate-id">
-                  Credential ID: {displayedCertificate.credentialID}
-                </p>
-                <div className="verified-badge">
-                  <span className="verified-icon">✓</span>
-                  <span>Blockchain Verified</span>
-                </div>
+                <a
+                  href="#"
+                  className="certificate-id-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    navigator.clipboard.writeText(displayedCertificate.credentialID);
+                    toast.success('Credential ID copied to clipboard!');
+                  }}
+                  title="Click to copy"
+                >
+                  Your ID: {displayedCertificate.credentialID}
+                </a>
+              </div>
+
+              {/* Blockscout link */}
+              <div className="certificate-etherscan">
+                <a
+                  href={`https://eth-sepolia.blockscout.com/address/${CERTIFICATE_ADDRESS}?tab=contract`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="etherscan-link"
+                >
+                  https://eth-sepolia.blockscout.com/address/{CERTIFICATE_ADDRESS}?tab=contract
+                </a>
               </div>
             </div>
           </div>
         )}
 
-        {!showCertificate && certificateInput && !submitting && (
+        {!showCertificate && certificateInput && !submitting && verificationAttempted && (
           <div className="no-certificate">
             <div className="no-certificate-icon">❌</div>
             <h3>Certificate Not Found</h3>

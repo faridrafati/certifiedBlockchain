@@ -624,6 +624,49 @@
   .status-message.success {
     background: rgba(72, 187, 120, 0.15);
   }
+
+  /* Fix MUI TextField input text visibility in dark mode */
+  .weighted-voting-container .MuiTextField-root .MuiInputBase-input,
+  .weighted-voting-container .MuiOutlinedInput-input,
+  .weighted-voting-container .MuiInputBase-input {
+    color: #e2e8f0 !important;
+  }
+
+  .weighted-voting-container .MuiTextField-root .MuiInputLabel-root,
+  .weighted-voting-container .MuiInputLabel-root {
+    color: #a0aec0 !important;
+  }
+
+  .weighted-voting-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
+  .weighted-voting-container .MuiInputLabel-root.Mui-focused {
+    color: #667eea !important;
+  }
+
+  .weighted-voting-container .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(160, 174, 192, 0.4) !important;
+  }
+
+  .weighted-voting-container .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
+
+  /* Disabled input styling in dark mode - 50% opacity for disabled look */
+  .weighted-voting-container .MuiOutlinedInput-root.Mui-disabled {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  .weighted-voting-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+    color: rgba(226, 232, 240, 0.5) !important;
+    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
+  }
+
+  .weighted-voting-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(226, 232, 240, 0.15) !important;
+  }
+
+  .weighted-voting-container .MuiInputLabel-root.Mui-disabled {
+    color: rgba(203, 213, 224, 0.5) !important;
+  }
 }
 
 /* MUI Overrides */

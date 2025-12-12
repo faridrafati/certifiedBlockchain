@@ -432,6 +432,49 @@
   .task-card:hover {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
   }
+
+  /* Fix MUI TextField input text visibility in dark mode */
+  .task-container .MuiTextField-root .MuiInputBase-input,
+  .task-container .MuiOutlinedInput-input,
+  .task-container .MuiInputBase-input {
+    color: #e2e8f0 !important;
+  }
+
+  .task-container .MuiTextField-root .MuiInputLabel-root,
+  .task-container .MuiInputLabel-root {
+    color: #a0aec0 !important;
+  }
+
+  .task-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
+  .task-container .MuiInputLabel-root.Mui-focused {
+    color: #667eea !important;
+  }
+
+  .task-container .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(160, 174, 192, 0.4) !important;
+  }
+
+  .task-container .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
+
+  /* Disabled input styling in dark mode - 50% opacity for disabled look */
+  .task-container .MuiOutlinedInput-root.Mui-disabled {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  .task-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+    color: rgba(226, 232, 240, 0.5) !important;
+    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
+  }
+
+  .task-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(226, 232, 240, 0.15) !important;
+  }
+
+  .task-container .MuiInputLabel-root.Mui-disabled {
+    color: rgba(203, 213, 224, 0.5) !important;
+  }
 }
 
 /* MUI Overrides */

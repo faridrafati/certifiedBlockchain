@@ -56,6 +56,9 @@ const GuessingGame = () => {
   const [amount, setAmount] = useState('');
   const [winEvents, setWinEvents] = useState([]);
   const [loseEvents, setLoseEvents] = useState([]);
+  const [isGameOnline, setIsGameOnline] = useState(true);
+  const [maxBetAmount, setMaxBetAmount] = useState(null);
+  const [contractBalance, setContractBalance] = useState(null);
 
   const checkMetamask = useCallback(async () => {
     try {
@@ -90,10 +93,19 @@ const GuessingGame = () => {
     (dataEvents, eventName, userAccount, web3Instance) => {
       const winOrLose = [];
       for (let i = 0; i < dataEvents.length; i++) {
-        const mysteryNumber = dataEvents[i]['returnValues']['mysteryNumber'];
-        const player = dataEvents[i]['returnValues']['player'];
-        const amount = dataEvents[i]['returnValues']['amount'];
-        const convertedAmount = web3Instance.utils.fromWei(amount);
+        const returnValues = dataEvents[i]['returnValues'];
+        if (!returnValues) continue;
+
+        const mysteryNumber = returnValues['mysteryNumber'];
+        const player = returnValues['player'];
+        const amount = returnValues['amount'];
+
+        // Skip if required values are undefined
+        if (amount === undefined || amount === null || player === undefined) {
+          continue;
+        }
+
+        const convertedAmount = web3Instance.utils.fromWei(amount.toString(), 'ether');
 
         if (player === userAccount) {
           if (eventName === 'PlayerWon') {
@@ -172,6 +184,18 @@ const GuessingGame = () => {
           .players(userAccount)
           .call();
         setPlayer(playerData);
+
+        // Get game status
+        const online = await contractInstance.methods.online().call();
+        setIsGameOnline(online);
+
+        // Get max bet amount
+        const maxBet = await contractInstance.methods.maxBetAmount().call();
+        setMaxBetAmount(maxBet !== undefined && maxBet !== null ? maxBet.toString() : '0');
+
+        // Get contract balance
+        const balance = await contractInstance.methods.getContractBalance().call();
+        setContractBalance(balance !== undefined && balance !== null ? balance.toString() : '0');
 
         const wins = await getEvents(
           contractInstance,
@@ -291,10 +315,36 @@ const GuessingGame = () => {
       return;
     }
 
+    // Validate game conditions before submitting
+    if (!isGameOnline) {
+      toast.error('Game is currently offline. Please try again later.');
+      return;
+    }
+
+    // Check if game data is loaded
+    if (maxBetAmount === null || contractBalance === null) {
+      toast.error('Loading game data. Please wait...');
+      return;
+    }
+
+    const amountInWei = web3.utils.toWei(amount, 'ether');
+
+    // Check if bet exceeds maximum
+    if (BigInt(amountInWei) > BigInt(maxBetAmount)) {
+      toast.error(`Bet exceeds maximum allowed: ${web3.utils.fromWei(maxBetAmount, 'ether')} ETH`);
+      return;
+    }
+
+    // Check if contract has enough balance to pay if player wins (contract pays 2x)
+    const potentialWinnings = BigInt(amountInWei) * 2n;
+    if (BigInt(contractBalance) < potentialWinnings) {
+      toast.error('Contract has insufficient balance to cover potential winnings. Please try a smaller bet.');
+      return;
+    }
+
     try {
       setSubmitting(true);
 
-      const amountInWei = web3.utils.toWei(amount, 'ether');
       const guessBoolean = guess === 'higher';
 
       toast.info('Placing bet. Please confirm in MetaMask...');
@@ -418,6 +468,33 @@ const GuessingGame = () => {
                   <p>Will the mystery number be higher or lower than 5?</p>
                 </div>
 
+                <div className="game-info-cards">
+                  <div className="info-card">
+                    <span className="info-label">Game Status:</span>
+                    <Chip
+                      label={isGameOnline ? 'Online' : 'Offline'}
+                      color={isGameOnline ? 'success' : 'error'}
+                      size="small"
+                    />
+                  </div>
+                  <div className="info-card">
+                    <span className="info-label">Max Bet:</span>
+                    <span className="info-value">
+                      {web3 && maxBetAmount !== null
+                        ? `${parseFloat(web3.utils.fromWei(maxBetAmount, 'ether')).toFixed(4)} ETH`
+                        : 'Loading...'}
+                    </span>
+                  </div>
+                  <div className="info-card">
+                    <span className="info-label">Contract Balance:</span>
+                    <span className="info-value">
+                      {web3 && contractBalance !== null
+                        ? `${parseFloat(web3.utils.fromWei(contractBalance, 'ether')).toFixed(4)} ETH`
+                        : 'Loading...'}
+                    </span>
+                  </div>
+                </div>
+
                 <form onSubmit={handleSubmitGuess}>
                   <div className="form-group">
                     <FormControl component="fieldset" fullWidth>
@@ -508,75 +585,75 @@ const GuessingGame = () => {
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Card className="wins-card">
-              <CardContent>
-                <div className="card-header-wins">
-                  <EmojiEventsIcon className="wins-icon" />
-                  <h3>Wins</h3>
-                  <Chip
-                    label={winEvents.length}
-                    color="success"
-                    className="count-chip"
-                  />
-                </div>
+            <div className="results-column">
+              <Card className="wins-card">
+                <CardContent>
+                  <div className="card-header-wins">
+                    <EmojiEventsIcon className="wins-icon" />
+                    <h3>Wins</h3>
+                    <Chip
+                      label={winEvents.length}
+                      color="success"
+                      className="count-chip"
+                    />
+                  </div>
 
-                <Divider className="divider" />
+                  <Divider className="divider" />
 
-                <List className="events-list">
-                  {winEvents.length > 0 ? (
-                    winEvents.map((event, index) => (
-                      <ListItem key={index} className="event-item">
-                        <ListItemIcon>
-                          <EmojiEventsIcon className="event-icon win-icon" />
-                        </ListItemIcon>
-                        <ListItemText primary={`You win ${event}`} />
-                      </ListItem>
-                    ))
-                  ) : (
-                    <div className="empty-state">
-                      <EmojiEventsIcon className="empty-icon" />
-                      <p>No wins yet. Try your luck!</p>
-                    </div>
-                  )}
-                </List>
-              </CardContent>
-            </Card>
-          </Grid>
+                  <List className="events-list">
+                    {winEvents.length > 0 ? (
+                      winEvents.map((event, index) => (
+                        <ListItem key={index} className="event-item">
+                          <ListItemIcon>
+                            <EmojiEventsIcon className="event-icon win-icon" />
+                          </ListItemIcon>
+                          <ListItemText primary={`You win ${event}`} />
+                        </ListItem>
+                      ))
+                    ) : (
+                      <div className="empty-state">
+                        <EmojiEventsIcon className="empty-icon" />
+                        <p>No wins yet. Try your luck!</p>
+                      </div>
+                    )}
+                  </List>
+                </CardContent>
+              </Card>
 
-          <Grid item xs={12} md={6}>
-            <Card className="losses-card">
-              <CardContent>
-                <div className="card-header-losses">
-                  <SentimentVeryDissatisfiedIcon className="losses-icon" />
-                  <h3>Losses</h3>
-                  <Chip
-                    label={loseEvents.length}
-                    color="error"
-                    className="count-chip"
-                  />
-                </div>
+              <Card className="losses-card">
+                <CardContent>
+                  <div className="card-header-losses">
+                    <SentimentVeryDissatisfiedIcon className="losses-icon" />
+                    <h3>Losses</h3>
+                    <Chip
+                      label={loseEvents.length}
+                      color="error"
+                      className="count-chip"
+                    />
+                  </div>
 
-                <Divider className="divider" />
+                  <Divider className="divider" />
 
-                <List className="events-list">
-                  {loseEvents.length > 0 ? (
-                    loseEvents.map((event, index) => (
-                      <ListItem key={index} className="event-item">
-                        <ListItemIcon>
-                          <SentimentVeryDissatisfiedIcon className="event-icon loss-icon" />
-                        </ListItemIcon>
-                        <ListItemText primary={`You lose ${event}`} />
-                      </ListItem>
-                    ))
-                  ) : (
-                    <div className="empty-state">
-                      <SentimentVeryDissatisfiedIcon className="empty-icon" />
-                      <p>No losses yet. You're doing great!</p>
-                    </div>
-                  )}
-                </List>
-              </CardContent>
-            </Card>
+                  <List className="events-list">
+                    {loseEvents.length > 0 ? (
+                      loseEvents.map((event, index) => (
+                        <ListItem key={index} className="event-item">
+                          <ListItemIcon>
+                            <SentimentVeryDissatisfiedIcon className="event-icon loss-icon" />
+                          </ListItemIcon>
+                          <ListItemText primary={`You lose ${event}`} />
+                        </ListItem>
+                      ))
+                    ) : (
+                      <div className="empty-state">
+                        <SentimentVeryDissatisfiedIcon className="empty-icon" />
+                        <p>No losses yet. You're doing great!</p>
+                      </div>
+                    )}
+                  </List>
+                </CardContent>
+              </Card>
+            </div>
           </Grid>
         </Grid>
       </div>

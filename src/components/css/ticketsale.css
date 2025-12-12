@@ -715,6 +715,49 @@
   .empty-state {
     background: rgba(102, 126, 234, 0.1);
   }
+
+  /* Fix MUI TextField input text visibility in dark mode */
+  .ticketsale-container .MuiTextField-root .MuiInputBase-input,
+  .ticketsale-container .MuiOutlinedInput-input,
+  .ticketsale-container .MuiInputBase-input {
+    color: #e2e8f0 !important;
+  }
+
+  .ticketsale-container .MuiTextField-root .MuiInputLabel-root,
+  .ticketsale-container .MuiInputLabel-root {
+    color: #a0aec0 !important;
+  }
+
+  .ticketsale-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
+  .ticketsale-container .MuiInputLabel-root.Mui-focused {
+    color: #667eea !important;
+  }
+
+  .ticketsale-container .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(160, 174, 192, 0.4) !important;
+  }
+
+  .ticketsale-container .MuiFormHelperText-root {
+    color: #a0aec0 !important;
+  }
+
+  /* Disabled input styling in dark mode - 50% opacity for disabled look */
+  .ticketsale-container .MuiOutlinedInput-root.Mui-disabled {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  .ticketsale-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+    color: rgba(226, 232, 240, 0.5) !important;
+    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
+  }
+
+  .ticketsale-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(226, 232, 240, 0.15) !important;
+  }
+
+  .ticketsale-container .MuiInputLabel-root.Mui-disabled {
+    color: rgba(203, 213, 224, 0.5) !important;
+  }
 }
 
 /* MUI Overrides */

@@ -60,9 +60,37 @@ const Poll = () => {
       toolbar: {
         show: false,
       },
+      background: 'transparent',
+    },
+    theme: {
+      mode: 'dark',
     },
     xaxis: {
       categories: ['Option #1', 'Option #2', 'Option #3'],
+      labels: {
+        style: {
+          colors: '#a0aec0',
+          fontSize: '12px',
+        },
+      },
+      axisBorder: {
+        color: 'rgba(160, 174, 192, 0.3)',
+      },
+      axisTicks: {
+        color: 'rgba(160, 174, 192, 0.3)',
+      },
+    },
+    yaxis: {
+      labels: {
+        style: {
+          colors: '#a0aec0',
+          fontSize: '12px',
+        },
+      },
+    },
+    grid: {
+      borderColor: 'rgba(160, 174, 192, 0.2)',
+      strokeDashArray: 4,
     },
     plotOptions: {
       bar: {
@@ -71,11 +99,17 @@ const Poll = () => {
       },
     },
     colors: ['#667eea', '#764ba2', '#48bb78'],
+    legend: {
+      labels: {
+        colors: '#e2e8f0',
+      },
+    },
     dataLabels: {
       enabled: true,
       style: {
         fontSize: '14px',
         fontWeight: 'bold',
+        colors: ['#ffffff'],
       },
     },
   });
@@ -136,17 +170,19 @@ const Poll = () => {
           });
         }
 
-        // Check which polls the user has voted on
-        const votedList = await contractInstance.methods
-          .getVoter(userAccount)
-          .call();
-        const votedPollIds = votedList[1].map((id) => Number(id));
+        // Check which polls the user has voted on (only if userAccount is provided)
+        if (userAccount) {
+          const votedList = await contractInstance.methods
+            .getVoter(userAccount)
+            .call();
+          const votedPollIds = votedList[1].map((id) => Number(id));
 
-        votedPollIds.forEach((pollId) => {
-          if (pollsList[pollId]) {
-            pollsList[pollId].voted = true;
-          }
-        });
+          votedPollIds.forEach((pollId) => {
+            if (pollsList[pollId]) {
+              pollsList[pollId].voted = true;
+            }
+          });
+        }
 
         setPolls(pollsList);
 
@@ -215,19 +251,19 @@ const Poll = () => {
 
   // Auto-refresh every 12 seconds (Ethereum block time)
   useEffect(() => {
-    if (!contract) return;
+    if (!contract || !account) return;
 
     const interval = setInterval(() => {
-      getAllPolls(contract);
+      getAllPolls(contract, account);
     }, 12000);
 
     return () => clearInterval(interval);
-  }, [contract, getAllPolls]);
+  }, [contract, account, getAllPolls]);
 
   const handleRefresh = async () => {
-    if (!contract) return;
+    if (!contract || !account) return;
     try {
-      await getAllPolls(contract);
+      await getAllPolls(contract, account);
       toast.success('Data refreshed!');
     } catch (error) {
       console.error('Refresh failed:', error);
@@ -237,15 +273,17 @@ const Poll = () => {
 
   const handleSelectPoll = (poll) => {
     setSelectedPoll(poll);
-    setSelectedOption('');
+    // Set selectedOption to user's vote if they've already voted, otherwise clear it
+    setSelectedOption(poll.userVote || '');
 
-    // Update chart
-    setChartOptions({
-      ...chartOptions,
+    // Update chart with dark mode styling preserved
+    setChartOptions((prev) => ({
+      ...prev,
       xaxis: {
+        ...prev.xaxis,
         categories: poll.items,
       },
-    });
+    }));
 
     setChartSeries([
       {
@@ -337,10 +375,12 @@ const Poll = () => {
         .on('receipt', async () => {
           toast.success('Vote submitted successfully!');
 
-          // Update local state
+          // Update local state - store user's vote
           const updatedPoll = {
             ...selectedPoll,
             voted: true,
+            userVote: selectedOption,
+            userVoteIndex: selectedIndex,
             votes: [...selectedPoll.votes],
           };
           updatedPoll.votes[selectedIndex]++;
@@ -351,7 +391,6 @@ const Poll = () => {
 
           setPolls(updatedPolls);
           handleSelectPoll(updatedPoll);
-          setSelectedOption('');
         })
         .on('error', (error) => {
           console.error('Vote error:', error);
@@ -522,10 +561,12 @@ const Poll = () => {
                     {poll.image && (
                       <CardMedia
                         component="img"
-                        height="120"
                         image={poll.image}
                         alt={poll.question}
                         className="poll-image"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
                       />
                     )}
                     <CardContent>
@@ -582,14 +623,23 @@ const Poll = () => {
                     {selectedPoll.image && (
                       <CardMedia
                         component="img"
-                        height="200"
                         image={selectedPoll.image}
                         alt={selectedPoll.question}
                         className="poll-detail-image"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                        }}
                       />
                     )}
 
                     <Divider className="divider" />
+
+                    {selectedPoll.voted && (
+                      <div className="already-voted-message">
+                        <CheckCircleIcon className="voted-icon" />
+                        <span>You have already voted on this poll</span>
+                      </div>
+                    )}
 
                     <form onSubmit={handleVote}>
                       <FormControl component="fieldset" fullWidth>
@@ -605,6 +655,14 @@ const Poll = () => {
                               label={
                                 <div className="option-label">
                                   <span>{item}</span>
+                                  {selectedPoll.voted && selectedPoll.userVote === item && (
+                                    <Chip
+                                      label="Your Vote"
+                                      size="small"
+                                      color="primary"
+                                      className="your-vote-chip"
+                                    />
+                                  )}
                                   <Chip
                                     label={`${selectedPoll.votes[index]} votes`}
                                     size="small"
@@ -613,7 +671,7 @@ const Poll = () => {
                                 </div>
                               }
                               disabled={selectedPoll.voted || submitting}
-                              className="option-item"
+                              className={`option-item ${selectedPoll.voted && selectedPoll.userVote === item ? 'user-voted-option' : ''}`}
                             />
                           ))}
                         </RadioGroup>

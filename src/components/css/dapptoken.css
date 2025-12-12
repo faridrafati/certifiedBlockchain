@@ -465,6 +465,24 @@
   .dapptoken-container .MuiFormHelperText-root {
     color: #a0aec0 !important;
   }
+
+  /* Disabled input styling in dark mode - 50% opacity for disabled look */
+  .dapptoken-container .MuiOutlinedInput-root.Mui-disabled {
+    background-color: rgba(255, 255, 255, 0.02) !important;
+  }
+
+  .dapptoken-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+    color: rgba(226, 232, 240, 0.5) !important;
+    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
+  }
+
+  .dapptoken-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+    border-color: rgba(226, 232, 240, 0.15) !important;
+  }
+
+  .dapptoken-container .MuiInputLabel-root.Mui-disabled {
+    color: rgba(203, 213, 224, 0.5) !important;
+  }
 }
 
 /* MUI Overrides */
@@ -489,6 +507,7 @@
   border-color: #764ba2 !important;
   border-width: 2px !important;
 }
+
 
 .dapptoken-container .MuiTextField-root {
   margin-bottom: 0 !important;

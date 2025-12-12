@@ -476,8 +476,10 @@ const Email = () => {
   };
 
   const formatDateTime = (timestamp) => {
+    // Convert BigInt to Number if needed, then convert to milliseconds
+    const ts = typeof timestamp === 'bigint' ? Number(timestamp) : timestamp;
     // Blockchain timestamps are in seconds, JavaScript Date expects milliseconds
-    const date = new Date(timestamp * 1000);
+    const date = new Date(ts * 1000);
     return {
       date: date.toLocaleDateString('en-US'),
       time: date.toLocaleTimeString('en-US', {

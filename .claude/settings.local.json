@@ -4,7 +4,9 @@
       "Bash(npm install)",
       "Bash(npm audit:*)",
       "Bash(dir /b /ad)",
-      "Bash(npx hardhat:*)"
+      "Bash(npx hardhat:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
