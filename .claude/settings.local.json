@@ -6,7 +6,14 @@
       "Bash(dir /b /ad)",
       "Bash(npx hardhat:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git push)",
+      "Bash(pip install:*)",
+      "Bash(solc-select install:*)",
+      "Bash(solc-select use:*)",
+      "Bash(slither:*)",
+      "Bash(npm run build:*)",
+      "Bash(grep:*)"
     ],
     "deny": [],
     "ask": []
