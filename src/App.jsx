@@ -59,6 +59,7 @@ import WeightedVoting from './WeightedVoting';
 import DappToken from './dappToken';
 import DappTokenSale from './dappTokenSale';
 import TicketSale from './TicketSale';
+import Exchange from './Exchange';
 
 /**
  * Main Application Component
@@ -302,41 +303,49 @@ function App() {
       {/* Main application content */}
       <div className={`fade-in app-content ${modalNeed ? 'blurred-content' : ''}`}>
         <NavBar />
-        <main className="container mt-4">
-          <Routes>
-            {/* Finance Routes */}
-            <Route path="/token" element={<DappToken />} />
-            <Route path="/crowdSale" element={<DappTokenSale />} />
-            <Route path="/auction" element={<Auction />} />
-            <Route path="/ticketSale" element={<TicketSale />} />
+        <Routes>
+          {/* Exchange Route - Full width, no container */}
+          <Route path="/exchange" element={<Exchange />} />
 
-            {/* Governance Routes */}
-            <Route path="/voting" element={<Voting />} />
-            <Route path="/weightedVoting" element={<WeightedVoting />} />
-            <Route path="/pollSurvey" element={<Poll />} />
+          {/* Other Routes - With container */}
+          <Route path="/*" element={
+            <main className="container mt-4">
+              <Routes>
+                {/* Finance Routes */}
+                <Route path="/token" element={<DappToken />} />
+                <Route path="/crowdSale" element={<DappTokenSale />} />
+                <Route path="/auction" element={<Auction />} />
+                <Route path="/ticketSale" element={<TicketSale />} />
 
-            {/* Communication Routes */}
-            <Route path="/chat" element={<Email />} />
-            <Route path="/chatBox" element={<Navigate to="/chatBoxStable" replace />} />
-            <Route path="/chatBoxStable" element={<ChatBoxStable />} />
+                {/* Governance Routes */}
+                <Route path="/voting" element={<Voting />} />
+                <Route path="/weightedVoting" element={<WeightedVoting />} />
+                <Route path="/pollSurvey" element={<Poll />} />
 
-            {/* Shopping Routes */}
-            <Route path="/petAdoption" element={<Adoption />} />
-            <Route path="/doggiesShop" element={<CryptoDoggies />} />
+                {/* Communication Routes */}
+                <Route path="/chat" element={<Email />} />
+                <Route path="/chatBox" element={<Navigate to="/chatBoxStable" replace />} />
+                <Route path="/chatBoxStable" element={<ChatBoxStable />} />
 
-            {/* Services Routes */}
-            <Route path="/certificate" element={<Certificate />} />
-            <Route path="/todo" element={<Task />} />
+                {/* Shopping Routes */}
+                <Route path="/petAdoption" element={<Adoption />} />
+                <Route path="/doggiesShop" element={<CryptoDoggies />} />
 
-            {/* Games Routes */}
-            <Route path="/guessing" element={<GuessingGame />} />
+                {/* Services Routes */}
+                <Route path="/certificate" element={<Certificate />} />
+                <Route path="/todo" element={<Task />} />
 
-            {/* Utility Routes */}
-            <Route path="/not-found" element={<NotFound />} />
-            <Route path="/" element={<Navigate to="/token" replace />} />
-            <Route path="*" element={<Navigate to="/not-found" replace />} />
-          </Routes>
-        </main>
+                {/* Games Routes */}
+                <Route path="/guessing" element={<GuessingGame />} />
+
+                {/* Utility Routes */}
+                <Route path="/not-found" element={<NotFound />} />
+                <Route path="/" element={<Navigate to="/token" replace />} />
+                <Route path="*" element={<Navigate to="/not-found" replace />} />
+              </Routes>
+            </main>
+          } />
+        </Routes>
       </div>
     </div>
   );

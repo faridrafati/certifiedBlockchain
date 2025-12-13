@@ -7,7 +7,7 @@
  * organized into categorized dropdown menus.
  *
  * Categories:
- * - Finance: Token Wallet, CrowdSale, Auction, Ticket Sale
+ * - Finance: Token Wallet, CrowdSale, DEX Exchange, Auction, Ticket Sale
  * - Governance: Voting, Weighted Voting, Poll Survey
  * - Communication: Blockchain Email, Chat Box
  * - Shopping: Pet Adoption, Crypto Doggies NFT
@@ -123,6 +123,12 @@ const NavBar = () => {
                     <NavLink className="dropdown-item" to="/crowdSale">
                       <span className="dropdown-icon">🚀</span>
                       Token CrowdSale
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/exchange">
+                      <span className="dropdown-icon">🔄</span>
+                      DEX Exchange
                     </NavLink>
                   </li>
                   <li>

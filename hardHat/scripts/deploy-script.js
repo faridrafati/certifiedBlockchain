@@ -83,6 +83,14 @@ async function main() {
 
   await deployContractWithArgs("DappTokenSale", [DappToken,1e12]);
 
+  // Deploy Exchange with fee account, fee percent, and DappToken address
+  const [deployer] = await ethers.getSigners();
+  await deployContractWithArgs("Exchange", [
+    deployer.address,  // feeAccount
+    10,                // feePercent (10%)
+    DappToken.target   // tokenAddress (DappToken)
+  ]);
+
 }
 
 main();
