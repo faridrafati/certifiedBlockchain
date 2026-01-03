@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { exchangeSelector } from '../store/selectors'
-import { loadAllOrders, subscribeToEvents } from '../store/interactions'
+import { loadAllOrders } from '../store/interactions'
 import OrderBook from './OrderBook.jsx'
 import Trades from './Trades.jsx'
 import MyTransactions from './MyTransactions.jsx'
@@ -10,29 +10,36 @@ import Balance from './Balance.jsx'
 import NewOrder from './NewOrder.jsx'
 
 class Content extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.loadBlockchainData(this.props)
   }
 
   async loadBlockchainData(props) {
     const { dispatch, exchange } = props
     await loadAllOrders(exchange, dispatch)
-    await subscribeToEvents(exchange, dispatch)
+    // No event subscriptions - we reload from contract state after transactions
   }
 
   render() {
     return (
-      <div className="content">
-        <div className="vertical-split">
-          <Balance />
-          <NewOrder />
-        </div>
+      <div className="exchange-content">
+        {/* Center - Large price chart (spans 2 rows) */}
+        <PriceChart />
+
+        {/* Top Left - Order Book */}
         <OrderBook />
-        <div className="vertical-split">
-          <PriceChart />
-          <MyTransactions />
-        </div>
+
+        {/* Top Right - Recent Trades */}
         <Trades />
+
+        {/* Middle Left - New Order Form */}
+        <NewOrder />
+
+        {/* Middle Right - Balance */}
+        <Balance />
+
+        {/* Bottom - Full width My Transactions */}
+        <MyTransactions />
       </div>
     )
   }

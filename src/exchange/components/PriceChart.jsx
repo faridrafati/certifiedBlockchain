@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { Card, CardContent, Typography, Box } from '@mui/material'
 import Chart from 'react-apexcharts'
 import Spinner from './Spinner'
 import { chartOptions } from './PriceChart.config'
@@ -11,7 +12,7 @@ import {
 const priceSymbol = (lastPriceChange) => {
   let output
   if(lastPriceChange === '+') {
-    output = <span className="text-success">&#9650;</span> // Green up tiangle
+    output = <span className="text-success">&#9650;</span> // Green up triangle
   } else {
     output = <span className="text-danger">&#9660;</span> // Red down triangle
   }
@@ -20,48 +21,59 @@ const priceSymbol = (lastPriceChange) => {
 
 const showPriceChart = (priceChart) => {
   return(
-    <div className="price-chart">
-      <div className="price" style={{
+    <div className="price-chart-container">
+      <Box sx={{
         display: 'flex',
         alignItems: 'center',
-        gap: '12px',
-        paddingBottom: '20px',
-        borderBottom: '1px solid rgba(139, 92, 246, 0.2)'
+        gap: 1.5,
+        paddingBottom: 2.5,
+        borderBottom: '1px solid rgba(102, 126, 234, 0.2)'
       }}>
-        <h4 style={{
+        <Typography variant="h6" sx={{
           margin: 0,
           fontSize: '1.3rem',
-          fontWeight: '700',
+          fontWeight: 700,
           color: '#e0e7ff',
           letterSpacing: '0.5px'
         }}>
           DAPP/ETH
-        </h4>
+        </Typography>
         {priceSymbol(priceChart.lastPriceChange)}
-        <span style={{
+        <Typography sx={{
           fontSize: '1.2rem',
-          fontWeight: '700',
+          fontWeight: 700,
           color: priceChart.lastPriceChange === '+' ? '#10b981' : '#ef4444'
         }}>
           {priceChart.lastPrice}
-        </span>
+        </Typography>
+      </Box>
+      <div className="chart-wrapper">
+        <Chart
+          options={chartOptions}
+          series={priceChart.series}
+          type='candlestick'
+          width='100%'
+          height='100%'
+        />
       </div>
-      <Chart options={chartOptions} series={priceChart.series} type='candlestick' width='100%' height='100%' />
     </div>
   )
 }
 
 class PriceChart extends Component {
   render() {
+    console.log('PriceChart - priceChartLoaded:', this.props.priceChartLoaded)
+    console.log('PriceChart - priceChart data:', this.props.priceChart)
+
     return (
-      <div className="card bg-dark text-white">
-        <div className="card-header">
-          📊 Price Chart
-        </div>
-        <div className="card-body">
+      <Card>
+        <CardContent>
+          <div className="card-header-custom">
+            📊 Price Chart
+          </div>
           {this.props.priceChartLoaded ? showPriceChart(this.props.priceChart) : <Spinner />}
-        </div>
-      </div>
+        </CardContent>
+      </Card>
     )
   }
 }

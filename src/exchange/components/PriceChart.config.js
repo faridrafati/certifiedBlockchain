@@ -1,48 +1,116 @@
 export const chartOptions = {
   chart: {
-    animations: { enabled: false },
-    toolbar: { show: false },
-    width: '100px'
+    animations: {
+      enabled: true,
+      easing: 'easeinout',
+      speed: 800,
+      animateGradually: {
+        enabled: true,
+        delay: 150
+      },
+      dynamicAnimation: {
+        enabled: true,
+        speed: 350
+      }
+    },
+    toolbar: {
+      show: true,
+      tools: {
+        download: true,
+        zoom: true,
+        zoomin: true,
+        zoomout: true,
+        pan: true,
+        reset: true
+      },
+      autoSelected: 'zoom'
+    },
+    background: 'transparent',
+    foreColor: '#e0e7ff'
+  },
+  plotOptions: {
+    candlestick: {
+      colors: {
+        upward: '#10b981',
+        downward: '#ef4444'
+      },
+      wick: {
+        useFillColor: true,
+      }
+    }
   },
   tooltip: {
     enabled: true,
-    theme: false,
+    theme: 'dark',
     style: {
       fontSize: '12px',
-      fontFamily: undefined
+      fontFamily: 'inherit'
     },
     x: {
-        show: false,
-        format: 'dd MMM',
-        formatter: undefined,
+      show: true,
+      format: 'dd MMM yyyy',
+      formatter: undefined,
     },
     y: {
       show: true,
-      title: 'price'
+      title: {
+        formatter: () => 'Price: '
+      }
     },
     marker: {
-      show: false,
+      show: true,
     },
     items: {
-       display: 'flex',
+      display: 'flex',
     },
     fixed: {
-        enabled: false,
-        position: 'topRight',
-        offsetX: 0,
-        offsetY: 0,
+      enabled: false,
+      position: 'topRight',
+      offsetX: 0,
+      offsetY: 0,
     },
+  },
+  grid: {
+    show: true,
+    borderColor: 'rgba(139, 92, 246, 0.1)',
+    strokeDashArray: 3,
+    position: 'back',
+    xaxis: {
+      lines: {
+        show: true
+      }
+    },
+    yaxis: {
+      lines: {
+        show: true
+      }
+    },
+    padding: {
+      top: 0,
+      right: 10,
+      bottom: 0,
+      left: 10
+    }
   },
   xaxis: {
     type: 'datetime',
     labels: {
       show: true,
       style: {
-          colors: '#fff',
-          fontSize: '8px',
-          cssClass: 'apexcharts-xaxis-label',
+        colors: '#a5b4fc',
+        fontSize: '10px',
+        cssClass: 'apexcharts-xaxis-label',
       },
+      datetimeUTC: false
     },
+    axisBorder: {
+      show: true,
+      color: 'rgba(139, 92, 246, 0.3)',
+    },
+    axisTicks: {
+      show: true,
+      color: 'rgba(139, 92, 246, 0.2)',
+    }
   },
   yaxis: {
     labels: {
@@ -50,13 +118,24 @@ export const chartOptions = {
       minWidth: 0,
       maxWidth: 160,
       style: {
-        color: '#fff',
-        fontSize: '8px',
+        colors: '#a5b4fc',
+        fontSize: '10px',
         cssClass: 'apexcharts-yaxis-label',
       },
-      offsetX: 0,
+      offsetX: -10,
       offsetY: 0,
       rotate: 0,
+      formatter: (value) => {
+        return value ? value.toFixed(4) : '0.0000'
+      }
+    },
+    axisBorder: {
+      show: true,
+      color: 'rgba(139, 92, 246, 0.3)',
+    },
+    axisTicks: {
+      show: true,
+      color: 'rgba(139, 92, 246, 0.2)',
     }
   }
 }

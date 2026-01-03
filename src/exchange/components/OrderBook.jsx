@@ -1,6 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { OverlayTrigger, Tooltip } from 'react-bootstrap'
+import {
+  Card,
+  CardContent,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Tooltip
+} from '@mui/material'
 import Spinner from './Spinner'
 import {
   orderBookSelector,
@@ -15,25 +25,24 @@ const renderOrder = (order, props) => {
   const { dispatch, exchange, account } = props
 
   return(
-    <OverlayTrigger
+    <Tooltip
       key={order.id}
-      placement='auto'
-      overlay={
-        <Tooltip id={order.id}>
-          {`Click here to ${order.orderFillAction}`}
-        </Tooltip>
-      }
+      title={`Click here to ${order.orderFillAction}`}
+      placement="top"
     >
-      <tr
-        key={order.id}
+      <TableRow
+        hover
         className="order-book-order"
         onClick={(e) => fillOrder(dispatch, exchange, order, account)}
+        sx={{ cursor: 'pointer' }}
       >
-        <td>{order.tokenAmount}</td>
-        <td className={`text-${order.orderTypeClass}`}>{order.tokenPrice}</td>
-        <td>{order.etherAmount}</td>
-      </tr>
-    </OverlayTrigger>
+        <TableCell>{order.tokenAmount}</TableCell>
+        <TableCell className={`text-${order.orderTypeClass}`}>
+          {order.tokenPrice}
+        </TableCell>
+        <TableCell>{order.etherAmount}</TableCell>
+      </TableRow>
+    </Tooltip>
   )
 }
 
@@ -41,49 +50,73 @@ const showOrderBook = (props) => {
   const { orderBook } = props
 
   return(
-    <tbody>
-      {orderBook.sellOrders.length > 0 ? (
-        orderBook.sellOrders.map((order) => renderOrder(order, props))
-      ) : (
-        <tr>
-          <td colSpan="3" style={{textAlign: 'center', color: '#a5b4fc', padding: '20px'}}>
-            No sell orders
-          </td>
-        </tr>
-      )}
-      <tr style={{background: 'rgba(139, 92, 246, 0.15)'}}>
-        <th style={{color: '#e0e7ff', fontWeight: '700'}}>DAPP</th>
-        <th style={{color: '#e0e7ff', fontWeight: '700'}}>DAPP/ETH</th>
-        <th style={{color: '#e0e7ff', fontWeight: '700'}}>ETH</th>
-      </tr>
-      {orderBook.buyOrders.length > 0 ? (
-        orderBook.buyOrders.map((order) => renderOrder(order, props))
-      ) : (
-        <tr>
-          <td colSpan="3" style={{textAlign: 'center', color: '#a5b4fc', padding: '20px'}}>
-            No buy orders
-          </td>
-        </tr>
-      )}
-    </tbody>
+    <>
+      <TableHead>
+        <TableRow>
+          <TableCell>DAPP</TableCell>
+          <TableCell>DAPP/ETH</TableCell>
+          <TableCell>ETH</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {orderBook.sellOrders.length > 0 ? (
+          orderBook.sellOrders.map((order) => renderOrder(order, props))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={3}>
+              <div className="table-empty-state">
+                <div className="table-empty-text">No sell orders</div>
+              </div>
+            </TableCell>
+          </TableRow>
+        )}
+        <TableRow>
+          <TableCell
+            colSpan={3}
+            sx={{
+              padding: 0,
+              height: '3px',
+              background: 'linear-gradient(90deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.5) 50%, rgba(102, 126, 234, 0.3) 100%)',
+              border: 'none'
+            }}
+          />
+        </TableRow>
+        {orderBook.buyOrders.length > 0 ? (
+          orderBook.buyOrders.map((order) => renderOrder(order, props))
+        ) : (
+          <TableRow>
+            <TableCell colSpan={3}>
+              <div className="table-empty-state">
+                <div className="table-empty-text">No buy orders</div>
+              </div>
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </>
   )
 }
 
 class OrderBook extends Component {
   render() {
+    console.log('OrderBook - showOrderBook:', this.props.showOrderBook)
+    console.log('OrderBook - orderBook data:', this.props.orderBook)
+    console.log('OrderBook - sellOrders:', this.props.orderBook?.sellOrders)
+    console.log('OrderBook - buyOrders:', this.props.orderBook?.buyOrders)
+
     return (
-      <div className="vertical">
-        <div className="card bg-dark text-white">
-          <div className="card-header">
+      <Card>
+        <CardContent>
+          <div className="card-header-custom">
             📊 Order Book
           </div>
-          <div className="card-body order-book">
-            <table className="table table-dark table-sm small">
+          <TableContainer>
+            <Table size="small">
               { this.props.showOrderBook ? showOrderBook(this.props) : <Spinner type='table' /> }
-            </table>
-          </div>
-        </div>
-      </div>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
     )
   }
 }
@@ -101,14 +134,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(OrderBook);
-
-
-
-
-
-
-
-
-
-
-

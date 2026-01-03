@@ -1,6 +1,18 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Tabs, Tab } from 'react-bootstrap'
+import {
+  Card,
+  CardContent,
+  Tabs,
+  Tab,
+  Box,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow
+} from '@mui/material'
 import Spinner from './Spinner'
 import {
   myFilledOrdersLoadedSelector,
@@ -17,30 +29,32 @@ const showMyFilledOrders = (props) => {
   const { myFilledOrders } = props
 
   return(
-    <tbody>
+    <TableBody>
       { myFilledOrders.length > 0 ? myFilledOrders.map((order) => {
         return (
-          <tr key={order.id}>
-            <td style={{color: '#a5b4fc', fontSize: '0.8rem'}}>{order.formattedTimestamp}</td>
-            <td className={`text-${order.orderTypeClass}`} style={{fontWeight: '600'}}>
+          <TableRow hover key={order.id}>
+            <TableCell sx={{color: '#a5b4fc', fontSize: '0.8rem'}}>
+              {order.formattedTimestamp}
+            </TableCell>
+            <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
               {order.orderSign}{order.tokenAmount}
-            </td>
-            <td className={`text-${order.orderTypeClass}`} style={{fontWeight: '600'}}>
+            </TableCell>
+            <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
               {order.tokenPrice}
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         )
       }) : (
-        <tr>
-          <td colSpan="3" style={{textAlign: 'center', color: '#a5b4fc', padding: '40px 20px'}}>
-            <div className="empty-state">
-              <div className="empty-state-icon">📋</div>
-              <div className="empty-state-text">No filled orders</div>
+        <TableRow>
+          <TableCell colSpan={3}>
+            <div className="table-empty-state">
+              <div className="table-empty-icon">📋</div>
+              <div className="table-empty-text">No filled orders</div>
             </div>
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       )}
-    </tbody>
+    </TableBody>
   )
 }
 
@@ -48,77 +62,102 @@ const showMyOpenOrders = (props) => {
   const { myOpenOrders, dispatch, exchange, account } = props
 
   return(
-    <tbody>
+    <TableBody>
       { myOpenOrders.length > 0 ? myOpenOrders.map((order) => {
         return (
-          <tr key={order.id}>
-            <td className={`text-${order.orderTypeClass}`} style={{fontWeight: '600'}}>
+          <TableRow hover key={order.id}>
+            <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
               {order.tokenAmount}
-            </td>
-            <td className={`text-${order.orderTypeClass}`} style={{fontWeight: '600'}}>
+            </TableCell>
+            <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
               {order.tokenPrice}
-            </td>
-            <td
-              className="cancel-order"
+            </TableCell>
+            <TableCell
+              className="cancel-order-cell"
               onClick={(e) => {
                 cancelOrder(dispatch, exchange, order, account)
               }}
-              style={{cursor: 'pointer', textAlign: 'center'}}
+              sx={{cursor: 'pointer', textAlign: 'center'}}
             >
               <span style={{fontSize: '1.2rem'}}>✖</span>
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         )
       }) : (
-        <tr>
-          <td colSpan="3" style={{textAlign: 'center', color: '#a5b4fc', padding: '40px 20px'}}>
-            <div className="empty-state">
-              <div className="empty-state-icon">📝</div>
-              <div className="empty-state-text">No open orders</div>
+        <TableRow>
+          <TableCell colSpan={3}>
+            <div className="table-empty-state">
+              <div className="table-empty-icon">📝</div>
+              <div className="table-empty-text">No open orders</div>
             </div>
-          </td>
-        </tr>
+          </TableCell>
+        </TableRow>
       )}
-    </tbody>
+    </TableBody>
   )
 }
 
 class MyTransactions extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeTab: 0
+    }
+  }
+
+  handleTabChange = (event, newValue) => {
+    this.setState({ activeTab: newValue })
+  }
+
   render() {
+    const { activeTab } = this.state
+
     return (
-      <div className="card bg-dark text-white">
-        <div className="card-header">
-          👤 My Transactions
-        </div>
-        <div className="card-body">
-          <Tabs defaultActiveKey="trades" className="bg-dark text-white">
-            <Tab eventKey="trades" title="✅ Filled" className="bg-dark">
-              <table className="table table-dark table-sm small">
-                <thead>
-                  <tr>
-                    <th>Time</th>
-                    <th>DAPP</th>
-                    <th>DAPP/ETH</th>
-                  </tr>
-                </thead>
-                { this.props.showMyFilledOrders ? showMyFilledOrders(this.props) : <Spinner type="table" />}
-              </table>
-            </Tab>
-            <Tab eventKey="orders" title="⏳ Open" className="bg-dark">
-              <table className="table table-dark table-sm small">
-                <thead>
-                  <tr>
-                    <th>Amount</th>
-                    <th>DAPP/ETH</th>
-                    <th>Cancel</th>
-                  </tr>
-                </thead>
-                { this.props.showMyOpenOrders ? showMyOpenOrders(this.props) : <Spinner type="table" />}
-              </table>
-            </Tab>
+      <Card>
+        <CardContent>
+          <div className="card-header-custom">
+            👤 My Transactions
+          </div>
+          <Tabs value={activeTab} onChange={this.handleTabChange}>
+            <Tab label="✅ Filled" />
+            <Tab label="⏳ Open" />
           </Tabs>
-        </div>
-      </div>
+
+          <Box role="tabpanel" hidden={activeTab !== 0} className="tab-panel">
+            {activeTab === 0 && (
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Time</TableCell>
+                      <TableCell>DAPP</TableCell>
+                      <TableCell>DAPP/ETH</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  { this.props.showMyFilledOrders ? showMyFilledOrders(this.props) : <Spinner type="table" />}
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+
+          <Box role="tabpanel" hidden={activeTab !== 1} className="tab-panel">
+            {activeTab === 1 && (
+              <TableContainer>
+                <Table size="small">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Amount</TableCell>
+                      <TableCell>DAPP/ETH</TableCell>
+                      <TableCell>Cancel</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  { this.props.showMyOpenOrders ? showMyOpenOrders(this.props) : <Spinner type="table" />}
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
     )
   }
 }
@@ -138,13 +177,3 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps)(MyTransactions);
-
-
-
-
-
-
-
-
-
-

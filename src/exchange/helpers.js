@@ -6,11 +6,11 @@ export const DECIMALS = (10**18)
 
 // Shortcut to avoid passing around web3 connection
 export const ether = (wei) => {
-  if(wei) {
-    // Convert BigInt to Number if needed
-    const weiNum = typeof wei === 'bigint' ? Number(wei) : wei
-    return(weiNum / DECIMALS) // 18 decimal places
+  if (wei === undefined || wei === null || wei === '') {
+    return 0
   }
+  // Convert BigInt or String to Number
+  return Number(wei) / DECIMALS // 18 decimal places
 }
 
 // Tokens and ether have same decimal resolution

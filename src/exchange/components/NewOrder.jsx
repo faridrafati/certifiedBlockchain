@@ -1,7 +1,16 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Tabs, Tab } from 'react-bootstrap'
-import Spinner from './Spinner'
+import {
+  Card,
+  CardContent,
+  Tabs,
+  Tab,
+  Box,
+  TextField,
+  Button,
+  Typography
+} from '@mui/material'
+import { toast } from 'react-toastify'
 import {
   exchangeSelector,
   tokenSelector,
@@ -21,141 +30,192 @@ import {
   makeSellOrder
 } from '../store/interactions'
 
-const showForm = (props) => {
-  const {
-    dispatch,
-    buyOrder,
-    exchange,
-    token,
-    web3,
-    account,
-    sellOrder,
-    showBuyTotal,
-    showSellTotal
-  } = props
-
-  return(
-    <Tabs defaultActiveKey="buy" className="bg-dark text-white">
-
-      <Tab eventKey="buy" title="📈 Buy" className="bg-dark">
-        <form className="row" onSubmit={(event) => {
-          event.preventDefault()
-          makeBuyOrder(dispatch, exchange, token, web3, buyOrder, account)
-        }}>
-          <div className="col-12 mb-3">
-            <label className="form-label" style={{fontSize: '0.85rem', fontWeight: '600', color: '#a5b4fc'}}>
-              Amount (DAPP)
-            </label>
-            <input
-              type="text"
-              className="form-control form-control-sm bg-dark text-white"
-              placeholder="0.00"
-              onChange={(e) => dispatch( buyOrderAmountChanged( e.target.value ) )}
-              required
-            />
-          </div>
-          <div className="col-12 mb-3">
-            <label className="form-label" style={{fontSize: '0.85rem', fontWeight: '600', color: '#a5b4fc'}}>
-              Price (ETH)
-            </label>
-            <input
-              type="text"
-              className="form-control form-control-sm bg-dark text-white"
-              placeholder="0.00"
-              onChange={(e) => dispatch( buyOrderPriceChanged( e.target.value ) )}
-              required
-            />
-          </div>
-          { showBuyTotal ? (
-            <div className="col-12 mb-3">
-              <div style={{
-                padding: '12px',
-                background: 'rgba(139, 92, 246, 0.1)',
-                borderRadius: '8px',
-                border: '1px solid rgba(139, 92, 246, 0.3)'
-              }}>
-                <small style={{color: '#a5b4fc', fontWeight: '600'}}>Total Cost: </small>
-                <span style={{color: '#8b5cf6', fontWeight: '700', fontSize: '1rem'}}>
-                  {(buyOrder.amount * buyOrder.price).toFixed(4)} ETH
-                </span>
-              </div>
-            </div>
-          ) : null }
-          <div className="col-12">
-            <button type="submit" className="btn btn-success btn-sm btn-block">
-              Buy DAPP
-            </button>
-          </div>
-        </form>
-      </Tab>
-
-      <Tab eventKey="sell" title="📉 Sell" className="bg-dark">
-        <form className="row" onSubmit={(event) => {
-          event.preventDefault()
-          makeSellOrder(dispatch, exchange, token, web3, sellOrder, account)
-        }}>
-          <div className="col-12 mb-3">
-            <label className="form-label" style={{fontSize: '0.85rem', fontWeight: '600', color: '#a5b4fc'}}>
-              Amount (DAPP)
-            </label>
-            <input
-              type="text"
-              className="form-control form-control-sm bg-dark text-white"
-              placeholder="0.00"
-              onChange={(e) => dispatch( sellOrderAmountChanged( e.target.value ) )}
-              required
-            />
-          </div>
-          <div className="col-12 mb-3">
-            <label className="form-label" style={{fontSize: '0.85rem', fontWeight: '600', color: '#a5b4fc'}}>
-              Price (ETH)
-            </label>
-            <input
-              type="text"
-              className="form-control form-control-sm bg-dark text-white"
-              placeholder="0.00"
-              onChange={(e) => dispatch( sellOrderPriceChanged( e.target.value ) )}
-              required
-            />
-          </div>
-          { showSellTotal ? (
-            <div className="col-12 mb-3">
-              <div style={{
-                padding: '12px',
-                background: 'rgba(239, 68, 68, 0.1)',
-                borderRadius: '8px',
-                border: '1px solid rgba(239, 68, 68, 0.3)'
-              }}>
-                <small style={{color: '#a5b4fc', fontWeight: '600'}}>Total Receive: </small>
-                <span style={{color: '#ef4444', fontWeight: '700', fontSize: '1rem'}}>
-                  {(sellOrder.amount * sellOrder.price).toFixed(4)} ETH
-                </span>
-              </div>
-            </div>
-          ) : null }
-          <div className="col-12">
-            <button type="submit" className="btn btn-danger btn-sm btn-block">
-              Sell DAPP
-            </button>
-          </div>
-        </form>
-      </Tab>
-    </Tabs>
-  )
-}
-
 class NewOrder extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      activeTab: 0,
+      submitting: false
+    }
+  }
+
+  handleTabChange = (event, newValue) => {
+    this.setState({ activeTab: newValue })
+  }
+
+  handleBuyOrder = async (event) => {
+    event.preventDefault()
+    const { dispatch, exchange, token, web3, buyOrder, account } = this.props
+
+    try {
+      this.setState({ submitting: true })
+      toast.info('Submitting buy order. Please confirm in MetaMask...')
+      await makeBuyOrder(dispatch, exchange, token, web3, buyOrder, account)
+      toast.success('Buy order submitted successfully!')
+    } catch (error) {
+      console.error('Buy order failed:', error)
+      toast.error(`Failed to submit buy order: ${error.message || 'Unknown error'}`)
+    } finally {
+      this.setState({ submitting: false })
+    }
+  }
+
+  handleSellOrder = async (event) => {
+    event.preventDefault()
+    const { dispatch, exchange, token, web3, sellOrder, account } = this.props
+
+    try {
+      this.setState({ submitting: true })
+      toast.info('Submitting sell order. Please confirm in MetaMask...')
+      await makeSellOrder(dispatch, exchange, token, web3, sellOrder, account)
+      toast.success('Sell order submitted successfully!')
+    } catch (error) {
+      console.error('Sell order failed:', error)
+      toast.error(`Failed to submit sell order: ${error.message || 'Unknown error'}`)
+    } finally {
+      this.setState({ submitting: false })
+    }
+  }
 
   render() {
+    const { activeTab, submitting } = this.state
+    const {
+      dispatch,
+      buyOrder,
+      sellOrder,
+      showBuyTotal,
+      showSellTotal
+    } = this.props
+
     return (
-      <div className="card bg-dark text-white">
-        <div className="card-header">
-          New Order
-        </div>
-        <div className="card-body">
-          {this.props.showForm ? showForm(this.props) : <Spinner />}
-        </div>
-      </div>
+      <Card>
+        <CardContent>
+          <div className="card-header-custom">
+            📝 New Order
+          </div>
+
+          <Tabs value={activeTab} onChange={this.handleTabChange}>
+            <Tab label="📈 Buy" />
+            <Tab label="📉 Sell" />
+          </Tabs>
+
+          {/* Buy Tab */}
+          <Box role="tabpanel" hidden={activeTab !== 0} className="tab-panel">
+            {activeTab === 0 && (
+              <form onSubmit={this.handleBuyOrder} aria-label="Buy DAPP tokens form">
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <TextField
+                    label="Amount (DAPP)"
+                    type="number"
+                    inputProps={{ step: '0.0001', min: '0' }}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    placeholder="0.00"
+                    onChange={(e) => dispatch(buyOrderAmountChanged(e.target.value))}
+                    disabled={submitting}
+                    required
+                  />
+
+                  <TextField
+                    label="Price (ETH)"
+                    type="number"
+                    inputProps={{ step: '0.0001', min: '0' }}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    placeholder="0.00"
+                    onChange={(e) => dispatch(buyOrderPriceChanged(e.target.value))}
+                    disabled={submitting}
+                    required
+                  />
+
+                  {showBuyTotal && (
+                    <Box className="info-box">
+                      <Typography variant="body2" component="span" sx={{ color: '#a5b4fc', fontWeight: 600, fontSize: '0.85rem' }}>
+                        Total Cost:{' '}
+                      </Typography>
+                      <Typography component="span" sx={{ color: '#667eea', fontWeight: 700, fontSize: '1rem' }}>
+                        {(buyOrder.amount * buyOrder.price).toFixed(4)} ETH
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="success"
+                    fullWidth
+                    size="large"
+                    disabled={submitting}
+                    aria-label="Submit buy order"
+                  >
+                    {submitting ? 'Submitting...' : 'Buy DAPP'}
+                  </Button>
+                </Box>
+              </form>
+            )}
+          </Box>
+
+          {/* Sell Tab */}
+          <Box role="tabpanel" hidden={activeTab !== 1} className="tab-panel">
+            {activeTab === 1 && (
+              <form onSubmit={this.handleSellOrder} aria-label="Sell DAPP tokens form">
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  <TextField
+                    label="Amount (DAPP)"
+                    type="number"
+                    inputProps={{ step: '0.0001', min: '0' }}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    placeholder="0.00"
+                    onChange={(e) => dispatch(sellOrderAmountChanged(e.target.value))}
+                    disabled={submitting}
+                    required
+                  />
+
+                  <TextField
+                    label="Price (ETH)"
+                    type="number"
+                    inputProps={{ step: '0.0001', min: '0' }}
+                    variant="outlined"
+                    size="small"
+                    fullWidth
+                    placeholder="0.00"
+                    onChange={(e) => dispatch(sellOrderPriceChanged(e.target.value))}
+                    disabled={submitting}
+                    required
+                  />
+
+                  {showSellTotal && (
+                    <Box className="info-box-error">
+                      <Typography variant="body2" component="span" sx={{ color: '#a5b4fc', fontWeight: 600, fontSize: '0.85rem' }}>
+                        Total Receive:{' '}
+                      </Typography>
+                      <Typography component="span" sx={{ color: '#ef4444', fontWeight: 700, fontSize: '1rem' }}>
+                        {(sellOrder.amount * sellOrder.price).toFixed(4)} ETH
+                      </Typography>
+                    </Box>
+                  )}
+
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="error"
+                    fullWidth
+                    size="large"
+                    disabled={submitting}
+                    aria-label="Submit sell order"
+                  >
+                    {submitting ? 'Submitting...' : 'Sell DAPP'}
+                  </Button>
+                </Box>
+              </form>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
     )
   }
 }
@@ -171,7 +231,6 @@ function mapStateToProps(state) {
     web3: web3Selector(state),
     buyOrder,
     sellOrder,
-    showForm: !buyOrder.making && !sellOrder.making,
     showBuyTotal: buyOrder.amount && buyOrder.price,
     showSellTotal: sellOrder.amount && sellOrder.price
   }

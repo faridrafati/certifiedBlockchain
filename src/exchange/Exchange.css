@@ -1,413 +1,250 @@
-/* Modern Exchange Styling */
+/* Exchange with DappToken Style - Dark Theme with MUI Components */
 
+/* Main Container */
 .exchange-container {
   width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  padding-top: 20px;
+  padding: 2rem 1rem;
 }
 
-.content {
-  background: transparent;
-  position: relative;
-  width: 100%;
-  min-height: calc(100vh - 120px);
+/* Hero Section - DappToken Style */
+.exchange-hero {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 24px;
+  padding: 3rem 2rem;
+  margin: 0 auto 3rem auto;
+  max-width: 1800px;
+  color: white;
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+  animation: fadeInDown 0.6s ease-out;
+  text-align: center;
+}
+
+.exchange-hero .hero-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.exchange-hero .hero-title-row {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  justify-content: space-evenly;
-  padding: 12px;
-  gap: 12px;
-  z-index: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
 }
 
-.content > div {
-  width: 20%;
-  min-width: 280px;
-}
-
-.content > div:first-child {
-  min-width: 300px;
-}
-
-.content > div:nth-child(2) {
-  min-width: 320px;
-}
-
-.content div:nth-child(3) {
-  width: 40%;
-  min-width: 400px;
-}
-
-.content > div:last-child {
-  min-width: 300px;
-}
-
-@media (max-width:1400px) {
-  .content {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-
-  .content > div {
-    width: 100% !important;
-    min-width: unset !important;
-  }
-}
-
-@media (max-width:992px) {
-  .content {
-    display: block;
-    overflow-y: auto;
-  }
-
-  .content > div {
-    width: 100% !important;
-    padding-right: 0;
-    padding-bottom: 12px;
-    min-width: unset !important;
-  }
-}
-
-.vertical > div {
-  height: 100%;
-}
-
-.vertical-split {
+.exchange-hero .hero-title-row h1 {
+  margin: 0 !important;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-evenly;
-  flex-wrap: nowrap;
-  gap: 12px;
+  align-items: center;
+  gap: 1rem;
 }
 
-.vertical-split > div {
-  height: 50%;
-  min-height: 350px;
+.exchange-hero .hero-icon {
+  font-size: 3rem !important;
+  color: white;
 }
 
-.vertical-split > div:first-child {
-  margin-bottom: 0;
-}
-
-.vertical-split:last-child > div:first-child {
-  height: 60%;
-  min-height: 400px;
-}
-
-.vertical-split:last-child > div:last-child {
-  height: 40%;
-  min-height: 300px;
-}
-
-@media (max-width:992px) {
-  .vertical-split {
-    display: block;
-  }
-  .vertical-split > div,
-  .vertical-split > div:first-child {
-    height: auto;
-    min-height: 350px;
-    margin-bottom: 12px;
-  }
-}
-
-/* Modern Card Styling */
-.card {
-  border-radius: 16px;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: space-evenly;
-  flex-wrap: nowrap;
-  height: 100%;
-  background: rgba(30, 30, 46, 0.95);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-
-.card:hover {
-  box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
-  border-color: rgba(139, 92, 246, 0.3);
-}
-
-.card-header {
-  padding: 16px 20px;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-weight: 600;
-  font-size: 1.1rem;
-  letter-spacing: 0.5px;
-  color: #e0e7ff;
-  text-transform: uppercase;
-}
-
-.card-body {
-  flex: auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  padding: 16px;
-}
-
-/* Custom Scrollbar */
-.card-body::-webkit-scrollbar {
-  width: 6px;
-}
-
-.card-body::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.card-body::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.5);
-  border-radius: 10px;
-}
-
-.card-body::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.7);
-}
-
-.card-body th {
-  border-top: 0;
-  color: #a5b4fc;
-  font-weight: 600;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  padding: 12px 8px;
-}
-
-.card-body td {
-  color: #e0e7ff;
-  padding: 10px 8px;
-  font-size: 0.9rem;
-}
-
-/* Tables */
-.table {
-  color: #e0e7ff;
-}
-
-.table-dark {
-  background-color: transparent;
-}
-
-.table-dark thead th {
-  border-bottom: 2px solid rgba(139, 92, 246, 0.3);
-}
-
-.table-dark tbody tr {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.2s ease;
-}
-
-.table-dark tbody tr:hover {
-  background-color: rgba(139, 92, 246, 0.1);
-}
-
-/* Tabs */
-.card-body .nav-tabs {
-  border-color: rgba(139, 92, 246, 0.3);
-  margin-bottom: 16px;
-}
-
-.card-body .nav-item.nav-link {
-  font-size: 0.9rem;
-  font-weight: 600;
-  background-color: transparent;
-  color: #a5b4fc;
-  padding: 10px 20px;
-  border-top: 0px;
-  border-right: 0px;
-  border-left: 0px;
-  border-color: transparent;
-  border-radius: 8px 8px 0 0;
-  transition: all 0.3s ease;
-  margin-right: 4px;
-}
-
-.card-body .nav-item.nav-link:hover {
-  color: #e0e7ff;
-  background-color: rgba(139, 92, 246, 0.1);
-}
-
-.card-body .nav-item.nav-link.active {
-  border-top: 0px;
-  border-right: 0px;
-  border-left: 0px;
-  border-bottom: 3px solid #8b5cf6;
-  background: linear-gradient(to bottom, rgba(139, 92, 246, 0.2), transparent);
-  color: #fff;
-}
-
-/* Forms */
-.form-control {
-  background-color: rgba(30, 30, 46, 0.8) !important;
-  border: 1px solid rgba(139, 92, 246, 0.3) !important;
-  color: #e0e7ff !important;
-  border-radius: 8px !important;
-  padding: 10px 14px !important;
+.exchange-hero .hero-refresh-btn {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.15) !important;
   transition: all 0.3s ease !important;
-  font-size: 0.95rem !important;
+  width: 40px !important;
+  height: 40px !important;
+  flex-shrink: 0;
 }
 
-.form-control:focus {
-  background-color: rgba(30, 30, 46, 0.95) !important;
-  border-color: #8b5cf6 !important;
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2) !important;
-  color: #fff !important;
+.exchange-hero .hero-refresh-btn svg {
+  font-size: 1.5rem !important;
 }
 
-.form-control::placeholder {
-  color: rgba(165, 180, 252, 0.5) !important;
+.exchange-hero .hero-refresh-btn:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: rotate(180deg);
 }
 
-/* Buttons */
-.btn {
-  border-radius: 8px !important;
-  padding: 10px 24px !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
-  font-size: 0.85rem !important;
+.exchange-hero .hero-content h1 {
+  margin-bottom: 1rem;
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  color: white;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%) !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4) !important;
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6) !important;
-}
-
-.btn-success {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
-}
-
-.btn-success:hover {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6) !important;
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
-  border: none !important;
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
-}
-
-.btn-danger:hover {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6) !important;
-}
-
-.btn-block {
-  width: 100%;
-}
-
-/* Price Chart */
-.card-body .price-chart {
-  height: 100%;
-  padding-bottom: 60px;
-}
-
-.card-body .price-chart .price {
-  padding-left: 20px;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #8b5cf6;
-}
-
-/* Order Book Specific */
-td.cancel-order {
-  cursor: pointer;
-  color: #ef4444;
-  font-weight: 600;
-  transition: all 0.2s ease;
-}
-
-td.cancel-order:hover {
-  color: #dc2626;
-  transform: scale(1.1);
-}
-
-tr.order-book-order {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-tr.order-book-order:hover {
-  background-color: rgba(139, 92, 246, 0.15);
-}
-
-/* Success and Danger Colors */
-.text-success {
-  color: #10b981 !important;
-}
-
-.text-danger {
-  color: #ef4444 !important;
-}
-
-/* Badge Styling */
-.badge {
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.75rem;
-}
-
-/* Spinner */
-.spinner-border {
-  color: #8b5cf6;
-  width: 3rem;
-  height: 3rem;
-  border-width: 0.3em;
-}
-
-/* Row spacing */
-.row {
-  margin-bottom: 12px;
-}
-
-.row:last-child {
+.exchange-hero .hero-content p {
+  font-size: 1.2rem;
+  opacity: 0.95;
   margin-bottom: 0;
+  color: white;
 }
 
-/* Responsive Typography */
+/* Hero Responsive */
 @media (max-width: 768px) {
-  .card-header {
+  .exchange-hero {
+    border-radius: 16px;
+    padding: 2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .exchange-hero .hero-title-row {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .exchange-hero .hero-content h1 {
+    font-size: 1.75rem !important;
+  }
+
+  .exchange-hero .hero-icon {
+    font-size: 2.5rem !important;
+  }
+
+  .exchange-hero .hero-content p {
     font-size: 1rem;
-    padding: 12px 16px;
   }
 
-  .card-body {
-    padding: 12px;
+  .exchange-hero .hero-refresh-btn {
+    width: 36px !important;
+    height: 36px !important;
   }
 
-  .btn {
-    padding: 8px 16px !important;
-    font-size: 0.8rem !important;
+  .exchange-hero .hero-refresh-btn svg {
+    font-size: 1.25rem !important;
   }
 }
 
-/* Loading States */
+/* Content Grid Layout (Binance-style Trading Interface) */
+.exchange-content {
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  display: grid;
+  grid-template-columns: minmax(280px, 1.2fr) minmax(500px, 3fr) minmax(280px, 1.2fr);
+  grid-template-rows: auto auto;
+  gap: 1rem;
+  animation: fadeInUp 0.6s ease-out;
+  grid-template-areas:
+    "orderbook pricechart trades"
+    "neworder mytransactions balance";
+}
+
+/* Assign grid areas to components */
+.exchange-content > :nth-child(1) { grid-area: pricechart; }
+.exchange-content > :nth-child(2) { grid-area: orderbook; }
+.exchange-content > :nth-child(3) { grid-area: trades; }
+.exchange-content > :nth-child(4) { grid-area: neworder; }
+.exchange-content > :nth-child(5) { grid-area: balance; }
+.exchange-content > :nth-child(6) { grid-area: mytransactions; }
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .exchange-content {
+    grid-template-columns: minmax(250px, 1fr) minmax(400px, 2.5fr) minmax(250px, 1fr);
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 1200px) {
+  .exchange-content {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "pricechart pricechart"
+      "mytransactions mytransactions"
+      "orderbook trades"
+      "neworder balance";
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .exchange-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "pricechart"
+      "orderbook"
+      "trades"
+      "neworder"
+      "balance"
+      "mytransactions";
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .exchange-container {
+    padding: 1rem;
+  }
+
+  .exchange-content {
+    gap: 0.75rem;
+  }
+
+  /* Adjust chart height on tablets */
+  .exchange-content > :nth-child(1) {
+    min-height: 450px;
+  }
+
+  .exchange-container .chart-wrapper {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  .exchange-container {
+    padding: 0.5rem;
+  }
+
+  .exchange-content {
+    gap: 0.5rem;
+  }
+
+  /* Smaller chart on mobile */
+  .exchange-content > :nth-child(1) {
+    min-height: 400px;
+  }
+
+  .exchange-container .chart-wrapper {
+    min-height: 280px;
+  }
+
+  .exchange-container .price-display {
+    padding: 10px 16px;
+    font-size: 1.1rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -417,24 +254,671 @@ tr.order-book-order:hover {
   }
 }
 
-.loading {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+/* ===== MUI COMPONENT DARK THEME OVERRIDES ===== */
+
+/* MUI Card Components */
+.exchange-container .MuiCard-root {
+  background: rgba(30, 30, 46, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.3s ease !important;
+  animation: fadeInUp 0.6s ease-out;
 }
 
-/* Empty State */
-.empty-state {
+.exchange-container .MuiCard-root:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.2) !important;
+  border-color: rgba(102, 126, 234, 0.3);
+}
+
+.exchange-container .MuiCardContent-root {
+  color: #e0e7ff !important;
+  padding: 18px !important;
+}
+
+/* Card Headers (custom) */
+.exchange-container .card-header-custom {
+  padding: 12px 18px;
+  background: rgba(102, 126, 234, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  color: #e0e7ff;
+  text-transform: uppercase;
+  border-radius: 20px 20px 0 0;
+  margin: -18px -18px 18px -18px;
+}
+
+/* MUI Tabs */
+.exchange-container .MuiTabs-root {
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3) !important;
+  margin-bottom: 16px !important;
+  min-height: 42px !important;
+}
+
+.exchange-container .MuiTab-root {
+  color: #a5b4fc !important;
+  font-weight: 600 !important;
+  font-size: 0.9rem !important;
+  text-transform: none !important;
+  min-height: 42px !important;
+  padding: 10px 20px !important;
+  transition: all 0.3s ease !important;
+}
+
+.exchange-container .MuiTab-root:hover {
+  color: #e0e7ff !important;
+  background-color: rgba(102, 126, 234, 0.1) !important;
+}
+
+.exchange-container .MuiTab-root.Mui-selected {
+  color: #fff !important;
+}
+
+.exchange-container .MuiTabs-indicator {
+  background-color: #667eea !important;
+  height: 3px !important;
+}
+
+/* Tab Panels */
+.exchange-container .tab-panel {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* MUI TextField */
+.exchange-container .MuiTextField-root {
+  width: 100%;
+  margin-bottom: 0 !important;
+}
+
+.exchange-container .MuiOutlinedInput-root {
+  background-color: rgba(30, 30, 46, 0.8) !important;
+  border-radius: 12px !important;
+  color: #e0e7ff !important;
+  transition: all 0.3s ease !important;
+}
+
+.exchange-container .MuiOutlinedInput-input {
+  color: #e0e7ff !important;
+  font-size: 0.95rem !important;
+}
+
+.exchange-container .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(102, 126, 234, 0.3) !important;
+  transition: all 0.3s ease !important;
+}
+
+.exchange-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(102, 126, 234, 0.5) !important;
+}
+
+.exchange-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #667eea !important;
+  border-width: 2px !important;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2) !important;
+}
+
+.exchange-container .MuiOutlinedInput-root.Mui-disabled {
+  background-color: rgba(30, 30, 46, 0.5) !important;
+  opacity: 0.6;
+}
+
+.exchange-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+  color: rgba(224, 231, 255, 0.5) !important;
+  -webkit-text-fill-color: rgba(224, 231, 255, 0.5) !important;
+}
+
+.exchange-container .MuiInputLabel-root {
+  color: #a5b4fc !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+}
+
+.exchange-container .MuiInputLabel-root.Mui-focused {
+  color: #667eea !important;
+}
+
+.exchange-container .MuiInputLabel-root.Mui-disabled {
+  color: rgba(165, 180, 252, 0.5) !important;
+}
+
+.exchange-container .MuiFormHelperText-root {
+  color: #a5b4fc !important;
+  font-size: 0.75rem !important;
+  margin-top: 6px !important;
+}
+
+/* TextField Error States */
+.exchange-container .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.exchange-container .MuiFormHelperText-root.Mui-error {
+  color: #ef4444 !important;
+}
+
+/* MUI Buttons */
+.exchange-container .MuiButton-root {
+  border-radius: 12px !important;
+  padding: 10px 24px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  font-size: 0.85rem !important;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.exchange-container .MuiButton-root:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* Primary Button */
+.exchange-container .MuiButton-containedPrimary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+.exchange-container .MuiButton-containedPrimary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5a52d5 0%, #6a3f92 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+}
+
+/* Success Button */
+.exchange-container .MuiButton-containedSuccess {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
+  color: #fff !important;
+}
+
+.exchange-container .MuiButton-containedSuccess:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6) !important;
+}
+
+/* Error/Danger Button */
+.exchange-container .MuiButton-containedError {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  border: none !important;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
+  color: #fff !important;
+}
+
+.exchange-container .MuiButton-containedError:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6) !important;
+}
+
+/* Outlined Buttons */
+.exchange-container .MuiButton-outlined {
+  border: 2px solid rgba(102, 126, 234, 0.5) !important;
+  color: #667eea !important;
+}
+
+.exchange-container .MuiButton-outlined:hover:not(:disabled) {
+  background: rgba(102, 126, 234, 0.1) !important;
+  border-color: #667eea !important;
+}
+
+/* Button Sizes */
+.exchange-container .MuiButton-sizeSmall {
+  padding: 6px 16px !important;
+  font-size: 0.75rem !important;
+}
+
+.exchange-container .MuiButton-sizeLarge {
+  padding: 12px 28px !important;
+  font-size: 0.95rem !important;
+}
+
+/* MUI Tables */
+.exchange-container .MuiTable-root {
+  color: #e0e7ff !important;
+}
+
+.exchange-container .MuiTableContainer-root {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.exchange-container .MuiTableCell-root {
+  color: #e0e7ff !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 10px 8px !important;
+  font-size: 0.9rem !important;
+}
+
+.exchange-container .MuiTableCell-head {
+  color: #a5b4fc !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 0.5px !important;
+  background: rgba(30, 30, 46, 0.95) !important;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3) !important;
+  padding: 12px 8px !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 10 !important;
+}
+
+.exchange-container .MuiTableRow-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.exchange-container .MuiTableRow-root.MuiTableRow-hover:hover {
+  background-color: rgba(102, 126, 234, 0.15) !important;
+  transform: scale(1.005);
+  cursor: pointer;
+}
+
+/* Table Empty States */
+.exchange-container .table-empty-state {
   text-align: center;
   padding: 40px 20px;
   color: #a5b4fc;
 }
 
-.empty-state-icon {
-  font-size: 3rem;
-  margin-bottom: 16px;
+.exchange-container .table-empty-icon {
+  font-size: 2.5rem !important;
   opacity: 0.5;
+  margin-bottom: 12px;
 }
 
-.empty-state-text {
-  font-size: 1rem;
+.exchange-container .table-empty-text {
+  font-size: 0.95rem;
   font-weight: 500;
+}
+
+/* MUI Tooltip */
+.exchange-container .MuiTooltip-tooltip {
+  background-color: rgba(30, 30, 46, 0.95) !important;
+  color: #e0e7ff !important;
+  font-size: 0.85rem !important;
+  font-weight: 500 !important;
+  padding: 8px 12px !important;
+  border: 1px solid rgba(102, 126, 234, 0.3) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.exchange-container .MuiTooltip-arrow {
+  color: rgba(30, 30, 46, 0.95) !important;
+}
+
+/* MUI ToggleButton for asset selection */
+.exchange-container .MuiToggleButtonGroup-root {
+  background: rgba(102, 126, 234, 0.1) !important;
+  border-radius: 8px !important;
+  padding: 4px !important;
+  gap: 4px !important;
+}
+
+.exchange-container .MuiToggleButton-root {
+  color: #a5b4fc !important;
+  border: 1px solid rgba(102, 126, 234, 0.3) !important;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  padding: 8px 16px !important;
+  transition: all 0.3s ease !important;
+  text-transform: uppercase !important;
+  font-size: 0.85rem !important;
+}
+
+.exchange-container .MuiToggleButton-root:hover {
+  background: rgba(102, 126, 234, 0.2) !important;
+}
+
+.exchange-container .MuiToggleButton-root.Mui-selected {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+}
+
+.exchange-container .MuiToggleButton-root.Mui-selected:hover {
+  background: linear-gradient(135deg, #5a52d5 0%, #6a3f92 100%) !important;
+}
+
+/* MUI CircularProgress */
+.exchange-container .MuiCircularProgress-root {
+  color: #667eea !important;
+}
+
+/* Spinner Container */
+.exchange-container .spinner-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 200px;
+}
+
+.exchange-container .loading-text {
+  margin-top: 16px;
+  color: #a5b4fc;
+  font-size: 0.9rem;
+  font-weight: 500;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* MUI Divider */
+.exchange-container .MuiDivider-root {
+  background: rgba(102, 126, 234, 0.2) !important;
+  margin: 1.5rem 0 !important;
+}
+
+/* MUI Typography */
+.exchange-container .MuiTypography-root {
+  color: #e0e7ff !important;
+}
+
+.exchange-container .MuiTypography-h5 {
+  font-weight: 700 !important;
+  font-size: 1.5rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.exchange-container .MuiTypography-h6 {
+  font-weight: 600 !important;
+  font-size: 1.2rem !important;
+  margin-bottom: 0.75rem !important;
+}
+
+.exchange-container .MuiTypography-body2 {
+  color: #a5b4fc !important;
+  font-size: 0.875rem !important;
+}
+
+/* MUI Box */
+.exchange-container .info-box {
+  padding: 12px 16px;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  border-radius: 8px;
+  margin: 12px 0;
+}
+
+.exchange-container .info-box-success {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.exchange-container .info-box-error {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Color Classes */
+.exchange-container .text-success {
+  color: #10b981 !important;
+}
+
+.exchange-container .text-danger {
+  color: #ef4444 !important;
+}
+
+.exchange-container .text-primary {
+  color: #667eea !important;
+}
+
+.exchange-container .text-muted {
+  color: #a5b4fc !important;
+}
+
+/* Cancel Order Hover Effect */
+.exchange-container .cancel-order-cell {
+  cursor: pointer;
+  color: #ef4444 !important;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.exchange-container .cancel-order-cell:hover {
+  color: #dc2626 !important;
+  transform: scale(1.2);
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+/* Price Chart Specific */
+.exchange-container .price-chart-container {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.exchange-container .price-display {
+  padding: 12px 20px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+.exchange-container .chart-wrapper {
+  flex: 1;
+  width: 100%;
+  min-height: 400px;
+  position: relative;
+}
+
+/* ApexCharts specific fixes */
+.exchange-container .chart-wrapper .apexcharts-canvas {
+  width: 100% !important;
+}
+
+.exchange-container .chart-wrapper svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Ensure PriceChart card height and CardContent fills it */
+.exchange-content > :nth-child(1) {
+  min-height: 400px;
+}
+
+.exchange-content > :nth-child(1) .MuiCard-root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.exchange-content > :nth-child(1) .MuiCardContent-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.exchange-content > :nth-child(1) .card-header-custom {
+  margin: 0;
+  border-radius: 20px 20px 0 0;
+  flex-shrink: 0;
+  padding: 12px 18px;
+}
+
+/* OrderBook and Trades optimal heights */
+.exchange-content > :nth-child(2) .MuiCard-root,
+.exchange-content > :nth-child(3) .MuiCard-root {
+  height: 100%;
+  min-height: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* OrderBook and Trades - Remove padding, fill space */
+.exchange-content > :nth-child(2) .MuiCardContent-root,
+.exchange-content > :nth-child(3) .MuiCardContent-root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.exchange-content > :nth-child(2) .card-header-custom,
+.exchange-content > :nth-child(3) .card-header-custom {
+  margin: 0;
+  border-radius: 20px 20px 0 0;
+  flex-shrink: 0;
+  padding: 12px 18px;
+}
+
+/* OrderBook and Trades - TableContainer fills remaining space */
+.exchange-content > :nth-child(2) .MuiTableContainer-root,
+.exchange-content > :nth-child(3) .MuiTableContainer-root {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* NewOrder and Balance optimal heights */
+.exchange-content > :nth-child(4) .MuiCard-root,
+.exchange-content > :nth-child(5) .MuiCard-root {
+  height: 100%;
+  min-height: 400px;
+}
+
+/* MyTransactions optimal height */
+.exchange-content > :nth-child(6) .MuiCard-root {
+  height: 100%;
+  min-height: 400px;
+}
+
+/* Custom Scrollbar */
+.exchange-container ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.exchange-container ::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.exchange-container ::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.exchange-container ::-webkit-scrollbar-thumb:hover {
+  background: rgba(102, 126, 234, 0.7);
+}
+
+/* Focus Styles for Accessibility */
+.exchange-container *:focus {
+  outline: 2px solid rgba(102, 126, 234, 0.5);
+  outline-offset: 2px;
+}
+
+.exchange-container button:focus,
+.exchange-container .MuiButton-root:focus {
+  outline: 2px solid rgba(102, 126, 234, 0.7);
+  outline-offset: 2px;
+}
+
+/* Print Styles */
+@media print {
+  .exchange-container {
+    background: white;
+  }
+
+  .exchange-container .MuiCard-root {
+    box-shadow: none;
+    border: 1px solid #e2e8f0;
+  }
+
+  .exchange-container .MuiButton-root,
+  .exchange-container .MuiToggleButtonGroup-root {
+    display: none;
+  }
+}
+
+/* Smooth Transitions */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Utility Classes */
+.exchange-container .mb-2 {
+  margin-bottom: 1rem !important;
+}
+
+.exchange-container .mb-3 {
+  margin-bottom: 1.5rem !important;
+}
+
+.exchange-container .mt-2 {
+  margin-top: 1rem !important;
+}
+
+.exchange-container .mt-3 {
+  margin-top: 1.5rem !important;
+}
+
+.exchange-container .p-2 {
+  padding: 1rem !important;
+}
+
+.exchange-container .p-3 {
+  padding: 1.5rem !important;
+}
+
+.exchange-container .text-center {
+  text-align: center !important;
+}
+
+.exchange-container .d-flex {
+  display: flex !important;
+}
+
+.exchange-container .justify-content-between {
+  justify-content: space-between !important;
+}
+
+.exchange-container .align-items-center {
+  align-items: center !important;
+}
+
+.exchange-container .w-100 {
+  width: 100% !important;
+}
+
+/* Balance Table Styling */
+.exchange-container .balance-table {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.exchange-container .balance-table-cell {
+  padding: 8px !important;
+  font-size: 0.9rem !important;
+}
+
+.exchange-container .balance-label {
+  color: #a5b4fc !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  font-size: 0.75rem !important;
+}
+
+.exchange-container .balance-value {
+  color: #667eea !important;
+  font-weight: 700 !important;
+  font-size: 1.1rem !important;
 }
