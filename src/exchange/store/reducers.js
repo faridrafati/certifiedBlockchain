@@ -35,7 +35,12 @@ function exchange(state = {}, action) {
     case 'FILLED_ORDERS_LOADED':
       return { ...state, filledOrders: { loaded: true, data: action.filledOrders } }
     case 'ALL_ORDERS_LOADED':
-      return { ...state, allOrders: { loaded: true, data: action.allOrders } }
+      return {
+        ...state,
+        allOrders: { loaded: true, data: action.allOrders },
+        orderFilling: false,
+        orderCancelling: false
+      }
     case 'ORDER_CANCELLING':
       return { ...state, orderCancelling: true }
     case 'ORDER_CANCELLED':

@@ -9,34 +9,79 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Tooltip
+  Tooltip,
+  CircularProgress
 } from '@mui/material'
+import { toast } from 'react-toastify'
 import Spinner from './Spinner'
 import {
   orderBookSelector,
   orderBookLoadedSelector,
   exchangeSelector,
   accountSelector,
-  orderFillingSelector
+  orderFillingSelector,
+  exchangeEtherBalanceSelector,
+  exchangeTokenBalanceSelector
 } from '../store/selectors'
-import { fillOrder } from '../store/interactions'
+import { fillOrder, loadAllOrders } from '../store/interactions'
+import { ETHER_ADDRESS } from '../helpers'
 
 const renderOrder = (order, props) => {
-  const { dispatch, exchange, account } = props
+  const { dispatch, exchange, account, exchangeEtherBalance, exchangeTokenBalance, feePercent, fillingOrderId, onFillOrder } = props
+
+  // Check if this is the user's own order
+  const isOwnOrder = order.user && order.user.toLowerCase() === account.toLowerCase()
+
+  // Check if user has sufficient balance to fill this order
+  // When filling an order, user needs the token/ETH that the order creator wants (tokenGet)
+  // IMPORTANT: Some exchanges charge fee on what you GIVE (not what you receive)
+  // So user might need: amountGet + fee
+  const amountNeeded = parseFloat(order.tokenGet === ETHER_ADDRESS ? order.etherAmount : order.tokenAmount)
+  const fee = amountNeeded * (feePercent / 100)
+  const totalNeeded = amountNeeded + fee
+
+  const userBalance = order.tokenGet === ETHER_ADDRESS ? exchangeEtherBalance : exchangeTokenBalance
+  const hasSufficientBalance = userBalance >= totalNeeded
+
+  // User can fill the order only if it's not their own order AND they have sufficient balance
+  const canFill = !isOwnOrder && hasSufficientBalance
+  const isFilling = fillingOrderId === order.id
+
+  let tooltipTitle
+  if (isFilling) {
+    tooltipTitle = 'Processing transaction...'
+  } else if (isOwnOrder) {
+    tooltipTitle = `This is your own order. You cannot fill your own orders.`
+  } else if (!hasSufficientBalance) {
+    tooltipTitle = `Insufficient balance. You need ${amountNeeded.toFixed(6)} ${order.tokenGet === ETHER_ADDRESS ? 'ETH' : 'DAPP'} in exchange. You have ${userBalance.toFixed(6)}. Please deposit more funds.`
+  } else {
+    tooltipTitle = `Click here to ${order.orderFillAction}`
+  }
 
   return(
     <Tooltip
       key={order.id}
-      title={`Click here to ${order.orderFillAction}`}
+      title={tooltipTitle}
       placement="top"
     >
       <TableRow
         hover
         className="order-book-order"
-        onClick={(e) => fillOrder(dispatch, exchange, order, account)}
-        sx={{ cursor: 'pointer' }}
+        onClick={() => canFill && !isFilling && onFillOrder(order)}
+        sx={{
+          cursor: canFill && !isFilling ? 'pointer' : 'not-allowed',
+          opacity: canFill && !isFilling ? 1 : 0.5,
+          '&:hover': {
+            backgroundColor: canFill && !isFilling ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
+          }
+        }}
       >
-        <TableCell>{order.tokenAmount}</TableCell>
+        <TableCell>
+          {isFilling ? (
+            <CircularProgress size={16} sx={{ mr: 1 }} />
+          ) : null}
+          {order.tokenAmount}
+        </TableCell>
         <TableCell className={`text-${order.orderTypeClass}`}>
           {order.tokenPrice}
         </TableCell>
@@ -122,6 +167,129 @@ const showOrderBook = (props) => {
 }
 
 class OrderBook extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      fillingOrderId: null
+    }
+  }
+
+  handleFillOrder = async (order) => {
+    const { dispatch, exchange, account, exchangeEtherBalance, exchangeTokenBalance, feePercent } = this.props
+
+    try {
+      this.setState({ fillingOrderId: order.id })
+
+      console.log('=== FILL ORDER DEBUG ===')
+      console.log('Order object:', order)
+      console.log('Account:', account)
+      console.log('Exchange ETH balance:', exchangeEtherBalance)
+      console.log('Exchange Token balance:', exchangeTokenBalance)
+
+      // Fetch fresh order data from contract
+      const orderData = await exchange.methods.orders(order.id).call()
+      console.log('Fresh order data from contract:', orderData)
+
+      const isCancelled = await exchange.methods.orderCancelled(order.id).call()
+      const isFilled = await exchange.methods.orderFilled(order.id).call()
+
+      console.log('Order status - Cancelled:', isCancelled, 'Filled:', isFilled)
+
+      if (isCancelled) {
+        toast.error('This order has already been cancelled')
+        this.setState({ fillingOrderId: null })
+        await loadAllOrders(exchange, dispatch)
+        return
+      }
+
+      if (isFilled) {
+        toast.error('This order has already been filled')
+        this.setState({ fillingOrderId: null })
+        await loadAllOrders(exchange, dispatch)
+        return
+      }
+
+      // Check if this is user's own order
+      const orderUser = orderData[1] || orderData.user
+      console.log('Order creator:', orderUser, 'vs Current user:', account)
+      if (orderUser && orderUser.toLowerCase() === account.toLowerCase()) {
+        toast.error('You cannot fill your own order')
+        this.setState({ fillingOrderId: null })
+        return
+      }
+
+      // Validate balance - use fresh order data
+      const tokenGet = orderData[2] || orderData.tokenGet
+      const amountGetWei = orderData[3] || orderData.amountGet
+      const tokenGive = orderData[4] || orderData.tokenGive
+      const amountGiveWei = orderData[5] || orderData.amountGive
+
+      console.log('TokenGet:', tokenGet)
+      console.log('AmountGet (wei):', amountGetWei)
+      console.log('TokenGive:', tokenGive)
+      console.log('AmountGive (wei):', amountGiveWei)
+      console.log('ETHER_ADDRESS:', ETHER_ADDRESS)
+
+      // Convert wei to ether for comparison
+      const amountNeeded = Number(amountGetWei) / (10**18)
+      const fee = amountNeeded * (feePercent / 100)
+      const totalNeeded = amountNeeded + fee
+      const userBalance = tokenGet.toLowerCase() === ETHER_ADDRESS.toLowerCase() ? exchangeEtherBalance : exchangeTokenBalance
+
+      console.log('Filler balance validation:', {
+        amountNeeded,
+        fee,
+        totalNeeded,
+        userBalance,
+        tokenNeeded: tokenGet.toLowerCase() === ETHER_ADDRESS.toLowerCase() ? 'ETH' : 'DAPP',
+        hasEnough: userBalance >= totalNeeded
+      })
+
+      if (userBalance < totalNeeded) {
+        toast.error(`Insufficient balance. You need ${totalNeeded.toFixed(6)} ${tokenGet.toLowerCase() === ETHER_ADDRESS.toLowerCase() ? 'ETH' : 'DAPP'} (including ${(feePercent)}% fee) but only have ${userBalance.toFixed(6)}`)
+        this.setState({ fillingOrderId: null })
+        return
+      }
+
+      // CRITICAL: Check if order creator still has enough balance to fulfill their side!
+      // The Exchange contract doesn't lock funds when orders are created, so creators can withdraw after
+      const amountGiveNeeded = Number(amountGiveWei) / (10**18)
+      const creatorBalance = await exchange.methods.balanceOf(tokenGive, orderUser).call()
+      const creatorBalanceEther = Number(creatorBalance) / (10**18)
+
+      console.log('Order creator balance validation:', {
+        orderCreator: orderUser,
+        tokenGive: tokenGive,
+        amountGiveNeeded,
+        creatorBalance: creatorBalanceEther,
+        hasEnough: creatorBalanceEther >= amountGiveNeeded
+      })
+
+      if (creatorBalanceEther < amountGiveNeeded) {
+        toast.error(`Order cannot be filled. The order creator no longer has enough ${tokenGive.toLowerCase() === ETHER_ADDRESS.toLowerCase() ? 'ETH' : 'DAPP'} in the exchange to complete this trade.`)
+        this.setState({ fillingOrderId: null })
+        await loadAllOrders(exchange, dispatch)
+        return
+      }
+
+      console.log('All validations passed, sending transaction...')
+      toast.info('Filling order. Please confirm in MetaMask...')
+      await fillOrder(dispatch, exchange, order, account)
+      toast.success('Order filled successfully!')
+    } catch (error) {
+      console.error('Fill order failed:', error)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to fill order: ${errorMessage}`)
+        await loadAllOrders(exchange, dispatch)
+      }
+    } finally {
+      this.setState({ fillingOrderId: null })
+    }
+  }
+
   render() {
     console.log('OrderBook - showOrderBook:', this.props.showOrderBook)
     console.log('OrderBook - orderBook data:', this.props.orderBook)
@@ -138,6 +306,7 @@ class OrderBook extends Component {
             sx={{
               maxHeight: '500px',
               overflowY: 'auto',
+              overflowX: 'hidden',
               '&::-webkit-scrollbar': {
                 width: '8px',
               },
@@ -155,7 +324,11 @@ class OrderBook extends Component {
             }}
           >
             <Table size="small" stickyHeader>
-              { this.props.showOrderBook ? showOrderBook(this.props) : <Spinner type='table' /> }
+              { this.props.showOrderBook ? showOrderBook({
+                ...this.props,
+                fillingOrderId: this.state.fillingOrderId,
+                onFillOrder: this.handleFillOrder
+              }) : <Spinner type='table' /> }
             </Table>
           </TableContainer>
         </CardContent>
@@ -172,7 +345,10 @@ function mapStateToProps(state) {
     orderBook: orderBookSelector(state),
     showOrderBook: orderBookLoaded && !orderFilling,
     exchange: exchangeSelector(state),
-    account: accountSelector(state)
+    account: accountSelector(state),
+    exchangeEtherBalance: exchangeEtherBalanceSelector(state),
+    exchangeTokenBalance: exchangeTokenBalanceSelector(state),
+    feePercent: 10 // This should match your exchange fee percent
   }
 }
 

@@ -60,7 +60,12 @@ class NewOrder extends Component {
       toast.success('Buy order submitted successfully!')
     } catch (error) {
       console.error('Buy order failed:', error)
-      toast.error(`Failed to submit buy order: ${error.message || 'Unknown error'}`)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to submit buy order: ${errorMessage}`)
+      }
     } finally {
       this.setState({ submitting: false })
     }
@@ -83,7 +88,12 @@ class NewOrder extends Component {
       toast.success('Sell order submitted successfully!')
     } catch (error) {
       console.error('Sell order failed:', error)
-      toast.error(`Failed to submit sell order: ${error.message || 'Unknown error'}`)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to submit sell order: ${errorMessage}`)
+      }
     } finally {
       this.setState({ submitting: false })
     }

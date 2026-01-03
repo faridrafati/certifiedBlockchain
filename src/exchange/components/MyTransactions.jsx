@@ -11,7 +11,8 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  Tooltip
 } from '@mui/material'
 import Spinner from './Spinner'
 import {
@@ -28,21 +29,42 @@ import { cancelOrder } from '../store/interactions'
 const showMyFilledOrders = (props) => {
   const { myFilledOrders } = props
 
+  const handleRowClick = (transactionHash) => {
+    if (transactionHash) {
+      window.open(`https://eth-sepolia.blockscout.com/tx/${transactionHash}`, '_blank')
+    }
+  }
+
   return(
     <TableBody>
       { myFilledOrders.length > 0 ? myFilledOrders.map((order) => {
         return (
-          <TableRow hover key={order.id}>
-            <TableCell sx={{color: '#a5b4fc', fontSize: '0.8rem'}}>
-              {order.formattedTimestamp}
-            </TableCell>
-            <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
-              {order.orderSign}{order.tokenAmount}
-            </TableCell>
-            <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
-              {order.tokenPrice}
-            </TableCell>
-          </TableRow>
+          <Tooltip
+            key={order.id}
+            title={order.transactionHash ? 'Click to view transaction on Blockscout' : 'Transaction hash not available'}
+            placement="left"
+          >
+            <TableRow
+              hover
+              onClick={() => handleRowClick(order.transactionHash)}
+              sx={{
+                cursor: order.transactionHash ? 'pointer' : 'default',
+                '&:hover': {
+                  backgroundColor: order.transactionHash ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
+                }
+              }}
+            >
+              <TableCell sx={{color: '#a5b4fc', fontSize: '0.8rem'}}>
+                {order.formattedTimestamp}
+              </TableCell>
+              <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
+                {order.orderSign}{order.tokenAmount}
+              </TableCell>
+              <TableCell className={`text-${order.orderTypeClass}`} sx={{fontWeight: 600}}>
+                {order.tokenPrice}
+              </TableCell>
+            </TableRow>
+          </Tooltip>
         )
       }) : (
         <TableRow>
@@ -119,31 +141,34 @@ class MyTransactions extends Component {
             👤 My Transactions
           </div>
           <Tabs value={activeTab} onChange={this.handleTabChange}>
-            <Tab label="✅ Filled" />
             <Tab label="⏳ Open" />
+            <Tab label="✅ Filled" />
           </Tabs>
 
           <Box role="tabpanel" hidden={activeTab !== 0} className="tab-panel">
             {activeTab === 0 && (
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Time</TableCell>
-                      <TableCell>DAPP</TableCell>
-                      <TableCell>DAPP/ETH</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  { this.props.showMyFilledOrders ? showMyFilledOrders(this.props) : <Spinner type="table" />}
-                </Table>
-              </TableContainer>
-            )}
-          </Box>
-
-          <Box role="tabpanel" hidden={activeTab !== 1} className="tab-panel">
-            {activeTab === 1 && (
-              <TableContainer>
-                <Table size="small">
+              <TableContainer
+                sx={{
+                  maxHeight: '500px',
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    background: 'rgba(102, 126, 234, 0.1)',
+                    borderRadius: '4px',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: 'rgba(102, 126, 234, 0.5)',
+                    borderRadius: '4px',
+                    '&:hover': {
+                      background: 'rgba(102, 126, 234, 0.7)',
+                    },
+                  },
+                }}
+              >
+                <Table size="small" stickyHeader>
                   <TableHead>
                     <TableRow>
                       <TableCell>Amount</TableCell>
@@ -152,6 +177,43 @@ class MyTransactions extends Component {
                     </TableRow>
                   </TableHead>
                   { this.props.showMyOpenOrders ? showMyOpenOrders(this.props) : <Spinner type="table" />}
+                </Table>
+              </TableContainer>
+            )}
+          </Box>
+
+          <Box role="tabpanel" hidden={activeTab !== 1} className="tab-panel">
+            {activeTab === 1 && (
+              <TableContainer
+                sx={{
+                  maxHeight: '500px',
+                  overflowY: 'auto',
+                  overflowX: 'hidden',
+                  '&::-webkit-scrollbar': {
+                    width: '8px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    background: 'rgba(102, 126, 234, 0.1)',
+                    borderRadius: '4px',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    background: 'rgba(102, 126, 234, 0.5)',
+                    borderRadius: '4px',
+                    '&:hover': {
+                      background: 'rgba(102, 126, 234, 0.7)',
+                    },
+                  },
+                }}
+              >
+                <Table size="small" stickyHeader>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Time</TableCell>
+                      <TableCell>DAPP</TableCell>
+                      <TableCell>DAPP/ETH</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  { this.props.showMyFilledOrders ? showMyFilledOrders(this.props) : <Spinner type="table" />}
                 </Table>
               </TableContainer>
             )}

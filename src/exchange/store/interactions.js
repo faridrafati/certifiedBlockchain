@@ -72,6 +72,24 @@ export const loadAllOrders = async (exchange, dispatch) => {
   const orderCount = Number(await exchange.methods.orderCount().call())
   console.log('loadAllOrders - Order count:', orderCount)
 
+  // Fetch Trade events to get userFill, transaction hash, and fill timestamp
+  const tradeEvents = await exchange.getPastEvents('Trade', {
+    fromBlock: 0,
+    toBlock: 'latest'
+  })
+  console.log('loadAllOrders - Trade events fetched:', tradeEvents.length)
+
+  // Create a map of orderId -> {userFill, transactionHash, fillTimestamp}
+  const tradeDataMap = {}
+  tradeEvents.forEach(event => {
+    const orderId = String(event.returnValues.id)
+    tradeDataMap[orderId] = {
+      userFill: event.returnValues.userFill,
+      transactionHash: event.transactionHash,
+      fillTimestamp: String(event.returnValues.timestamp)
+    }
+  })
+
   // Fetch all orders directly from contract state
   const allOrders = []
   const cancelledOrders = []
@@ -104,7 +122,15 @@ export const loadAllOrders = async (exchange, dispatch) => {
 
     // Add to filled if filled
     if (isFilled) {
-      filledOrders.push(order)
+      // Add userFill, transactionHash, and use fill timestamp from Trade event
+      const tradeData = tradeDataMap[order.id] || {}
+      const orderWithTradeData = {
+        ...order,
+        timestamp: tradeData.fillTimestamp || order.timestamp, // Use fill timestamp instead of creation timestamp
+        userFill: tradeData.userFill || null,
+        transactionHash: tradeData.transactionHash || null
+      }
+      filledOrders.push(orderWithTradeData)
     }
   }
 
@@ -188,17 +214,32 @@ export const cancelOrder = (dispatch, exchange, order, account) => {
 }
 
 export const fillOrder = (dispatch, exchange, order, account) => {
-  exchange.methods.fillOrder(order.id).send({ from: account })
-  .on('transactionHash', (hash) => {
-     dispatch(orderFilling())
-  })
-  .on('receipt', async (receipt) => {
-    // Reload orders from contract state after transaction is mined
-    await loadAllOrders(exchange, dispatch)
-  })
-  .on('error', (error) => {
-    console.log(error)
-    window.alert('There was an error!')
+  return new Promise((resolve, reject) => {
+    try {
+      exchange.methods.fillOrder(order.id).send({
+        from: account,
+        gas: 500000 // Set reasonable gas limit to avoid estimation issues
+      })
+      .on('transactionHash', (hash) => {
+        dispatch(orderFilling())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload orders from contract state after transaction is mined
+        await loadAllOrders(exchange, dispatch)
+        resolve(receipt)
+      })
+      .on('error', (error) => {
+        console.log(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
+      console.error(error)
+      reject(error)
+    }
   })
 }
 
@@ -228,67 +269,123 @@ export const loadBalances = async (dispatch, web3, exchange, token, account) => 
 }
 
 export const depositEther = (dispatch, exchange, web3, token, amount, account) => {
-  exchange.methods.depositEther().send({ from: account,  value: web3.utils.toWei(amount, 'ether') })
-  .on('transactionHash', (hash) => {
-    dispatch(balancesLoading())
-  })
-  .on('receipt', async (receipt) => {
-    // Reload balances from contract state after transaction is mined
-    await loadBalances(dispatch, web3, exchange, token, account)
-  })
-  .on('error',(error) => {
-    console.error(error)
-    window.alert(`There was an error!`)
+  return new Promise((resolve, reject) => {
+    try {
+      exchange.methods.depositEther().send({ from: account,  value: web3.utils.toWei(amount, 'ether') })
+      .on('transactionHash', (hash) => {
+        dispatch(balancesLoading())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload balances from contract state after transaction is mined
+        await loadBalances(dispatch, web3, exchange, token, account)
+        resolve(receipt)
+      })
+      .on('error',(error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
+      console.error(error)
+      reject(error)
+    }
   })
 }
 
 export const withdrawEther = (dispatch, exchange, web3, token, amount, account) => {
-  exchange.methods.withdrawEther(web3.utils.toWei(amount, 'ether')).send({ from: account })
-  .on('transactionHash', (hash) => {
-    dispatch(balancesLoading())
-  })
-  .on('receipt', async (receipt) => {
-    // Reload balances from contract state after transaction is mined
-    await loadBalances(dispatch, web3, exchange, token, account)
-  })
-  .on('error',(error) => {
-    console.error(error)
-    window.alert(`There was an error!`)
+  return new Promise((resolve, reject) => {
+    try {
+      exchange.methods.withdrawEther(web3.utils.toWei(amount, 'ether')).send({ from: account })
+      .on('transactionHash', (hash) => {
+        dispatch(balancesLoading())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload balances from contract state after transaction is mined
+        await loadBalances(dispatch, web3, exchange, token, account)
+        resolve(receipt)
+      })
+      .on('error',(error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
+      console.error(error)
+      reject(error)
+    }
   })
 }
 
 export const depositToken = (dispatch, exchange, web3, token, amount, account) => {
   amount = web3.utils.toWei(amount, 'ether')
 
-  token.methods.approve(exchange.options.address, amount).send({ from: account })
-  .on('transactionHash', (hash) => {
-    exchange.methods.depositToken(token.options.address, amount).send({ from: account })
-    .on('transactionHash', (hash) => {
-      dispatch(balancesLoading())
-    })
-    .on('receipt', async (receipt) => {
-      // Reload balances from contract state after transaction is mined
-      await loadBalances(dispatch, web3, exchange, token, account)
-    })
-    .on('error',(error) => {
+  return new Promise((resolve, reject) => {
+    try {
+      token.methods.approve(exchange.options.address, amount).send({ from: account })
+      .on('transactionHash', (hash) => {
+        exchange.methods.depositToken(token.options.address, amount).send({ from: account })
+        .on('transactionHash', (hash) => {
+          dispatch(balancesLoading())
+        })
+        .on('receipt', async (receipt) => {
+          // Reload balances from contract state after transaction is mined
+          await loadBalances(dispatch, web3, exchange, token, account)
+          resolve(receipt)
+        })
+        .on('error',(error) => {
+          console.error(error)
+          reject(error)
+        })
+        .catch((error) => {
+          console.error(error)
+          reject(error)
+        })
+      })
+      .on('error',(error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
       console.error(error)
-      window.alert(`There was an error!`)
-    })
+      reject(error)
+    }
   })
 }
 
 export const withdrawToken = (dispatch, exchange, web3, token, amount, account) => {
-  exchange.methods.withdrawToken(token.options.address, web3.utils.toWei(amount, 'ether')).send({ from: account })
-  .on('transactionHash', (hash) => {
-    dispatch(balancesLoading())
-  })
-  .on('receipt', async (receipt) => {
-    // Reload balances from contract state after transaction is mined
-    await loadBalances(dispatch, web3, exchange, token, account)
-  })
-  .on('error',(error) => {
-    console.error(error)
-    window.alert(`There was an error!`)
+  return new Promise((resolve, reject) => {
+    try {
+      exchange.methods.withdrawToken(token.options.address, web3.utils.toWei(amount, 'ether')).send({ from: account })
+      .on('transactionHash', (hash) => {
+        dispatch(balancesLoading())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload balances from contract state after transaction is mined
+        await loadBalances(dispatch, web3, exchange, token, account)
+        resolve(receipt)
+      })
+      .on('error',(error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
+      console.error(error)
+      reject(error)
+    }
   })
 }
 
@@ -299,19 +396,31 @@ export const makeBuyOrder = (dispatch, exchange, token, web3, order, account) =>
   const amountGive = web3.utils.toWei((order.amount * order.price).toString(), 'ether')
 
   return new Promise((resolve, reject) => {
-    exchange.methods.makeOrder(tokenGet, amountGet, tokenGive, amountGive).send({ from: account })
-    .on('transactionHash', (hash) => {
-      dispatch(buyOrderMaking())
-    })
-    .on('receipt', async (receipt) => {
-      // Reload orders from contract state after transaction is mined
-      await loadAllOrders(exchange, dispatch)
-      resolve(receipt)
-    })
-    .on('error',(error) => {
+    try {
+      exchange.methods.makeOrder(tokenGet, amountGet, tokenGive, amountGive).send({
+        from: account,
+        gas: 500000 // Set reasonable gas limit to avoid estimation issues
+      })
+      .on('transactionHash', (hash) => {
+        dispatch(buyOrderMaking())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload orders from contract state after transaction is mined
+        await loadAllOrders(exchange, dispatch)
+        resolve(receipt)
+      })
+      .on('error',(error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
       console.error(error)
       reject(error)
-    })
+    }
   })
 }
 
@@ -322,18 +431,30 @@ export const makeSellOrder = (dispatch, exchange, token, web3, order, account) =
   const amountGive = web3.utils.toWei(order.amount, 'ether')
 
   return new Promise((resolve, reject) => {
-    exchange.methods.makeOrder(tokenGet, amountGet, tokenGive, amountGive).send({ from: account })
-    .on('transactionHash', (hash) => {
-      dispatch(sellOrderMaking())
-    })
-    .on('receipt', async (receipt) => {
-      // Reload orders from contract state after transaction is mined
-      await loadAllOrders(exchange, dispatch)
-      resolve(receipt)
-    })
-    .on('error',(error) => {
+    try {
+      exchange.methods.makeOrder(tokenGet, amountGet, tokenGive, amountGive).send({
+        from: account,
+        gas: 500000 // Set reasonable gas limit to avoid estimation issues
+      })
+      .on('transactionHash', (hash) => {
+        dispatch(sellOrderMaking())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload orders from contract state after transaction is mined
+        await loadAllOrders(exchange, dispatch)
+        resolve(receipt)
+      })
+      .on('error',(error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
       console.error(error)
       reject(error)
-    })
+    }
   })
 }

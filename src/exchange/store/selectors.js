@@ -103,7 +103,8 @@ const decorateOrder = (order) => {
     etherAmount: ether(etherAmount),
     tokenAmount: tokens(tokenAmount),
     tokenPrice,
-    formattedTimestamp: moment.unix(order.timestamp).format('h:mm:ss a M/D')
+    formattedTimestamp: moment.unix(order.timestamp).local().format('YYYY-MM-DD HH:mm:ss'),
+    user: order.user // Preserve user field for order creator
   })
 }
 

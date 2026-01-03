@@ -9,7 +9,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography
+  Typography,
+  Tooltip
 } from '@mui/material'
 import Spinner from './Spinner'
 import {
@@ -18,21 +19,43 @@ import {
 } from '../store/selectors'
 
 const showFilledOrders = (filledOrders) => {
+  const handleRowClick = (transactionHash) => {
+    if (transactionHash) {
+      window.open(`https://eth-sepolia.blockscout.com/tx/${transactionHash}`, '_blank')
+    }
+  }
+
   return(
     <TableBody>
       { filledOrders.length > 0 ? filledOrders.map((order) => {
         return(
-          <TableRow hover key={order.id} className={`order-${order.id}`}>
-            <TableCell sx={{color: '#a5b4fc', fontSize: '0.8rem'}}>
-              {order.formattedTimestamp}
-            </TableCell>
-            <TableCell sx={{fontWeight: 600}}>
-              {order.tokenAmount}
-            </TableCell>
-            <TableCell className={`text-${order.tokenPriceClass}`} sx={{fontWeight: 600}}>
-              {order.tokenPrice}
-            </TableCell>
-          </TableRow>
+          <Tooltip
+            key={order.id}
+            title={order.transactionHash ? 'Click to view transaction on Blockscout' : 'Transaction hash not available'}
+            placement="left"
+          >
+            <TableRow
+              hover
+              className={`order-${order.id}`}
+              onClick={() => handleRowClick(order.transactionHash)}
+              sx={{
+                cursor: order.transactionHash ? 'pointer' : 'default',
+                '&:hover': {
+                  backgroundColor: order.transactionHash ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
+                }
+              }}
+            >
+              <TableCell sx={{color: '#a5b4fc', fontSize: '0.8rem'}}>
+                {order.formattedTimestamp}
+              </TableCell>
+              <TableCell sx={{fontWeight: 600}}>
+                {order.tokenAmount}
+              </TableCell>
+              <TableCell className={`text-${order.tokenPriceClass}`} sx={{fontWeight: 600}}>
+                {order.tokenPrice}
+              </TableCell>
+            </TableRow>
+          </Tooltip>
         )
       }) : (
         <TableRow>
@@ -56,8 +79,28 @@ class Trades extends Component {
           <div className="card-header-custom">
             💹 Recent Trades
           </div>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer
+            sx={{
+              maxHeight: '500px',
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              '&::-webkit-scrollbar': {
+                width: '8px',
+              },
+              '&::-webkit-scrollbar-track': {
+                background: 'rgba(102, 126, 234, 0.1)',
+                borderRadius: '4px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: 'rgba(102, 126, 234, 0.5)',
+                borderRadius: '4px',
+                '&:hover': {
+                  background: 'rgba(102, 126, 234, 0.7)',
+                },
+              },
+            }}
+          >
+            <Table size="small" stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell>Time</TableCell>

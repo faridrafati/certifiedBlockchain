@@ -17,6 +17,7 @@ import {
   TableHead,
   TableRow
 } from '@mui/material'
+import { toast } from 'react-toastify'
 import Spinner from './Spinner'
 import {
   loadBalances,
@@ -52,7 +53,8 @@ class Balance extends Component {
     super(props)
     this.state = {
       selectedAsset: 'ETH',
-      activeTab: 0
+      activeTab: 0,
+      submitting: false
     }
   }
 
@@ -82,6 +84,114 @@ class Balance extends Component {
       minimumFractionDigits: 0,
       maximumFractionDigits: 4
     })
+  }
+
+  handleDepositEther = async (event) => {
+    event.preventDefault()
+    const { dispatch, exchange, web3, token, etherDepositAmount, account } = this.props
+
+    if (!etherDepositAmount || isNaN(etherDepositAmount) || parseFloat(etherDepositAmount) <= 0) {
+      toast.error('Please enter a valid amount')
+      return
+    }
+
+    try {
+      this.setState({ submitting: true })
+      toast.info('Depositing ETH. Please confirm in MetaMask...')
+      await depositEther(dispatch, exchange, web3, token, etherDepositAmount, account)
+      toast.success('ETH deposited successfully!')
+    } catch (error) {
+      console.error('Deposit failed:', error)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to deposit ETH: ${errorMessage}`)
+      }
+    } finally {
+      this.setState({ submitting: false })
+    }
+  }
+
+  handleDepositToken = async (event) => {
+    event.preventDefault()
+    const { dispatch, exchange, web3, token, tokenDepositAmount, account } = this.props
+
+    if (!tokenDepositAmount || isNaN(tokenDepositAmount) || parseFloat(tokenDepositAmount) <= 0) {
+      toast.error('Please enter a valid amount')
+      return
+    }
+
+    try {
+      this.setState({ submitting: true })
+      toast.info('Depositing DAPP tokens. Please confirm in MetaMask...')
+      await depositToken(dispatch, exchange, web3, token, tokenDepositAmount, account)
+      toast.success('DAPP tokens deposited successfully!')
+    } catch (error) {
+      console.error('Deposit failed:', error)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to deposit DAPP: ${errorMessage}`)
+      }
+    } finally {
+      this.setState({ submitting: false })
+    }
+  }
+
+  handleWithdrawEther = async (event) => {
+    event.preventDefault()
+    const { dispatch, exchange, web3, token, etherWithdrawAmount, account } = this.props
+
+    if (!etherWithdrawAmount || isNaN(etherWithdrawAmount) || parseFloat(etherWithdrawAmount) <= 0) {
+      toast.error('Please enter a valid amount')
+      return
+    }
+
+    try {
+      this.setState({ submitting: true })
+      toast.info('Withdrawing ETH. Please confirm in MetaMask...')
+      await withdrawEther(dispatch, exchange, web3, token, etherWithdrawAmount, account)
+      toast.success('ETH withdrawn successfully!')
+    } catch (error) {
+      console.error('Withdraw failed:', error)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to withdraw ETH: ${errorMessage}`)
+      }
+    } finally {
+      this.setState({ submitting: false })
+    }
+  }
+
+  handleWithdrawToken = async (event) => {
+    event.preventDefault()
+    const { dispatch, exchange, web3, token, tokenWithdrawAmount, account } = this.props
+
+    if (!tokenWithdrawAmount || isNaN(tokenWithdrawAmount) || parseFloat(tokenWithdrawAmount) <= 0) {
+      toast.error('Please enter a valid amount')
+      return
+    }
+
+    try {
+      this.setState({ submitting: true })
+      toast.info('Withdrawing DAPP tokens. Please confirm in MetaMask...')
+      await withdrawToken(dispatch, exchange, web3, token, tokenWithdrawAmount, account)
+      toast.success('DAPP tokens withdrawn successfully!')
+    } catch (error) {
+      console.error('Withdraw failed:', error)
+      const errorMessage = error.message || 'Unknown error'
+      if (errorMessage.includes('User denied') || errorMessage.includes('user rejected')) {
+        toast.warning('Transaction cancelled by user')
+      } else {
+        toast.error(`Failed to withdraw DAPP: ${errorMessage}`)
+      }
+    } finally {
+      this.setState({ submitting: false })
+    }
   }
 
   renderAssetToggle = () => {
@@ -144,7 +254,7 @@ class Balance extends Component {
   }
 
   render() {
-    const { selectedAsset, activeTab } = this.state
+    const { selectedAsset, activeTab, submitting } = this.state
     const {
       dispatch,
       exchange,
@@ -192,10 +302,7 @@ class Balance extends Component {
 
                 {selectedAsset === 'ETH' ? (
                   <form
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      depositEther(dispatch, exchange, web3, token, etherDepositAmount, account)
-                    }}
+                    onSubmit={this.handleDepositEther}
                     aria-label="Deposit Ether form"
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -208,6 +315,7 @@ class Balance extends Component {
                         fullWidth
                         placeholder="0.00"
                         onChange={(e) => dispatch(etherDepositAmountChanged(e.target.value))}
+                        disabled={submitting}
                         required
                       />
                       <Button
@@ -215,18 +323,16 @@ class Balance extends Component {
                         variant="contained"
                         color="success"
                         fullWidth
+                        disabled={submitting}
                         aria-label="Deposit Ether to exchange"
                       >
-                        Deposit ETH
+                        {submitting ? 'Submitting...' : 'Deposit ETH'}
                       </Button>
                     </Box>
                   </form>
                 ) : (
                   <form
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      depositToken(dispatch, exchange, web3, token, tokenDepositAmount, account)
-                    }}
+                    onSubmit={this.handleDepositToken}
                     aria-label="Deposit DAPP token form"
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -239,6 +345,7 @@ class Balance extends Component {
                         fullWidth
                         placeholder="0.00"
                         onChange={(e) => dispatch(tokenDepositAmountChanged(e.target.value))}
+                        disabled={submitting}
                         required
                       />
                       <Button
@@ -246,9 +353,10 @@ class Balance extends Component {
                         variant="contained"
                         color="success"
                         fullWidth
+                        disabled={submitting}
                         aria-label="Deposit DAPP tokens to exchange"
                       >
-                        Deposit DAPP
+                        {submitting ? 'Submitting...' : 'Deposit DAPP'}
                       </Button>
                     </Box>
                   </form>
@@ -266,10 +374,7 @@ class Balance extends Component {
 
                 {selectedAsset === 'ETH' ? (
                   <form
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      withdrawEther(dispatch, exchange, web3, token, etherWithdrawAmount, account)
-                    }}
+                    onSubmit={this.handleWithdrawEther}
                     aria-label="Withdraw Ether form"
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -282,6 +387,7 @@ class Balance extends Component {
                         fullWidth
                         placeholder="0.00"
                         onChange={(e) => dispatch(etherWithdrawAmountChanged(e.target.value))}
+                        disabled={submitting}
                         required
                       />
                       <Button
@@ -289,18 +395,16 @@ class Balance extends Component {
                         variant="contained"
                         color="error"
                         fullWidth
+                        disabled={submitting}
                         aria-label="Withdraw Ether from exchange"
                       >
-                        Withdraw ETH
+                        {submitting ? 'Submitting...' : 'Withdraw ETH'}
                       </Button>
                     </Box>
                   </form>
                 ) : (
                   <form
-                    onSubmit={(event) => {
-                      event.preventDefault()
-                      withdrawToken(dispatch, exchange, web3, token, tokenWithdrawAmount, account)
-                    }}
+                    onSubmit={this.handleWithdrawToken}
                     aria-label="Withdraw DAPP token form"
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -313,6 +417,7 @@ class Balance extends Component {
                         fullWidth
                         placeholder="0.00"
                         onChange={(e) => dispatch(tokenWithdrawAmountChanged(e.target.value))}
+                        disabled={submitting}
                         required
                       />
                       <Button
@@ -320,9 +425,10 @@ class Balance extends Component {
                         variant="contained"
                         color="error"
                         fullWidth
+                        disabled={submitting}
                         aria-label="Withdraw DAPP tokens from exchange"
                       >
-                        Withdraw DAPP
+                        {submitting ? 'Submitting...' : 'Withdraw DAPP'}
                       </Button>
                     </Box>
                   </form>
