@@ -17,7 +17,8 @@
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
       "Bash(timeout /t 5)",
-      "Bash(find c:UsersFaridDesktop\"\"My Projects\"\\\\certifiedblockchain -type f -name \"*.jsx\" -o -name \"*.css \")"
+      "Bash(find c:UsersFaridDesktop\"\"My Projects\"\\\\certifiedblockchain -type f -name \"*.jsx\" -o -name \"*.css \")",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
