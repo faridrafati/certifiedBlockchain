@@ -47,6 +47,12 @@ class NewOrder extends Component {
     event.preventDefault()
     const { dispatch, exchange, token, web3, buyOrder, account } = this.props
 
+    // Validate order data
+    if (!buyOrder.amount || !buyOrder.price || isNaN(buyOrder.amount) || isNaN(buyOrder.price)) {
+      toast.error('Please enter valid amount and price')
+      return
+    }
+
     try {
       this.setState({ submitting: true })
       toast.info('Submitting buy order. Please confirm in MetaMask...')
@@ -63,6 +69,12 @@ class NewOrder extends Component {
   handleSellOrder = async (event) => {
     event.preventDefault()
     const { dispatch, exchange, token, web3, sellOrder, account } = this.props
+
+    // Validate order data
+    if (!sellOrder.amount || !sellOrder.price || isNaN(sellOrder.amount) || isNaN(sellOrder.price)) {
+      toast.error('Please enter valid amount and price')
+      return
+    }
 
     try {
       this.setState({ submitting: true })

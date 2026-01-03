@@ -94,7 +94,7 @@ function exchange(state = {}, action) {
     case 'BUY_ORDER_PRICE_CHANGED':
       return { ...state, buyOrder: { ...state.buyOrder, price: action.price } }
     case 'BUY_ORDER_MAKING':
-      return { ...state, buyOrder: { ...state.buyOrder, amount: null, price: null, making: true } }
+      return { ...state, buyOrder: { ...state.buyOrder, making: true } }
 
     case 'ORDER_MADE':
       // Prevent duplicate orders
@@ -113,11 +113,13 @@ function exchange(state = {}, action) {
           data
         },
         buyOrder: {
-          ...state.buyOrder,
+          amount: null,
+          price: null,
           making: false
         },
         sellOrder: {
-          ...state.sellOrder,
+          amount: null,
+          price: null,
           making: false
         }
       }
@@ -127,7 +129,7 @@ function exchange(state = {}, action) {
     case 'SELL_ORDER_PRICE_CHANGED':
       return { ...state, sellOrder: { ...state.sellOrder, price: action.price } }
     case 'SELL_ORDER_MAKING':
-      return { ...state, sellOrder: { ...state.sellOrder, amount: null, price: null, making: true } }
+      return { ...state, sellOrder: { ...state.sellOrder, making: true } }
 
     default:
       return state

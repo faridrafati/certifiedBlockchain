@@ -53,9 +53,33 @@ const showOrderBook = (props) => {
     <>
       <TableHead>
         <TableRow>
-          <TableCell>DAPP</TableCell>
-          <TableCell>DAPP/ETH</TableCell>
-          <TableCell>ETH</TableCell>
+          <TableCell
+            sx={{
+              backgroundColor: '#1a1625',
+              fontWeight: 600,
+              color: '#a5b4fc'
+            }}
+          >
+            DAPP
+          </TableCell>
+          <TableCell
+            sx={{
+              backgroundColor: '#1a1625',
+              fontWeight: 600,
+              color: '#a5b4fc'
+            }}
+          >
+            DAPP/ETH
+          </TableCell>
+          <TableCell
+            sx={{
+              backgroundColor: '#1a1625',
+              fontWeight: 600,
+              color: '#a5b4fc'
+            }}
+          >
+            ETH
+          </TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -110,8 +134,27 @@ class OrderBook extends Component {
           <div className="card-header-custom">
             📊 Order Book
           </div>
-          <TableContainer>
-            <Table size="small">
+          <TableContainer
+            sx={{
+              maxHeight: '500px',
+              overflowY: 'auto',
+              '&::-webkit-scrollbar': {
+                width: '8px',
+              },
+              '&::-webkit-scrollbar-track': {
+                background: 'rgba(102, 126, 234, 0.1)',
+                borderRadius: '4px',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: 'rgba(102, 126, 234, 0.5)',
+                borderRadius: '4px',
+                '&:hover': {
+                  background: 'rgba(102, 126, 234, 0.7)',
+                },
+              },
+            }}
+          >
+            <Table size="small" stickyHeader>
               { this.props.showOrderBook ? showOrderBook(this.props) : <Spinner type='table' /> }
             </Table>
           </TableContainer>
