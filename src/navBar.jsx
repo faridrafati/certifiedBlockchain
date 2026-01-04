@@ -21,8 +21,12 @@
  * - Active link highlighting via NavLink
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { IconButton, Popover, Box, Typography } from '@mui/material';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import 'bootstrap/dist/css/bootstrap.css';
 import './components/css/navbar.css';
 
@@ -39,12 +43,26 @@ import './components/css/navbar.css';
  * <NavBar />
  */
 const NavBar = () => {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleInfoClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleInfoClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
   return (
     <div className="navbar-wrapper">
       <nav className="navbar navbar-dark navbar-expand-lg custom-navbar">
         <div className="container-fluid">
           {/* Brand Logo and Name */}
-          <Link className="navbar-brand brand-logo" to="/">
+          <Link className="navbar-brand brand-logo" to="/" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             {/* Custom SVG Logo */}
             <svg
               width="32"
@@ -80,7 +98,133 @@ const NavBar = () => {
               </defs>
             </svg>
             <span className="brand-text">Blockchain DApp</span>
+            <IconButton
+              onClick={handleInfoClick}
+              size="small"
+              sx={{
+                color: 'rgba(255, 255, 255, 0.8)',
+                padding: '4px',
+                marginLeft: '-4px',
+                '&:hover': {
+                  color: '#fff',
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                }
+              }}
+            >
+              <InfoOutlinedIcon fontSize="small" />
+            </IconButton>
           </Link>
+
+          {/* Info Popover */}
+          <Popover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleInfoClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'left',
+            }}
+            sx={{
+              '& .MuiPopover-paper': {
+                borderRadius: '16px',
+                boxShadow: '0 12px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                overflow: 'visible',
+                mt: 1.5,
+                background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
+                border: '2px solid rgba(102, 126, 234, 0.5)'
+              }
+            }}
+          >
+            <Box sx={{ p: 3, minWidth: '280px' }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  mb: 2,
+                  fontWeight: 700,
+                  color: '#fff',
+                  fontSize: '1.1rem',
+                  textAlign: 'center',
+                  letterSpacing: '0.5px'
+                }}
+              >
+                🌐 Connect with us
+              </Typography>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <Box
+                  component="a"
+                  href="https://www.linkedin.com/in/rafati-amir"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    padding: '14px 16px',
+                    borderRadius: '10px',
+                    textDecoration: 'none',
+                    color: '#fff',
+                    background: 'linear-gradient(135deg, #0077b5 0%, #005885 100%)',
+                    boxShadow: '0 4px 12px rgba(0, 119, 181, 0.3)',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    '&:hover': {
+                      transform: 'translateY(-2px) scale(1.02)',
+                      boxShadow: '0 8px 24px rgba(0, 119, 181, 0.5)',
+                      background: 'linear-gradient(135deg, #0088cc 0%, #006699 100%)'
+                    }
+                  }}
+                >
+                  <LinkedInIcon sx={{ fontSize: 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }} />
+                  <Box>
+                    <Typography sx={{ fontWeight: 600, fontSize: '1rem', lineHeight: 1.2 }}>
+                      LinkedIn
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.75rem', opacity: 0.9, lineHeight: 1.2 }}>
+                      Professional Profile
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box
+                  component="a"
+                  href="https://github.com/faridrafati/certifiedBlockchain"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    padding: '14px 16px',
+                    borderRadius: '10px',
+                    textDecoration: 'none',
+                    color: '#fff',
+                    background: 'linear-gradient(135deg, #333 0%, #1a1a1a 100%)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    '&:hover': {
+                      transform: 'translateY(-2px) scale(1.02)',
+                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
+                      background: 'linear-gradient(135deg, #444 0%, #2a2a2a 100%)'
+                    }
+                  }}
+                >
+                  <GitHubIcon sx={{ fontSize: 28, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.2))' }} />
+                  <Box>
+                    <Typography sx={{ fontWeight: 600, fontSize: '1rem', lineHeight: 1.2 }}>
+                      GitHub
+                    </Typography>
+                    <Typography sx={{ fontSize: '0.75rem', opacity: 0.9, lineHeight: 1.2 }}>
+                      Source Code Repository
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Popover>
 
           {/* Mobile Toggle Button */}
           <button

@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import './exchange/Exchange.css'
 import { connect } from 'react-redux'
 import { Provider } from 'react-redux'
-import { IconButton, Tooltip } from '@mui/material'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
-import RefreshIcon from '@mui/icons-material/Refresh'
 import configureStore from './exchange/store/configureStore'
 import {
   loadWeb3,
@@ -15,7 +13,7 @@ import {
 } from './exchange/store/interactions'
 import { contractsLoadedSelector, web3Selector, exchangeSelector, tokenSelector, accountSelector } from './exchange/store/selectors'
 import Content from './exchange/components/Content.jsx'
-import ContractInfo from './components/ContractInfo'
+import HeroSection from './components/HeroSection'
 import { EXCHANGE_ADDRESS } from './components/config/ExchangeConfig'
 
 const store = configureStore()
@@ -77,31 +75,15 @@ class ExchangeApp extends Component {
 
     return (
       <div className="exchange-container">
-        {/* Hero Section - DappToken Style */}
-        <section className="exchange-hero">
-          <div className="hero-content">
-            <div className="hero-title-row">
-              <h1 className="display-4 fw-bold mb-3">
-                <SwapHorizIcon className="hero-icon" />
-                Decentralized Exchange
-              </h1>
-              <ContractInfo
-                contractAddress={EXCHANGE_ADDRESS}
-                contractName="Exchange Contract"
-                network={import.meta.env.VITE_NETWORK_ID}
-                account={account}
-              />
-              <Tooltip title="Refresh Data">
-                <IconButton onClick={this.handleRefresh} className="hero-refresh-btn">
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <p className="lead mb-4">
-              Trade DAPP/ETH tokens instantly with zero intermediaries. Your keys, your crypto, your control.
-            </p>
-          </div>
-        </section>
+        <HeroSection
+          title="🔄 Decentralized Exchange"
+          description="Trade DAPP/ETH tokens instantly with zero intermediaries"
+          contractAddress={EXCHANGE_ADDRESS}
+          contractName="Exchange Contract"
+          network={import.meta.env.VITE_NETWORK_ID}
+          account={account}
+          onRefresh={this.handleRefresh}
+        />
 
         {/* Exchange Content */}
         { this.props.contractsLoaded ? <Content /> : <div className="content"></div> }

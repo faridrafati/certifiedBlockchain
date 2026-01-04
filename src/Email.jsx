@@ -54,13 +54,12 @@ import SendIcon from '@mui/icons-material/Send';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { EMAIL_ABI, EMAIL_ADDRESS } from './components/config/EmailConfig';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import './components/css/email.css';
 
 const Email = () => {
@@ -531,21 +530,15 @@ const Email = () => {
   if (!isRegistered) {
     return (
       <div className="email-container">
-        <section className="hero-section">
-          <div className="hero-content">
-            <div className="hero-title-row">
-              <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
-              <ContractInfo
-                contractAddress={EMAIL_ADDRESS}
-                contractName="Blockchain Email"
-                network={import.meta.env.VITE_NETWORK_ID}
-                owner={owner}
-                account={currentAccount}
-              />
-            </div>
-            <p className="lead mb-4">Registration required to continue</p>
-          </div>
-        </section>
+        <HeroSection
+          title="📧 Blockchain Email"
+          description="Registration required to continue"
+          contractAddress={EMAIL_ADDRESS}
+          contractName="Blockchain Email"
+          network={import.meta.env.VITE_NETWORK_ID}
+          owner={owner}
+          account={currentAccount}
+        />
         <div className="registration-message">
           <h3>Please complete registration to continue</h3>
         </div>
@@ -570,28 +563,16 @@ const Email = () => {
 
   return (
     <div className="email-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">📧 Blockchain Email</h1>
-            <ContractInfo
-              contractAddress={EMAIL_ADDRESS}
-              contractName="Blockchain Email"
-              network={import.meta.env.VITE_NETWORK_ID}
-              owner={owner}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Secure, decentralized messaging on the Ethereum blockchain
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title="📧 Blockchain Email"
+        description="Secure, decentralized messaging on the Ethereum blockchain"
+        contractAddress={EMAIL_ADDRESS}
+        contractName="Blockchain Email"
+        network={import.meta.env.VITE_NETWORK_ID}
+        owner={owner}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       <div className="email-content">
         {/* Messages Section */}

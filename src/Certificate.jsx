@@ -30,15 +30,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, IconButton, Tooltip } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { TextField, Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { sha256 } from 'js-sha256';
 import logoPhoto from './components/images/image007.png';
 import certPhoto from './components/images/image008.png';
 import { CERTIFICATE_ABI, CERTIFICATE_ADDRESS } from './components/config/CertificateConfig';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/certificate.css';
 
@@ -382,28 +381,16 @@ const Certificate = () => {
   if (!isOwner) {
     return (
       <div className="certificate-container">
-        <section className="hero-section">
-          <div className="hero-content">
-            <div className="hero-title-row">
-              <h1 className="display-4 fw-bold mb-3">🎓 Certificate Verification</h1>
-              <ContractInfo
-                contractAddress={CERTIFICATE_ADDRESS}
-                contractName="Certificate Contract"
-                network={import.meta.env.VITE_NETWORK_ID}
-                owner={owner}
-                account={account}
-              />
-              <Tooltip title="Refresh Data">
-                <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <p className="lead mb-4">
-              Verify the authenticity of blockchain-secured certificates
-            </p>
-          </div>
-        </section>
+        <HeroSection
+          title="🎓 Certificate Verification"
+          description="Verify the authenticity of blockchain-secured certificates"
+          contractAddress={CERTIFICATE_ADDRESS}
+          contractName="Certificate Contract"
+          network={import.meta.env.VITE_NETWORK_ID}
+          owner={owner}
+          account={account}
+          onRefresh={handleRefresh}
+        />
 
         <div className="certificate-checker">
           <div className="checker-card">
@@ -518,26 +505,16 @@ const Certificate = () => {
   // Admin view - Certificate management
   return (
     <div className="certificate-container admin-view">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">🎓 Certificate Admin Panel</h1>
-            <ContractInfo
-              contractAddress={CERTIFICATE_ADDRESS}
-              contractName="Certificate Contract"
-              network={import.meta.env.VITE_NETWORK_ID}
-              owner={owner}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">Manage and issue blockchain certificates</p>
-        </div>
-      </section>
+      <HeroSection
+        title="🎓 Certificate Admin Panel"
+        description="Manage and issue blockchain certificates"
+        contractAddress={CERTIFICATE_ADDRESS}
+        contractName="Certificate Contract"
+        network={import.meta.env.VITE_NETWORK_ID}
+        owner={owner}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       <div className="admin-content">
         <div className="admin-form-card">

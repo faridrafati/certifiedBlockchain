@@ -71,7 +71,7 @@ import {
   CRYPTODOGGIES_ADDRESS,
 } from './components/config/CryptoDoggiesConfig';
 import doggyidparser from './components/doggyidparser';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/cryptodoggies.css';
 
@@ -424,26 +424,16 @@ const CryptoDoggies = () => {
   if (isOwner) {
     return (
       <div className="cryptodoggies-container">
-        <section className="hero-section">
-          <div className="hero-content">
-            <div className="hero-title-row">
-              <h1 className="display-4 fw-bold mb-3">🐾 Doggies Admin</h1>
-              <ContractInfo
-                contractAddress={CRYPTODOGGIES_ADDRESS}
-                contractName="Doggies Shop"
-                owner={owner}
-                account={account}
-                network={import.meta.env.VITE_NETWORK_ID}
-              />
-              <Tooltip title="Refresh Data">
-                <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <p className="lead mb-4">Manage your NFT doggies collection</p>
-          </div>
-        </section>
+        <HeroSection
+          title="🐾 Doggies Admin"
+          description="Manage your NFT doggies collection"
+          contractAddress={CRYPTODOGGIES_ADDRESS}
+          contractName="Doggies Shop"
+          owner={owner}
+          account={account}
+          network={import.meta.env.VITE_NETWORK_ID}
+          onRefresh={handleRefresh}
+        />
 
         <div className="doggies-content">
           {/* Quick Actions */}
@@ -635,28 +625,16 @@ const CryptoDoggies = () => {
   // Public Marketplace View
   return (
     <div className="cryptodoggies-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">🐾 Doggies Shop</h1>
-            <ContractInfo
-              contractAddress={CRYPTODOGGIES_ADDRESS}
-              contractName="Doggies Shop"
-              owner={owner}
-              account={account}
-              network={import.meta.env.VITE_NETWORK_ID}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Collect and trade unique NFT doggies on the blockchain
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title="🐾 Doggies Shop"
+        description="Collect and trade unique NFT doggies on the blockchain"
+        contractAddress={CRYPTODOGGIES_ADDRESS}
+        contractName="Doggies Shop"
+        owner={owner}
+        account={account}
+        network={import.meta.env.VITE_NETWORK_ID}
+        onRefresh={handleRefresh}
+      />
 
       <div className="doggies-content">
         {paused && (

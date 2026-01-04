@@ -31,15 +31,14 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, IconButton, Tooltip } from '@mui/material';
+import { TextField, Button, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { TASK_ABI, TASK_ADDRESS } from './components/config/TaskConfig';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/task.css';
 
@@ -271,28 +270,16 @@ const Task = () => {
 
   return (
     <div className="task-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">📝 Todo Manager</h1>
-            <ContractInfo
-              contractAddress={TASK_ADDRESS}
-              contractName="Task Contract"
-              network={import.meta.env.VITE_NETWORK_ID}
-              owner={owner}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Manage your tasks on the blockchain with transparency and permanence
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title="📝 Todo Manager"
+        description="Manage your tasks on the blockchain with transparency and permanence"
+        contractAddress={TASK_ADDRESS}
+        contractName="Task Contract"
+        network={import.meta.env.VITE_NETWORK_ID}
+        owner={owner}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       <div className="task-content">
         <div className="add-task-card">

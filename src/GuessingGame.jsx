@@ -68,7 +68,7 @@ import {
   GUESSINGGAME_ABI,
   GUESSINGGAME_ADDRESS,
 } from './components/config/GuessingGameConfig';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/guessinggame.css';
 
@@ -453,30 +453,16 @@ const GuessingGame = () => {
 
   return (
     <div className="guessinggame-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">
-              🎲 Guessing Game
-            </h1>
-            <ContractInfo
-              contractAddress={GUESSINGGAME_ADDRESS}
-              contractName="Guessing Game"
-              owner={owner}
-              account={account}
-              network={import.meta.env.VITE_NETWORK_ID}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Higher or Lower? Test your luck on the blockchain!
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title="🎲 Guessing Game"
+        description="Higher or Lower? Test your luck on the blockchain!"
+        contractAddress={GUESSINGGAME_ADDRESS}
+        contractName="Guessing Game"
+        owner={owner}
+        account={account}
+        network={import.meta.env.VITE_NETWORK_ID}
+        onRefresh={handleRefresh}
+      />
 
       <div className="game-content">
         <Grid container spacing={3}>

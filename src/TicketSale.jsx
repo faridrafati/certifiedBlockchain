@@ -55,7 +55,7 @@ import {
   TICKETSALE_ABI,
   TICKETSALE_ADDRESS,
 } from './components/config/TicketSaleConfig';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/ticketsale.css';
 
@@ -595,30 +595,16 @@ const TicketSale = () => {
 
   return (
     <div className="ticketsale-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">
-              📅 Event Tickets
-            </h1>
-            <ContractInfo
-              contractAddress={TICKETSALE_ADDRESS}
-              contractName="Event Tickets"
-              owner={owner}
-              account={account}
-              network={import.meta.env.VITE_NETWORK_ID}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Buy tickets for events secured on the blockchain
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title="📅 Event Tickets"
+        description="Buy tickets for events secured on the blockchain"
+        contractAddress={TICKETSALE_ADDRESS}
+        contractName="Event Tickets"
+        owner={owner}
+        account={account}
+        network={import.meta.env.VITE_NETWORK_ID}
+        onRefresh={handleRefresh}
+      />
 
       <div className="tickets-content">
         {isOwner && (

@@ -55,7 +55,7 @@ import {
   DAPPTOKEN_ADDRESS,
 } from './components/config/DappTokenConfig';
 import LoadingSpinner from './components/LoadingSpinner';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import './components/css/dapptoken.css';
 
 const DappToken = () => {
@@ -334,30 +334,15 @@ const DappToken = () => {
 
   return (
     <div className="dapptoken-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">
-              <AccountBalanceWalletIcon className="hero-icon" />
-              {tokenName}
-            </h1>
-            <ContractInfo
-              contractAddress={DAPPTOKEN_ADDRESS}
-              contractName={`${tokenName} Token`}
-              network={import.meta.env.VITE_NETWORK_ID}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            ERC-20 Token Wallet - Manage your {tokenSymbol} tokens
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title={`${tokenName}`}
+        description={`ERC-20 Token Wallet - Manage your ${tokenSymbol} tokens`}
+        contractAddress={DAPPTOKEN_ADDRESS}
+        contractName={`${tokenName} Token`}
+        network={import.meta.env.VITE_NETWORK_ID}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       <div className="token-content">
         {/* Token Information */}

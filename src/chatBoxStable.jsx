@@ -64,7 +64,7 @@ import {
 import LoginForm from './loginForm';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import _ from 'lodash';
 import './components/css/chatboxstable.css';
 
@@ -1076,23 +1076,15 @@ const ChatBoxStable = () => {
   if (!isRegistered) {
     return (
       <div className="chatbox-stable-container">
-        <section className="hero-section">
-          <div className="hero-content">
-            <div className="hero-title-row">
-              <h1 className="display-4 fw-bold mb-3">💬 Chat Box</h1>
-              <ContractInfo
-                contractAddress={CHATBOXPLUS_ADDRESS}
-                contractName="Chat Box"
-                network={import.meta.env.VITE_NETWORK_ID}
-                owner={owner}
-                account={currentAccount}
-              />
-            </div>
-            <p className="lead mb-4">
-              Secure blockchain messaging on Ethereum
-            </p>
-          </div>
-        </section>
+        <HeroSection
+          title="💬 Chat Box"
+          description="Secure blockchain messaging on Ethereum"
+          contractAddress={CHATBOXPLUS_ADDRESS}
+          contractName="Chat Box"
+          network={import.meta.env.VITE_NETWORK_ID}
+          owner={owner}
+          account={currentAccount}
+        />
         <LoginForm register={handleRegisterUser} submitting={submitting} />
 
         <ConfirmDialog
@@ -1110,28 +1102,16 @@ const ChatBoxStable = () => {
 
   return (
     <div className="chatbox-stable-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">💬 Chat Box</h1>
-            <ContractInfo
-              contractAddress={CHATBOXPLUS_ADDRESS}
-              contractName="Chat Box"
-              network={import.meta.env.VITE_NETWORK_ID}
-              owner={owner}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Secure blockchain messaging on Ethereum
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title="💬 Chat Box"
+        description="Secure blockchain messaging on Ethereum"
+        contractAddress={CHATBOXPLUS_ADDRESS}
+        contractName="Chat Box"
+        network={import.meta.env.VITE_NETWORK_ID}
+        owner={owner}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       <div className="chat-content">
         {/* Sidebar with contacts */}

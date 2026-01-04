@@ -66,7 +66,7 @@ import {
 } from './components/config/DappTokenConfig';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import './components/css/dapptokensale.css';
 
 const DappTokenSale = () => {
@@ -499,31 +499,16 @@ const DappTokenSale = () => {
 
   return (
     <div className="tokensale-container">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">
-              <TrendingUpIcon className="hero-icon" />
-              {tokenName} Token Sale
-            </h1>
-            <ContractInfo
-              contractAddress={DAPPTOKENSALE_ADDRESS}
-              contractName={`${tokenName} Token Sale`}
-              owner={admin}
-              network={import.meta.env.VITE_NETWORK_ID}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">
-            Participate in the {tokenSymbol} token crowdsale
-          </p>
-        </div>
-      </section>
+      <HeroSection
+        title={`${tokenName} Token Sale`}
+        description={`Participate in the ${tokenSymbol} token crowdsale`}
+        contractAddress={DAPPTOKENSALE_ADDRESS}
+        contractName={`${tokenName} Token Sale`}
+        owner={admin}
+        network={import.meta.env.VITE_NETWORK_ID}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       {/* Token Information Panel */}
       <Card className="token-info-card">

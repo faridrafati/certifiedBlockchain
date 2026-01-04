@@ -32,14 +32,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import Web3 from 'web3';
-import { TextField, Button, IconButton, Tooltip } from '@mui/material';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import { TextField, Button } from '@mui/material';
 import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import car from './components/images/car.png';
 import sold from './components/images/sold.png';
 import { AUCTION_ABI, AUCTION_ADDRESS } from './components/config/AuctionConfig';
-import ContractInfo from './components/ContractInfo';
+import HeroSection from './components/HeroSection';
 import './components/css/auction.css';
 
 const Auction = () => {
@@ -368,28 +367,16 @@ const Auction = () => {
     // Regular user view
     return (
       <div className="auction-container">
-        <section className="hero-section">
-          <div className="hero-content">
-            <div className="hero-title-row">
-              <h1 className="display-4 fw-bold mb-3">Blockchain Auction</h1>
-              <ContractInfo
-                contractAddress={AUCTION_ADDRESS}
-                contractName="Auction Contract"
-                network={import.meta.env.VITE_NETWORK_ID}
-                owner={owner}
-                account={account}
-              />
-              <Tooltip title="Refresh Data">
-                <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                  <RefreshIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-            <p className="lead mb-4">
-              Participate in a transparent, decentralized auction powered by smart contracts.
-            </p>
-          </div>
-        </section>
+        <HeroSection
+          title="Blockchain Auction"
+          description="Participate in a transparent, decentralized auction powered by smart contracts."
+          contractAddress={AUCTION_ADDRESS}
+          contractName="Auction Contract"
+          network={import.meta.env.VITE_NETWORK_ID}
+          owner={owner}
+          account={account}
+          onRefresh={handleRefresh}
+        />
 
         <div className="auction-content">
           <div className="auction-item-card">
@@ -473,26 +460,16 @@ const Auction = () => {
   // Admin view
   return (
     <div className="auction-container admin-view">
-      <section className="hero-section">
-        <div className="hero-content">
-          <div className="hero-title-row">
-            <h1 className="display-4 fw-bold mb-3">Auction Admin Panel</h1>
-            <ContractInfo
-              contractAddress={AUCTION_ADDRESS}
-              contractName="Auction Contract"
-              network={import.meta.env.VITE_NETWORK_ID}
-              owner={owner}
-              account={account}
-            />
-            <Tooltip title="Refresh Data">
-              <IconButton onClick={handleRefresh} className="hero-refresh-btn">
-                <RefreshIcon />
-              </IconButton>
-            </Tooltip>
-          </div>
-          <p className="lead mb-4">Manage your blockchain auction</p>
-        </div>
-      </section>
+      <HeroSection
+        title="Auction Admin Panel"
+        description="Manage your blockchain auction"
+        contractAddress={AUCTION_ADDRESS}
+        contractName="Auction Contract"
+        network={import.meta.env.VITE_NETWORK_ID}
+        owner={owner}
+        account={account}
+        onRefresh={handleRefresh}
+      />
 
       <div className="auction-content">
         <div className="auction-item-card">

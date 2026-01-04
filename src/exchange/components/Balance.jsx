@@ -88,10 +88,19 @@ class Balance extends Component {
 
   handleDepositEther = async (event) => {
     event.preventDefault()
-    const { dispatch, exchange, web3, token, etherDepositAmount, account } = this.props
+    const { dispatch, exchange, web3, token, etherDepositAmount, account, etherBalance } = this.props
 
     if (!etherDepositAmount || isNaN(etherDepositAmount) || parseFloat(etherDepositAmount) <= 0) {
       toast.error('Please enter a valid amount')
+      return
+    }
+
+    // Check if user has sufficient ETH in wallet
+    const depositAmount = parseFloat(etherDepositAmount)
+    if (depositAmount > etherBalance) {
+      toast.error(
+        `Insufficient ETH in wallet! You have ${etherBalance.toFixed(4)} ETH but trying to deposit ${depositAmount.toFixed(4)} ETH.`
+      )
       return
     }
 
@@ -115,10 +124,19 @@ class Balance extends Component {
 
   handleDepositToken = async (event) => {
     event.preventDefault()
-    const { dispatch, exchange, web3, token, tokenDepositAmount, account } = this.props
+    const { dispatch, exchange, web3, token, tokenDepositAmount, account, tokenBalance } = this.props
 
     if (!tokenDepositAmount || isNaN(tokenDepositAmount) || parseFloat(tokenDepositAmount) <= 0) {
       toast.error('Please enter a valid amount')
+      return
+    }
+
+    // Check if user has sufficient DAPP tokens in wallet
+    const depositAmount = parseFloat(tokenDepositAmount)
+    if (depositAmount > tokenBalance) {
+      toast.error(
+        `Insufficient DAPP in wallet! You have ${tokenBalance.toFixed(4)} DAPP but trying to deposit ${depositAmount.toFixed(4)} DAPP.`
+      )
       return
     }
 
@@ -142,10 +160,19 @@ class Balance extends Component {
 
   handleWithdrawEther = async (event) => {
     event.preventDefault()
-    const { dispatch, exchange, web3, token, etherWithdrawAmount, account } = this.props
+    const { dispatch, exchange, web3, token, etherWithdrawAmount, account, exchangeEtherBalance } = this.props
 
     if (!etherWithdrawAmount || isNaN(etherWithdrawAmount) || parseFloat(etherWithdrawAmount) <= 0) {
       toast.error('Please enter a valid amount')
+      return
+    }
+
+    // Check if user has sufficient ETH in exchange
+    const withdrawAmount = parseFloat(etherWithdrawAmount)
+    if (withdrawAmount > exchangeEtherBalance) {
+      toast.error(
+        `Insufficient ETH in exchange! You have ${exchangeEtherBalance.toFixed(4)} ETH but trying to withdraw ${withdrawAmount.toFixed(4)} ETH.`
+      )
       return
     }
 
@@ -169,10 +196,19 @@ class Balance extends Component {
 
   handleWithdrawToken = async (event) => {
     event.preventDefault()
-    const { dispatch, exchange, web3, token, tokenWithdrawAmount, account } = this.props
+    const { dispatch, exchange, web3, token, tokenWithdrawAmount, account, exchangeTokenBalance } = this.props
 
     if (!tokenWithdrawAmount || isNaN(tokenWithdrawAmount) || parseFloat(tokenWithdrawAmount) <= 0) {
       toast.error('Please enter a valid amount')
+      return
+    }
+
+    // Check if user has sufficient DAPP tokens in exchange
+    const withdrawAmount = parseFloat(tokenWithdrawAmount)
+    if (withdrawAmount > exchangeTokenBalance) {
+      toast.error(
+        `Insufficient DAPP in exchange! You have ${exchangeTokenBalance.toFixed(4)} DAPP but trying to withdraw ${withdrawAmount.toFixed(4)} DAPP.`
+      )
       return
     }
 
@@ -270,7 +306,7 @@ class Balance extends Component {
 
     if (!showForm) {
       return (
-        <Card>
+        <Card className="balance-card">
           <CardContent>
             <div className="card-header-custom">
               💼 Balance
@@ -282,7 +318,7 @@ class Balance extends Component {
     }
 
     return (
-      <Card>
+      <Card className="balance-card">
         <CardContent>
           <div className="card-header-custom">
             💼 Balance
