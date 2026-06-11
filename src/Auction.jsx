@@ -39,6 +39,7 @@ import car from './components/images/car.png';
 import sold from './components/images/sold.png';
 import { AUCTION_ABI, AUCTION_ADDRESS } from './components/config/AuctionConfig';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import './components/css/auction.css';
 
 const Auction = () => {
@@ -79,6 +80,9 @@ const Auction = () => {
     return new Date(dateString).valueOf() / 1000;
   };
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -93,14 +97,6 @@ const Auction = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

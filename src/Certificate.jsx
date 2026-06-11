@@ -38,6 +38,7 @@ import logoPhoto from './components/images/image007.png';
 import certPhoto from './components/images/image008.png';
 import { CERTIFICATE_ABI, CERTIFICATE_ADDRESS } from './components/config/CertificateConfig';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/certificate.css';
 
@@ -115,6 +116,9 @@ const Certificate = () => {
     return sha256(hashString).substring(0, 13);
   };
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -129,14 +133,6 @@ const Certificate = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

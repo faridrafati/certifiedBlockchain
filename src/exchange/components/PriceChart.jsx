@@ -62,9 +62,6 @@ const showPriceChart = (priceChart) => {
 
 class PriceChart extends Component {
   render() {
-    console.log('PriceChart - priceChartLoaded:', this.props.priceChartLoaded)
-    console.log('PriceChart - priceChart data:', this.props.priceChart)
-
     return (
       <Card>
         <CardContent>

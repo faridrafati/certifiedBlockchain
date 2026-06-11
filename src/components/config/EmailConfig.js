@@ -26,7 +26,8 @@
  * Environment Variable: VITE_EMAIL_ADDRESS
  */
 
-export const EMAIL_ADDRESS = import.meta.env.VITE_EMAIL_ADDRESS;
+// Default: Sepolia deployment from README.md; override via VITE_EMAIL_ADDRESS in .env
+export const EMAIL_ADDRESS = import.meta.env.VITE_EMAIL_ADDRESS || '0xF0307B91AF329eAE1f1d24EaAd629108C21592DC';
 export const EMAIL_ABI = [
 	{
 		"inputs": [
@@ -152,11 +153,6 @@ export const EMAIL_ABI = [
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
-			},
-			{
-				"internalType": "bool[16]",
-				"name": "",
-				"type": "bool[16]"
 			}
 		],
 		"stateMutability": "view",
@@ -180,14 +176,14 @@ export const EMAIL_ABI = [
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
-			},
-			{
-				"internalType": "bool[16]",
-				"name": "",
-				"type": "bool[16]"
 			}
 		],
 		"stateMutability": "view",
 		"type": "function"
 	}
 ];
+// NOTE: the deployed Sepolia Email contract (0xF030...92DC) is an older build whose
+// receiveMessages/sentMessages do NOT return the bool[16] "deleted" flags that the
+// current hardHat/contracts/Email.sol source defines. The ABI above matches the
+// deployed contract; Email.jsx tolerates the missing 4th array. If the contract is
+// redeployed from current source, add the bool[16] output back to both functions.

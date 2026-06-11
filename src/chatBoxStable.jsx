@@ -65,6 +65,7 @@ import LoginForm from './loginForm';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import _ from 'lodash';
 import './components/css/chatboxstable.css';
 
@@ -122,6 +123,9 @@ const ChatBoxStable = () => {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
   const MAX_MESSAGE_LENGTH = 32;
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -136,14 +140,6 @@ const ChatBoxStable = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

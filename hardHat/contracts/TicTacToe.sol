@@ -71,11 +71,13 @@ contract TicTacToe {
     /// @notice Player 2's address (payable for prize distribution)
     address payable public player2;
 
-    /// @notice Pending withdrawal amount for player 1 (if direct payment failed)
-    uint public balanceToWithdrawPlayer1;
+    /// @notice Pending withdrawal amount per address (if direct payment failed)
+    /// @dev Keyed by address so a game reset cannot orphan or reassign winnings
+    mapping(address => uint) public pendingWithdrawals;
 
-    /// @notice Pending withdrawal amount for player 2 (if direct payment failed)
-    uint public balanceToWithdrawPlayer2;
+    /// @notice Total ETH reserved for pending withdrawals
+    /// @dev Excluded from future payouts so reserved funds are never double-spent
+    uint public totalPendingWithdrawals;
 
     /// @notice Maximum time allowed between moves before emergency cashout
     uint public timeToReact = 365 days;
@@ -132,14 +134,14 @@ contract TicTacToe {
      * Emits {PlayerJoined} and {NextPlayer} events
      */
     function joinGameasPlayer1() public payable {
-        assert(player1 == address(0));
+        require(player1 == address(0), "Player 1 slot already taken");
         if (player2 != address(0)) {
             gameActive = true;
         } else {
             gameActive = false;
         }
 
-        require(msg.value == gameCost);
+        require(msg.value == gameCost, "Entry fee is 0.001 ETH");
 
         player1 = payable(msg.sender);
         emit PlayerJoined(player1);
@@ -165,14 +167,14 @@ contract TicTacToe {
      * Emits {PlayerJoined} and {NextPlayer} events
      */
     function joinGameasPlayer2() public payable {
-        assert(player2 == address(0));
+        require(player2 == address(0), "Player 2 slot already taken");
         if (player1 != address(0)) {
             gameActive = true;
         } else {
             gameActive = false;
         }
 
-        require(msg.value == gameCost);
+        require(msg.value == gameCost, "Entry fee is 0.001 ETH");
 
         player2 = payable(msg.sender);
         emit PlayerJoined(player2);
@@ -200,8 +202,10 @@ contract TicTacToe {
      * @dev Only current players can reset the game
      */
     function resetGame() public {
-        require((msg.sender == player1) || (msg.sender == player2));
+        require((msg.sender == player1) || (msg.sender == player2), "Only players can reset");
+        require(!gameActive, "Cannot reset a game in progress");
         board = emptyBoard;
+        movesCounter = 0;
         player1 = payable(address(0));
         player2 = payable(address(0));
     }
@@ -211,21 +215,13 @@ contract TicTacToe {
      * @dev Uses pull payment pattern for safety
      */
     function withdrawWin() public {
-        uint balanceToTransfer;
-        if (msg.sender == player1) {
-            require(balanceToWithdrawPlayer1 > 0);
-            balanceToTransfer = balanceToWithdrawPlayer1;
-            balanceToWithdrawPlayer1 = 0;
-            player1.transfer(balanceToTransfer);
-
-            emit PayoutSuccess(player1, balanceToTransfer);
-        } else {
-            require(balanceToWithdrawPlayer2 > 0);
-            balanceToTransfer = balanceToWithdrawPlayer2;
-            balanceToWithdrawPlayer2 = 0;
-            player2.transfer(balanceToTransfer);
-            emit PayoutSuccess(player2, balanceToTransfer);
-        }
+        uint amount = pendingWithdrawals[msg.sender];
+        require(amount > 0, "No pending winnings");
+        pendingWithdrawals[msg.sender] = 0;
+        totalPendingWithdrawals -= amount;
+        (bool success, ) = payable(msg.sender).call{value: amount}("");
+        require(success, "Withdrawal failed");
+        emit PayoutSuccess(msg.sender, amount);
     }
 
     /**
@@ -263,12 +259,11 @@ contract TicTacToe {
      * - Draw (board full)
      */
     function setStone(uint8 x, uint8 y) public {
-        require(board[x][y] == address(0));
-        require(gameValidUntil > block.timestamp);
-        assert(gameActive);
-        assert(x < boardSize);
-        assert(y < boardSize);
-        require(msg.sender == activePlayer);
+        require(x < boardSize && y < boardSize, "Coordinates out of bounds");
+        require(board[x][y] == address(0), "Cell already taken");
+        require(gameValidUntil > block.timestamp, "Game has timed out");
+        require(gameActive, "Game is not active");
+        require(msg.sender == activePlayer, "Not your turn");
         board[x][y] = msg.sender;
         movesCounter++;
         gameValidUntil = block.timestamp + timeToReact;
@@ -348,15 +343,14 @@ contract TicTacToe {
     function setWinner(address payable player) private {
         gameActive = false;
         emit GameOverWithWin(player);
-        uint balanceToPayOut = address(this).balance;
+        // Exclude funds already reserved for earlier failed payouts
+        uint balanceToPayOut = address(this).balance - totalPendingWithdrawals;
 
-        // Attempt direct payment, fallback to withdrawal pattern
-        if (player.send(balanceToPayOut) != true) {
-            if (player == player1) {
-                balanceToWithdrawPlayer1 = balanceToPayOut;
-            } else {
-                balanceToWithdrawPlayer2 = balanceToPayOut;
-            }
+        // Attempt direct payment, fallback to pull-payment pattern
+        (bool success, ) = player.call{value: balanceToPayOut}("");
+        if (!success) {
+            pendingWithdrawals[player] += balanceToPayOut;
+            totalPendingWithdrawals += balanceToPayOut;
         } else {
             emit PayoutSuccess(player, balanceToPayOut);
         }
@@ -370,17 +364,26 @@ contract TicTacToe {
         gameActive = false;
         emit GameOverWithDraw();
 
-        uint balanceToPayOut = address(this).balance / 2;
+        // Cache players so a reentrant resetGame() cannot redirect the payouts
+        address payable p1 = player1;
+        address payable p2 = player2;
 
-        if (player1.send(balanceToPayOut) == false) {
-            balanceToWithdrawPlayer1 += balanceToPayOut;
+        // Exclude funds already reserved for earlier failed payouts
+        uint balanceToPayOut = (address(this).balance - totalPendingWithdrawals) / 2;
+
+        (bool success1, ) = p1.call{value: balanceToPayOut}("");
+        if (!success1) {
+            pendingWithdrawals[p1] += balanceToPayOut;
+            totalPendingWithdrawals += balanceToPayOut;
         } else {
-            emit PayoutSuccess(player1, balanceToPayOut);
+            emit PayoutSuccess(p1, balanceToPayOut);
         }
-        if (player2.send(balanceToPayOut) == false) {
-            balanceToWithdrawPlayer2 += balanceToPayOut;
+        (bool success2, ) = p2.call{value: balanceToPayOut}("");
+        if (!success2) {
+            pendingWithdrawals[p2] += balanceToPayOut;
+            totalPendingWithdrawals += balanceToPayOut;
         } else {
-            emit PayoutSuccess(player2, balanceToPayOut);
+            emit PayoutSuccess(p2, balanceToPayOut);
         }
     }
 }

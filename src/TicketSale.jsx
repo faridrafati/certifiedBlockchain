@@ -56,6 +56,7 @@ import {
   TICKETSALE_ADDRESS,
 } from './components/config/TicketSaleConfig';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/ticketsale.css';
 
@@ -99,6 +100,9 @@ const TicketSale = () => {
   const [occasionTime, setOccasionTime] = useState('');
   const [occasionLocation, setOccasionLocation] = useState('');
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -113,14 +117,6 @@ const TicketSale = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

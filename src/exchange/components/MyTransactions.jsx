@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { toast } from 'react-toastify'
 import {
   Card,
   CardContent,
@@ -96,8 +97,18 @@ const showMyOpenOrders = (props) => {
             </TableCell>
             <TableCell
               className="cancel-order-cell"
-              onClick={(e) => {
-                cancelOrder(dispatch, exchange, order, account)
+              onClick={async (e) => {
+                try {
+                  toast.info('Cancelling order... Please confirm in MetaMask.')
+                  await cancelOrder(dispatch, exchange, order, account)
+                  toast.success('Order cancelled!')
+                } catch (error) {
+                  if (error?.code === 4001) {
+                    toast.warning('Transaction rejected.')
+                  } else {
+                    toast.error('Failed to cancel order. Please try again.')
+                  }
+                }
               }}
               sx={{cursor: 'pointer', textAlign: 'center'}}
             >

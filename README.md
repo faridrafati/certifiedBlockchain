@@ -214,9 +214,10 @@ All smart contracts are deployed and verified on the Sepolia testnet (Chain ID: 
 | Auction | `0xAc07aB3BEEFBB0D107e6f975d48527cF3C16a7E6` | [View Contract](https://eth-sepolia.blockscout.com/address/0xAc07aB3BEEFBB0D107e6f975d48527cF3C16a7E6?tab=contract) |
 | Certificate | `0xca1daC5e14Df6CE19ed3a7185250bEB8A3c895F6` | [View Contract](https://eth-sepolia.blockscout.com/address/0xca1daC5e14Df6CE19ed3a7185250bEB8A3c895F6?tab=contract) |
 | ChatBoxPlus | `0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59` | [View Contract](https://eth-sepolia.blockscout.com/address/0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59?tab=contract) |
-| CryptoDoggies | `0xdbF365c5c131BcBCF20541926450436E2Dd8Bba7` | [View Contract](https://eth-sepolia.blockscout.com/address/0xdbF365c5c131BcBCF20541926450436E2Dd8Bba7?tab=contract) |
+| CryptoDoggies | `0x0DF3177CBd501eda6ffC64B1c543C058F3953744` | [View Contract](https://eth-sepolia.blockscout.com/address/0x0DF3177CBd501eda6ffC64B1c543C058F3953744?tab=contract) |
 | DappToken | `0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86` | [View Contract](https://eth-sepolia.blockscout.com/address/0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86?tab=contract) |
 | DappTokenSale | `0xD85E2446A1C3421612BE36cB6077B308F47D2B03` | [View Contract](https://eth-sepolia.blockscout.com/address/0xD85E2446A1C3421612BE36cB6077B308F47D2B03?tab=contract) |
+| Exchange | `0x26203b12bA4Cec5eB24A68834EC57ee47fa0F00B` | [View Contract](https://eth-sepolia.blockscout.com/address/0x26203b12bA4Cec5eB24A68834EC57ee47fa0F00B?tab=contract) |
 | Email | `0xF0307B91AF329eAE1f1d24EaAd629108C21592DC` | [View Contract](https://eth-sepolia.blockscout.com/address/0xF0307B91AF329eAE1f1d24EaAd629108C21592DC?tab=contract) |
 | GuessingGame | `0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84` | [View Contract](https://eth-sepolia.blockscout.com/address/0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84?tab=contract) |
 | Poll | `0x67C446683398483d54E8c3FF3541a54a5447a6c1` | [View Contract](https://eth-sepolia.blockscout.com/address/0x67C446683398483d54E8c3FF3541a54a5447a6c1?tab=contract) |

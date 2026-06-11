@@ -84,6 +84,7 @@ contract WeightedVoting {
      * Note: The contract expects exactly 3 candidates in the array
      */
     constructor(string[] memory _Candidates) {
+        require(_Candidates.length == 3, "Exactly 3 candidates required");
         candidatesList.push(Candidates({name: _Candidates[0], voteCount: 0}));
         candidatesList.push(Candidates({name: _Candidates[1], voteCount: 0}));
         candidatesList.push(Candidates({name: _Candidates[2], voteCount: 0}));
@@ -109,8 +110,8 @@ contract WeightedVoting {
      * Note: Uses assert() which will consume all gas on failure
      */
     function authorizeVoter(address _address, uint _weight) public {
-        assert(msg.sender == owner);
-        assert(!voters[_address].hasVoted);
+        require(msg.sender == owner, "Only owner can authorize voters");
+        require(!voters[_address].hasVoted, "Voter has already voted");
         voters[_address] = Voters({weight: _weight, hasVoted: false});
     }
 
@@ -130,8 +131,9 @@ contract WeightedVoting {
      * Note: The vote count increases by the voter's weight, not just by 1
      */
     function voteForCandidate(uint _index) public {
-        require(voters[msg.sender].weight != 0);
-        require(voters[msg.sender].hasVoted == false);
+        require(_index < candidatesList.length, "Invalid candidate index");
+        require(voters[msg.sender].weight != 0, "Not authorized to vote");
+        require(voters[msg.sender].hasVoted == false, "Already voted");
         candidatesList[_index].voteCount =
             candidatesList[_index].voteCount +
             voters[msg.sender].weight;

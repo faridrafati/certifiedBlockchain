@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './exchange/Exchange.css'
 import { connect } from 'react-redux'
 import { Provider } from 'react-redux'
+import { toast } from 'react-toastify'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import configureStore from './exchange/store/configureStore'
 import {
@@ -38,24 +39,29 @@ class ExchangeApp extends Component {
   }
 
   handleAccountChange = async (accounts) => {
-    console.log('Account changed to:', accounts[0])
-    // Reload the entire page when account changes (like DappToken)
+    // Reload the entire page when account changes so contract state reinitializes
     window.location.reload()
   }
 
   async loadBlockchainData(dispatch) {
-    const web3 = await loadWeb3(dispatch)
-    const networkId = await web3.eth.net.getId()
-    await loadAccount(web3, dispatch)
-    const token = await loadToken(web3, networkId, dispatch)
-    if(!token) {
-      window.alert('Token smart contract not detected on the current network. Please select another network with Metamask.')
-      return
-    }
-    const exchange = await loadExchange(web3, networkId, dispatch)
-    if(!exchange) {
-      window.alert('Exchange smart contract not detected on the current network. Please select another network with Metamask.')
-      return
+    try {
+      const web3 = await loadWeb3(dispatch)
+      if (!web3) return
+      const networkId = await web3.eth.net.getId()
+      await loadAccount(web3, dispatch)
+      const token = await loadToken(web3, networkId, dispatch)
+      if(!token) {
+        toast.error('Token contract not detected on this network. Please switch networks in MetaMask.')
+        return
+      }
+      const exchange = await loadExchange(web3, networkId, dispatch)
+      if(!exchange) {
+        toast.error('Exchange contract not detected on this network. Please switch networks in MetaMask.')
+        return
+      }
+    } catch (error) {
+      console.error('Failed to load blockchain data:', error)
+      toast.error('Failed to connect to the blockchain. Please check MetaMask and refresh.')
     }
   }
 

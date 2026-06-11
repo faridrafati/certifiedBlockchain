@@ -72,6 +72,7 @@ import {
 } from './components/config/CryptoDoggiesConfig';
 import doggyidparser from './components/doggyidparser';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/cryptodoggies.css';
 
@@ -249,26 +250,11 @@ const CryptoDoggies = () => {
     }
   }, [fetchTokens]);
 
-  // Setup MetaMask listeners
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   useEffect(() => {
-    const setupListeners = async () => {
-      if (!window.ethereum) return;
-
-      window.ethereum.on('chainChanged', () => window.location.reload());
-      window.ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) window.location.reload();
-      });
-    };
-
-    setupListeners();
     initializeContract();
-
-    return () => {
-      if (window.ethereum?.removeListener) {
-        window.ethereum.removeListener('chainChanged', () => {});
-        window.ethereum.removeListener('accountsChanged', () => {});
-      }
-    };
   }, [initializeContract]);
 
   // Transaction handler wrapper

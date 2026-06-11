@@ -136,7 +136,7 @@ contract Certificate {
         uint _expirationDate,
         string memory _reasonForAward
     ) public {
-        require(owner == msg.sender);
+        require(owner == msg.sender, "Only owner can issue certificates");
         certified.push(
             Certified({
                 credentialID: _credentialID,

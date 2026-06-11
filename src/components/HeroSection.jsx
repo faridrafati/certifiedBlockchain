@@ -33,7 +33,7 @@ const HeroSection = ({
   description,
   contractAddress,
   contractName,
-  network = import.meta.env.VITE_NETWORK_ID,
+  network = import.meta.env.VITE_NETWORK_ID || '11155111', // Sepolia by default
   owner = '',
   account = '',
   onRefresh = null,
@@ -43,13 +43,22 @@ const HeroSection = ({
       <div className="hero-content">
         <div className="hero-title-row">
           <h1 className="display-4 fw-bold mb-3">{title}</h1>
-          <ContractInfo
-            contractAddress={contractAddress}
-            contractName={contractName}
-            network={network}
-            owner={owner}
-            account={account}
-          />
+          {contractAddress ? (
+            <ContractInfo
+              contractAddress={contractAddress}
+              contractName={contractName}
+              network={network}
+              owner={owner}
+              account={account}
+            />
+          ) : (
+            <span
+              className="badge bg-warning text-dark"
+              title={`Set the ${contractName || 'contract'} address in the .env file (VITE_*_ADDRESS) and restart the dev server`}
+            >
+              ⚠️ Contract not configured
+            </span>
+          )}
           {onRefresh && (
             <Tooltip title="Refresh Data">
               <IconButton onClick={onRefresh} className="hero-refresh-btn">
@@ -81,7 +90,8 @@ const HeroSection = ({
 HeroSection.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  contractAddress: PropTypes.string.isRequired,
+  // Undefined when the matching VITE_*_ADDRESS env var is not set
+  contractAddress: PropTypes.string,
   contractName: PropTypes.string.isRequired,
   network: PropTypes.string,
   owner: PropTypes.string,

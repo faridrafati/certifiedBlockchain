@@ -60,6 +60,7 @@ import { EMAIL_ABI, EMAIL_ADDRESS } from './components/config/EmailConfig';
 import LoadingSpinner from './components/LoadingSpinner';
 import ConfirmDialog from './components/ConfirmDialog';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import './components/css/email.css';
 
 const Email = () => {
@@ -95,6 +96,9 @@ const Email = () => {
   // Ref for message input to focus on reply
   const messageInputRef = useRef(null);
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -106,14 +110,6 @@ const Email = () => {
         return;
       }
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

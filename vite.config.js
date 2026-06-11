@@ -9,7 +9,6 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
       '@components': resolve(__dirname, './src/components'),
-      '@contracts': resolve(__dirname, './client/src/contracts'),
     },
   },
   server: {
@@ -21,6 +20,6 @@ export default defineConfig({
     sourcemap: true,
   },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'ethers', 'web3'],
+    include: ['react', 'react-dom', 'web3'],
   },
 });

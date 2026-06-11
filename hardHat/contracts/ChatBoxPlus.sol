@@ -304,7 +304,7 @@ contract ChatBoxPlus {
         address[] memory sender = new address[](maxMessageLength);
         uint256[] memory timestamp = new uint256[](maxMessageLength);
         bool[maxMessageLength] memory deleted;
-        for (uint256 m = 0; m < maxMessageLength - 1; m++) {
+        for (uint256 m = 0; m < maxMessageLength; m++) {
             Message memory message = receiversInbox.receivedMessages[m];
             content[m] = message.content;
             sender[m] = message.sender;
@@ -336,7 +336,7 @@ contract ChatBoxPlus {
         address[] memory receiver = new address[](maxMessageLength);
         uint256[] memory timestamp = new uint256[](maxMessageLength);
         bool[maxMessageLength] memory deleted;
-        for (uint256 m = 0; m < maxMessageLength - 1; m++) {
+        for (uint256 m = 0; m < maxMessageLength; m++) {
             Message memory message = sentsInbox.sentMessages[m];
             content[m] = message.content;
             receiver[m] = message.receiver;
@@ -520,12 +520,11 @@ contract ChatBoxPlus {
         bool gameExist;
         uint64 gameIndex;
         (gameExist, gameIndex) = gameIndexFunction(_secondPlayer);
-        require(gameExist);
-        require(game[gameIndex].board[x][y] == address(0));
-        assert(game[gameIndex].gameActive);
-        assert(x < boardSize);
-        assert(y < boardSize);
-        require(msg.sender == game[gameIndex].activePlayer);
+        require(gameExist, "Game does not exist");
+        require(x < boardSize && y < boardSize, "Coordinates out of bounds");
+        require(game[gameIndex].board[x][y] == address(0), "Cell already taken");
+        require(game[gameIndex].gameActive, "Game is not active");
+        require(msg.sender == game[gameIndex].activePlayer, "Not your turn");
         game[gameIndex].board[x][y] = msg.sender;
         game[gameIndex].movesCounter++;
 

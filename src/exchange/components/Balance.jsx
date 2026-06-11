@@ -64,7 +64,12 @@ class Balance extends Component {
 
   async loadBlockchainData() {
     const { dispatch, web3, exchange, token, account } = this.props
-    await loadBalances(dispatch, web3, exchange, token, account)
+    try {
+      await loadBalances(dispatch, web3, exchange, token, account)
+    } catch (error) {
+      console.error('Failed to load balances:', error)
+      toast.error('Failed to load balances. Please refresh the page.')
+    }
   }
 
   handleAssetChange = (event, newAsset) => {

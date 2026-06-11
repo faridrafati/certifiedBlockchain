@@ -40,6 +40,11 @@ hardHat/cache/
 hardHat/artifacts/
 hardHat/node_modules/
 
+# Secrets - never commit wallet seed phrases or private keys
+seed.txt
+*.mnemonic
+*.key
+
 # Misc
 *.log
 .cache/

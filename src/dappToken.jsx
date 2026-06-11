@@ -56,6 +56,7 @@ import {
 } from './components/config/DappTokenConfig';
 import LoadingSpinner from './components/LoadingSpinner';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import './components/css/dapptoken.css';
 
 const DappToken = () => {
@@ -98,6 +99,9 @@ const DappToken = () => {
     }
   };
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -112,14 +116,6 @@ const DappToken = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

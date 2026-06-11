@@ -28,7 +28,8 @@
  * Environment Variable: VITE_CHATBOXPLUS_ADDRESS
  */
 
-export const CHATBOXPLUS_ADDRESS = import.meta.env.VITE_CHATBOXPLUS_ADDRESS;
+// Default: Sepolia deployment from README.md; override via VITE_CHATBOXPLUS_ADDRESS in .env
+export const CHATBOXPLUS_ADDRESS = import.meta.env.VITE_CHATBOXPLUS_ADDRESS || '0xBAbe5292d01Cc5F0986AD6B2451A2Ef24b9c5d59';
 export const CHATBOXPLUS_ABI = [
 	{
 		"inputs": [
@@ -420,11 +421,6 @@ export const CHATBOXPLUS_ABI = [
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
-			},
-			{
-				"internalType": "bool[64]",
-				"name": "",
-				"type": "bool[64]"
 			}
 		],
 		"stateMutability": "view",
@@ -448,14 +444,14 @@ export const CHATBOXPLUS_ABI = [
 				"internalType": "address[]",
 				"name": "",
 				"type": "address[]"
-			},
-			{
-				"internalType": "bool[64]",
-				"name": "",
-				"type": "bool[64]"
 			}
 		],
 		"stateMutability": "view",
 		"type": "function"
 	}
 ];
+// NOTE: the deployed Sepolia ChatBoxPlus contract (0xBAbe...5d59) is an older build
+// whose receiveMessages/sentMessages do NOT return the bool[64] "deleted" flags that
+// the current hardHat/contracts/ChatBoxPlus.sol source defines. The ABI above matches
+// the deployed contract; chatBoxStable.jsx tolerates the missing 4th array. If the
+// contract is redeployed from current source, add the bool[64] output back.

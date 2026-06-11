@@ -34,7 +34,8 @@
  * Environment Variable: VITE_CRYPTODOGGIES_ADDRESS
  */
 
-export const CRYPTODOGGIES_ADDRESS = import.meta.env.VITE_CRYPTODOGGIES_ADDRESS;
+// Default: Sepolia deployment from README.md; override via VITE_CRYPTODOGGIES_ADDRESS in .env
+export const CRYPTODOGGIES_ADDRESS = import.meta.env.VITE_CRYPTODOGGIES_ADDRESS || '0x0DF3177CBd501eda6ffC64B1c543C058F3953744';
 export const CRYPTODOGGIES_ABI = [
   // Events
   {

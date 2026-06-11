@@ -30,7 +30,8 @@
  * Environment Variable: VITE_DAPPTOKENSALE_ADDRESS
  */
 
-export const DAPPTOKENSALE_ADDRESS = import.meta.env.VITE_DAPPTOKENSALE_ADDRESS;
+// Default: Sepolia deployment from README.md; override via VITE_DAPPTOKENSALE_ADDRESS in .env
+export const DAPPTOKENSALE_ADDRESS = import.meta.env.VITE_DAPPTOKENSALE_ADDRESS || '0xD85E2446A1C3421612BE36cB6077B308F47D2B03';
 export const DAPPTOKENSALE_ABI = [
   {
     "inputs": [

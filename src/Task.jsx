@@ -39,6 +39,7 @@ import { toast } from 'react-toastify';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { TASK_ABI, TASK_ADDRESS } from './components/config/TaskConfig';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/task.css';
 
@@ -59,6 +60,9 @@ const Task = () => {
   const [taskText, setTaskText] = useState('');
   const [taskDateTime, setTaskDateTime] = useState('');
 
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -73,14 +77,6 @@ const Task = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      ethereum.on('chainChanged', () => window.location.reload());
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');
@@ -164,14 +160,14 @@ const Task = () => {
 
   // Auto-refresh every 12 seconds (Ethereum block time)
   useEffect(() => {
-    if (!contract) return;
+    if (!contract || !account) return;
 
     const interval = setInterval(() => {
-      loadTasks(contract);
+      loadTasks(contract, account);
     }, 12000);
 
     return () => clearInterval(interval);
-  }, [contract, loadTasks]);
+  }, [contract, account, loadTasks]);
 
   const handleRefresh = async () => {
     if (!contract) return;

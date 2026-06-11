@@ -153,7 +153,7 @@ contract Email {
         address[] memory sender = new address[](16);
         uint[] memory timestamp = new uint[](16);
         bool[16] memory deleted;
-        for (uint m = 0; m < 15; m++) {
+        for (uint m = 0; m < 16; m++) {
             Message memory message = receiversInbox.receivedMessages[m];
             content[m] = message.content;
             sender[m] = message.sender;
@@ -181,7 +181,7 @@ contract Email {
         address[] memory receiver = new address[](16);
         uint[] memory timestamp = new uint[](16);
         bool[16] memory deleted;
-        for (uint m = 0; m < 15; m++) {
+        for (uint m = 0; m < 16; m++) {
             Message memory message = sentsInbox.sentMessages[m];
             content[m] = message.content;
             receiver[m] = message.receiver;

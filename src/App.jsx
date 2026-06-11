@@ -32,7 +32,7 @@
  * - /ticketSale: Event ticketing
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ToastContainer, toast } from 'react-toastify';
@@ -44,22 +44,23 @@ import NavBar from './navBar';
 import NotFound from './notFound';
 import LoadingSpinner from './components/LoadingSpinner';
 
-// Import all blockchain components
-import Adoption from './adoption';
-import Auction from './Auction';
-import Certificate from './Certificate';
-import GuessingGame from './GuessingGame';
-import Task from './Task';
-import Poll from './Poll';
-import Email from './Email';
-import CryptoDoggies from './CryptoDoggies';
-import ChatBoxStable from './chatBoxStable';
-import Voting from './Voting';
-import WeightedVoting from './WeightedVoting';
-import DappToken from './dappToken';
-import DappTokenSale from './dappTokenSale';
-import TicketSale from './TicketSale';
-import Exchange from './Exchange';
+// Lazy-load each dApp page so the initial bundle only contains the shell.
+// Each route's code is downloaded on first visit.
+const Adoption = lazy(() => import('./adoption'));
+const Auction = lazy(() => import('./Auction'));
+const Certificate = lazy(() => import('./Certificate'));
+const GuessingGame = lazy(() => import('./GuessingGame'));
+const Task = lazy(() => import('./Task'));
+const Poll = lazy(() => import('./Poll'));
+const Email = lazy(() => import('./Email'));
+const CryptoDoggies = lazy(() => import('./CryptoDoggies'));
+const ChatBoxStable = lazy(() => import('./chatBoxStable'));
+const Voting = lazy(() => import('./Voting'));
+const WeightedVoting = lazy(() => import('./WeightedVoting'));
+const DappToken = lazy(() => import('./dappToken'));
+const DappTokenSale = lazy(() => import('./dappTokenSale'));
+const TicketSale = lazy(() => import('./TicketSale'));
+const Exchange = lazy(() => import('./Exchange'));
 
 /**
  * Main Application Component
@@ -85,9 +86,23 @@ function App() {
   // Ref to prevent duplicate toast notifications
   const hasShownConnectedToast = useRef(false);
 
+  // Ref mirroring currentAccount so event listeners registered once on mount
+  // always see the latest value instead of a stale closure
+  const currentAccountRef = useRef(null);
+
   // Initialize MetaMask connection on component mount
   useEffect(() => {
     checkMetamask();
+
+    // Clean up MetaMask listeners on unmount (also prevents duplicate
+    // listeners under React StrictMode's double-invoked effects)
+    return () => {
+      const { ethereum } = window;
+      if (ethereum?.removeListener) {
+        ethereum.removeListener('chainChanged', onChainChanged);
+        ethereum.removeListener('accountsChanged', onAccountsChanged);
+      }
+    };
   }, []);
 
   /**
@@ -130,6 +145,18 @@ function App() {
   };
 
   /**
+   * Named listener handlers so they can be removed on unmount
+   */
+  const onChainChanged = (newChainId) => {
+    handleChainChanged(newChainId);
+    window.location.reload();
+  };
+
+  const onAccountsChanged = (accounts) => {
+    handleAccountsChanged(accounts, false);
+  };
+
+  /**
    * Main MetaMask detection and initialization function
    * Checks for MetaMask, sets up event listeners for account/chain changes
    */
@@ -166,10 +193,7 @@ function App() {
       }
 
       // Listen for chain/network changes (will reload page)
-      ethereum.on('chainChanged', (newChainId) => {
-        handleChainChanged(newChainId);
-        window.location.reload();
-      });
+      ethereum.on('chainChanged', onChainChanged);
 
       // Handle account changes
       try {
@@ -180,9 +204,7 @@ function App() {
       }
 
       // Listen for account changes (wallet lock/unlock, account switch)
-      ethereum.on('accountsChanged', (accounts) => {
-        handleAccountsChanged(accounts, false);
-      });
+      ethereum.on('accountsChanged', onAccountsChanged);
 
       setIsLoading(false);
     } catch (error) {
@@ -210,7 +232,8 @@ function App() {
   const handleAccountsChanged = (accounts, isInitialCheck = false) => {
     if (accounts.length === 0) {
       // Wallet is locked or disconnected
-      const wasConnected = currentAccount !== null;
+      const wasConnected = currentAccountRef.current !== null;
+      currentAccountRef.current = null;
       setCurrentAccount(null);
       setModalNeed(true);
       hasShownConnectedToast.current = false;
@@ -226,7 +249,8 @@ function App() {
       }
     } else {
       const newAccount = accounts[0];
-      if (newAccount !== currentAccount) {
+      if (newAccount !== currentAccountRef.current) {
+        currentAccountRef.current = newAccount;
         setCurrentAccount(newAccount);
         setModalNeed(false);
 
@@ -254,6 +278,7 @@ function App() {
     try {
       const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
       const account = accounts[0];
+      currentAccountRef.current = account;
       setCurrentAccount(account);
       setModalNeed(false);
       // Toast is handled by handleAccountsChanged listener
@@ -303,6 +328,7 @@ function App() {
       {/* Main application content */}
       <div className={`fade-in app-content ${modalNeed ? 'blurred-content' : ''}`}>
         <NavBar />
+        <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
         <Routes>
           {/* Exchange Route - Full width, no container */}
           <Route path="/exchange" element={<Exchange />} />
@@ -346,6 +372,7 @@ function App() {
             </main>
           } />
         </Routes>
+        </Suspense>
       </div>
     </div>
   );

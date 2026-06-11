@@ -36,6 +36,7 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import pets from './components/pets.json';
 import { ADOPTION_ABI, ADOPTION_ADDRESS } from './components/config/AdoptionConfig';
 import HeroSection from './components/HeroSection';
+import useWalletEvents from './components/useWalletEvents';
 import LoadingSpinner from './components/LoadingSpinner';
 import './components/css/card.css';
 
@@ -138,6 +139,9 @@ const Adoption = () => {
   }, []);
 
   // Check MetaMask and setup listeners
+  // Reload on wallet account/network change; listeners cleaned up on unmount
+  useWalletEvents();
+
   const checkMetamask = useCallback(async () => {
     try {
       const { ethereum } = window;
@@ -153,20 +157,6 @@ const Adoption = () => {
       const chain = await ethereum.request({ method: 'eth_chainId' });
       setChainId(chain);
 
-      // Setup chain change listener
-      ethereum.on('chainChanged', (newChainId) => {
-        setChainId(newChainId);
-        window.location.reload();
-      });
-
-      // Setup account change listener
-      ethereum.on('accountsChanged', (accounts) => {
-        if (accounts.length > 0) {
-          setCurrentAccount(accounts[0]);
-          setAccount(accounts[0]);
-          window.location.reload();
-        }
-      });
     } catch (error) {
       console.error('Error checking MetaMask:', error);
       toast.error('Failed to connect to MetaMask');

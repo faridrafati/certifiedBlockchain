@@ -1,4 +1,5 @@
 import Web3 from 'web3'
+import { toast } from 'react-toastify'
 import {
   web3Loaded,
   web3AccountLoaded,
@@ -31,8 +32,8 @@ export const loadWeb3 = async (dispatch) => {
     dispatch(web3Loaded(web3))
     return web3
   } else {
-    window.alert('Please install MetaMask')
-    window.location.assign("https://metamask.io/")
+    toast.error('Please install MetaMask to use the exchange')
+    return null
   }
 }
 
@@ -45,39 +46,39 @@ export const loadAccount = async (web3, dispatch) => {
 
 export const loadToken = async (web3, networkId, dispatch) => {
   try {
+    // Undefined when VITE_DAPPTOKEN_ADDRESS is not set in .env
+    if (!DAPPTOKEN_ADDRESS) return null
     const token = new web3.eth.Contract(DAPPTOKEN_ABI, DAPPTOKEN_ADDRESS)
     dispatch(tokenLoaded(token))
     return token
   } catch (error) {
-    console.log('Contract not deployed to the current network. Please select another network with Metamask.')
+    console.error('Token contract not deployed to the current network.', error)
     return null
   }
 }
 
 export const loadExchange = async (web3, networkId, dispatch) => {
   try {
+    // Undefined when VITE_EXCHANGE_ADDRESS is not set in .env
+    if (!EXCHANGE_ADDRESS) return null
     const exchange = new web3.eth.Contract(EXCHANGE_ABI, EXCHANGE_ADDRESS)
     dispatch(exchangeLoaded(exchange))
     return exchange
   } catch (error) {
-    console.log('Contract not deployed to the current network. Please select another network with Metamask.')
+    console.error('Exchange contract not deployed to the current network.', error)
     return null
   }
 }
 
 export const loadAllOrders = async (exchange, dispatch) => {
-  console.log('loadAllOrders - Starting to fetch orders from blockchain...')
-
   // Get total number of orders from contract
   const orderCount = Number(await exchange.methods.orderCount().call())
-  console.log('loadAllOrders - Order count:', orderCount)
 
   // Fetch Trade events to get userFill, transaction hash, and fill timestamp
   const tradeEvents = await exchange.getPastEvents('Trade', {
     fromBlock: 0,
     toBlock: 'latest'
   })
-  console.log('loadAllOrders - Trade events fetched:', tradeEvents.length)
 
   // Create a map of orderId -> {userFill, transactionHash, fillTimestamp}
   const tradeDataMap = {}
@@ -90,16 +91,23 @@ export const loadAllOrders = async (exchange, dispatch) => {
     }
   })
 
-  // Fetch all orders directly from contract state
+  // Fetch all orders concurrently (order data + cancelled/filled status per order)
+  const orderResults = await Promise.all(
+    Array.from({ length: orderCount }, (_, idx) => {
+      const i = idx + 1
+      return Promise.all([
+        exchange.methods.orders(i).call(),
+        exchange.methods.orderCancelled(i).call(),
+        exchange.methods.orderFilled(i).call()
+      ])
+    })
+  )
+
   const allOrders = []
   const cancelledOrders = []
   const filledOrders = []
 
-  for (let i = 1; i <= orderCount; i++) {
-    const orderData = await exchange.methods.orders(i).call()
-    const isCancelled = await exchange.methods.orderCancelled(i).call()
-    const isFilled = await exchange.methods.orderFilled(i).call()
-
+  for (const [orderData, isCancelled, isFilled] of orderResults) {
     // Transform order data from contract format (numeric indices) to named properties
     // Convert BigInt values to strings to match expected format
     const order = {
@@ -112,38 +120,28 @@ export const loadAllOrders = async (exchange, dispatch) => {
       timestamp: String(orderData[6] || orderData.timestamp)
     }
 
-    // Add to allOrders
     allOrders.push(order)
 
-    // Add to cancelled if cancelled
     if (isCancelled) {
       cancelledOrders.push(order)
     }
 
-    // Add to filled if filled
     if (isFilled) {
       // Add userFill, transactionHash, and use fill timestamp from Trade event
       const tradeData = tradeDataMap[order.id] || {}
-      const orderWithTradeData = {
+      filledOrders.push({
         ...order,
-        timestamp: tradeData.fillTimestamp || order.timestamp, // Use fill timestamp instead of creation timestamp
+        timestamp: tradeData.fillTimestamp || order.timestamp,
         userFill: tradeData.userFill || null,
         transactionHash: tradeData.transactionHash || null
-      }
-      filledOrders.push(orderWithTradeData)
+      })
     }
   }
-
-  console.log('loadAllOrders - All orders fetched:', allOrders.length, allOrders)
-  console.log('loadAllOrders - Cancelled orders:', cancelledOrders.length, cancelledOrders)
-  console.log('loadAllOrders - Filled orders:', filledOrders.length, filledOrders)
 
   // Dispatch to Redux
   dispatch(cancelledOrdersLoaded(cancelledOrders))
   dispatch(filledOrdersLoaded(filledOrders))
   dispatch(allOrdersLoaded(allOrders))
-
-  console.log('loadAllOrders - All orders dispatched to Redux')
 }
 
 // NOTE: Event subscriptions disabled - we now reload data directly from contract state
@@ -199,17 +197,29 @@ export const subscribeToEvents = async (exchange, dispatch) => {
 */
 
 export const cancelOrder = (dispatch, exchange, order, account) => {
-  exchange.methods.cancelOrder(order.id).send({ from: account })
-  .on('transactionHash', (hash) => {
-     dispatch(orderCancelling())
-  })
-  .on('receipt', async (receipt) => {
-    // Reload orders from contract state after transaction is mined
-    await loadAllOrders(exchange, dispatch)
-  })
-  .on('error', (error) => {
-    console.log(error)
-    window.alert('There was an error!')
+  return new Promise((resolve, reject) => {
+    try {
+      exchange.methods.cancelOrder(order.id).send({ from: account })
+      .on('transactionHash', (hash) => {
+        dispatch(orderCancelling())
+      })
+      .on('receipt', async (receipt) => {
+        // Reload orders from contract state after transaction is mined
+        await loadAllOrders(exchange, dispatch)
+        resolve(receipt)
+      })
+      .on('error', (error) => {
+        console.error(error)
+        reject(error)
+      })
+      .catch((error) => {
+        console.error(error)
+        reject(error)
+      })
+    } catch (error) {
+      console.error(error)
+      reject(error)
+    }
   })
 }
 
@@ -229,7 +239,7 @@ export const fillOrder = (dispatch, exchange, order, account) => {
         resolve(receipt)
       })
       .on('error', (error) => {
-        console.log(error)
+        console.error(error)
         reject(error)
       })
       .catch((error) => {
@@ -264,7 +274,7 @@ export const loadBalances = async (dispatch, web3, exchange, token, account) => 
       // Trigger all balances loaded
       dispatch(balancesLoaded())
     } else {
-      window.alert('Please login with MetaMask')
+      toast.error('Please login with MetaMask')
     }
 }
 
@@ -328,7 +338,9 @@ export const depositToken = (dispatch, exchange, web3, token, amount, account) =
   return new Promise((resolve, reject) => {
     try {
       token.methods.approve(exchange.options.address, amount).send({ from: account })
-      .on('transactionHash', (hash) => {
+      .on('receipt', () => {
+        // Only deposit once the approval is mined - depositing on the approval's
+        // transactionHash would race the allowance update and can revert
         exchange.methods.depositToken(token.options.address, amount).send({ from: account })
         .on('transactionHash', (hash) => {
           dispatch(balancesLoading())
@@ -393,7 +405,8 @@ export const makeBuyOrder = (dispatch, exchange, token, web3, order, account) =>
   const tokenGet = token.options.address
   const amountGet = web3.utils.toWei(order.amount, 'ether')
   const tokenGive = ETHER_ADDRESS
-  const amountGive = web3.utils.toWei((order.amount * order.price).toString(), 'ether')
+  // toFixed(18) avoids float artifacts and exponent notation that toWei rejects
+  const amountGive = web3.utils.toWei((order.amount * order.price).toFixed(18), 'ether')
 
   return new Promise((resolve, reject) => {
     try {
@@ -426,7 +439,8 @@ export const makeBuyOrder = (dispatch, exchange, token, web3, order, account) =>
 
 export const makeSellOrder = (dispatch, exchange, token, web3, order, account) => {
   const tokenGet = ETHER_ADDRESS
-  const amountGet = web3.utils.toWei((order.amount * order.price).toString(), 'ether')
+  // toFixed(18) avoids float artifacts and exponent notation that toWei rejects
+  const amountGet = web3.utils.toWei((order.amount * order.price).toFixed(18), 'ether')
   const tokenGive = token.options.address
   const amountGive = web3.utils.toWei(order.amount, 'ether')
 

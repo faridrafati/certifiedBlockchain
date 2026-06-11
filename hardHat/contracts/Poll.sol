@@ -106,6 +106,9 @@ contract Poll {
     ) public {
         require(bytes(_question).length > 0, "Empty question");
         require(_options.length > 1, "At least 2 options required");
+        for (uint256 i = 0; i < _options.length; i++) {
+            require(bytes(_options[i]).length > 0, "Empty option");
+        }
 
         uint256 pollId = polls.length;
 

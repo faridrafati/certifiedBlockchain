@@ -24,7 +24,20 @@ function token(state = {}, action) {
   }
 }
 
-function exchange(state = {}, action) {
+const EXCHANGE_INITIAL_STATE = {
+  loaded: false,
+  contract: null,
+  allOrders: { loaded: false, data: [] },
+  cancelledOrders: { loaded: false, data: [] },
+  filledOrders: { loaded: false, data: [] },
+  orderCancelling: false,
+  orderFilling: false,
+  balancesLoading: false,
+  buyOrder: { amount: null, price: null, making: false },
+  sellOrder: { amount: null, price: null, making: false }
+}
+
+function exchange(state = EXCHANGE_INITIAL_STATE, action) {
   let index, data
 
   switch (action.type) {
