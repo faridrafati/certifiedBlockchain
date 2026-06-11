@@ -534,3 +534,10 @@ header {
     place-self: center;
   }
 }
+
+@media screen and (max-width: 360px) {
+  /* Legacy nav links: let items shrink instead of forcing 60px each */
+  .nav__links li {
+    min-width: auto;
+  }
+}

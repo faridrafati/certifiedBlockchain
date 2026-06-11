@@ -70,7 +70,7 @@
 /* Token Content Grid */
 .token-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(350px, 100%), 1fr));
   gap: 2rem;
   animation: fadeInUp 0.6s ease-out;
 }
@@ -181,6 +181,8 @@
   font-family: 'Courier New', monospace;
   font-size: 0.85rem !important;
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .copy-btn {
@@ -372,6 +374,18 @@
   .token-content {
     gap: 1.5rem;
   }
+
+  /* Touch-friendly icon buttons (44px minimum tap target) */
+  .hero-refresh-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  .copy-btn,
+  .refresh-btn {
+    min-width: 44px !important;
+    min-height: 44px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -400,6 +414,9 @@
 
   .contract-address {
     font-size: 0.75rem !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .quick-amounts {
@@ -413,6 +430,12 @@
 
   .quick-amounts button {
     width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .balance-value {
+    font-size: 1.5rem;
   }
 }
 

@@ -243,7 +243,7 @@ class Balance extends Component {
         exclusive
         onChange={this.handleAssetChange}
         fullWidth
-        sx={{ marginBottom: 2 }}
+        sx={{ marginBottom: { xs: 1.5, md: 2 } }}
       >
         <ToggleButton value="ETH" aria-label="Select ETH">
           ETH

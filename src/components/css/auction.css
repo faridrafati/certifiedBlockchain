@@ -206,6 +206,12 @@
   font-weight: 600;
   font-family: 'Courier New', monospace;
   font-size: 0.9rem;
+  display: inline-block;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 /* Bid Input Group */
@@ -464,6 +470,20 @@
   .place-bid-card h4,
   .control-card h4 {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .bid-amount {
+    font-size: 1.5rem;
+  }
+
+  .admin-bid-amount {
+    font-size: 1.5rem;
+  }
+
+  .item-image-container {
+    height: 200px;
   }
 }
 

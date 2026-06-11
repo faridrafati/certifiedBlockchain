@@ -567,34 +567,36 @@ const CryptoDoggies = () => {
               </h3>
               <Divider className="divider" />
               {doggies.length > 0 ? (
-                <TableContainer component={Paper} className="doggies-table">
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>#</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>DNA</TableCell>
-                        <TableCell>Price (ETH)</TableCell>
-                        <TableCell>Next Price</TableCell>
-                        <TableCell>Owner</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {doggies.map((doggy, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{doggy.name}</TableCell>
-                          <TableCell className="dna-cell">{doggy.dna}</TableCell>
-                          <TableCell>{parseFloat(doggy.price).toFixed(4)}</TableCell>
-                          <TableCell>{parseFloat(doggy.nextPrice).toFixed(4)}</TableCell>
-                          <TableCell className="address-cell">
-                            {formatAddress(doggy.owner)}
-                          </TableCell>
+                <div className="table-scroll-wrapper">
+                  <TableContainer component={Paper} className="doggies-table">
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>#</TableCell>
+                          <TableCell>Name</TableCell>
+                          <TableCell>DNA</TableCell>
+                          <TableCell>Price (ETH)</TableCell>
+                          <TableCell>Next Price</TableCell>
+                          <TableCell>Owner</TableCell>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
+                      </TableHead>
+                      <TableBody>
+                        {doggies.map((doggy, index) => (
+                          <TableRow key={index}>
+                            <TableCell>{index + 1}</TableCell>
+                            <TableCell>{doggy.name}</TableCell>
+                            <TableCell className="dna-cell">{doggy.dna}</TableCell>
+                            <TableCell>{parseFloat(doggy.price).toFixed(4)}</TableCell>
+                            <TableCell>{parseFloat(doggy.nextPrice).toFixed(4)}</TableCell>
+                            <TableCell className="address-cell">
+                              {formatAddress(doggy.owner)}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
               ) : (
                 <div className="empty-state">
                   <PetsIcon className="empty-icon" />

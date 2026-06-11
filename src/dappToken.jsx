@@ -394,7 +394,10 @@ const DappToken = () => {
                 <div className="info-item">
                   <span className="info-label">Contract Address</span>
                   <div className="address-container">
-                    <span className="info-value contract-address">
+                    <span
+                      className="info-value contract-address"
+                      title={DAPPTOKEN_ADDRESS}
+                    >
                       {DAPPTOKEN_ADDRESS}
                     </span>
                     <Tooltip title="Copy Address">

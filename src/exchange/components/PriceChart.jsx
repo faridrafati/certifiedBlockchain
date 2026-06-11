@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { Card, CardContent, Typography, Box } from '@mui/material'
 import Chart from 'react-apexcharts'
 import Spinner from './Spinner'
-import { chartOptions } from './PriceChart.config'
+import { getResponsiveChartOptions } from './PriceChart.config'
 import {
   priceChartLoadedSelector,
   priceChartSelector
@@ -25,13 +25,15 @@ const showPriceChart = (priceChart) => {
       <Box sx={{
         display: 'flex',
         alignItems: 'center',
-        gap: 1.5,
-        paddingBottom: 2.5,
+        flexWrap: 'wrap',
+        gap: { xs: 0.75, md: 1.5 },
+        paddingBottom: { xs: 1.5, md: 2.5 },
+        paddingX: { xs: 1.5, md: 0 },
         borderBottom: '1px solid rgba(102, 126, 234, 0.2)'
       }}>
         <Typography variant="h6" sx={{
           margin: 0,
-          fontSize: '1.3rem',
+          fontSize: { xs: '1.1rem', md: '1.3rem' },
           fontWeight: 700,
           color: '#e0e7ff',
           letterSpacing: '0.5px'
@@ -40,7 +42,7 @@ const showPriceChart = (priceChart) => {
         </Typography>
         {priceSymbol(priceChart.lastPriceChange)}
         <Typography sx={{
-          fontSize: '1.2rem',
+          fontSize: { xs: '1rem', md: '1.2rem' },
           fontWeight: 700,
           color: priceChart.lastPriceChange === '+' ? '#10b981' : '#ef4444'
         }}>
@@ -49,7 +51,7 @@ const showPriceChart = (priceChart) => {
       </Box>
       <div className="chart-wrapper">
         <Chart
-          options={chartOptions}
+          options={getResponsiveChartOptions()}
           series={priceChart.series}
           type='candlestick'
           width='100%'

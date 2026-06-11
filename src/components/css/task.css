@@ -405,6 +405,12 @@
   }
 }
 
+@media (max-width: 360px) {
+  .task-text {
+    font-size: 0.9rem;
+  }
+}
+
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
   .add-task-card,

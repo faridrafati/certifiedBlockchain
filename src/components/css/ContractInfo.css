@@ -31,7 +31,8 @@
 .contract-info-dialog .contract-info-paper {
   border-radius: 20px;
   padding: 0.5rem;
-  min-width: 360px;
+  /* Never force the dialog wider than the viewport on small phones */
+  min-width: min(360px, calc(100vw - 4rem));
   max-width: 500px;
   box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
   animation: contractInfoFadeIn 0.3s ease-out;
@@ -265,10 +266,22 @@
   }
 }
 
+/* Touch Devices - keep the round info button a 44px tap target */
+@media (hover: none) and (pointer: coarse) {
+  .contract-info-btn {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+  }
+}
+
 /* Responsive */
 @media (max-width: 480px) {
   .contract-info-dialog .contract-info-paper {
     min-width: auto;
+    width: calc(100vw - 2rem);
+    max-width: 500px;
     margin: 1rem;
   }
 

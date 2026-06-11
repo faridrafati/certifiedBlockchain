@@ -45,6 +45,19 @@ import './components/css/navbar.css';
 const NavBar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
+  // On phones the Bootstrap collapse stays expanded after tapping a link,
+  // covering the page content. Collapse it whenever a menu item is chosen.
+  const closeMobileMenu = (event) => {
+    if (!event.target.closest('.dropdown-item')) return;
+    const nav = document.getElementById('navbarNavAltMarkup');
+    if (nav?.classList.contains('show')) {
+      nav.classList.remove('show');
+      document
+        .querySelector('.navbar-toggler')
+        ?.setAttribute('aria-expanded', 'false');
+    }
+  };
+
   const handleInfoClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -240,7 +253,11 @@ const NavBar = () => {
           </button>
 
           {/* Collapsible Navigation Menu */}
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div
+            className="collapse navbar-collapse"
+            id="navbarNavAltMarkup"
+            onClick={closeMobileMenu}
+          >
             <ul className="navbar-nav ms-auto">
 
               {/* Finance Dropdown - Token, CrowdSale, Auction, Tickets */}

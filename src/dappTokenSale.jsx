@@ -543,7 +543,10 @@ const DappTokenSale = () => {
             <div className="token-info-row">
               <div className="token-info-item full-width">
                 <span className="token-info-label">Contract Address</span>
-                <span className="token-info-value address">
+                <span
+                  className="token-info-value address"
+                  title={DAPPTOKEN_ADDRESS}
+                >
                   {DAPPTOKEN_ADDRESS}
                 </span>
               </div>

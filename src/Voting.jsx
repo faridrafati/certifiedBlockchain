@@ -328,7 +328,7 @@ const Voting = () => {
 
                     <div className="candidate-address">
                       <span className="address-label">Address:</span>
-                      <span className="address-value">
+                      <span className="address-value" title={candidate.address}>
                         {candidate.address.substring(0, 8)}...
                         {candidate.address.substring(38)}
                       </span>

@@ -427,6 +427,7 @@
 /* Certificates Table */
 .table-responsive {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .certificates-table {
@@ -686,7 +687,7 @@
   }
 
   .certificate-name {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
   }
 
   .certificate-achievement {
@@ -695,6 +696,20 @@
 
   .certificate-course {
     font-size: 1.5rem;
+  }
+
+  .certificates-table {
+    font-size: 0.75rem;
+  }
+
+  .certificates-table th,
+  .certificates-table td {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .credential-id {
+    font-size: 0.75rem;
+    letter-spacing: 0;
   }
 
   .certificate-org,
@@ -747,6 +762,16 @@
 
   .hero-content p {
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .certificate-name {
+    font-size: 1.25rem;
+  }
+
+  .certificate-course {
+    font-size: 1.2rem;
   }
 }
 

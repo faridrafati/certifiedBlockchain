@@ -167,6 +167,7 @@ const ContractInfo = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   className="address-link"
+                  title={contractAddress}
                 >
                   {truncateAddress(contractAddress)}
                 </a>
@@ -191,6 +192,7 @@ const ContractInfo = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="address-link"
+                    title={owner}
                   >
                     {truncateAddress(owner)}
                   </a>
@@ -218,6 +220,7 @@ const ContractInfo = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     className="address-link"
+                    title={account}
                   >
                     {truncateAddress(account)}
                   </a>

@@ -262,6 +262,51 @@
   }
 }
 
+@media (max-width: 480px) {
+  /* Respect safe areas on notched phones (navbar is sticky and full-width) */
+  .navbar-wrapper {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* Keep open dropdowns in flow so they never extend past the viewport */
+  .dropdown-menu {
+    position: static;
+    margin-left: 0;
+    margin-top: 0.125rem;
+    background: rgba(0, 0, 0, 0.6);
+  }
+}
+
+@media (max-width: 360px) {
+  .custom-navbar {
+    padding: 0.5rem;
+  }
+
+  .custom-navbar .container-fluid {
+    padding: 0 0.25rem;
+  }
+
+  .brand-logo {
+    gap: 0.4rem;
+    padding: 0.375rem;
+  }
+
+  .brand-text {
+    font-size: 0.85rem;
+  }
+
+  .brand-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .navbar-nav {
+    flex-wrap: wrap;
+    gap: 0.125rem;
+  }
+}
+
 /* Hover Effects for Large Screens */
 @media (min-width: 992px) {
   .nav-item.dropdown:hover .dropdown-menu {
@@ -277,6 +322,18 @@
 .navbar-wrapper.scrolled .custom-navbar {
   padding: 0.75rem 2rem;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 991px) {
+  .navbar-wrapper.scrolled .custom-navbar {
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .navbar-wrapper.scrolled .custom-navbar {
+    padding: 0.5rem;
+  }
 }
 
 /* Accessibility */

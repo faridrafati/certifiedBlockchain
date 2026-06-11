@@ -264,9 +264,10 @@ class OrderBook extends Component {
           </div>
           <TableContainer
             sx={{
-              maxHeight: '500px',
+              maxHeight: { xs: '250px', sm: '350px', md: '500px' },
               overflowY: 'auto',
-              overflowX: 'hidden',
+              overflowX: { xs: 'auto', md: 'hidden' },
+              WebkitOverflowScrolling: 'touch',
               '&::-webkit-scrollbar': {
                 width: '8px',
               },

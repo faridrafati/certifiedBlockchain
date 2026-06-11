@@ -277,6 +277,32 @@
   }
 }
 
+@media (max-width: 360px) {
+  .metamask-modal-body {
+    padding: 1.5rem 1rem 1rem;
+  }
+
+  .metamask-modal-footer {
+    padding: 1rem 1.25rem;
+  }
+
+  .modal-action-button {
+    min-width: 140px;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  .metamask-logo,
+  .logo-pulse {
+    width: 70px;
+    height: 70px;
+  }
+
+  .modal-title {
+    font-size: 1.3rem;
+  }
+}
+
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
   .metamask-modal-body {

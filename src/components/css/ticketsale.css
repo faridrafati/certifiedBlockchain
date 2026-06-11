@@ -681,6 +681,23 @@
   }
 }
 
+@media (max-width: 800px) {
+  /* Stack admin stats and action buttons vertically on tablets/phones */
+  .admin-stats {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .admin-stats .stat-item {
+    justify-content: center;
+  }
+
+  .admin-stats .MuiButton-root {
+    width: 100%;
+  }
+}
+
 @media (max-width: 480px) {
   .hero-content h1 {
     font-size: 1.5rem;
@@ -994,9 +1011,14 @@
 /* Seat Map */
 .seat-map-container {
   display: flex;
-  justify-content: center;
+  /* flex-start + auto margins on .seat-map keep it centered when it fits,
+     but avoid the centered-flex overflow bug that clips the left edge
+     when the map is wider than the viewport */
+  justify-content: flex-start;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding: 0.5rem;
+  max-width: 100%;
 }
 
 .seat-map {
@@ -1004,6 +1026,7 @@
   flex-direction: column;
   gap: 0.5rem;
   align-items: center;
+  margin: 0 auto;
 }
 
 .seat-row {
@@ -1628,7 +1651,16 @@
 @media (max-width: 600px) {
   .seat-dialog .MuiPaper-root {
     margin: 1rem !important;
+    width: calc(100% - 2rem) !important;
+    max-width: calc(100% - 2rem) !important;
     max-height: calc(100% - 2rem) !important;
+  }
+
+  /* Touch-friendly dialog actions (44px minimum tap target) */
+  .seat-dialog-actions .MuiButton-root,
+  .success-dialog-actions .MuiButton-root,
+  .transfer-dialog-actions .MuiButton-root {
+    min-height: 44px;
   }
 
   .seat {
@@ -1669,6 +1701,62 @@
   .stage {
     padding: 0.5rem 2rem;
     font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .seat-dialog .MuiPaper-root {
+    margin: 0.5rem !important;
+    width: calc(100% - 1rem) !important;
+    max-width: calc(100% - 1rem) !important;
+    max-height: calc(100% - 1rem) !important;
+  }
+
+  .seat-dialog-content {
+    padding: 0.75rem !important;
+  }
+
+  .seat-dialog-actions {
+    padding: 0.75rem 1rem !important;
+  }
+
+  .seat {
+    width: 22px;
+    height: 22px;
+  }
+
+  .seat svg {
+    font-size: 0.85rem !important;
+  }
+
+  .seats {
+    gap: 0.2rem;
+  }
+
+  .seat-row {
+    gap: 0.25rem;
+  }
+
+  .row-number {
+    width: 18px;
+    font-size: 0.7rem;
+  }
+
+  .seat-legend {
+    gap: 0.5rem 0.75rem;
+  }
+
+  .legend-item {
+    font-size: 0.7rem;
+  }
+
+  .selected-seat-info {
+    padding: 0.75rem;
+  }
+
+  .selected-seat-info p {
+    font-size: 0.85rem;
+    word-wrap: break-word;
   }
 }
 

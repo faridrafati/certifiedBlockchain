@@ -149,6 +149,7 @@
 
 .admin-action-btn {
   padding: 0.75rem 2rem !important;
+  min-height: 44px;
   font-weight: 700 !important;
   border-radius: 12px !important;
   text-transform: uppercase !important;
@@ -188,6 +189,7 @@
 
 .submit-button {
   padding: 0.875rem 2rem !important;
+  min-height: 44px;
   font-weight: 700 !important;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   border-radius: 12px !important;
@@ -206,6 +208,11 @@
 }
 
 /* Table Styles */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .doggies-table {
   border-radius: 12px !important;
   overflow: hidden;
@@ -426,6 +433,7 @@
 
 .buy-button {
   padding: 0.75rem 1.5rem !important;
+  min-height: 44px;
   font-weight: 700 !important;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
   border-radius: 12px !important;
@@ -627,11 +635,30 @@
   .doggies-table .MuiTableHead-root .MuiTableCell-root {
     font-size: 0.8rem;
   }
+
+  /* Keep wide tables horizontally scrollable instead of overflowing */
+  .doggies-table {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .doggies-table .MuiTable-root {
+    min-width: 600px;
+  }
+
+  .dna-cell,
+  .address-cell {
+    word-break: break-all;
+  }
 }
 
 @media (max-width: 480px) {
+  .hero-section {
+    padding: 1.5rem 1rem;
+  }
+
   .hero-content h1 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
   }
 
   .hero-icon {
@@ -648,8 +675,25 @@
     gap: 1rem;
   }
 
+  .admin-actions {
+    gap: 0.75rem;
+  }
+
+  .admin-action-btn {
+    width: 100%;
+  }
+
   .marketplace-header h2 {
     font-size: 1.25rem;
+  }
+
+  .doggy-canvas {
+    max-width: 140px;
+  }
+
+  .card-media {
+    padding: 1rem;
+    min-height: 160px;
   }
 
   .doggy-info h4 {

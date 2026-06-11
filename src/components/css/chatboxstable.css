@@ -415,6 +415,9 @@
   color: #718096;
   margin: 0;
   font-family: 'Courier New', monospace;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 .last-activity {
@@ -797,6 +800,58 @@
   .message-bubble {
     padding: 0.875rem 1rem;
     font-size: 0.95rem;
+  }
+
+  /* Stack sidebar above chat with capped height so the input bar stays reachable */
+  .chat-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    min-height: 0;
+  }
+
+  .chat-sidebar {
+    max-height: 320px;
+    max-width: 100%;
+  }
+
+  .contacts-list {
+    max-height: 180px;
+  }
+
+  .messages-area {
+    min-height: 250px;
+    max-height: 300px;
+    padding: 1rem;
+  }
+
+  .chat-input-area {
+    padding: 1rem;
+  }
+
+  .input-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .input-container .MuiTextField-root {
+    width: 100%;
+  }
+
+  .send-button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  /* Prevent iOS auto-zoom on focus (requires >= 16px input font) */
+  .chatbox-stable-container .MuiOutlinedInput-input {
+    font-size: 16px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .sidebar-header {
+    padding: 0.75rem 1rem;
   }
 }
 
@@ -1278,6 +1333,23 @@
     width: 28px;
     height: 28px;
     font-size: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .game-cell {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+
+  .game-board {
+    gap: 3px;
+    padding: 0.5rem;
+  }
+
+  .game-row {
+    gap: 3px;
   }
 }
 

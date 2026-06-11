@@ -223,7 +223,7 @@ class NewOrder extends Component {
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {/* Available Balance */}
                   <Box sx={{ p: 1, bgcolor: '#1e293b', borderRadius: 1, border: '1px solid #334155' }}>
-                    <Typography variant="caption" sx={{ color: '#94a3b8' }}>
+                    <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: { xs: '0.8rem', md: '0.75rem' } }}>
                       Available ETH in Exchange: <strong style={{ color: '#10b981' }}>{exchangeEtherBalance.toFixed(4)} ETH</strong>
                     </Typography>
                   </Box>
@@ -265,7 +265,7 @@ class NewOrder extends Component {
                         </Typography>
                       </Box>
                       {!hasSufficientEth && (
-                        <Box sx={{ p: 2, bgcolor: '#7f1d1d', borderRadius: 1, border: '2px solid #dc2626', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                        <Box sx={{ p: { xs: 1.5, md: 2 }, bgcolor: '#7f1d1d', borderRadius: 1, border: '2px solid #dc2626', display: 'flex', flexDirection: 'column', gap: { xs: 1, md: 1.5 } }}>
                           <Typography variant="body2" sx={{ color: '#fca5a5', display: 'block', fontWeight: 600 }}>
                             ⚠️ Insufficient balance! You need {buyTotalCost.toFixed(4)} ETH but only have {exchangeEtherBalance.toFixed(4)} ETH
                           </Typography>
@@ -320,7 +320,7 @@ class NewOrder extends Component {
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {/* Available Balance */}
                   <Box sx={{ p: 1, bgcolor: '#1e293b', borderRadius: 1, border: '1px solid #334155' }}>
-                    <Typography variant="caption" sx={{ color: '#94a3b8' }}>
+                    <Typography variant="caption" sx={{ color: '#94a3b8', fontSize: { xs: '0.8rem', md: '0.75rem' } }}>
                       Available DAPP in Exchange: <strong style={{ color: '#10b981' }}>{exchangeTokenBalance.toFixed(4)} DAPP</strong>
                     </Typography>
                   </Box>
@@ -362,7 +362,7 @@ class NewOrder extends Component {
                         </Typography>
                       </Box>
                       {!hasSufficientTokens && (
-                        <Box sx={{ p: 2, bgcolor: '#7f1d1d', borderRadius: 1, border: '2px solid #dc2626', display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+                        <Box sx={{ p: { xs: 1.5, md: 2 }, bgcolor: '#7f1d1d', borderRadius: 1, border: '2px solid #dc2626', display: 'flex', flexDirection: 'column', gap: { xs: 1, md: 1.5 } }}>
                           <Typography variant="body2" sx={{ color: '#fca5a5', display: 'block', fontWeight: 600 }}>
                             ⚠️ Insufficient balance! You need {sellAmount.toFixed(4)} DAPP but only have {exchangeTokenBalance.toFixed(4)} DAPP
                           </Typography>

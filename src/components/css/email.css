@@ -467,10 +467,51 @@
 
   .compose-section {
     padding: 1.25rem;
+    position: static;
+    order: 1;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Stack compose above the inbox in a single column */
+  .email-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .messages-section {
+    order: 2;
+  }
+
+  .messages-list {
+    max-height: 250px;
+    padding: 1rem;
   }
 
   .message-card {
     padding: 1.25rem;
+  }
+
+  .message-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .message-header-right {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  /* Keep the compose form compact so the send button stays above the fold */
+  .compose-section form textarea {
+    max-height: 120px;
+    overflow-y: auto !important;
+  }
+
+  /* Prevent iOS auto-zoom on focus (requires >= 16px input font) */
+  .email-container .MuiOutlinedInput-input,
+  .email-container .MuiSelect-select {
+    font-size: 16px !important;
   }
 
   .no-messages {

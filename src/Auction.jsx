@@ -407,7 +407,7 @@ const Auction = () => {
                 {isBidder ? (
                   <span className="your-bid">🎉 You are the highest bidder!</span>
                 ) : (
-                  <span className="other-bidder">
+                  <span className="other-bidder" title={highestBidder}>
                     Highest Bidder: {highestBidder.substring(0, 6)}...
                     {highestBidder.substring(38)}
                   </span>
@@ -497,7 +497,7 @@ const Auction = () => {
               {highestBidder !== '0x0000000000000000000000000000000000000000' && (
                 <div className="admin-bidder-info">
                   <p className="admin-bidder-label">Highest Bidder:</p>
-                  <p className="admin-bidder-address">
+                  <p className="admin-bidder-address" title={highestBidder}>
                     {highestBidder.substring(0, 6)}...{highestBidder.substring(38)}
                   </p>
                 </div>

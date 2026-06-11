@@ -158,7 +158,8 @@
 
 @media (max-width: 992px) {
   .exchange-content {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr) prevents wide table/chart content from forcing horizontal overflow */
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "pricechart"
       "orderbook"
@@ -921,4 +922,183 @@
   color: #667eea !important;
   font-weight: 700 !important;
   font-size: 1.1rem !important;
+}
+
+/* ===== MOBILE RESPONSIVE OVERRIDES ===== */
+/* Kept at the end of the file so they win over the base component
+   rules above (several earlier media rules were being overridden by
+   later base rules of equal specificity). Desktop (>1024px) untouched. */
+
+@media (max-width: 768px) {
+  /* Stack panels in a mobile-friendly order: act first (balance / new order),
+     then chart, then market data */
+  .exchange-content {
+    padding: 1rem 0;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "balance"
+      "neworder"
+      "pricechart"
+      "orderbook"
+      "trades"
+      "mytransactions";
+  }
+
+  /* Chart heights on tablets/phones (base rules above set 400px) */
+  .exchange-content > :nth-child(1) {
+    min-height: 380px;
+  }
+
+  .exchange-container .chart-wrapper {
+    min-height: 320px;
+  }
+
+  /* Keep inputs >= 16px so iOS Safari doesn't auto-zoom on focus */
+  .exchange-container .MuiOutlinedInput-input {
+    font-size: 16px !important;
+  }
+
+  /* Smooth touch scrolling inside scrollable tables */
+  .exchange-container .MuiTableContainer-root {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 480px) {
+  .exchange-content {
+    padding: 0.75rem 0.25rem;
+    gap: 0.5rem;
+  }
+
+  /* Tighter card padding on phones */
+  .exchange-container .MuiCardContent-root {
+    padding: 12px !important;
+  }
+
+  .exchange-container .card-header-custom {
+    padding: 10px 12px;
+    margin: -12px -12px 12px -12px;
+    font-size: 0.9rem;
+  }
+
+  /* Let cards shrink to their content instead of forcing tall blanks */
+  .exchange-content > :nth-child(2) .MuiCard-root,
+  .exchange-content > :nth-child(3) .MuiCard-root,
+  .exchange-content > :nth-child(4) .MuiCard-root,
+  .exchange-content > :nth-child(5) .MuiCard-root,
+  .exchange-content > :nth-child(6) .MuiCard-root {
+    min-height: 0;
+  }
+
+  /* Chart card + wrapper sizing */
+  .exchange-content > :nth-child(1) {
+    min-height: 340px;
+  }
+
+  .exchange-container .chart-wrapper {
+    min-height: 280px;
+  }
+
+  .exchange-container .price-display {
+    padding: 10px 12px;
+    font-size: 1.1rem;
+  }
+
+  /* Tabs: tighter but with >= 44px tap targets */
+  .exchange-container .MuiTabs-root {
+    min-height: 44px !important;
+  }
+
+  .exchange-container .MuiTab-root {
+    padding: 8px 12px !important;
+    font-size: 0.8rem !important;
+    min-width: 60px !important;
+    min-height: 44px !important;
+  }
+
+  /* Buttons: tighter padding, preserve 44px tap target */
+  .exchange-container .MuiButton-root {
+    padding: 10px 16px !important;
+    font-size: 0.8rem !important;
+    min-height: 44px;
+  }
+
+  /* Toggle buttons (ETH/DAPP): tighter padding, keep tap height */
+  .exchange-container .MuiToggleButton-root {
+    padding: 8px 8px !important;
+    min-height: 44px;
+  }
+
+  /* Table cells: tighter padding and slightly smaller numbers */
+  .exchange-container .MuiTableCell-root {
+    padding: 8px 4px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .exchange-container .MuiTableCell-head {
+    padding: 10px 4px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Body2 text (totals, warnings) scales down slightly */
+  .exchange-container .MuiTypography-body2 {
+    font-size: 0.8rem !important;
+  }
+
+  .exchange-container .MuiTypography-h6 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Balance summary table */
+  .exchange-container .balance-table-cell {
+    padding: 6px 4px !important;
+    font-size: 0.8rem !important;
+  }
+
+  .exchange-container .balance-value {
+    font-size: 1rem !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .exchange-content {
+    padding: 0.5rem 0.125rem;
+  }
+
+  .exchange-container .MuiCardContent-root {
+    padding: 10px !important;
+  }
+
+  .exchange-container .card-header-custom {
+    padding: 8px 10px;
+    margin: -10px -10px 10px -10px;
+  }
+
+  .exchange-content > :nth-child(1) {
+    min-height: 300px;
+  }
+
+  .exchange-container .chart-wrapper {
+    min-height: 240px;
+  }
+
+  .exchange-container .MuiTab-root {
+    padding: 6px 8px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .exchange-container .MuiButton-root {
+    padding: 8px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .exchange-container .MuiTableCell-root {
+    padding: 6px 3px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .exchange-container .balance-table-cell {
+    padding: 4px 2px !important;
+    font-size: 0.75rem !important;
+  }
 }

@@ -632,6 +632,10 @@
     padding: 0 0.5rem;
   }
 
+  .polls-sidebar {
+    max-height: 400px;
+  }
+
   .polls-header {
     padding: 1rem 1.5rem;
     flex-direction: column;
@@ -666,6 +670,10 @@
     font-size: 1rem;
   }
 
+  .polls-sidebar {
+    max-height: 300px;
+  }
+
   .create-poll-card h3 {
     font-size: 1.5rem;
   }
@@ -678,8 +686,20 @@
     font-size: 0.95rem;
   }
 
+  .option-label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
   .option-label span {
     font-size: 0.95rem;
+  }
+
+  .chart-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .chart-header h4 {

@@ -140,6 +140,31 @@ export const chartOptions = {
   }
 }
 
+// Returns chart options with a y-axis label width suited to the current
+// viewport. The hardcoded 160px maxWidth reserved nearly half the canvas
+// on phones; 60-90px is plenty for 4-decimal prices at 10px font.
+export const getResponsiveChartOptions = () => {
+  const width = typeof window !== 'undefined' ? window.innerWidth : 1024
+
+  let maxWidth = 160
+  if (width < 480) {
+    maxWidth = 60
+  } else if (width < 768) {
+    maxWidth = 90
+  }
+
+  return {
+    ...chartOptions,
+    yaxis: {
+      ...chartOptions.yaxis,
+      labels: {
+        ...chartOptions.yaxis.labels,
+        maxWidth
+      }
+    }
+  }
+}
+
 export const dummyData = [
   {
     data: [
