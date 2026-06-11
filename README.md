@@ -1,145 +1,149 @@
 # Certified Blockchain DApp
 
-[![Solidity](https://img.shields.io/badge/Solidity-0.8.24-blue.svg)](https://soliditylang.org/)
+[![Solidity](https://img.shields.io/badge/Solidity-0.8.20%2B-blue.svg)](https://soliditylang.org/)
 [![React](https://img.shields.io/badge/React-18.2-61DAFB.svg)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF.svg)](https://vitejs.dev/)
-[![Web3.js](https://img.shields.io/badge/Web3.js-1.7.4-F16822.svg)](https://web3js.org/)
+[![Vite](https://img.shields.io/badge/Vite-6.x-646CFF.svg)](https://vitejs.dev/)
+[![Web3.js](https://img.shields.io/badge/Web3.js-4.x-F16822.svg)](https://web3js.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-A comprehensive Web3 decentralized application (DApp) built with React, Vite, and Ethereum smart contracts. This project showcases multiple blockchain use cases including pet adoption, token sales, voting systems, auctions, and more.
+A comprehensive Web3 decentralized application (DApp) built with React, Vite, and Ethereum smart contracts. This project showcases multiple blockchain use cases including a DEX exchange, pet adoption, token sales, voting systems, auctions, and more.
 
-> **Live Demo:** Deployed on Sepolia Testnet - Connect MetaMask to interact
+> **Live Demo:** Deployed on Sepolia Testnet - Connect MetaMask to interact.
+> All contract addresses are preconfigured, so the app works out of the box - no `.env` required.
 
 ## Features
 
 ### Core Applications
 
+- **DEX Exchange** - Order-book token exchange with deposits, candlestick price chart, and live order book
 - **Pet Adoption DApp** - Adopt virtual pets secured on the blockchain
-- **Token Management** - ERC-20 token implementation with crowdsale functionality
+- **Token Management** - ERC-20 token wallet with crowdsale (ICO) functionality
 - **Voting Systems** - Democratic and weighted voting mechanisms
-- **Auction Platform** - Decentralized auction system
-- **Chat & Messaging** - Blockchain-based communication
+- **Poll Survey** - Create polls and vote with charted results
+- **Auction Platform** - Decentralized auction system with cumulative bidding
+- **Chat & Messaging** - Blockchain email and a chat box with built-in TicTacToe
 - **Certificate Management** - Digital certificate issuance and verification
-- **Crypto Doggies** - NFT-style collectible game
-- **Guessing Game** - Interactive blockchain gaming
-- **Ticket Sales** - Event ticket distribution system
+- **Crypto Doggies** - NFT collectibles with procedurally generated pixel art
+- **Guessing Game** - Higher/lower betting game
+- **Ticket Sales** - NFT event tickets with seat selection
 - **Task Management** - Decentralized todo list
 
 ### Technical Highlights
 
 - Modern React 18 with Hooks
-- Vite for lightning-fast development
-- Web3.js integration for Ethereum interactions
-- MetaMask connectivity
-- Multi-chain support (Mainnet, Goerli, Sepolia, Hardhat, Ganache)
-- Responsive design with Bootstrap 5
-- Real-time transaction notifications
-- Beautiful gradient UI with smooth animations
-- Type-safe with PropTypes
+- Vite 6 for lightning-fast development
+- Route-level code splitting (each dApp loads on demand - initial bundle ~143 KB gzipped)
+- Web3.js v4 integration for Ethereum interactions
+- MetaMask connectivity with shared wallet-event handling (`useWalletEvents` hook)
+- **Fully responsive** - phones (360px+), tablets, and desktop
+- Real-time transaction notifications (react-toastify)
+- Beautiful dark gradient UI with smooth animations
+- Redux-powered exchange with reselect selectors
 
 ## Prerequisites
 
 Before you begin, ensure you have the following installed:
 
-- [Node.js](https://nodejs.org/) (v16 or higher)
-- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+- [Node.js](https://nodejs.org/) (v18 or higher)
+- [npm](https://www.npmjs.com/)
 - [MetaMask](https://metamask.io/) browser extension
-- [Hardhat](https://hardhat.org/) or [Ganache](https://trufflesuite.com/ganache/) for local blockchain
+- Some Sepolia test ETH ([faucet](https://sepoliafaucet.com/)) to send transactions
 
-## Installation
+## Quick Start
+
+The repo ships with cross-platform launcher scripts that install dependencies
+automatically on first run:
+
+```bash
+# Windows
+run.bat              # start the dev server at http://localhost:3000
+run.bat build        # production build into dist/
+run.bat compile      # compile the Solidity contracts (hardHat/)
+run.bat node         # start a local Hardhat blockchain
+
+# Linux / macOS
+chmod +x run.sh      # first time only
+./run.sh             # same commands: dev (default) | build | preview | compile | node
+```
+
+Or do it manually:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd CertifiedBlockchainHardhat
+   git clone https://github.com/faridrafati/certifiedBlockchain.git
+   cd certifiedBlockchain
    ```
 
-2. **Install dependencies**
+2. **Install dependencies and start**
    ```bash
    npm install
+   npm run dev
    ```
+   The application starts at `http://localhost:3000`.
 
-3. **Set up environment variables**
-   Create a `.env` file in the root directory:
-   ```env
-   VITE_CONTRACT_ADDRESS=your_contract_address
-   VITE_INFURA_KEY=your_infura_key
-   ```
-
-4. **Start local blockchain** (optional for development)
+3. **Environment variables (optional)**
+   The Sepolia contract addresses are baked into `src/components/config/*.js`
+   as defaults, so no `.env` is needed to run against Sepolia. To point at your
+   own deployments, copy the template and override any address:
    ```bash
-   npx hardhat node
-   # or
-   ganache-cli
+   cp .env.example .env   # then edit the VITE_*_ADDRESS values
    ```
+   Note: Vite reads `.env` once at startup - restart the dev server after editing it.
 
-5. **Deploy contracts**
+4. **Compile / deploy contracts** (optional - the Hardhat workspace lives in `hardHat/`)
    ```bash
-   npx hardhat run scripts/deploy.js --network localhost
+   cd hardHat
+   npm install
+   npx hardhat compile
+   npx hardhat node                                          # local chain
+   npx hardhat run scripts/deploy-script.js --network localhost
    ```
-
-## Running the Application
-
-### Development Mode
-
-```bash
-npm run dev
-```
-
-The application will start at `http://localhost:3000`
-
-### Build for Production
-
-```bash
-npm run build
-```
-
-### Preview Production Build
-
-```bash
-npm run preview
-```
+   For Sepolia deployment, set `PRIVATE_KEY` and `SEPOLIA_RPC_URL` in `.env`
+   (see `.env.example`) and pass `--network sepolia`.
 
 ## Project Structure
 
 ```
 certifiedblockchain/
-├── contracts/                    # Solidity smart contracts (15 contracts)
-│   ├── Adoption.sol             # Pet adoption tracking
-│   ├── Auction.sol              # Decentralized auction
-│   ├── Certificate.sol          # Digital certificate issuance
-│   ├── ChatBoxPlus.sol          # Chat + TicTacToe game
-│   ├── CryptoDoggies.sol        # NFT collectibles (ERC-721)
-│   ├── DappToken.sol            # ERC-20 token
-│   ├── DappTokenSale.sol        # Token crowdsale (ICO)
-│   ├── Email.sol                # Decentralized messaging
-│   ├── GuessingGame.sol         # Blockchain betting game
-│   ├── Poll.sol                 # Polling/survey system
-│   ├── Task.sol                 # Task/todo manager
-│   ├── TicketSale.sol           # NFT event tickets (ERC-721)
-│   ├── TicTacToe.sol            # Standalone game
-│   ├── Voting.sol               # Democratic voting
-│   └── WeightedVoting.sol       # Weighted voting system
+├── hardHat/                      # Hardhat workspace (own package.json)
+│   ├── contracts/               # Solidity smart contracts (16 contracts)
+│   │   ├── Adoption.sol         # Pet adoption tracking
+│   │   ├── Auction.sol          # Decentralized auction
+│   │   ├── Certificate.sol      # Digital certificate issuance
+│   │   ├── ChatBoxPlus.sol      # Chat + TicTacToe game
+│   │   ├── CryptoDoggies.sol    # NFT collectibles (ERC-721)
+│   │   ├── DappToken.sol        # ERC-20 token
+│   │   ├── DappTokenSale.sol    # Token crowdsale (ICO)
+│   │   ├── Email.sol            # Decentralized messaging
+│   │   ├── Exchange.sol         # Order-book DEX
+│   │   ├── GuessingGame.sol     # Blockchain betting game
+│   │   ├── Poll.sol             # Polling/survey system
+│   │   ├── Task.sol             # Task/todo manager
+│   │   ├── TicketSale.sol       # NFT event tickets (ERC-721)
+│   │   ├── TicTacToe.sol        # Standalone game
+│   │   ├── Voting.sol           # Democratic voting
+│   │   └── WeightedVoting.sol   # Weighted voting system
+│   ├── scripts/                 # Deployment scripts
+│   └── hardhat.config.js        # Hardhat configuration
 │
 ├── src/
 │   ├── components/
-│   │   ├── config/              # Contract ABIs & addresses (15 config files)
-│   │   │   ├── AdoptionConfig.js
-│   │   │   ├── AuctionConfig.js
-│   │   │   ├── CertificateConfig.js
-│   │   │   └── ...
-│   │   ├── css/                 # Component stylesheets
+│   │   ├── config/              # Contract ABIs & addresses (16 config files)
+│   │   ├── css/                 # Per-page stylesheets (responsive)
 │   │   ├── images/              # Pet images for adoption
-│   │   ├── pollCommon/          # Poll form components
-│   │   ├── Card.jsx             # Reusable card component
 │   │   ├── ConfirmDialog.jsx    # Confirmation modal
 │   │   ├── ContractInfo.jsx     # Contract details dialog
+│   │   ├── HeroSection.jsx      # Shared page header banner
 │   │   ├── LoadingSpinner.jsx   # Loading indicator
-│   │   ├── navBar.jsx           # Navigation component
-│   │   └── ...
+│   │   └── useWalletEvents.js   # Shared MetaMask event hook (with cleanup)
 │   │
+│   ├── exchange/                # DEX feature (redux store + components)
+│   │   ├── components/          # OrderBook, PriceChart, Balance, ...
+│   │   └── store/               # actions, reducers, selectors, interactions
+│   │
+│   ├── App.jsx                  # Main app with lazy-loaded routing
+│   ├── navBar.jsx               # Navigation (responsive hamburger menu)
 │   ├── adoption.jsx             # Pet adoption page
-│   ├── App.jsx                  # Main app with routing
 │   ├── Auction.jsx              # Auction platform
 │   ├── Certificate.jsx          # Certificate verification
 │   ├── chatBoxStable.jsx        # Chat + game interface
@@ -147,18 +151,17 @@ certifiedblockchain/
 │   ├── dappToken.jsx            # Token wallet
 │   ├── dappTokenSale.jsx        # ICO interface
 │   ├── Email.jsx                # Messaging system
+│   ├── Exchange.jsx             # DEX entry point
 │   ├── GuessingGame.jsx         # Higher/Lower game
 │   ├── Poll.jsx                 # Polling system
 │   ├── Task.jsx                 # Task manager
 │   ├── TicketSale.jsx           # Event ticketing
 │   ├── Voting.jsx               # Voting interface
-│   ├── WeightedVoting.jsx       # Weighted voting
-│   └── ...
+│   └── WeightedVoting.jsx       # Weighted voting
 │
-├── scripts/                     # Deployment scripts
-├── test/                        # Contract tests
-├── hardhat.config.js            # Hardhat configuration
+├── run.bat / run.sh             # Cross-platform launchers
 ├── vite.config.js               # Vite configuration
+├── .env.example                 # Environment variable template
 └── README.md                    # This file
 ```
 
@@ -185,11 +188,15 @@ All source files include comprehensive JSDoc/NatSpec documentation:
 
 ## Smart Contract Configuration
 
-Update contract configurations in `src/components/config/`:
+Each contract has a config file in `src/components/config/` that exports its
+ABI and address. Addresses default to the verified Sepolia deployments below
+and can be overridden per contract via `.env`:
 
 ```javascript
-export const ADOPTION_ADDRESS = 'YOUR_CONTRACT_ADDRESS';
-export const ADOPTION_ABI = [ /* YOUR ABI */ ];
+// src/components/config/AdoptionConfig.js
+export const ADOPTION_ADDRESS =
+  import.meta.env.VITE_ADOPTION_ADDRESS || '0x625E...eC17'; // Sepolia default
+export const ADOPTION_ABI = [ /* ABI */ ];
 ```
 
 ## Supported Networks
@@ -262,59 +269,65 @@ All smart contracts are deployed and verified on the Sepolia testnet (Chain ID: 
 3. Cast your vote
 4. Track voting results in real-time
 
+### DEX Exchange
+
+1. Navigate to the Exchange page
+2. Deposit ETH and/or DAPP tokens into the exchange from the Balance panel
+3. Place buy/sell orders, or click an order in the order book to fill it
+4. Note the 10% taker fee - filling an order requires `amount + 10%` in your
+   exchange balance
+5. Track trades on the candlestick price chart and in My Transactions
+
 ## Key Features
 
 ### Modern UI/UX
 
-- Gradient-based design with smooth animations
-- Hover effects and transitions
-- Responsive grid layout
+- **Mobile and tablet responsive** - tested at 360/480/768/1024px breakpoints
+- 44px touch targets, 16px inputs (no iOS auto-zoom), scrollable tables
+- Gradient-based dark design with smooth animations
 - Loading states and spinners
 - Toast notifications for all actions
-- Dark mode support
 
 ### Web3 Integration
 
 - Automatic MetaMask detection
-- Network change handling
-- Account change handling
-- Transaction status tracking
-- Gas estimation
+- Network and account change handling (shared `useWalletEvents` hook with
+  listener cleanup)
+- Transaction status tracking with toast feedback
 - Error handling with user-friendly messages
 
 ### Performance
 
-- Lazy loading for images
-- Optimized re-renders with React hooks
-- Memoized values for expensive computations
-- Code splitting with React Router
+- Route-level code splitting with `React.lazy` - each dApp page is its own
+  chunk; initial JS is ~435 KB (~143 KB gzipped)
+- Parallelized contract reads on the exchange (order book loads in one round trip)
+- Optimized re-renders with React hooks and reselect memoization
+- Dev-only redux logging
 
 ## Technologies Used
 
 ### Frontend
 
 - React 18.2
-- Vite 5.0
-- React Router DOM 6.20
-- React Bootstrap 2.7
-- Styled Components 5.3
-- ApexCharts 4.0 (for data visualization)
+- Vite 6
+- React Router DOM 6
+- Redux + React-Redux + Reselect (exchange feature)
+- ApexCharts 4 (candlestick chart and poll results)
 
 ### Blockchain
 
-- Web3.js 1.7.4
-- Ethers.js 6.12.1
+- Web3.js 4.x
 - MetaMask Detect Provider
-- Solidity 0.8.19
-- Hardhat / Truffle
+- Solidity 0.8.20+ (OpenZeppelin 5)
+- Hardhat 2
 
 ### UI/UX
 
-- Bootstrap 5.2
+- Material-UI 5
+- Bootstrap 5.2 + React Bootstrap
 - Font Awesome 4.7
-- React Toastify 9.1
-- Custom CSS with animations
-- Material-UI 5.10
+- React Toastify
+- Custom responsive CSS with animations
 
 ## Development
 
@@ -366,7 +379,7 @@ npm run dev
 
 ## Security
 
-- Never commit private keys or seed phrases
+- Never commit private keys or seed phrases (`.env`, `seed.txt`, `*.key` are gitignored)
 - Always verify contract addresses
 - Test on testnets before mainnet
 - Use environment variables for sensitive data
@@ -377,13 +390,21 @@ npm run dev
 ### ERC Standards Implemented
 - **ERC-20**: DappToken (fungible token with decimals)
 - **ERC-721**: TicketSale, CryptoDoggies (NFT tickets and collectibles)
+- **Custom order-book DEX**: Exchange (deposits, orders, fills, 10% fee)
 
 ### Security Patterns
-- Reentrancy guards on all payable functions
+- Reentrancy guards and checks-effects-interactions on payable functions
+- Pull-payment withdrawals with per-address balances (TicTacToe)
 - Access control (owner-only functions)
-- SafeMath (built into Solidity 0.8+)
+- Overflow checks (built into Solidity 0.8+)
 - Pausable functionality (CryptoDoggies)
-- Input validation and require statements
+- Input validation with descriptive `require` messages
+
+### Known Limitations (educational project)
+- GuessingGame and CryptoDoggies use block-based randomness, which is
+  predictable by miners - fine for a testnet demo, not for real value
+- The Exchange does not lock funds when an order is created; the frontend
+  re-validates both parties' balances before filling
 
 ### Gas Optimization
 - Efficient storage packing
@@ -430,4 +451,4 @@ For questions, support, or feature requests:
 
 **Built with ❤️ by Certified Blockchain Developers**
 
-*Last updated: December 2024*
+*Last updated: June 2026*
