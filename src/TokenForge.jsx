@@ -53,6 +53,9 @@ export default function TokenForge() {
   const [deploying, setDeploying] = useState(false);
   const [usdPerEth, setUsdPerEth] = useState(null);
   const [result, setResult] = useState(null); // { address, hash }
+  const [factoryOwner, setFactoryOwner] = useState('');
+  const [factoryBalance, setFactoryBalance] = useState(null); // wei string
+  const [withdrawing, setWithdrawing] = useState(false);
 
   useWalletEvents();
 
@@ -71,11 +74,44 @@ export default function TokenForge() {
           const m = await f.methods.networkMultiplierBps().call();
           setMultiplierBps(Number(m));
         } catch { /* keep default */ }
+        try {
+          const o = await f.methods.owner().call();
+          setFactoryOwner(o);
+        } catch { /* no admin panel */ }
+        try {
+          const bal = await w3.eth.getBalance(TOKENFORGE_FACTORY_ADDRESS);
+          setFactoryBalance(String(bal));
+        } catch { /* no balance display */ }
       }
     } catch (e) {
       console.error('TokenForge init failed', e);
     }
   }, []);
+
+  const refreshFactoryBalance = useCallback(async () => {
+    if (!web3 || !TOKENFORGE_FACTORY_ADDRESS) return;
+    try {
+      const bal = await web3.eth.getBalance(TOKENFORGE_FACTORY_ADDRESS);
+      setFactoryBalance(String(bal));
+    } catch { /* ignore */ }
+  }, [web3]);
+
+  const handleWithdraw = async () => {
+    if (!factory || !account) return;
+    try {
+      setWithdrawing(true);
+      toast.info('Confirm the withdrawal in MetaMask…');
+      await factory.methods.withdraw().send({ from: account });
+      toast.success('Fees withdrawn to the treasury.');
+      await refreshFactoryBalance();
+    } catch (e) {
+      console.error('Withdraw failed', e);
+      if (e?.code === 4001) toast.warning('Transaction rejected.');
+      else toast.error('Withdraw failed. See console for details.');
+    } finally {
+      setWithdrawing(false);
+    }
+  };
 
   useEffect(() => { init(); }, [init]);
 
@@ -195,6 +231,7 @@ export default function TokenForge() {
       const token = receipt?.events?.TokenCreated?.returnValues?.token;
       setResult({ address: token, hash: receipt.transactionHash });
       toast.success('Token deployed!');
+      refreshFactoryBalance(); // fees just accrued to the factory
     } catch (e) {
       console.error('Deploy failed', e);
       const msg = e?.message || 'Deployment failed';
@@ -249,6 +286,8 @@ export default function TokenForge() {
   }
 
   const notConfigured = !TOKENFORGE_FACTORY_ADDRESS;
+  const isOwner = account && factoryOwner && account.toLowerCase() === factoryOwner.toLowerCase();
+  const factoryBalanceEth = factoryBalance != null && web3?.utils ? web3.utils.fromWei(factoryBalance, 'ether') : null;
 
   return (
     <div className="tf-container">
@@ -264,6 +303,20 @@ export default function TokenForge() {
         <div className="tf-banner tf-warn">
           The TokenForge factory isn't deployed on this network yet. You can design a token and preview pricing &amp; Solidity below;
           deploy the factory (<code>scripts/deploy-tokenforge.js</code>) and set <code>VITE_TOKENFORGE_FACTORY_ADDRESS</code> to enable creation.
+        </div>
+      )}
+
+      {isOwner && (
+        <div className="tf-admin">
+          <div className="tf-admin-info">
+            <span className="tf-admin-tag">Admin</span>
+            <span>Fees collected: <strong>{factoryBalanceEth != null ? `${fmt(factoryBalanceEth)} ETH` : '…'}</strong></span>
+          </div>
+          <Button variant="contained" size="small" className="tf-admin-btn"
+            disabled={withdrawing || !factoryBalance || factoryBalance === '0'}
+            onClick={handleWithdraw}>
+            {withdrawing ? <CircularProgress size={18} /> : 'Withdraw to treasury'}
+          </Button>
         </div>
       )}
 

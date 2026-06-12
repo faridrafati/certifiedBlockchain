@@ -37,6 +37,34 @@
   letter-spacing: 0.3px;
 }
 
+/* ---- admin (factory owner only) ---- */
+.tf-admin {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 12px 0;
+  padding: 10px 14px;
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.12), rgba(102, 126, 234, 0.1));
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  border-radius: 10px;
+}
+.tf-admin-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: #d1fae5; }
+.tf-admin-info strong { color: #6ee7b7; }
+.tf-admin-tag {
+  font-size: 0.66rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+  padding: 2px 8px;
+  border-radius: 6px;
+}
+.tf-admin-btn { background: #10b981 !important; font-weight: 700 !important; }
+.tf-admin-btn.Mui-disabled { opacity: 0.45; }
+
 /* ---- template strip ---- */
 .tf-strip-head {
   display: flex;
@@ -296,12 +324,21 @@
   .tf-builder { grid-template-columns: minmax(0, 1fr) 330px; }
 }
 
-/* ---- mobile: stack form then summary ---- */
+/* ---- mobile: stack form then summary; wrap templates so all are visible ---- */
 @media (max-width: 820px) {
   .tf-builder { grid-template-columns: 1fr; }
   .tf-summary { position: static; }
-  .tf-template-strip { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
-  .tf-template-chip { flex-shrink: 0; }
+  .tf-template-strip { flex-wrap: wrap; }
+}
+@media (max-width: 520px) {
+  /* full-width template chips in a single readable column */
+  .tf-template-strip { gap: 7px; }
+  .tf-template-chip {
+    width: 100%;
+    justify-content: space-between;
+    padding: 10px 14px;
+    border-radius: 12px;
+  }
 }
 @media (max-width: 520px) {
   .tf-grid2, .tf-grid3 { grid-template-columns: 1fr; }
