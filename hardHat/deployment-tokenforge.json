@@ -1,0 +1,13 @@
+{
+  "network": "sepolia",
+  "deployer": "0x98C3CF43ce4FFc6d2Ec25402022fE12d95e3078F",
+  "contracts": {
+    "ForgeTokenDeployer": "0x528db054dB3387929B7CFc7595f47b309eF102be",
+    "TokenFactory": "0x782f1DA03d5faedd2613d27E9055613F68216911"
+  },
+  "config": {
+    "basePrice": "50000000000000000",
+    "networkMultiplierBps": 0
+  },
+  "timestamp": "2026-06-12T01:09:14.334Z"
+}
