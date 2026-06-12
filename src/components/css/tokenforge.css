@@ -1,4 +1,7 @@
-/* TokenForge — à-la-carte ERC-20 generator. Dark theme, fully responsive. */
+/* TokenForge — à-la-carte ERC-20 generator.
+   Layout modeled on smartcontracts.tools/token-generator: configuration form on
+   the left, sticky Order Summary checkout card on the right, template strip on
+   top. Dark palette to match the rest of the app. */
 
 .tf-container {
   max-width: 1200px;
@@ -27,108 +30,126 @@
 }
 
 .tf-section-head {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #a5b4fc;
-  margin: 18px 0 10px;
+  margin: 0;
   letter-spacing: 0.3px;
 }
 
-/* ---- category cards ---- */
-.tf-category-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 14px;
-}
-.tf-category-card {
-  background: linear-gradient(160deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
-  border: 1px solid rgba(102, 126, 234, 0.25);
-  border-radius: 14px;
-  padding: 16px;
-  cursor: pointer;
-  transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+/* ---- template strip ---- */
+.tf-strip-head {
   display: flex;
-  flex-direction: column;
-  min-height: 168px;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  margin: 16px 0 8px;
+  flex-wrap: wrap;
 }
-.tf-category-card:hover {
-  transform: translateY(-3px);
-  border-color: rgba(139, 124, 246, 0.8);
-  box-shadow: 0 8px 24px rgba(80, 70, 160, 0.35);
+.tf-active-label { font-size: 0.82rem; color: #9aa6d4; }
+.tf-active-label strong { color: #e0e7ff; }
+
+.tf-template-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
 }
-.tf-category-card.active {
+.tf-template-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: rgba(102, 126, 234, 0.07);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  user-select: none;
+}
+.tf-template-chip:hover { border-color: rgba(139, 124, 246, 0.8); transform: translateY(-1px); }
+.tf-template-chip.active {
   border-color: #8b7cf6;
-  box-shadow: 0 0 0 2px rgba(139, 124, 246, 0.5);
+  background: rgba(139, 124, 246, 0.18);
+  box-shadow: 0 0 0 1px rgba(139, 124, 246, 0.5);
 }
-.tf-category-card.soon { opacity: 0.6; }
-.tf-cat-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-.tf-cat-name { font-size: 1.15rem; font-weight: 700; color: #f1f5ff; }
+.tf-template-chip.soon { opacity: 0.5; }
+.tf-chip-name { font-weight: 700; font-size: 0.85rem; color: #f1f5ff; }
+.tf-chip-price { font-size: 0.74rem; color: #a5b4fc; }
 .tf-badge {
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 700;
   text-transform: uppercase;
   background: linear-gradient(90deg, #667eea, #764ba2);
   color: #fff;
-  padding: 2px 8px;
+  padding: 2px 7px;
   border-radius: 999px;
 }
 .tf-badge.soon { background: #4b5563; }
-.tf-cat-desc { font-size: 0.82rem; color: #b9c2e6; margin: 8px 0; flex: 1; line-height: 1.4; }
-.tf-cat-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
-.tf-tag {
-  font-size: 0.68rem;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  padding: 2px 7px;
-  border-radius: 6px;
-  color: #cbd5f0;
-}
-.tf-cat-price { font-weight: 700; color: #a5b4fc; font-size: 0.9rem; }
 
-/* ---- active template bar ---- */
-.tf-active-bar {
-  margin: 18px 0 10px;
-  padding: 10px 14px;
-  background: rgba(102, 126, 234, 0.1);
-  border-radius: 8px;
-  font-size: 0.9rem;
-}
-
-/* ---- builder two-column ---- */
+/* ---- two-column builder: form left, sticky summary right ---- */
 .tf-builder {
   display: grid;
-  grid-template-columns: 1fr 360px;
+  grid-template-columns: minmax(0, 1fr) 380px;
   gap: 18px;
   align-items: start;
 }
-.tf-summary { position: sticky; top: 16px; }
+.tf-form { min-width: 0; }
+.tf-summary { position: sticky; top: 14px; min-width: 0; }
 
-.tf-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.tf-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+/* ---- form sections ---- */
+.tf-form-card .MuiCardContent-root { padding: 8px 18px 18px; }
+.tf-section { padding: 14px 0; }
+.tf-section + .tf-section { border-top: 1px solid rgba(255, 255, 255, 0.08); }
+.tf-section-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #f1f5ff;
+  margin: 0 0 14px;
+  letter-spacing: 0.2px;
+}
 
-/* ---- features list ---- */
-.tf-features { display: flex; flex-direction: column; }
+.tf-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 12px; }
+.tf-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px 12px; }
+
+/* ---- feature rows (checkbox · name · ⓘ · price pill) ---- */
 .tf-feature-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 4px 6px;
+  gap: 6px;
+  padding: 3px 8px;
   border-radius: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
+.tf-feature-row:last-child { border-bottom: none; }
 .tf-feature-row:hover { background: rgba(255, 255, 255, 0.03); }
 .tf-feature-row.disabled { opacity: 0.45; }
+.tf-feature-row.checked { background: rgba(102, 126, 234, 0.08); }
+.tf-feature-row.included { opacity: 0.85; }
 .tf-feature-row.danger .tf-feat-name { color: #fca5a5; }
-.tf-feat-name { font-size: 0.92rem; display: inline-flex; align-items: center; gap: 6px; }
+.tf-feature-row .MuiFormControlLabel-root { margin-right: 0; flex: 0 1 auto; }
+.tf-feat-name { font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px; }
 .tf-risk {
-  font-size: 0.62rem;
+  font-size: 0.6rem;
   text-transform: uppercase;
   background: rgba(239, 68, 68, 0.2);
   color: #fca5a5;
   padding: 1px 5px;
   border-radius: 4px;
 }
-.tf-info { color: #7c8bbd; cursor: help; }
-.tf-feat-price { margin-left: auto; font-size: 0.82rem; color: #a5b4fc; white-space: nowrap; }
+.tf-info { color: #7c8bbd; cursor: help; flex-shrink: 0; }
+
+.tf-pill {
+  margin-left: auto;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 2px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.tf-pill.free { background: rgba(255, 255, 255, 0.08); color: #9aa6d4; }
+.tf-pill.paid { background: rgba(102, 126, 234, 0.18); color: #a5b4fc; }
+.tf-pill.soon { background: rgba(75, 85, 99, 0.4); color: #9ca3af; }
 
 .tf-extra {
   margin-top: 12px;
@@ -148,40 +169,101 @@
   line-height: 1.45;
 }
 
-/* ---- order summary ---- */
-.tf-notes { margin-bottom: 10px; }
-.tf-note { font-size: 0.78rem; color: #93c5fd; padding: 3px 0; }
+/* ---- order summary (checkout card) ---- */
+.tf-summary-card {
+  border: 1px solid rgba(102, 126, 234, 0.3) !important;
+  box-shadow: 0 10px 32px rgba(40, 35, 90, 0.45) !important;
+}
+.tf-sum-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.tf-sum-title { font-size: 1.05rem; font-weight: 800; color: #f1f5ff; }
+.tf-network-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #c7d2fe;
+  background: rgba(102, 126, 234, 0.14);
+  border: 1px solid rgba(102, 126, 234, 0.35);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.tf-net-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: #34d399;
+  box-shadow: 0 0 6px #34d399;
+}
+
+.tf-token-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.tf-token-avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.tf-token-id { display: flex; flex-direction: column; min-width: 0; }
+.tf-token-name { font-weight: 700; color: #f1f5ff; font-size: 0.92rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tf-token-sub { font-size: 0.74rem; color: #9aa6d4; }
+
+.tf-notes { margin-bottom: 8px; }
+.tf-note { font-size: 0.76rem; color: #93c5fd; padding: 2px 0; }
+
 .tf-lines { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 8px; }
-.tf-line { display: flex; justify-content: space-between; font-size: 0.86rem; padding: 4px 0; color: #cbd5f0; }
+.tf-line { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 4px 0; color: #cbd5f0; gap: 10px; }
+.tf-line-free { color: #9aa6d4; }
 .tf-total {
   display: flex;
   justify-content: space-between;
   align-items: center;
   font-weight: 800;
-  font-size: 1.15rem;
+  font-size: 1.18rem;
   color: #f1f5ff;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   margin-top: 8px;
   padding-top: 10px;
 }
-.tf-free-badge {
-  font-size: 0.62rem;
-  background: rgba(16, 185, 129, 0.2);
-  color: #6ee7b7;
-  padding: 2px 7px;
-  border-radius: 999px;
-  margin-left: 8px;
-  vertical-align: middle;
+.tf-total-val { color: #a5b4fc; }
+.tf-usd { font-size: 0.78rem; color: #6ee7b7; text-align: right; margin-top: 2px; }
+
+.tf-agree { margin-top: 10px !important; align-items: flex-start !important; }
+.tf-agree .MuiCheckbox-root { padding-top: 0; }
+.tf-agree-text { font-size: 0.74rem; color: #9aa6d4; line-height: 1.45; }
+
+.tf-deploy { margin-top: 12px; }
+.tf-cta {
+  background: linear-gradient(90deg, #667eea, #764ba2) !important;
+  font-weight: 700 !important;
+  padding: 10px 0 !important;
 }
-.tf-deploy { margin-top: 14px; }
-.tf-muted { font-size: 0.76rem; color: #8b95bd; margin-top: 10px; line-height: 1.5; }
+.tf-cta.Mui-disabled { opacity: 0.45; }
+.tf-muted { font-size: 0.74rem; color: #8b95bd; margin-top: 10px; line-height: 1.5; }
 
 .tf-solidity {
   background: #0f1021;
   border: 1px solid rgba(102, 126, 234, 0.25);
   border-radius: 8px;
   padding: 12px;
-  font-size: 0.74rem;
+  font-size: 0.72rem;
   color: #c7d2fe;
   overflow-x: auto;
   white-space: pre;
@@ -206,19 +288,19 @@
 
 /* ---- tablet ---- */
 @media (max-width: 1024px) {
-  .tf-builder { grid-template-columns: 1fr 320px; }
+  .tf-builder { grid-template-columns: minmax(0, 1fr) 330px; }
 }
 
-/* ---- mobile ---- */
+/* ---- mobile: stack form then summary ---- */
 @media (max-width: 820px) {
   .tf-builder { grid-template-columns: 1fr; }
   .tf-summary { position: static; }
-  .tf-category-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+  .tf-template-strip { overflow-x: auto; flex-wrap: nowrap; padding-bottom: 6px; }
+  .tf-template-chip { flex-shrink: 0; }
 }
 @media (max-width: 520px) {
   .tf-grid2, .tf-grid3 { grid-template-columns: 1fr; }
-  .tf-category-grid { grid-template-columns: 1fr 1fr; }
-  .tf-category-card { min-height: 150px; padding: 13px; }
-  .tf-cat-name { font-size: 1.05rem; }
   .tf-success-actions .MuiButton-root { flex: 1 1 100%; }
+  .tf-feat-name { font-size: 0.84rem; }
+  .tf-pill { font-size: 0.68rem; padding: 2px 7px; }
 }

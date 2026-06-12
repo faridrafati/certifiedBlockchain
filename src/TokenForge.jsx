@@ -49,7 +49,9 @@ export default function TokenForge() {
   const [tab, setTab] = useState(0);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [ack, setAck] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [deploying, setDeploying] = useState(false);
+  const [usdPerEth, setUsdPerEth] = useState(null);
   const [result, setResult] = useState(null); // { address, hash }
 
   useWalletEvents();
@@ -76,6 +78,19 @@ export default function TokenForge() {
   }, []);
 
   useEffect(() => { init(); }, [init]);
+
+  // Live USD estimate (CoinGecko, best-effort; UI works fine without it)
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd');
+        const j = await r.json();
+        if (!cancelled && j?.ethereum?.usd) setUsdPerEth(Number(j.ethereum.usd));
+      } catch { /* no USD display */ }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const bitmap = useMemo(() => encodeBitmap(state), [state]);
   const errors = useMemo(() => validate(state), [state]);
@@ -241,81 +256,97 @@ export default function TokenForge() {
         </div>
       )}
 
-      {/* Category cards */}
-      <h3 className="tf-section-head">1 · Choose a template</h3>
-      <div className="tf-category-grid">
+      {/* Template strip (presets pre-fill the builder below) */}
+      <div className="tf-strip-head">
+        <h3 className="tf-section-head">Templates</h3>
+        <span className="tf-active-label">Selected: <strong>{categoryLabel()}</strong></span>
+      </div>
+      <div className="tf-template-strip">
         {CATEGORIES.map((cat) => (
           <div
             key={cat.key}
-            className={`tf-category-card ${state.category === cat.key || state.category === `custom:${cat.key}` ? 'active' : ''} ${cat.phase2 ? 'soon' : ''}`}
+            className={`tf-template-chip ${state.category === cat.key || state.category === `custom:${cat.key}` ? 'active' : ''} ${cat.phase2 ? 'soon' : ''}`}
             onClick={() => pickCategory(cat)}
+            title={cat.desc}
           >
-            <div className="tf-cat-top">
-              <span className="tf-cat-name">{cat.name}</span>
-              {cat.badge && <span className={`tf-badge ${cat.badge === 'Soon' ? 'soon' : ''}`}>{cat.badge}</span>}
-            </div>
-            <p className="tf-cat-desc">{cat.desc}</p>
-            <div className="tf-cat-tags">
-              {cat.toggles.slice(0, 4).map((id) => (
-                <span key={id} className="tf-tag">{TOGGLE_FEATURES.find(f => f.id === id)?.name}</span>
-              ))}
-            </div>
-            <div className="tf-cat-price">{cat.key === 'custom' ? 'Build your own' : `from ${fmt(totalEth(stateFromCategory(cat, state), multiplierBps))} ETH`}</div>
+            <span className="tf-chip-name">{cat.name}</span>
+            {cat.badge && <span className={`tf-badge ${cat.badge === 'Soon' ? 'soon' : ''}`}>{cat.badge}</span>}
+            <span className="tf-chip-price">{cat.key === 'custom' ? 'blank' : `${fmt(totalEth(stateFromCategory(cat, state), multiplierBps))} ETH`}</span>
           </div>
         ))}
       </div>
 
-      {/* Builder */}
-      <div className="tf-active-bar">
-        <span>Template: <strong>{categoryLabel()}</strong></span>
-      </div>
-
+      {/* smartcontracts.tools layout: form left, sticky order summary right */}
       <div className="tf-builder">
-        {/* Left: form */}
         <div className="tf-form">
-          <Card><CardContent>
-            <h3 className="tf-section-head">2 · Token details</h3>
-            <div className="tf-grid2">
-              <TextField label="Name" size="small" value={state.name} onChange={(e) => setField('name', e.target.value)}
-                error={!!errors.name} helperText={errors.name} inputProps={{ maxLength: 50 }} />
-              <TextField label="Symbol" size="small" value={state.symbol}
-                onChange={(e) => setField('symbol', e.target.value.toUpperCase())}
-                error={!!errors.symbol} helperText={errors.symbol} inputProps={{ maxLength: 11 }} />
-              <TextField label="Initial Supply" size="small" value={state.initialSupply}
-                onChange={(e) => setField('initialSupply', cleanInt(e.target.value))}
-                error={!!errors.initialSupply} helperText={errors.initialSupply} />
-              {state.toggles[FID.CUSTOM_DECIMALS] && (
-                <TextField label="Decimals (0–18)" size="small" type="number" value={state.decimals}
+          <Card className="tf-form-card"><CardContent>
+            <div className="tf-section">
+              <h3 className="tf-section-title">Token Details</h3>
+              <div className="tf-grid2">
+                <TextField label="Token Name" size="small" value={state.name} onChange={(e) => setField('name', e.target.value)}
+                  error={!!errors.name} helperText={errors.name || 'e.g. My Awesome Token'} inputProps={{ maxLength: 50 }} />
+                <TextField label="Token Symbol" size="small" value={state.symbol}
+                  onChange={(e) => setField('symbol', e.target.value.toUpperCase())}
+                  error={!!errors.symbol} helperText={errors.symbol || 'e.g. MAT'} inputProps={{ maxLength: 11 }} />
+                <TextField label="Initial Supply" size="small" value={state.initialSupply}
+                  onChange={(e) => setField('initialSupply', cleanInt(e.target.value))}
+                  error={!!errors.initialSupply} helperText={errors.initialSupply || `${fmt(cleanInt(state.initialSupply) || 0)} tokens to your wallet`} />
+                <TextField label="Token Decimals" size="small" type="number" value={decimals}
+                  disabled={!state.toggles[FID.CUSTOM_DECIMALS]}
                   onChange={(e) => setField('decimals', e.target.value)}
-                  error={!!errors.decimals} helperText={errors.decimals} inputProps={{ min: 0, max: 18 }} />
-              )}
-              {state.supplyType === 'capped' && (
-                <TextField label="Max Supply" size="small" value={state.maxSupply}
-                  onChange={(e) => setField('maxSupply', cleanInt(e.target.value))}
-                  error={!!errors.maxSupply} helperText={errors.maxSupply} />
-              )}
+                  error={!!errors.decimals}
+                  helperText={errors.decimals || (state.toggles[FID.CUSTOM_DECIMALS] ? '0–18' : 'Enable "Customizable Decimals" to change')}
+                  inputProps={{ min: 0, max: 18 }} />
+                {state.supplyType === 'capped' && (
+                  <TextField label="Max Supply" size="small" value={state.maxSupply}
+                    onChange={(e) => setField('maxSupply', cleanInt(e.target.value))}
+                    error={!!errors.maxSupply} helperText={errors.maxSupply || 'Hard cap — minting can never exceed this'} />
+                )}
+              </div>
             </div>
 
-            <h3 className="tf-section-head">3 · Token type</h3>
-            <div className="tf-grid3">
-              <TextField select size="small" label="Supply Type" value={state.supplyType} onChange={(e) => setDropdown('supplyType', e.target.value)}>
-                {SUPPLY_OPTIONS.map(o => <MenuItem key={o.value} value={o.value}>{o.label}{o.price ? ` (+${o.price})` : ''}</MenuItem>)}
-              </TextField>
-              <TextField select size="small" label="Access Type" value={state.accessType} onChange={(e) => setDropdown('accessType', e.target.value)}>
-                {ACCESS_OPTIONS.map(o => <MenuItem key={o.value} value={o.value}>{o.label}{o.price ? ` (+${o.price})` : ''}</MenuItem>)}
-              </TextField>
-              <TextField select size="small" label="Transfer Type" value={state.transferType} onChange={(e) => setDropdown('transferType', e.target.value)}>
-                {TRANSFER_OPTIONS.map(o => <MenuItem key={o.value} value={o.value}>{o.label}{o.price ? ` (+${o.price})` : ''}</MenuItem>)}
-              </TextField>
+            <div className="tf-section">
+              <h3 className="tf-section-title">Token Type</h3>
+              <div className="tf-grid3">
+                <TextField select size="small" label="Supply Type" value={state.supplyType} onChange={(e) => setDropdown('supplyType', e.target.value)}
+                  helperText={SUPPLY_OPTIONS.find(o => o.value === state.supplyType)?.hint}>
+                  {SUPPLY_OPTIONS.map(o => <MenuItem key={o.value} value={o.value}>{o.label}{o.price ? ` · +${o.price} ETH` : ' · Free'}</MenuItem>)}
+                </TextField>
+                <TextField select size="small" label="Access Type" value={state.accessType} onChange={(e) => setDropdown('accessType', e.target.value)}
+                  helperText={ACCESS_OPTIONS.find(o => o.value === state.accessType)?.hint}>
+                  {ACCESS_OPTIONS.map(o => <MenuItem key={o.value} value={o.value}>{o.label}{o.price ? ` · +${o.price} ETH` : ' · Free'}</MenuItem>)}
+                </TextField>
+                <TextField select size="small" label="Transfer Type" value={state.transferType} onChange={(e) => setDropdown('transferType', e.target.value)}
+                  helperText={TRANSFER_OPTIONS.find(o => o.value === state.transferType)?.hint}>
+                  {TRANSFER_OPTIONS.map(o => <MenuItem key={o.value} value={o.value}>{o.label}{o.price ? ` · +${o.price} ETH` : ' · Free'}</MenuItem>)}
+                </TextField>
+              </div>
             </div>
 
-            <h3 className="tf-section-head">4 · Features</h3>
-            <div className="tf-features">
+            <div className="tf-section">
+              <h3 className="tf-section-title">Token Features</h3>
+              {/* Always-included rows, like the reference generator */}
+              <div className="tf-feature-row included">
+                <FormControlLabel control={<Checkbox checked disabled size="small" />}
+                  label={<span className="tf-feat-name">ERC20 Compliant</span>} />
+                <Tooltip title="Full EIP-20 standard: transfers, allowances, events. Always included." placement="top">
+                  <InfoOutlinedIcon fontSize="small" className="tf-info" />
+                </Tooltip>
+                <span className="tf-pill free">Free</span>
+              </div>
+              <div className="tf-feature-row included">
+                <FormControlLabel control={<Checkbox checked disabled size="small" />}
+                  label={<span className="tf-feat-name">Verified Source Code</span>} />
+                <Tooltip title="Deployed from the audited, source-verified ForgeToken family. Always included." placement="top">
+                  <InfoOutlinedIcon fontSize="small" className="tf-info" />
+                </Tooltip>
+                <span className="tf-pill free">Free</span>
+              </div>
               {TOGGLE_FEATURES.map((f) => {
                 const isDisabled = !!disabled[f.id];
                 const checked = !!state.toggles[f.id] && !isDisabled;
                 return (
-                  <div key={f.id} className={`tf-feature-row ${isDisabled ? 'disabled' : ''} ${f.danger ? 'danger' : ''}`}>
+                  <div key={f.id} className={`tf-feature-row ${isDisabled ? 'disabled' : ''} ${f.danger ? 'danger' : ''} ${checked ? 'checked' : ''}`}>
                     <FormControlLabel
                       control={<Checkbox checked={checked} disabled={isDisabled} onChange={() => toggle(f.id)} size="small" />}
                       label={<span className="tf-feat-name">{f.name}{f.danger && <span className="tf-risk">risk</span>}</span>}
@@ -323,7 +354,7 @@ export default function TokenForge() {
                     <Tooltip title={isDisabled ? disabled[f.id] : f.tooltip} placement="top">
                       <InfoOutlinedIcon fontSize="small" className="tf-info" />
                     </Tooltip>
-                    <span className="tf-feat-price">{PHASE2(f.id) ? 'soon' : `+${f.price} ETH`}</span>
+                    <span className={`tf-pill ${PHASE2(f.id) ? 'soon' : 'paid'}`}>{PHASE2(f.id) ? 'Soon' : `+${f.price} ETH`}</span>
                   </div>
                 );
               })}
@@ -364,12 +395,24 @@ export default function TokenForge() {
           </CardContent></Card>
         </div>
 
-        {/* Right: sticky order summary */}
+        {/* Right: sticky order summary (checkout) */}
         <div className="tf-summary">
-          <Card><CardContent>
-            <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="fullWidth" sx={{ mb: 1 }}>
-              <Tab label="Order Summary" />
-              <Tab label="Solidity" />
+          <Card className="tf-summary-card"><CardContent>
+            <div className="tf-sum-head">
+              <span className="tf-sum-title">Order Summary</span>
+              <span className="tf-network-chip"><span className="tf-net-dot" />Sepolia</span>
+            </div>
+            <div className="tf-token-preview">
+              <div className="tf-token-avatar">{(state.symbol || 'TKN').slice(0, 4)}</div>
+              <div className="tf-token-id">
+                <span className="tf-token-name">{state.name || 'Your Token'}</span>
+                <span className="tf-token-sub">{fmt(cleanInt(state.initialSupply) || 0)} · {decimals} decimals</span>
+              </div>
+            </div>
+
+            <Tabs value={tab} onChange={(_, v) => setTab(v)} variant="fullWidth" sx={{ mb: 1, minHeight: 36 }}>
+              <Tab label="Summary" sx={{ minHeight: 36 }} />
+              <Tab label="Solidity" sx={{ minHeight: 36 }} />
             </Tabs>
 
             {tab === 0 ? (
@@ -381,25 +424,39 @@ export default function TokenForge() {
                 )}
                 <div className="tf-lines">
                   {items.map((it, i) => (
-                    <div key={i} className="tf-line"><span>{it.label}</span><span>{it.price === 0 ? 'Free' : `${it.price} ETH`}</span></div>
+                    <div key={i} className="tf-line">
+                      <span>{it.label}</span>
+                      <span className={it.price === 0 ? 'tf-line-free' : ''}>{it.price === 0 ? 'Free' : `${it.price} ETH`}</span>
+                    </div>
                   ))}
                 </div>
                 <div className="tf-total">
                   <span>Total</span>
-                  <span>
+                  <span className="tf-total-val">
                     {chainFee != null
                       ? `${fmt(web3?.utils ? web3.utils.fromWei(chainFee, 'ether') : offlineTotal)} ETH`
                       : `${fmt(offlineTotal)} ETH`}
-                    {multiplierBps === 0 && <span className="tf-free-badge">testnet free</span>}
                   </span>
                 </div>
+                {multiplierBps === 0 ? (
+                  <div className="tf-usd">Testnet — service fee waived, you only pay gas</div>
+                ) : (usdPerEth != null && (
+                  <div className="tf-usd">≈ ${fmt(offlineTotal * usdPerEth)} USD</div>
+                ))}
+
+                <FormControlLabel
+                  className="tf-agree"
+                  control={<Checkbox size="small" checked={agree} onChange={(e) => setAgree(e.target.checked)} />}
+                  label={<span className="tf-agree-text">I have read and agree that tokens are deployed exactly as configured and I am responsible for their use.</span>}
+                />
+
                 <div className="tf-deploy">
                   {!account ? (
-                    <Button variant="contained" fullWidth disabled>Connect wallet (top right)</Button>
+                    <Button variant="contained" fullWidth disabled className="tf-cta">Connect wallet (top right)</Button>
                   ) : (
-                    <Tooltip title={notConfigured ? 'Factory not deployed on this network' : (!formValid ? 'Fix the highlighted fields' : '')}>
+                    <Tooltip title={notConfigured ? 'Factory not deployed on this network' : (!formValid ? 'Fix the highlighted fields' : (!agree ? 'Accept the agreement above' : ''))}>
                       <span>
-                        <Button variant="contained" fullWidth disabled={notConfigured || !formValid || deploying}
+                        <Button variant="contained" fullWidth className="tf-cta" disabled={notConfigured || !formValid || !agree || deploying}
                           onClick={() => { setAck(false); setConfirmOpen(true); }}>
                           {deploying ? <CircularProgress size={22} /> : 'Create Token'}
                         </Button>
