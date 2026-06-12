@@ -225,6 +225,7 @@ All smart contracts are deployed and verified on the Sepolia testnet (Chain ID: 
 | DappToken | `0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86` | [View Contract](https://eth-sepolia.blockscout.com/address/0xfc557fA2A750ECaa504FE1a4AEF48D90F3E74c86?tab=contract) |
 | DappTokenSale | `0xD85E2446A1C3421612BE36cB6077B308F47D2B03` | [View Contract](https://eth-sepolia.blockscout.com/address/0xD85E2446A1C3421612BE36cB6077B308F47D2B03?tab=contract) |
 | Exchange | `0x26203b12bA4Cec5eB24A68834EC57ee47fa0F00B` | [View Contract](https://eth-sepolia.blockscout.com/address/0x26203b12bA4Cec5eB24A68834EC57ee47fa0F00B?tab=contract) |
+| TokenForge Factory | `0x782f1DA03d5faedd2613d27E9055613F68216911` | [View Contract](https://eth-sepolia.blockscout.com/address/0x782f1DA03d5faedd2613d27E9055613F68216911?tab=contract) |
 | Email | `0xF0307B91AF329eAE1f1d24EaAd629108C21592DC` | [View Contract](https://eth-sepolia.blockscout.com/address/0xF0307B91AF329eAE1f1d24EaAd629108C21592DC?tab=contract) |
 | GuessingGame | `0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84` | [View Contract](https://eth-sepolia.blockscout.com/address/0xD2b1a870390fEDEc46a06f9870EdEDc5d8F53F84?tab=contract) |
 | Poll | `0x67C446683398483d54E8c3FF3541a54a5447a6c1` | [View Contract](https://eth-sepolia.blockscout.com/address/0x67C446683398483d54E8c3FF3541a54a5447a6c1?tab=contract) |
