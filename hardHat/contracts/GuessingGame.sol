@@ -239,6 +239,11 @@ contract GuessingGame {
         require(online == true, "The game is not online");
         require(msg.value > 0, "Bet amount must be greater than 0");
         require(msg.value <= maxBetAmount, "Bet exceeds maximum allowed");
+        // The mystery number is always in [1,10]. Without bounding _display a
+        // caller could pass 0 (with "higher") or 11 (with "lower") and win every
+        // time, draining the house. Constrain it to the valid range so neither
+        // guess can be made risk-free.
+        require(_display >= 1 && _display <= 10, "Display number out of range");
 
         // Ensure contract can pay out if player wins
         require(address(this).balance >= msg.value * 2, "Contract has insufficient funds for payout");

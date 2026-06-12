@@ -105,6 +105,15 @@ contract Exchange {
   }
 
   function makeOrder(address _tokenGet, uint256 _amountGet, address _tokenGive, uint256 _amountGive) public {
+    // Reject degenerate zero-amount orders that would clutter the book and fill as no-ops.
+    require(_amountGet > 0 && _amountGive > 0, "Amounts must be > 0");
+    // Collateralize the order: lock the maker's give-side funds now. This guarantees
+    // every open order is fillable and removes the "phantom order" grief where a maker
+    // withdraws after ordering, making fillOrder revert for honest takers. Reverts here
+    // if the maker has not deposited enough of the give-side token.
+    require(tokens[_tokenGive][msg.sender] >= _amountGive, "Insufficient balance to back order");
+    tokens[_tokenGive][msg.sender] = tokens[_tokenGive][msg.sender] - _amountGive;
+
     orderCount = orderCount + 1;
     orders[orderCount] = _Order(orderCount, msg.sender, _tokenGet, _amountGet, _tokenGive, _amountGive, block.timestamp);
     emit Order(orderCount, msg.sender, _tokenGet, _amountGet, _tokenGive, _amountGive, block.timestamp);
@@ -114,7 +123,11 @@ contract Exchange {
     _Order storage _order = orders[_id];
     require(address(_order.user) == msg.sender, "Not order owner");
     require(_order.id == _id, "Order does not exist");
+    require(!orderFilled[_id], "Order already filled");
+    require(!orderCancelled[_id], "Order already cancelled");
     orderCancelled[_id] = true;
+    // Release the escrowed give-side funds back to the maker.
+    tokens[_order.tokenGive][_order.user] = tokens[_order.tokenGive][_order.user] + _order.amountGive;
     emit Cancel(_order.id, msg.sender, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive, block.timestamp);
   }
 
@@ -123,18 +136,20 @@ contract Exchange {
     require(!orderFilled[_id], "Order already filled");
     require(!orderCancelled[_id], "Order already cancelled");
     _Order storage _order = orders[_id];
+    orderFilled[_order.id] = true; // effects before interaction-free trade (CEI hygiene)
     _trade(_order.id, _order.user, _order.tokenGet, _order.amountGet, _order.tokenGive, _order.amountGive);
-    orderFilled[_order.id] = true;
   }
 
   function _trade(uint256 _orderId, address _user, address _tokenGet, uint256 _amountGet, address _tokenGive, uint256 _amountGive) internal {
     // Fee paid by the user that fills the order, a.k.a. msg.sender.
     uint256 _feeAmount = (_amountGet * feePercent) / 100;
 
+    // Filler pays the get-side plus fee; maker receives the get-side.
     tokens[_tokenGet][msg.sender] = tokens[_tokenGet][msg.sender] - (_amountGet + _feeAmount);
     tokens[_tokenGet][_user] = tokens[_tokenGet][_user] + _amountGet;
     tokens[_tokenGet][feeAccount] = tokens[_tokenGet][feeAccount] + _feeAmount;
-    tokens[_tokenGive][_user] = tokens[_tokenGive][_user] - _amountGive;
+    // The maker's give-side was already escrowed in makeOrder; pay it to the filler.
+    // (No debit of the maker here - that double-debit was the source of the underflow revert.)
     tokens[_tokenGive][msg.sender] = tokens[_tokenGive][msg.sender] + _amountGive;
 
     emit Trade(_orderId, _user, _tokenGet, _amountGet, _tokenGive, _amountGive, msg.sender, block.timestamp);

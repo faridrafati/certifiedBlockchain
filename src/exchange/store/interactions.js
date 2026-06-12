@@ -12,6 +12,7 @@ import {
   orderCancelled,
   orderFilling,
   orderFilled,
+  feePercentLoaded,
   etherBalanceLoaded,
   tokenBalanceLoaded,
   exchangeEtherBalanceLoaded,
@@ -63,6 +64,14 @@ export const loadExchange = async (web3, networkId, dispatch) => {
     if (!EXCHANGE_ADDRESS) return null
     const exchange = new web3.eth.Contract(EXCHANGE_ABI, EXCHANGE_ADDRESS)
     dispatch(exchangeLoaded(exchange))
+    // Read the real fee from the contract so the order-book affordability checks
+    // stay in sync with the deployed fee instead of assuming a hardcoded 10%.
+    try {
+      const fee = await exchange.methods.feePercent().call()
+      dispatch(feePercentLoaded(Number(fee)))
+    } catch (feeErr) {
+      console.error('Could not read feePercent from exchange; using default.', feeErr)
+    }
     return exchange
   } catch (error) {
     console.error('Exchange contract not deployed to the current network.', error)

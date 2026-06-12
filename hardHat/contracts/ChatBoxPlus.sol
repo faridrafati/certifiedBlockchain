@@ -126,6 +126,13 @@ contract ChatBoxPlus {
     /// @notice Mapping of game ID to Game struct
     mapping(uint256 => Game) public game;
 
+    /// @notice O(1) lookup of a game by its unordered player pair.
+    /// @dev Stores gameIndex + 1 so that 0 means "no game". Replaces the former
+    ///      unbounded scan over all games (a permissionless griefer could create
+    ///      unlimited games against fresh addresses to push the scan past the
+    ///      block gas limit and brick every game operation).
+    mapping(bytes32 => uint64) private gameIdByPair;
+
     /// @notice Mapping of user addresses to their inboxes
     mapping(address => Inbox) userInboxes;
 
@@ -438,8 +445,15 @@ contract ChatBoxPlus {
         }
         game[gameCounter].movesCounter = 0;
         game[gameCounter].board = emptyBoard;
+        // Index this game by its unordered player pair for O(1) future lookups.
+        gameIdByPair[_pairKey(msg.sender, _invitedPlayer)] = gameCounter + 1;
         gameCounter++;
         return true;
+    }
+
+    /// @dev Order-independent key for a pair of player addresses.
+    function _pairKey(address a, address b) private pure returns (bytes32) {
+        return a < b ? keccak256(abi.encodePacked(a, b)) : keccak256(abi.encodePacked(b, a));
     }
 
     /**
@@ -451,17 +465,12 @@ contract ChatBoxPlus {
     function gameIndexFunction(
         address _secondPlayer
     ) public view returns (bool, uint64) {
-        for (uint64 index = 0; index < gameCounter; index++) {
-            if (
-                ((game[index].player1 == msg.sender) &&
-                    (game[index].player2 == _secondPlayer)) ||
-                ((game[index].player1 == _secondPlayer) &&
-                    (game[index].player2 == msg.sender))
-            ) {
-                return (true, index);
-            }
+        // O(1) lookup: stored value is gameIndex + 1, so 0 means "no game".
+        uint64 stored = gameIdByPair[_pairKey(msg.sender, _secondPlayer)];
+        if (stored == 0) {
+            return (false, 0);
         }
-        return (false, 0);
+        return (true, stored - 1);
     }
 
     /**

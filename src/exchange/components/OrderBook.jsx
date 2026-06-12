@@ -21,7 +21,8 @@ import {
   accountSelector,
   orderFillingSelector,
   exchangeEtherBalanceSelector,
-  exchangeTokenBalanceSelector
+  exchangeTokenBalanceSelector,
+  feePercentSelector
 } from '../store/selectors'
 import { fillOrder, loadAllOrders } from '../store/interactions'
 import { ETHER_ADDRESS } from '../helpers'
@@ -309,7 +310,7 @@ function mapStateToProps(state) {
     account: accountSelector(state),
     exchangeEtherBalance: exchangeEtherBalanceSelector(state),
     exchangeTokenBalance: exchangeTokenBalanceSelector(state),
-    feePercent: 10 // This should match your exchange fee percent
+    feePercent: feePercentSelector(state) // read from the contract, not hardcoded
   }
 }
 

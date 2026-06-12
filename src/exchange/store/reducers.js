@@ -27,6 +27,7 @@ function token(state = {}, action) {
 const EXCHANGE_INITIAL_STATE = {
   loaded: false,
   contract: null,
+  feePercent: 10, // overwritten by FEE_PERCENT_LOADED once read from the contract
   allOrders: { loaded: false, data: [] },
   cancelledOrders: { loaded: false, data: [] },
   filledOrders: { loaded: false, data: [] },
@@ -43,6 +44,8 @@ function exchange(state = EXCHANGE_INITIAL_STATE, action) {
   switch (action.type) {
     case 'EXCHANGE_LOADED':
       return { ...state, loaded: true, contract: action.contract }
+    case 'FEE_PERCENT_LOADED':
+      return { ...state, feePercent: action.feePercent }
     case 'CANCELLED_ORDERS_LOADED':
       return { ...state, cancelledOrders: { loaded: true, data: action.cancelledOrders } }
     case 'FILLED_ORDERS_LOADED':

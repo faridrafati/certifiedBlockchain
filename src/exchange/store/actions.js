@@ -29,6 +29,13 @@ export function exchangeLoaded(contract) {
   }
 }
 
+export function feePercentLoaded(feePercent) {
+  return {
+    type: 'FEE_PERCENT_LOADED',
+    feePercent
+  }
+}
+
 export function cancelledOrdersLoaded(cancelledOrders) {
   return {
     type: 'CANCELLED_ORDERS_LOADED',

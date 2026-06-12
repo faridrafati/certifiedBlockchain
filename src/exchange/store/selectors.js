@@ -33,6 +33,10 @@ export const exchangeLoadedSelector = createSelector(exchangeLoaded, el => el)
 const exchange = state => get(state, 'exchange.contract')
 export const exchangeSelector = createSelector(exchange, e => e)
 
+// Fee percent read from the contract (falls back to 10 until loaded)
+const feePercent = state => get(state, 'exchange.feePercent', 10)
+export const feePercentSelector = createSelector(feePercent, f => Number(f))
+
 export const contractsLoadedSelector = createSelector(
   tokenLoaded,
   exchangeLoaded,
