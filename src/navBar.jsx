@@ -304,6 +304,12 @@ const NavBar = () => {
                       Ticket Sale
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink className="dropdown-item" to="/tokenforge">
+                      <span className="dropdown-icon">🏭</span>
+                      Token Generator
+                    </NavLink>
+                  </li>
                 </ul>
               </li>
 

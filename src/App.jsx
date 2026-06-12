@@ -61,6 +61,7 @@ const DappToken = lazy(() => import('./dappToken'));
 const DappTokenSale = lazy(() => import('./dappTokenSale'));
 const TicketSale = lazy(() => import('./TicketSale'));
 const Exchange = lazy(() => import('./Exchange'));
+const TokenForge = lazy(() => import('./TokenForge'));
 
 /**
  * Main Application Component
@@ -342,6 +343,7 @@ function App() {
                 <Route path="/crowdSale" element={<DappTokenSale />} />
                 <Route path="/auction" element={<Auction />} />
                 <Route path="/ticketSale" element={<TicketSale />} />
+                <Route path="/tokenforge" element={<TokenForge />} />
 
                 {/* Governance Routes */}
                 <Route path="/voting" element={<Voting />} />
