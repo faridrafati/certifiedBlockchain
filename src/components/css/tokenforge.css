@@ -231,6 +231,11 @@
 .tf-lines { border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 8px; }
 .tf-line { display: flex; justify-content: space-between; font-size: 0.85rem; padding: 4px 0; color: #cbd5f0; gap: 10px; }
 .tf-line-free { color: #9aa6d4; }
+
+.tf-adjust-block { border-top: 1px dashed rgba(255, 255, 255, 0.14); margin-top: 6px; padding-top: 6px; }
+.tf-subtotal { color: #e0e7ff; font-weight: 600; }
+.tf-adjust { color: #6ee7b7; }
+.tf-adjust span:last-child { font-weight: 700; }
 .tf-total {
   display: flex;
   justify-content: space-between;

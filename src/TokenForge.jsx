@@ -149,6 +149,17 @@ export default function TokenForge() {
   const antiWhale = !!state.toggles[FID.ANTI_WHALE];
   const deflationary = !!state.toggles[FID.DEFLATIONARY];
 
+  // ---- pricing breakdown for the order summary ----
+  // Line items show the full reference (mainnet) chart; the on-chain total is
+  // that subtotal scaled by the network multiplier. We surface the multiplier as
+  // an explicit discount line so the subtotal and total always reconcile.
+  const subtotal = items.reduce((a, b) => a + b.price, 0);
+  const displayTotal = (chainFee != null && web3?.utils)
+    ? Number(web3.utils.fromWei(chainFee, 'ether'))
+    : offlineTotal;
+  const networkAdjustment = subtotal - displayTotal; // amount waived/added by the multiplier
+  const multiplierLabel = `${(multiplierBps / 10000)}×`;
+
   // ---- deploy ----
   const buildCfgArray = () => {
     const supplyScaled = (BigInt(cleanInt(state.initialSupply) || '0') * (10n ** BigInt(decimals))).toString();
@@ -430,18 +441,23 @@ export default function TokenForge() {
                     </div>
                   ))}
                 </div>
+                {multiplierBps !== 10000 && (
+                  <div className="tf-adjust-block">
+                    <div className="tf-line tf-subtotal"><span>Subtotal</span><span>{fmt(subtotal)} ETH</span></div>
+                    <div className="tf-line tf-adjust">
+                      <span>{multiplierBps === 0 ? 'Sepolia testnet — fee waived' : `Network multiplier (${multiplierLabel})`}</span>
+                      <span>{networkAdjustment > 0 ? `−${fmt(networkAdjustment)} ETH` : `${fmt(networkAdjustment)} ETH`}</span>
+                    </div>
+                  </div>
+                )}
                 <div className="tf-total">
                   <span>Total</span>
-                  <span className="tf-total-val">
-                    {chainFee != null
-                      ? `${fmt(web3?.utils ? web3.utils.fromWei(chainFee, 'ether') : offlineTotal)} ETH`
-                      : `${fmt(offlineTotal)} ETH`}
-                  </span>
+                  <span className="tf-total-val">{fmt(displayTotal)} ETH</span>
                 </div>
                 {multiplierBps === 0 ? (
-                  <div className="tf-usd">Testnet — service fee waived, you only pay gas</div>
-                ) : (usdPerEth != null && (
-                  <div className="tf-usd">≈ ${fmt(offlineTotal * usdPerEth)} USD</div>
+                  <div className="tf-usd">You only pay network gas to deploy on Sepolia.</div>
+                ) : (usdPerEth != null && displayTotal > 0 && (
+                  <div className="tf-usd">≈ ${fmt(displayTotal * usdPerEth)} USD</div>
                 ))}
 
                 <FormControlLabel
