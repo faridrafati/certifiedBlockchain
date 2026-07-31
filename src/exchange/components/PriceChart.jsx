@@ -29,7 +29,7 @@ const showPriceChart = (priceChart) => {
         gap: { xs: 0.75, md: 1.5 },
         paddingBottom: { xs: 1.5, md: 2.5 },
         paddingX: { xs: 1.5, md: 0 },
-        borderBottom: '1px solid rgba(102, 126, 234, 0.2)'
+        borderBottom: '1px solid rgba(124, 58, 237, 0.2)'
       }}>
         <Typography variant="h6" sx={{
           margin: 0,
@@ -68,7 +68,7 @@ class PriceChart extends Component {
       <Card>
         <CardContent>
           <div className="card-header-custom">
-            📊 Price Chart
+            Price Chart
           </div>
           {this.props.priceChartLoaded ? showPriceChart(this.props.priceChart) : <Spinner />}
         </CardContent>

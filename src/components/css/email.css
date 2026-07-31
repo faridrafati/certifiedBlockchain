@@ -1,417 +1,418 @@
-/* Email/Chat Styles */
+/**
+ * @file email.css
+ * @description Blockchain Email page — dark web3 operations theme.
+ * Consumes design tokens from index.css only. Hero styling is global
+ * (index.css); this file covers page layout, message list and compose panel.
+ */
+
 .email-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--space-6) var(--space-4);
 }
 
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  margin-bottom: 3rem;
-  color: white;
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-  animation: fadeInDown 0.6s ease-out;
-  text-align: center;
-}
+/* ------------------------------------------------------ */
+/* Layout */
 
-.hero-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.hero-title-row h1 {
-  margin: 0 !important;
-}
-
-.hero-refresh-btn {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.3s ease !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0;
-}
-
-.hero-refresh-btn svg {
-  font-size: 1.5rem !important;
-}
-
-.hero-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: rotate(180deg);
-}
-
-.hero-content h1 {
-  margin-bottom: 1rem;
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 1.5rem;
-}
-
-/* Email Content Layout */
 .email-content {
   display: grid;
   grid-template-columns: 1fr 1.5fr;
-  gap: 2rem;
-  animation: fadeInUp 0.6s ease-out;
+  gap: var(--space-6);
 }
 
-/* Compose Section */
+/* ------------------------------------------------------ */
+/* Compose panel */
+
 .compose-section {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-6);
   height: fit-content;
   position: sticky;
-  top: 2rem;
+  top: var(--space-6);
 }
 
 .compose-section h3 {
-  color: #2d3748;
-  font-weight: 700;
-  font-size: 1.6rem;
-  margin-bottom: 1.5rem;
+  font-size: 1.3rem;
+  margin-bottom: var(--space-5);
 }
 
 .contact-select {
-  margin-bottom: 1.5rem !important;
+  margin-bottom: var(--space-5) !important;
 }
 
 .reply-context {
-  background: rgba(102, 126, 234, 0.1);
-  border-left: 4px solid #667eea;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
+  background: var(--color-primary-soft);
+  border-left: 3px solid var(--color-primary);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-5);
 }
 
 .reply-context strong {
-  color: #667eea;
-  font-size: 0.9rem;
+  color: var(--color-link);
+  font-size: 0.85rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
 }
 
 .reply-context p {
-  margin: 0.5rem 0 0;
-  color: #4a5568;
+  margin: var(--space-2) 0 0;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
 .compose-section form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-5);
 }
 
 .send-button {
-  padding: 1rem 2rem !important;
-  font-size: 1.1rem !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
+  min-height: 48px;
+  padding: var(--space-3) var(--space-6) !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast),
+    transform var(--transition-fast) !important;
 }
 
 .send-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+  background: var(--color-primary-hover) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow) !important;
+}
+
+.send-button.Mui-disabled {
+  background: var(--color-surface) !important;
+  color: var(--color-text-muted) !important;
 }
 
 .contacts-count {
-  margin-top: 1rem !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
+  margin-top: var(--space-4) !important;
+  font-weight: 600 !important;
+  background: var(--color-primary-soft) !important;
+  color: var(--color-link) !important;
+  border: 1px solid var(--color-primary) !important;
 }
 
-/* Messages Section */
+/* ------------------------------------------------------ */
+/* Messages panel */
+
 .messages-section {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
 }
 
 .tabs-container {
-  border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+  border-bottom: 1px solid var(--color-border);
 }
 
 .tabs-container .MuiTab-root {
-  font-weight: 700 !important;
-  font-size: 1rem !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  color: var(--color-text-muted) !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.04em !important;
+  min-height: 48px;
+  transition: color var(--transition-fast) !important;
+}
+
+.tabs-container .MuiTab-root:hover {
+  color: var(--color-text-secondary) !important;
 }
 
 .tabs-container .Mui-selected {
-  color: #667eea !important;
+  color: var(--color-link) !important;
 }
 
 .tabs-container .MuiTabs-indicator {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: var(--color-primary) !important;
   height: 3px !important;
 }
 
-/* Messages List */
 .messages-list {
-  padding: 2rem;
+  padding: var(--space-5);
   max-height: 600px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
-.messages-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.messages-list::-webkit-scrollbar-track {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 10px;
-}
-
-.messages-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
-}
-
-/* No Messages State */
+/* Empty state */
 .no-messages {
   text-align: center;
-  padding: 4rem 2rem;
-  color: #718096;
+  padding: var(--space-8) var(--space-5);
+  color: var(--color-text-secondary);
 }
 
 .no-messages-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-  animation: float 3s ease-in-out infinite;
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+  color: var(--color-text-muted);
 }
 
 .no-messages h4 {
-  color: #2d3748;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  font-size: 1.4rem;
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+  font-size: 1.25rem;
 }
 
 .no-messages p {
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
-/* Message Cards */
+/* Message cards */
 .message-card {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.03) 0%, rgba(118, 75, 162, 0.03) 100%);
-  border-radius: 16px;
-  padding: 1.5rem;
-  border: 2px solid transparent;
-  transition: all 0.3s ease;
-  animation: slideIn 0.4s ease-out;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-5);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .message-card:hover {
-  border-color: rgba(102, 126, 234, 0.3);
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.06) 0%, rgba(118, 75, 162, 0.06) 100%);
-  transform: translateX(5px);
-  box-shadow: 0 5px 20px rgba(102, 126, 234, 0.15);
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-sm);
 }
 
 .message-card.received {
-  border-left: 4px solid #667eea;
+  border-left: 3px solid var(--color-primary);
 }
 
 .message-card.sent {
-  border-left: 4px solid #48bb78;
+  border-left: 3px solid var(--color-accent);
+}
+
+.message-card:focus-within {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-ring);
 }
 
 .message-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-3);
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .message-header-right {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .message-from,
 .message-to {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  color: #2d3748;
-  font-weight: 700;
-  font-size: 0.95rem;
+  gap: var(--space-2);
+  color: var(--color-text);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.message-from span,
+.message-to span {
+  font-family: var(--font-mono);
 }
 
 .message-from svg,
 .message-to svg {
-  color: #667eea;
+  color: var(--color-link);
 }
 
 .message-time {
-  color: #718096;
-  font-size: 0.85rem;
-  font-weight: 500;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
 }
 
 .message-content {
-  background: white;
-  padding: 1rem;
-  border-radius: 12px;
-  color: #2d3748;
-  font-size: 1rem;
+  background: var(--color-surface-solid);
+  border: 1px solid var(--color-border);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
   line-height: 1.6;
   word-break: break-word;
-  margin-bottom: 0.75rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-bottom: var(--space-3);
 }
 
 .reply-button {
-  padding: 0.5rem 1rem !important;
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4) !important;
   font-weight: 600 !important;
-  border-radius: 8px !important;
+  border-radius: var(--radius-sm) !important;
   text-transform: none !important;
-  color: #667eea !important;
-  border: 2px solid #667eea !important;
-  transition: all 0.3s ease !important;
+  color: var(--color-link) !important;
+  border: 1px solid var(--color-primary) !important;
+  transition: background-color var(--transition-fast), color var(--transition-fast) !important;
 }
 
 .reply-button:hover {
-  background: #667eea !important;
-  color: white !important;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3) !important;
-}
-
-.message-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
 }
 
 .clear-conversation-btn {
-  color: #718096 !important;
-  transition: all 0.3s ease !important;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--color-text-muted) !important;
+  transition: color var(--transition-fast), background-color var(--transition-fast) !important;
 }
 
 .clear-conversation-btn:hover {
-  color: #e53e3e !important;
-  background: rgba(229, 62, 62, 0.1) !important;
+  color: var(--color-danger-text) !important;
+  background: color-mix(in srgb, var(--color-danger) 15%, transparent) !important;
 }
 
 .clear-conversation-btn:disabled {
-  color: rgba(113, 128, 150, 0.4) !important;
+  color: color-mix(in srgb, var(--color-text-muted) 40%, transparent) !important;
 }
 
 .clear-inbox-button {
-  margin-top: 1rem !important;
-  padding: 0.875rem 1.5rem !important;
-  font-weight: 700 !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
+  margin-top: var(--space-4) !important;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-5) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-md) !important;
+  text-transform: none !important;
+  color: var(--color-danger-text) !important;
+  border-color: var(--color-danger) !important;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
 .clear-inbox-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(229, 62, 62, 0.3) !important;
+  background: color-mix(in srgb, var(--color-danger) 12%, transparent) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
-/* Registration Message */
+/* ------------------------------------------------------ */
+/* Registration state */
+
 .registration-message {
-  background: white;
-  border-radius: 20px;
-  padding: 3rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-7) var(--space-6);
   text-align: center;
   max-width: 600px;
-  margin: 2rem auto;
+  margin: var(--space-6) auto;
 }
 
 .registration-message h3 {
-  color: #2d3748;
-  font-weight: 700;
+  font-size: 1.2rem;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ------------------------------------------------------ */
+/* MUI dark bridge (page always dark — no media query) */
+
+.email-container .MuiButton-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+  font-family: var(--font-body) !important;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.email-container .MuiOutlinedInput-root {
+  border-radius: var(--radius-md) !important;
+  background: var(--color-surface);
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.email-container .MuiInputBase-input,
+.email-container .MuiOutlinedInput-input {
+  color: var(--color-text) !important;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.email-container .MuiInputLabel-root {
+  color: var(--color-text-secondary) !important;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+.email-container .MuiInputLabel-root.Mui-focused {
+  color: var(--color-link) !important;
 }
 
-/* Responsive Design */
+.email-container .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-border-strong) !important;
+}
+
+.email-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary) !important;
+}
+
+.email-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary) !important;
+  border-width: 2px !important;
+}
+
+.email-container .MuiFormHelperText-root {
+  color: var(--color-text-muted) !important;
+}
+
+.email-container .MuiSelect-icon {
+  color: var(--color-text-secondary) !important;
+}
+
+.email-container .MuiTextField-root {
+  margin-bottom: 0 !important;
+}
+
+.email-container .MuiSelect-select {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Disabled inputs keep a readable but visibly muted look */
+.email-container .MuiOutlinedInput-root.Mui-disabled {
+  background-color: var(--color-surface) !important;
+}
+
+.email-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+  color: var(--color-text-muted) !important;
+  -webkit-text-fill-color: var(--color-text-muted) !important;
+}
+
+.email-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-border) !important;
+}
+
+.email-container .MuiInputLabel-root.Mui-disabled {
+  color: var(--color-text-muted) !important;
+}
+
+/* Select menu renders in a portal — must be styled globally */
+.MuiMenu-paper {
+  background: var(--color-surface-solid) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.MuiMenuItem-root {
+  color: var(--color-text) !important;
+  font-family: var(--font-body) !important;
+}
+
+.MuiMenuItem-root:hover {
+  background: var(--color-primary-soft) !important;
+}
+
+/* ------------------------------------------------------ */
+/* Responsive */
+
 @media (max-width: 1200px) {
   .email-content {
     grid-template-columns: 1fr;
@@ -424,21 +425,16 @@
 
 @media (max-width: 768px) {
   .email-container {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
-  .hero-section {
-    padding: 2rem 1.5rem;
-  }
-
-  .compose-section,
-  .messages-section {
-    padding: 1.5rem;
+  .compose-section {
+    padding: var(--space-5);
   }
 
   .messages-list {
     max-height: 400px;
-    padding: 1.5rem;
+    padding: var(--space-5);
   }
 
   .message-header {
@@ -453,29 +449,21 @@
 }
 
 @media (max-width: 480px) {
-  .hero-content h1 {
-    font-size: 1.75rem;
-  }
-
-  .hero-content p {
-    font-size: 1rem;
-  }
-
   .compose-section h3 {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 
   .compose-section {
-    padding: 1.25rem;
+    padding: var(--space-4);
     position: static;
     order: 1;
-    margin-bottom: 1.5rem;
+    margin-bottom: var(--space-5);
   }
 
   /* Stack compose above the inbox in a single column */
   .email-content {
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: var(--space-4);
   }
 
   .messages-section {
@@ -484,17 +472,17 @@
 
   .messages-list {
     max-height: 250px;
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .message-card {
-    padding: 1.25rem;
+    padding: var(--space-4);
   }
 
   .message-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: var(--space-3);
   }
 
   .message-header-right {
@@ -515,193 +503,10 @@
   }
 
   .no-messages {
-    padding: 3rem 1rem;
+    padding: var(--space-7) var(--space-4);
   }
 
   .no-messages-icon {
-    font-size: 3.5rem;
-  }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .compose-section,
-  .messages-section,
-  .registration-message {
-    background: #1a202c;
-  }
-
-  .compose-section h3,
-  .no-messages h4,
-  .registration-message h3,
-  .message-from,
-  .message-to {
-    color: #e2e8f0;
-  }
-
-  .no-messages p,
-  .message-time {
-    color: #cbd5e0;
-  }
-
-  /* Tabs dark mode */
-  .tabs-container {
-    border-bottom-color: rgba(102, 126, 234, 0.2);
-  }
-
-  .tabs-container .MuiTab-root {
-    color: #a0aec0 !important;
-  }
-
-  .tabs-container .Mui-selected {
-    color: #667eea !important;
-  }
-
-  .message-card {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
-  }
-
-  .message-card:hover {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%);
-  }
-
-  .message-content {
-    background: #2d3748;
-    color: #e2e8f0;
-  }
-
-  .reply-context {
-    background: rgba(102, 126, 234, 0.15);
-    color: #e2e8f0;
-  }
-
-  .reply-context p {
-    color: #cbd5e0;
-  }
-
-  /* Input fields dark mode */
-  .email-container .MuiOutlinedInput-input {
-    color: #e2e8f0 !important;
-  }
-
-  .email-container .MuiInputLabel-root {
-    color: #a0aec0 !important;
-  }
-
-  .email-container .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(160, 174, 192, 0.3) !important;
-  }
-
-  .email-container .MuiFormHelperText-root {
-    color: #a0aec0 !important;
-  }
-
-  .email-container .MuiSelect-icon {
-    color: #a0aec0 !important;
-  }
-
-  /* Menu items dark mode */
-  .MuiMenu-paper {
-    background: #2d3748 !important;
-  }
-
-  .MuiMenuItem-root {
-    color: #e2e8f0 !important;
-  }
-
-  .MuiMenuItem-root:hover {
-    background: rgba(102, 126, 234, 0.2) !important;
-  }
-
-  /* Disabled input styling in dark mode - 50% opacity for disabled look */
-  .email-container .MuiOutlinedInput-root.Mui-disabled {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-  }
-
-  .email-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
-    color: rgba(226, 232, 240, 0.5) !important;
-    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
-  }
-
-  .email-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(226, 232, 240, 0.15) !important;
-  }
-
-  .email-container .MuiInputLabel-root.Mui-disabled {
-    color: rgba(203, 213, 224, 0.5) !important;
-  }
-}
-
-/* MUI Overrides */
-.email-container .MuiButton-root {
-  text-transform: none !important;
-  font-weight: 600 !important;
-}
-
-.email-container .MuiOutlinedInput-root {
-  border-radius: 12px !important;
-}
-
-.email-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #667eea !important;
-}
-
-.email-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #764ba2 !important;
-  border-width: 2px !important;
-}
-
-.email-container .MuiTextField-root {
-  margin-bottom: 0 !important;
-}
-
-.email-container .MuiSelect-select {
-  display: flex !important;
-  align-items: center !important;
-}
-
-/* Accessibility */
-.send-button:focus,
-.reply-button:focus,
-.clear-inbox-button:focus {
-  outline: 3px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-.message-card:focus-within {
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-/* Print Styles */
-@media print {
-  .email-container {
-    max-width: 100%;
-  }
-
-  .hero-section,
-  .compose-section,
-  .messages-section {
-    box-shadow: none;
-    border: 1px solid #e2e8f0;
-  }
-
-  .send-button,
-  .reply-button,
-  .clear-inbox-button {
-    display: none;
-  }
-
-  .compose-section form {
-    display: none;
-  }
-
-  .email-content {
-    grid-template-columns: 1fr;
-  }
-
-  .messages-list {
-    max-height: none;
-    overflow: visible;
+    font-size: 2.25rem;
   }
 }

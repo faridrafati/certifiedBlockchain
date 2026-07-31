@@ -1,89 +1,44 @@
-/* Auction Styles */
+/**
+ * Auction page styles — dark web3 operations theme.
+ * Consumes design tokens from index.css only. Hero styles are global.
+ */
+
 .auction-container {
-  max-width: 1200px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--space-6) var(--space-4);
 }
 
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  margin-bottom: 3rem;
-  color: white;
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-  text-align: center;
-}
-
-.hero-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.hero-title-row h1 {
-  margin: 0 !important;
-}
-
-.hero-refresh-btn {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.3s ease !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0;
-}
-
-.hero-refresh-btn svg {
-  font-size: 1.5rem !important;
-}
-
-.hero-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: rotate(180deg);
-}
-
-.hero-content h1 {
-  margin-bottom: 1rem;
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 1.5rem;
-}
-
+/* Two-column layout: item on the left, bidding on the right */
 .auction-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-top: 2rem;
-  animation: fadeIn 0.6s ease-out;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
 }
 
 /* Auction Item Card */
 .auction-item-card {
-  background: white;
-  border-radius: 20px;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+  transition: border-color var(--transition-base), box-shadow var(--transition-base),
+    transform var(--transition-base);
 }
 
 .auction-item-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-lg);
 }
 
 .item-image-container {
   position: relative;
   width: 100%;
   height: 400px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: var(--color-surface-solid);
   overflow: hidden;
 }
 
@@ -91,11 +46,11 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
+  transition: transform var(--transition-base);
 }
 
 .auction-item-card:hover .auction-item-image {
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .sold-overlay {
@@ -103,51 +58,49 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-20deg);
-  font-size: 4rem;
+  font-family: var(--font-display);
+  font-size: 3.5rem;
   font-weight: 900;
-  color: white;
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-  padding: 1rem 3rem;
-  border-radius: 16px;
-  border: 4px solid white;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  box-shadow: 0 10px 40px rgba(220, 53, 69, 0.5);
-  opacity: 0.95;
-  animation: pulseScale 2s ease-in-out infinite;
+  letter-spacing: 0.08em;
+  color: var(--color-on-primary);
+  background: var(--color-danger);
+  padding: var(--space-4) var(--space-7);
+  border-radius: var(--radius-lg);
+  border: 3px solid var(--color-danger-text);
+  box-shadow: var(--shadow-lg);
 }
 
 /* Auction Status */
 .auction-status {
-  padding: 1.5rem;
+  padding: var(--space-5);
   text-align: center;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
 }
 
 .status-badge {
   display: inline-block;
-  padding: 0.75rem 1.5rem;
-  border-radius: 50px;
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-full);
   font-weight: 700;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-  animation: fadeInUp 0.6s ease-out;
+  font-size: 1rem;
+  margin-bottom: var(--space-2);
 }
 
 .status-badge.active {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  animation: pulseGlow 2s ease-in-out infinite;
+  background: var(--color-accent-soft);
+  color: var(--color-success-text);
+  border: 1px solid rgba(34, 197, 94, 0.4);
 }
 
 .status-badge.ended {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+  background: rgba(220, 38, 38, 0.15);
+  color: var(--color-danger-text);
+  border: 1px solid rgba(220, 38, 38, 0.4);
 }
 
 .end-time {
-  color: #4a5568;
+  color: var(--color-text-secondary);
   font-weight: 500;
   margin: 0;
   font-size: 0.95rem;
@@ -157,54 +110,54 @@
 .bid-section {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-5);
 }
 
 .current-bid-card,
 .place-bid-card {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 0.6s ease-out;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
 }
 
-.current-bid-card h3,
+.current-bid-card h3 {
+  margin-bottom: var(--space-5);
+  font-size: 1.35rem;
+}
+
 .place-bid-card h4 {
-  color: #2d3748;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
+  margin-bottom: var(--space-5);
+  font-size: 1.2rem;
 }
 
 .bid-amount {
-  font-size: 3rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 1rem;
-  animation: slideIn 0.6s ease-out;
+  font-family: var(--font-mono);
+  font-size: 2.75rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
 }
 
 .bidder-info {
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: 12px;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   text-align: center;
 }
 
 .your-bid {
-  color: #667eea;
+  color: var(--color-success-text);
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
 }
 
 .other-bidder {
-  color: #4a5568;
+  color: var(--color-text-secondary);
   font-weight: 600;
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   display: inline-block;
   max-width: 100%;
@@ -218,39 +171,35 @@
 .bid-input-group {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
+/* Primary CTA — colors come from the MUI theme (violet primary) */
 .bid-button {
-  padding: 1rem 2rem !important;
-  font-size: 1.1rem !important;
+  min-height: 48px;
+  font-size: 1.05rem !important;
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
-}
-
-.bid-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+  letter-spacing: 0.03em !important;
 }
 
 .your-bid-info {
-  padding: 1rem;
-  background: rgba(255, 193, 7, 0.1);
-  border-left: 4px solid #ffc107;
-  border-radius: 8px;
-  color: #4a5568;
+  padding: var(--space-4);
+  background: rgba(245, 158, 11, 0.12);
+  border-left: 4px solid var(--color-warning);
+  border-radius: var(--radius-sm);
+  color: var(--color-warning-text);
   font-weight: 600;
+}
+
+.your-bid-info p {
+  margin: 0;
 }
 
 /* Admin Bid Info */
 .admin-bid-info {
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-  border-top: 1px solid rgba(102, 126, 234, 0.1);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
 }
 
 .admin-bid-section {
@@ -258,133 +207,106 @@
 }
 
 .admin-bid-section h4 {
-  color: #2d3748;
-  font-weight: 700;
-  font-size: 1.3rem;
-  margin-bottom: 1rem;
+  font-size: 1.15rem;
+  margin-bottom: var(--space-4);
 }
 
 .admin-bid-amount {
-  font-size: 2.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 1rem;
+  font-family: var(--font-mono);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
 }
 
 .admin-bidder-info {
-  padding: 1rem;
-  background: rgba(102, 126, 234, 0.1);
-  border-radius: 12px;
-  margin-top: 1rem;
+  padding: var(--space-4);
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  margin-top: var(--space-4);
 }
 
 .admin-bidder-label {
-  color: #4a5568;
+  color: var(--color-text-muted);
   font-weight: 600;
   font-size: 0.9rem;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 var(--space-2) 0;
 }
 
 .admin-bidder-address {
-  color: #2d3748;
-  font-weight: 700;
-  font-family: 'Courier New', monospace;
+  color: var(--color-text);
+  font-weight: 600;
+  font-family: var(--font-mono);
   font-size: 1rem;
   margin: 0;
+  word-break: break-all;
 }
 
 /* Admin Controls */
 .admin-controls {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-5);
 }
 
 .control-card {
-  background: white;
-  border-radius: 20px;
-  padding: 2rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  animation: fadeInUp 0.6s ease-out;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
 }
 
 .control-card h4 {
-  color: #2d3748;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  font-size: 1.3rem;
+  margin-bottom: var(--space-5);
+  font-size: 1.15rem;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .control-card .MuiTextField-root {
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
+/* Admin auction status readout */
 .status-text {
-  padding: 1rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: 12px;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   text-align: center;
   font-weight: 700;
-  color: #667eea;
-  margin-bottom: 1rem;
+  color: var(--color-info-text);
+  margin-bottom: var(--space-4);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* MUI polish (colors come from the global dark MUI theme) */
+.auction-container .MuiButton-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+  min-height: 44px;
+  border-radius: var(--radius-md) !important;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast),
+    transform var(--transition-fast) !important;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.auction-container .MuiButton-root:hover:not(:disabled) {
+  transform: translateY(-1px);
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+.auction-container .MuiButton-root:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
 }
 
-@keyframes pulseScale {
-  0%, 100% {
-    transform: translate(-50%, -50%) rotate(-20deg) scale(1);
-  }
-  50% {
-    transform: translate(-50%, -50%) rotate(-20deg) scale(1.1);
-  }
+.auction-container .MuiTextField-root {
+  margin-bottom: 0;
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-  }
-  50% {
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-  }
+.auction-container .MuiOutlinedInput-root {
+  border-radius: var(--radius-md) !important;
 }
 
 /* Responsive Design */
@@ -398,7 +320,7 @@
   }
 
   .bid-amount {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
   }
 
   .admin-bid-amount {
@@ -408,7 +330,7 @@
 
 @media (max-width: 768px) {
   .auction-container {
-    padding: 1rem;
+    padding: var(--space-4);
   }
 
   .item-image-container {
@@ -418,7 +340,7 @@
   .current-bid-card,
   .place-bid-card,
   .control-card {
-    padding: 1.5rem;
+    padding: var(--space-5);
   }
 
   .bid-amount {
@@ -429,17 +351,14 @@
     font-size: 1.75rem;
   }
 
-  .admin-bid-section h4 {
-    font-size: 1.1rem;
-  }
-
   .sold-overlay {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    padding: var(--space-3) var(--space-6);
   }
 
   .status-badge {
-    font-size: 1rem;
-    padding: 0.625rem 1.25rem;
+    font-size: 0.95rem;
+    padding: var(--space-2) var(--space-4);
   }
 }
 
@@ -447,7 +366,7 @@
   .current-bid-card,
   .place-bid-card,
   .control-card {
-    padding: 1.25rem;
+    padding: var(--space-4);
   }
 
   .bid-amount {
@@ -458,10 +377,6 @@
     font-size: 1.5rem;
   }
 
-  .admin-bid-section h4 {
-    font-size: 1rem;
-  }
-
   .admin-bidder-address {
     font-size: 0.85rem;
   }
@@ -469,7 +384,7 @@
   .current-bid-card h3,
   .place-bid-card h4,
   .control-card h4 {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }
 
@@ -478,130 +393,7 @@
     font-size: 1.5rem;
   }
 
-  .admin-bid-amount {
-    font-size: 1.5rem;
-  }
-
   .item-image-container {
     height: 200px;
   }
-}
-
-/* Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .auction-item-card,
-  .current-bid-card,
-  .place-bid-card,
-  .control-card {
-    background: #1a202c;
-  }
-
-  .current-bid-card h3,
-  .place-bid-card h4,
-  .control-card h4 {
-    color: #e2e8f0;
-  }
-
-  .end-time,
-  .other-bidder {
-    color: #cbd5e0;
-  }
-
-  .your-bid-info {
-    background: rgba(255, 193, 7, 0.15);
-    color: #e2e8f0;
-  }
-
-  /* Admin Bid Info Dark Mode */
-  .admin-bid-section h4 {
-    color: #e2e8f0;
-  }
-
-  .admin-bidder-label {
-    color: #cbd5e0;
-  }
-
-  .admin-bidder-address {
-    color: #e2e8f0;
-  }
-
-  /* Fix MUI TextField input text visibility in dark mode */
-  .auction-container .MuiTextField-root .MuiInputBase-input,
-  .auction-container .MuiOutlinedInput-input,
-  .auction-container .MuiInputBase-input {
-    color: #e2e8f0 !important;
-  }
-
-  .auction-container .MuiTextField-root .MuiInputLabel-root,
-  .auction-container .MuiInputLabel-root {
-    color: #a0aec0 !important;
-  }
-
-  .auction-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
-  .auction-container .MuiInputLabel-root.Mui-focused {
-    color: #667eea !important;
-  }
-
-  .auction-container .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(160, 174, 192, 0.4) !important;
-  }
-
-  .auction-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: #667eea !important;
-  }
-
-  .auction-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #764ba2 !important;
-  }
-
-  .auction-container .MuiFormHelperText-root {
-    color: #a0aec0 !important;
-  }
-
-  /* Disabled input styling in dark mode - 50% opacity for disabled look */
-  .auction-container .MuiOutlinedInput-root.Mui-disabled {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-  }
-
-  .auction-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
-    color: rgba(226, 232, 240, 0.5) !important;
-    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
-  }
-
-  .auction-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(226, 232, 240, 0.15) !important;
-  }
-
-  .auction-container .MuiInputLabel-root.Mui-disabled {
-    color: rgba(203, 213, 224, 0.5) !important;
-  }
-}
-
-/* MUI Overrides */
-.auction-container .MuiButton-root {
-  text-transform: none !important;
-  font-weight: 600 !important;
-  padding: 0.875rem 1.5rem !important;
-  border-radius: 12px !important;
-  transition: all 0.3s ease !important;
-}
-
-.auction-container .MuiButton-root:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
-}
-
-.auction-container .MuiTextField-root {
-  margin-bottom: 0 !important;
-}
-
-.auction-container .MuiOutlinedInput-root {
-  border-radius: 12px !important;
-}
-
-/* Accessibility */
-.bid-button:focus,
-.control-card .MuiButton-root:focus {
-  outline: 3px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
 }

@@ -266,9 +266,9 @@ export default function TokenForge() {
   if (result) {
     return (
       <div className="tf-container">
-        <HeroSection title="🏭 TokenForge" description="Your token is live." contractAddress={TOKENFORGE_FACTORY_ADDRESS} contractName="TokenForge Factory" account={account} />
+        <HeroSection title="TokenForge" description="Your token is live." contractAddress={TOKENFORGE_FACTORY_ADDRESS} contractName="TokenForge Factory" account={account} />
         <Card className="tf-success"><CardContent>
-          <h2>🎉 {state.name} ({state.symbol.toUpperCase()}) deployed!</h2>
+          <h2><i className="fa fa-check-circle" aria-hidden="true" />{state.name} ({state.symbol.toUpperCase()}) deployed!</h2>
           <div className="tf-addr">
             <code>{result.address}</code>
             <IconButton size="small" onClick={() => copy(result.address)}><ContentCopyIcon fontSize="inherit" /></IconButton>
@@ -292,7 +292,7 @@ export default function TokenForge() {
   return (
     <div className="tf-container">
       <HeroSection
-        title="🏭 TokenForge"
+        title="TokenForge"
         description="Create your own ERC-20 token — pick a template or build feature-by-feature. You only pay for what you select."
         contractAddress={TOKENFORGE_FACTORY_ADDRESS}
         contractName="TokenForge Factory"
@@ -453,7 +453,7 @@ export default function TokenForge() {
             )}
             {(state.toggles[FID.CONTROLLED] || state.toggles[FID.URWA]) && (
               <div className="tf-disclosure">
-                ⚠️ You selected a feature that lets the owner move or freeze holders' tokens. Buyers will see this as a rug risk — only use it for genuine compliance / regulated-asset cases.
+                <i className="fa fa-exclamation-triangle" aria-hidden="true" /> You selected a feature that lets the owner move or freeze holders' tokens. Buyers will see this as a rug risk — only use it for genuine compliance / regulated-asset cases.
               </div>
             )}
           </CardContent></Card>
@@ -483,7 +483,7 @@ export default function TokenForge() {
               <>
                 {autoNotes.length > 0 && (
                   <div className="tf-notes">
-                    {autoNotes.map((n, i) => <div key={i} className="tf-note">ℹ️ {n}</div>)}
+                    {autoNotes.map((n, i) => <div key={i} className="tf-note"><i className="fa fa-info-circle" aria-hidden="true" /> {n}</div>)}
                   </div>
                 )}
                 <div className="tf-lines">

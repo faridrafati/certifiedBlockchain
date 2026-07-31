@@ -4,14 +4,17 @@
  * @author CertifiedBlockchain
  *
  * This component provides a consistent hero section across all dApps with:
- * - Title with optional emoji icon
+ * - Display title
  * - Subtitle/description text
  * - Contract information display
  * - Refresh button for data updates
  *
+ * Styling lives exclusively in the global index.css
+ * (.hero-section / .hero-content / .hero-title-row / .network-info).
+ *
  * @example
  * <HeroSection
- *   title="🗳️ Democratic Voting System"
+ *   title="Democratic Voting System"
  *   description="Participate in transparent, blockchain-based democratic voting"
  *   contractAddress={VOTING_ADDRESS}
  *   contractName="Voting Contract"
@@ -53,10 +56,10 @@ const HeroSection = ({
             />
           ) : (
             <span
-              className="badge bg-warning text-dark"
+              className="badge bg-warning"
               title={`Set the ${contractName || 'contract'} address in the .env file (VITE_*_ADDRESS) and restart the dev server`}
             >
-              ⚠️ Contract not configured
+              <i className="fa fa-exclamation-triangle" aria-hidden="true" /> Contract not configured
             </span>
           )}
           {onRefresh && (
@@ -70,14 +73,13 @@ const HeroSection = ({
         <p className="lead mb-4">{description}</p>
 
         {/* Network Info */}
-        <p className="network-info" style={{ fontSize: '0.9rem', opacity: 0.85, marginTop: '-0.5rem' }}>
+        <p className="network-info">
           This website works on the <strong>Sepolia testnet</strong>.
           Need test ETH? Get it from the{' '}
           <a
             href="https://sepolia-faucet.pk910.de/#/"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: 'inherit', textDecoration: 'underline' }}
           >
             Sepolia Faucet
           </a>

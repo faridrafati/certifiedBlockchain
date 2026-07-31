@@ -51,7 +51,7 @@ const showMyFilledOrders = (props) => {
               sx={{
                 cursor: order.transactionHash ? 'pointer' : 'default',
                 '&:hover': {
-                  backgroundColor: order.transactionHash ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
+                  backgroundColor: order.transactionHash ? 'rgba(124, 58, 237, 0.1)' : 'transparent'
                 }
               }}
             >
@@ -149,11 +149,11 @@ class MyTransactions extends Component {
       <Card>
         <CardContent>
           <div className="card-header-custom">
-            👤 My Transactions
+            My Transactions
           </div>
           <Tabs value={activeTab} onChange={this.handleTabChange}>
-            <Tab label="⏳ Open" />
-            <Tab label="✅ Filled" />
+            <Tab label="Open" />
+            <Tab label="Filled" />
           </Tabs>
 
           <Box role="tabpanel" hidden={activeTab !== 0} className="tab-panel">
@@ -168,14 +168,14 @@ class MyTransactions extends Component {
                     width: '8px',
                   },
                   '&::-webkit-scrollbar-track': {
-                    background: 'rgba(102, 126, 234, 0.1)',
+                    background: 'rgba(124, 58, 237, 0.1)',
                     borderRadius: '4px',
                   },
                   '&::-webkit-scrollbar-thumb': {
-                    background: 'rgba(102, 126, 234, 0.5)',
+                    background: 'rgba(124, 58, 237, 0.5)',
                     borderRadius: '4px',
                     '&:hover': {
-                      background: 'rgba(102, 126, 234, 0.7)',
+                      background: 'rgba(124, 58, 237, 0.7)',
                     },
                   },
                 }}
@@ -206,14 +206,14 @@ class MyTransactions extends Component {
                     width: '8px',
                   },
                   '&::-webkit-scrollbar-track': {
-                    background: 'rgba(102, 126, 234, 0.1)',
+                    background: 'rgba(124, 58, 237, 0.1)',
                     borderRadius: '4px',
                   },
                   '&::-webkit-scrollbar-thumb': {
-                    background: 'rgba(102, 126, 234, 0.5)',
+                    background: 'rgba(124, 58, 237, 0.5)',
                     borderRadius: '4px',
                     '&:hover': {
-                      background: 'rgba(102, 126, 234, 0.7)',
+                      background: 'rgba(124, 58, 237, 0.7)',
                     },
                   },
                 }}

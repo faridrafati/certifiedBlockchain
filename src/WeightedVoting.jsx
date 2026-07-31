@@ -364,28 +364,28 @@ const WeightedVoting = () => {
       case 'not_authorized':
         return (
           <Chip
-            label="⚠️ Not Authorized"
+            label="Not Authorized"
             className="status-badge not-authorized"
           />
         );
       case 'authorized_can_vote':
         return (
           <Chip
-            label="✅ Authorized - Ready to Vote"
+            label="Authorized - Ready to Vote"
             className="status-badge authorized"
           />
         );
       case 'authorized_voted':
         return (
           <Chip
-            label="✓ Already Voted"
+            label="Already Voted"
             className="status-badge voted"
           />
         );
       default:
         return (
           <Chip
-            label="❓ Status Unknown"
+            label="Status Unknown"
             className="status-badge unknown"
           />
         );
@@ -397,7 +397,7 @@ const WeightedVoting = () => {
     return (
       <div className="weighted-voting-container">
         <HeroSection
-          title="⚖️ Weighted Voting Admin"
+          title="Weighted Voting Admin"
           description="Manage weighted voting with custom voter authorization"
           contractAddress={WEIGHTEDVOTING_ADDRESS}
           contractName="Weighted Voting Contract"
@@ -409,7 +409,7 @@ const WeightedVoting = () => {
 
         <div className="admin-content">
           <div className="results-card">
-            <h3>📊 Voting Results</h3>
+            <h3>Voting Results</h3>
             <div className="candidates-results">
               {candidates.map((candidate, index) => {
                 const votePercentage =
@@ -446,7 +446,7 @@ const WeightedVoting = () => {
           </div>
 
           <div className="authorization-card">
-            <h3>🔐 Authorize Voter</h3>
+            <h3>Authorize Voter</h3>
             <p className="authorization-description">
               Grant voting rights to an address with a specific weight
             </p>
@@ -499,7 +499,7 @@ const WeightedVoting = () => {
   return (
     <div className="weighted-voting-container">
       <HeroSection
-        title="⚖️ Weighted Voting"
+        title="Weighted Voting"
         description="Cast your weighted vote for your preferred candidate"
         contractAddress={WEIGHTEDVOTING_ADDRESS}
         contractName="Weighted Voting Contract"

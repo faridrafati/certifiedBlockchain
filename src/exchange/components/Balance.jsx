@@ -314,7 +314,7 @@ class Balance extends Component {
         <Card className="balance-card">
           <CardContent>
             <div className="card-header-custom">
-              💼 Balance
+              Balance
             </div>
             <Spinner />
           </CardContent>
@@ -326,12 +326,12 @@ class Balance extends Component {
       <Card className="balance-card">
         <CardContent>
           <div className="card-header-custom">
-            💼 Balance
+            Balance
           </div>
 
           <Tabs value={activeTab} onChange={this.handleTabChange}>
-            <Tab label="💰 Deposit" />
-            <Tab label="💸 Withdraw" />
+            <Tab label="Deposit" />
+            <Tab label="Withdraw" />
           </Tabs>
 
           {/* Deposit Tab */}

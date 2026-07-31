@@ -450,7 +450,7 @@ const GuessingGame = () => {
   return (
     <div className="guessinggame-container">
       <HeroSection
-        title="🎲 Guessing Game"
+        title="Guessing Game"
         description="Higher or Lower? Test your luck on the blockchain!"
         contractAddress={GUESSINGGAME_ADDRESS}
         contractName="Guessing Game"

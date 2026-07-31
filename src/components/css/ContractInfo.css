@@ -1,21 +1,36 @@
-/* Contract Info Button */
+/**
+ * @file ContractInfo.css
+ * @description Dark contract-info trigger chip + detail dialog, mapped to
+ * the design tokens in index.css. !important is required to beat MUI's
+ * injected styles.
+ */
+
+/* Trigger button — sits inside the hero next to the title */
 .contract-info-btn {
-  color: rgba(255, 255, 255, 0.8) !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  transition: all 0.3s ease !important;
+  color: var(--color-text-secondary) !important;
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  transition: color var(--transition-fast), background-color var(--transition-fast),
+    border-color var(--transition-fast), transform var(--transition-fast) !important;
   width: 36px !important;
   height: 36px !important;
   min-width: 36px !important;
   max-width: 36px !important;
   padding: 6px !important;
-  border-radius: 50% !important;
+  border-radius: var(--radius-full) !important;
   overflow: hidden !important;
 }
 
 .contract-info-btn:hover {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.2) !important;
-  transform: scale(1.1);
+  color: var(--color-text) !important;
+  background: var(--color-primary-soft) !important;
+  border-color: var(--color-primary) !important;
+  transform: scale(1.05);
+}
+
+.contract-info-btn:focus-visible {
+  outline: 3px solid var(--color-ring) !important;
+  outline-offset: 2px !important;
 }
 
 .contract-info-btn svg {
@@ -27,14 +42,17 @@
   display: none !important;
 }
 
-/* Dialog Styles */
+/* Dialog */
 .contract-info-dialog .contract-info-paper {
-  border-radius: 20px;
-  padding: 0.5rem;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  color: var(--color-text);
+  padding: var(--space-2);
   /* Never force the dialog wider than the viewport on small phones */
   min-width: min(360px, calc(100vw - 4rem));
   max-width: 500px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-lg);
   animation: contractInfoFadeIn 0.3s ease-out;
   overflow: hidden;
 }
@@ -42,55 +60,58 @@
 .contract-info-title {
   display: flex !important;
   align-items: center !important;
-  gap: 0.75rem !important;
-  font-weight: 700 !important;
-  font-size: 1.3rem !important;
-  color: #2d3748 !important;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  padding: 1.25rem 1.5rem !important;
-  border-bottom: 1px solid rgba(102, 126, 234, 0.15);
+  gap: var(--space-3) !important;
+  font-family: var(--font-display) !important;
+  font-weight: 600 !important;
+  font-size: 1.2rem !important;
+  letter-spacing: 0.02em !important;
+  color: var(--color-text) !important;
+  background: linear-gradient(135deg, var(--color-primary-soft) 0%, var(--color-secondary-soft) 100%);
+  padding: var(--space-4) var(--space-5) !important;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .contract-info-title .title-icon {
-  color: #667eea;
-  font-size: 1.75rem;
+  color: var(--color-link);
+  font-size: 1.6rem;
 }
 
 .contract-info-content {
-  padding: 1.5rem !important;
+  padding: var(--space-5) !important;
 }
 
-/* Info Section */
+/* Info rows */
 .info-section {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.875rem 1rem;
-  background: #f8fafc;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s ease;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 .info-row:hover {
-  background: #f1f5f9;
-  border-color: rgba(102, 126, 234, 0.3);
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
 }
 
 .info-label {
   font-weight: 600;
-  color: #4a5568;
+  color: var(--color-text-secondary);
   font-size: 0.9rem;
 }
 
 .info-value {
-  color: #2d3748;
+  color: var(--color-text);
+  font-family: var(--font-mono);
   font-size: 0.9rem;
   font-weight: 500;
 }
@@ -98,32 +119,38 @@
 .info-value-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
+/* Addresses link out to the block explorer */
 .address-link {
-  font-family: 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 0.85rem;
-  color: #667eea;
+  color: var(--color-link);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .address-link:hover {
-  color: #764ba2;
+  color: var(--color-link-hover);
   text-decoration: underline;
 }
 
 .copy-btn {
-  color: #718096 !important;
+  color: var(--color-text-muted) !important;
   padding: 4px !important;
-  transition: all 0.2s ease !important;
+  transition: color var(--transition-fast), background-color var(--transition-fast) !important;
 }
 
 .copy-btn:hover {
-  color: #667eea !important;
-  background: rgba(102, 126, 234, 0.1) !important;
+  color: var(--color-link) !important;
+  background: var(--color-primary-soft) !important;
+}
+
+.copy-btn:focus-visible {
+  outline: 3px solid var(--color-ring) !important;
+  outline-offset: 2px !important;
 }
 
 .copy-btn svg {
@@ -131,58 +158,74 @@
 }
 
 .network-chip {
+  font-family: var(--font-body) !important;
   font-weight: 600 !important;
   font-size: 0.8rem !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: var(--color-primary-soft) !important;
+  color: var(--color-link) !important;
+  border: 1px solid rgba(124, 58, 237, 0.4) !important;
 }
 
-/* Info Footer */
+/* Footer */
 .info-footer {
-  margin-top: 1.25rem;
-  padding-top: 1rem;
-  border-top: 1px dashed #e2e8f0;
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px dashed var(--color-border-strong);
 }
 
 .security-note {
   margin: 0;
   font-size: 0.8rem;
-  color: #718096;
+  color: var(--color-text-muted);
   text-align: center;
   font-style: italic;
 }
 
 /* Actions */
 .contract-info-actions {
-  padding: 1rem 1.5rem 1.25rem !important;
-  gap: 0.75rem;
-  border-top: 1px solid #e2e8f0;
+  padding: var(--space-4) var(--space-5) !important;
+  gap: var(--space-3);
+  border-top: 1px solid var(--color-border);
+}
+
+.etherscan-btn,
+.close-btn {
+  border-radius: var(--radius-md) !important;
+  padding: 0.625rem 1.25rem !important;
+  min-height: 44px !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), box-shadow var(--transition-fast) !important;
 }
 
 .etherscan-btn {
-  border-radius: 10px !important;
-  padding: 0.625rem 1.25rem !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
-  border-color: #667eea !important;
-  color: #667eea !important;
+  border-color: var(--color-primary) !important;
+  color: var(--color-link) !important;
 }
 
 .etherscan-btn:hover {
-  background: rgba(102, 126, 234, 0.08) !important;
-  border-color: #764ba2 !important;
+  background: var(--color-primary-soft) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: var(--color-link-hover) !important;
 }
 
 .close-btn {
-  border-radius: 10px !important;
-  padding: 0.625rem 1.5rem !important;
-  font-weight: 600 !important;
-  text-transform: none !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .close-btn:hover {
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+  background: var(--color-primary-hover) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.etherscan-btn:focus-visible,
+.close-btn:focus-visible {
+  outline: 3px solid var(--color-ring) !important;
+  outline-offset: 2px !important;
 }
 
 /* Animation */
@@ -197,76 +240,7 @@
   }
 }
 
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .contract-info-dialog .contract-info-paper {
-    background-color: #1a202c;
-  }
-
-  .contract-info-title {
-    color: #e2e8f0 !important;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
-    border-bottom-color: rgba(102, 126, 234, 0.25);
-  }
-
-  .info-row {
-    background: #2d3748;
-    border-color: #4a5568;
-  }
-
-  .info-row:hover {
-    background: #3d4a5c;
-    border-color: rgba(102, 126, 234, 0.4);
-  }
-
-  .info-label {
-    color: #a0aec0;
-  }
-
-  .info-value {
-    color: #e2e8f0;
-  }
-
-  .address-link {
-    color: #a3bffa;
-  }
-
-  .address-link:hover {
-    color: #c4b5fd;
-  }
-
-  .copy-btn {
-    color: #a0aec0 !important;
-  }
-
-  .copy-btn:hover {
-    color: #a3bffa !important;
-    background: rgba(102, 126, 234, 0.2) !important;
-  }
-
-  .info-footer {
-    border-top-color: #4a5568;
-  }
-
-  .security-note {
-    color: #a0aec0;
-  }
-
-  .contract-info-actions {
-    border-top-color: #4a5568;
-  }
-
-  .etherscan-btn {
-    border-color: #a3bffa !important;
-    color: #a3bffa !important;
-  }
-
-  .etherscan-btn:hover {
-    background: rgba(102, 126, 234, 0.15) !important;
-  }
-}
-
-/* Touch Devices - keep the round info button a 44px tap target */
+/* Touch devices — keep the round info button a 44px tap target */
 @media (hover: none) and (pointer: coarse) {
   .contract-info-btn {
     width: 44px !important;
@@ -282,18 +256,18 @@
     min-width: auto;
     width: calc(100vw - 2rem);
     max-width: 500px;
-    margin: 1rem;
+    margin: var(--space-4);
   }
 
   .contract-info-title {
-    font-size: 1.1rem !important;
-    padding: 1rem !important;
+    font-size: 1.05rem !important;
+    padding: var(--space-4) !important;
   }
 
   .info-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .info-value-row {
@@ -303,10 +277,12 @@
 
   .contract-info-actions {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .etherscan-btn,
   .close-btn {
     width: 100%;
+    margin-left: 0 !important;
   }
 }

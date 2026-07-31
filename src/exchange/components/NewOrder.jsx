@@ -208,12 +208,12 @@ class NewOrder extends Component {
       <Card>
         <CardContent>
           <div className="card-header-custom">
-            📝 New Order
+            New Order
           </div>
 
           <Tabs value={activeTab} onChange={this.handleTabChange}>
-            <Tab label="📈 Buy" />
-            <Tab label="📉 Sell" />
+            <Tab label="Buy" />
+            <Tab label="Sell" />
           </Tabs>
 
           {/* Buy Tab */}
@@ -260,7 +260,7 @@ class NewOrder extends Component {
                         <Typography variant="body2" component="span" sx={{ color: '#a5b4fc', fontWeight: 600, fontSize: '0.85rem' }}>
                           Total Cost:{' '}
                         </Typography>
-                        <Typography component="span" sx={{ color: '#667eea', fontWeight: 700, fontSize: '1rem' }}>
+                        <Typography component="span" sx={{ color: 'var(--color-link)', fontWeight: 700, fontSize: '1rem' }}>
                           {buyTotalCost.toFixed(4)} ETH
                         </Typography>
                       </Box>
@@ -290,7 +290,7 @@ class NewOrder extends Component {
                               transition: 'all 0.2s ease'
                             }}
                           >
-                            💰 Deposit ETH Now
+                            Deposit ETH Now
                           </Button>
                         </Box>
                       )}
@@ -387,7 +387,7 @@ class NewOrder extends Component {
                               transition: 'all 0.2s ease'
                             }}
                           >
-                            💰 Deposit DAPP Now
+                            Deposit DAPP Now
                           </Button>
                         </Box>
                       )}

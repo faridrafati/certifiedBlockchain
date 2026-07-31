@@ -7,8 +7,8 @@
  * Provides helpful suggestions and quick links to popular pages.
  *
  * Features:
- * - Animated 404 display with rotating SVG circle
- * - Floating background elements for visual interest
+ * - 404 display with dashed SVG ring
+ * - Subtle static background elements for visual interest
  * - Helpful suggestions for users
  * - Go Home and Go Back navigation buttons
  * - Quick links to popular DApp pages
@@ -57,8 +57,8 @@ const NotFound = () => {
                     y2="120"
                     gradientUnits="userSpaceOnUse"
                   >
-                    <stop stopColor="#667eea" />
-                    <stop offset="1" stopColor="#764ba2" />
+                    <stop style={{ stopColor: 'var(--color-primary)' }} />
+                    <stop offset="1" style={{ stopColor: 'var(--color-secondary)' }} />
                   </linearGradient>
                 </defs>
               </svg>
@@ -125,16 +125,16 @@ const NotFound = () => {
           <p className="popular-title">Popular Pages:</p>
           <div className="link-grid">
             <Link to="/petAdoption" className="quick-link">
-              🐕 Pet Adoption
+              Pet Adoption
             </Link>
             <Link to="/token" className="quick-link">
-              💰 Tokens
+              Tokens
             </Link>
             <Link to="/voting" className="quick-link">
-              🗳️ Voting
+              Voting
             </Link>
             <Link to="/auction" className="quick-link">
-              ⚡ Auction
+              Auction
             </Link>
           </div>
         </div>

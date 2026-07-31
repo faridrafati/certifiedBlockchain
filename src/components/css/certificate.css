@@ -1,406 +1,298 @@
-/* Certificate Styles */
+/**
+ * @file certificate.css
+ * @description Certificate verification & admin page styles.
+ *
+ * Consumes design tokens from components/css/index.css only.
+ * Hero styling is global (index.css) — no hero rules here.
+ * Cards use the shared .surface-panel class (added in JSX); this sheet
+ * adds layout, the skeuomorphic "paper" certificate document, and the
+ * verification success/failure states.
+ */
+
+/* -- Layout -------------------------------------------------- */
+
 .certificate-container {
-  max-width: 1400px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--space-6) var(--space-4);
 }
 
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  margin-bottom: 3rem;
-  color: white;
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-  animation: fadeInDown 0.6s ease-out;
-  text-align: center;
-}
+/* -- Checker (public verification) ---------------------------- */
 
-.hero-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.hero-title-row h1 {
-  margin: 0 !important;
-}
-
-.hero-refresh-btn {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.3s ease !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0;
-}
-
-.hero-refresh-btn svg {
-  font-size: 1.5rem !important;
-}
-
-.hero-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: rotate(180deg);
-}
-
-.hero-content h1 {
-  margin-bottom: 1rem;
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 1.5rem;
-}
-
-/* Certificate Checker Card */
 .certificate-checker {
   max-width: 700px;
-  margin: 0 auto 3rem;
-  animation: fadeInUp 0.6s ease-out;
+  margin: 0 auto var(--space-6);
+  animation: fadeInUp 0.5s ease-out;
 }
 
 .checker-card {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.checker-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  padding: var(--space-6);
 }
 
 .checker-card h3 {
-  color: #2d3748;
-  font-weight: 700;
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.35rem;
+  margin-bottom: var(--space-2);
 }
 
 .checker-description {
-  color: #718096;
-  font-size: 1rem;
-  margin-bottom: 2rem;
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-5);
 }
 
 .checker-input-group {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
+/* Primary page CTA: signal green with dark text (AA on accent) */
 .check-button {
-  padding: 1rem 2rem !important;
-  font-size: 1.1rem !important;
+  min-height: 48px;
+  background-color: var(--color-accent) !important;
+  color: var(--color-on-accent) !important;
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
+  letter-spacing: 0.02em !important;
+  transition: background-color var(--transition-fast), transform var(--transition-fast),
+    box-shadow var(--transition-fast) !important;
 }
 
 .check-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+  background-color: var(--color-accent-hover) !important;
+  transform: translateY(-1px);
 }
 
-/* Certificate Display */
+.check-button.Mui-disabled {
+  opacity: 0.55;
+  color: var(--color-on-accent) !important;
+}
+
+/* -- Verification result states ------------------------------- */
+
+.verification-status {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+}
+
+.verification-status.verified {
+  background: var(--color-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--color-success) 40%, transparent);
+  color: var(--color-success-text);
+}
+
+.verification-status .fa {
+  font-size: 1.1rem;
+}
+
+/* Failure state */
+.no-certificate {
+  text-align: center;
+  padding: var(--space-7) var(--space-5);
+  margin: var(--space-5) auto;
+  max-width: 600px;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.no-certificate-icon {
+  font-size: 3rem;
+  color: var(--color-danger-text);
+  margin-bottom: var(--space-3);
+}
+
+.no-certificate h3 {
+  color: var(--color-danger-text);
+  font-size: 1.3rem;
+  margin-bottom: var(--space-2);
+}
+
+.no-certificate p {
+  color: var(--color-text-secondary);
+}
+
+/* -- Certificate document (sanctioned "paper" exception) -------
+   The certificate itself is a printable artifact and intentionally
+   stays a light paper document for skeuomorphic realism; everything
+   around it is dark. Paper shades are scoped locally — no tokens
+   exist for physical paper. Serif type is part of the skeuomorphism. */
+
 .certificate-display {
   max-width: 900px;
-  margin: 3rem auto;
-  animation: fadeIn 0.8s ease-out;
+  margin: var(--space-6) auto;
+  animation: fadeIn 0.6s ease-out;
 }
 
 .certificate-document {
-  background: linear-gradient(135deg, #1a2332 0%, #2d3748 100%);
-  border-radius: 0;
-  padding: 4rem 6rem 6rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-  border: none;
+  --paper-bg: #FBF7EE;
+  --paper-ink: #1E293B;
+  --paper-muted: rgba(30, 41, 59, 0.72);
+
   position: relative;
   overflow: hidden;
-  min-height: 700px;
+  background: var(--paper-bg);
+  color: var(--paper-ink);
+  border-radius: var(--radius-sm);
+  padding: var(--space-8) var(--space-7) calc(var(--space-8) + var(--space-6));
+  box-shadow: var(--shadow-lg);
 }
 
-/* Decorative wave element */
-.certificate-wave {
+/* Inner frame line, tinted from the brand primary */
+.certificate-document::before {
+  content: '';
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 350px;
-  height: 350px;
-  background: linear-gradient(135deg, rgba(45, 55, 72, 0.6) 0%, rgba(26, 32, 44, 0.4) 100%);
-  border-radius: 0 100% 0 0;
-  z-index: 0;
-}
-
-/* Gold circular stamp badge with SVG */
-.certificate-badge {
-  position: absolute;
-  bottom: 80px;
-  left: 50px;
-  z-index: 10;
-}
-
-.badge-svg {
-  filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
-}
-
-/* Scalloped edge */
-.badge-scalloped-edge {
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-/* Curved text on badge */
-.badge-curved-text {
-  fill: #2d3748;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 6px;
-  font-family: 'Lato', sans-serif;
-  text-transform: uppercase;
-}
-
-/* Center content container */
-.badge-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-.badge-logo {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  margin-bottom: 3px;
-}
-
-.badge-stars {
-  font-size: 9px;
-  color: #2d3748;
-  letter-spacing: 3px;
-  text-align: center;
-}
-
-.certificate-header {
-  text-align: center;
-  margin-bottom: 2rem;
+  inset: var(--space-3);
+  border: 2px solid color-mix(in srgb, var(--color-primary) 30%, transparent);
+  border-radius: 4px;
+  pointer-events: none;
 }
 
 .certificate-title {
-  font-size: 2.2rem;
-  font-weight: 300;
-  color: #cbd5e0;
-  letter-spacing: 6px;
+  font-size: clamp(1.2rem, 3.5vw, 2rem);
+  font-weight: 500;
+  letter-spacing: clamp(2px, 1vw, 6px);
+  color: var(--paper-ink);
   text-align: center;
-  margin: 2rem 0 2.5rem;
-  font-family: 'Lato', sans-serif;
-  position: relative;
-  z-index: 1;
+  margin: var(--space-4) 0 var(--space-6);
 }
 
 .certificate-logo-container {
   text-align: center;
-  margin-bottom: 2rem;
-  position: relative;
-  z-index: 1;
+  margin-bottom: var(--space-5);
 }
 
 .certificate-logo {
   width: 120px;
+  max-width: 40%;
   height: auto;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .certificate-intro {
   text-align: center;
-  font-size: 1.3rem;
-  color: #cbd5e0;
-  margin-bottom: 1.5rem;
-  font-family: 'Lato', sans-serif;
-  position: relative;
-  z-index: 1;
+  font-size: 1.15rem;
+  color: var(--paper-muted);
+  margin-bottom: var(--space-4);
 }
 
 .certificate-name {
   text-align: center;
-  font-size: 4rem;
+  font-family: Georgia, 'Times New Roman', serif; /* deliberate: paper artifact */
+  font-size: clamp(1.8rem, 5vw, 3.2rem);
   font-weight: 400;
-  color: #ffffff;
-  margin: 1rem 0 2rem;
-  font-family: 'Times New Roman', serif;
+  letter-spacing: 0;
+  color: var(--paper-ink);
   line-height: 1.2;
-  position: relative;
-  z-index: 1;
+  margin: var(--space-3) 0 var(--space-5);
 }
 
 .certificate-achievement {
   text-align: center;
-  font-size: 1.2rem;
-  color: #cbd5e0;
-  margin: 2rem auto;
+  font-size: 1.05rem;
+  color: var(--paper-muted);
   max-width: 700px;
-  font-family: 'Lato', sans-serif;
+  margin: var(--space-5) auto;
   line-height: 1.6;
-  position: relative;
-  z-index: 1;
 }
 
 .certificate-course {
   text-align: center;
-  font-size: 3rem;
+  font-family: Georgia, 'Times New Roman', serif; /* deliberate: paper artifact */
+  font-size: clamp(1.3rem, 4vw, 2.2rem);
   font-weight: 400;
-  color: #ffffff;
-  margin: 2rem 0 3rem;
-  font-family: 'Times New Roman', serif;
-  position: relative;
-  z-index: 1;
+  letter-spacing: 0;
+  color: var(--paper-ink);
+  margin: var(--space-5) 0 var(--space-6);
 }
 
 .certificate-footer {
   text-align: center;
-  margin-top: 3rem;
-  position: relative;
-  z-index: 1;
+  margin-top: var(--space-6);
 }
 
 .certificate-org {
-  font-size: 1.2rem;
-  color: #cbd5e0;
-  margin-bottom: 1rem;
-  font-family: 'Lato', sans-serif;
-  font-weight: 400;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--paper-ink);
+  margin-bottom: var(--space-3);
 }
 
 .certificate-date {
-  font-size: 1.1rem;
-  color: #cbd5e0;
-  margin: 0.3rem 0;
-  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  color: var(--paper-muted);
+  margin: var(--space-1) 0;
 }
 
 .certificate-id-link {
-  display: block;
-  font-size: 1.1rem;
-  color: #4a90e2;
-  margin: 1rem 0;
-  font-family: 'Lato', sans-serif;
-  text-decoration: none;
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  color: var(--color-primary-active);
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
-  padding: 0.5rem;
-  border-radius: 8px;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
 }
 
 .certificate-id-link:hover {
-  color: #357abd;
+  color: var(--color-primary-active);
   text-decoration: underline;
-  background: rgba(74, 144, 226, 0.1);
+  background: color-mix(in srgb, var(--color-primary) 10%, transparent);
 }
 
 .certificate-etherscan {
   position: absolute;
-  bottom: 20px;
+  bottom: var(--space-4);
   left: 0;
   right: 0;
   text-align: center;
-  z-index: 1;
+  padding: 0 var(--space-4);
 }
 
 .etherscan-link {
-  font-size: 0.85rem;
-  color: #718096;
-  text-decoration: none;
-  font-family: 'Courier New', monospace;
-  transition: color 0.3s ease;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--paper-muted);
   word-break: break-all;
+  transition: color var(--transition-fast);
 }
 
 .etherscan-link:hover {
-  color: #63b3ed;
+  color: var(--color-primary-active);
 }
 
-/* No Certificate Found */
-.no-certificate {
-  text-align: center;
-  padding: 3rem;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  margin: 2rem auto;
-  max-width: 600px;
-  animation: fadeIn 0.6s ease-out;
-}
+/* -- Admin view ------------------------------------------------ */
 
-.no-certificate-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-  animation: shake 0.5s ease-in-out;
-}
-
-.no-certificate h3 {
-  color: #e53e3e;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.no-certificate p {
-  color: #718096;
-  font-size: 1.1rem;
-}
-
-/* Admin View */
 .admin-content {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
-  animation: fadeInUp 0.6s ease-out;
+  gap: var(--space-5);
+  animation: fadeInUp 0.5s ease-out;
 }
 
 .admin-form-card,
 .certificates-table-card {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  padding: var(--space-6);
 }
 
 .admin-form-card h3,
 .certificates-table-card h3 {
-  color: #2d3748;
-  font-weight: 700;
-  font-size: 1.6rem;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  font-size: 1.3rem;
+  margin-bottom: var(--space-5);
 }
 
-/* Form Styling */
 .admin-form-card form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-5);
 }
 
 .form-row {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
+  gap: var(--space-4);
 }
 
 .form-row .MuiTextField-root {
@@ -408,66 +300,56 @@
 }
 
 .submit-button {
-  padding: 1rem 2rem !important;
-  font-size: 1.1rem !important;
+  min-height: 48px;
+  margin-top: var(--space-2) !important;
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
-  margin-top: 1rem !important;
 }
 
-.submit-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
-}
+/* -- Certificates table ---------------------------------------- */
 
-/* Certificates Table */
 .table-responsive {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .certificates-table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.certificates-table thead {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  min-width: 760px; /* wide table scrolls inside .table-responsive */
+  border-collapse: collapse;
 }
 
 .certificates-table th {
-  padding: 1rem 1.25rem;
+  background: var(--color-surface);
+  color: var(--color-text);
   text-align: left;
-  font-weight: 700;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
+  font-size: 0.8rem;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border-strong);
 }
 
 .certificates-table td {
-  padding: 1rem 1.25rem;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-  color: #4a5568;
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .certificates-table tbody tr {
-  transition: all 0.3s ease;
+  transition: background-color var(--transition-fast);
 }
 
 .certificates-table tbody tr:hover {
-  background: rgba(102, 126, 234, 0.05);
-  transform: scale(1.01);
+  background: var(--color-surface-hover);
+}
+
+.certificates-table tbody tr:hover td {
+  color: var(--color-text);
 }
 
 .certificates-table tbody tr:last-child td {
@@ -475,24 +357,43 @@
 }
 
 .credential-id {
-  font-family: 'Courier New', monospace;
-  font-weight: 700;
-  color: #667eea;
-  letter-spacing: 0.5px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--color-link);
+  white-space: nowrap;
 }
 
 .no-certificates {
   text-align: center;
-  padding: 3rem;
-  color: #718096;
-  font-size: 1.1rem;
+  padding: var(--space-7);
+  color: var(--color-text-muted);
 }
 
-/* Animations */
+/* -- MUI polish ------------------------------------------------ */
+
+.certificate-container .MuiButton-root {
+  text-transform: none !important;
+  font-weight: 600 !important;
+}
+
+/* MUI ButtonBase resets outline; restore the global focus ring */
+.certificate-container .MuiButtonBase-root:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* Native date pickers render a dark indicator; lift it for dark UI */
+.certificate-container input[type='date']::-webkit-calendar-picker-indicator {
+  filter: invert(0.75);
+  cursor: pointer;
+}
+
+/* -- Animations (finite, entry only) --------------------------- */
+
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -503,7 +404,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -511,423 +412,76 @@
   }
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulseGlow {
-  0%,
-  100% {
-    box-shadow: 0 4px 15px rgba(132, 250, 176, 0.4);
-  }
-  50% {
-    box-shadow: 0 8px 25px rgba(132, 250, 176, 0.6);
-  }
-}
-
-@keyframes shake {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  25% {
-    transform: translateX(-10px);
-  }
-  75% {
-    transform: translateX(10px);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 991px) {
-  .certificate-name {
-    font-size: 2.5rem;
-  }
-
-  .certificate-course {
-    font-size: 2rem;
-  }
-
-  .certificate-title {
-    font-size: 2rem;
-  }
-}
+/* -- Responsive ------------------------------------------------ */
 
 @media (max-width: 768px) {
   .certificate-container {
-    padding: 1rem;
+    padding: var(--space-4) var(--space-3);
   }
 
-  .hero-section {
-    padding: 2rem 1.5rem;
-  }
-
-  .certificate-document {
-    padding: 2rem 1.5rem;
-  }
-
-  .certificate-name {
-    font-size: 2rem;
-  }
-
-  .certificate-course {
-    font-size: 1.5rem;
-  }
-
-  .certificate-title {
-    font-size: 1.5rem;
-    letter-spacing: 2px;
-  }
-
-  .certificate-image {
-    width: 250px;
-  }
-
-  .checker-card {
-    padding: 1.5rem;
-  }
-
+  .checker-card,
   .admin-form-card,
   .certificates-table-card {
-    padding: 1.5rem;
+    padding: var(--space-5) var(--space-4);
   }
 
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .certificates-table {
-    font-size: 0.85rem;
-  }
-
-  .certificates-table th,
-  .certificates-table td {
-    padding: 0.75rem 0.5rem;
-  }
-}
-
-@media (max-width: 768px) {
   .certificate-document {
-    padding: 3rem 2rem 5rem;
-  }
-
-  .certificate-title {
-    font-size: 1.8rem;
-    letter-spacing: 4px;
+    padding: var(--space-6) var(--space-5) calc(var(--space-8) + var(--space-4));
   }
 
   .certificate-logo {
     width: 100px;
   }
 
-  .certificate-name {
-    font-size: 2.5rem;
-  }
-
-  .certificate-achievement {
-    font-size: 1rem;
-    max-width: 90%;
-  }
-
-  .certificate-course {
-    font-size: 2rem;
-  }
-
-  .badge-svg {
-    width: 150px;
-    height: 150px;
-  }
-
-  .badge-curved-text {
-    font-size: 9px;
-    letter-spacing: 3px;
-  }
-
-  .badge-logo {
-    width: 45px;
-    height: 45px;
-  }
-
-  .badge-stars {
-    font-size: 7px;
-  }
-
-  .certificate-badge {
-    bottom: 60px;
-    left: 30px;
-  }
-
-  .certificate-wave {
-    width: 250px;
-    height: 250px;
+  .form-row {
+    grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 480px) {
   .certificate-document {
-    padding: 2rem 1rem 4rem;
-    min-height: 600px;
+    padding: var(--space-5) var(--space-4) calc(var(--space-8) + var(--space-3));
   }
 
-  .certificate-title {
-    font-size: 1.3rem;
-    letter-spacing: 3px;
-    margin: 1rem 0 1.5rem;
+  .certificate-document::before {
+    inset: var(--space-2);
   }
 
   .certificate-logo {
     width: 80px;
   }
 
-  .certificate-name {
-    font-size: 1.5rem;
-  }
-
-  .certificate-achievement {
-    font-size: 0.9rem;
-  }
-
-  .certificate-course {
-    font-size: 1.5rem;
-  }
-
-  .certificates-table {
-    font-size: 0.75rem;
-  }
-
-  .certificates-table th,
-  .certificates-table td {
-    padding: 0.5rem 0.25rem;
-  }
-
-  .credential-id {
-    font-size: 0.75rem;
-    letter-spacing: 0;
-  }
-
-  .certificate-org,
-  .certificate-date {
-    font-size: 0.9rem;
-  }
-
   .certificate-id-link {
-    font-size: 0.9rem;
-  }
-
-  .badge-svg {
-    width: 120px;
-    height: 120px;
-  }
-
-  .badge-curved-text {
-    font-size: 7px;
-    letter-spacing: 2px;
-  }
-
-  .badge-logo {
-    width: 35px;
-    height: 35px;
-  }
-
-  .badge-stars {
-    font-size: 6px;
-    letter-spacing: 2px;
-  }
-
-  .certificate-badge {
-    bottom: 50px;
-    left: 20px;
-  }
-
-  .certificate-wave {
-    width: 200px;
-    height: 200px;
+    font-size: 0.85rem;
   }
 
   .etherscan-link {
     font-size: 0.7rem;
-    padding: 0 0.5rem;
-  }
-
-  .hero-content h1 {
-    font-size: 1.75rem;
-  }
-
-  .hero-content p {
-    font-size: 1rem;
   }
 }
 
-@media (max-width: 360px) {
-  .certificate-name {
-    font-size: 1.25rem;
-  }
+/* -- Print ------------------------------------------------------ */
 
-  .certificate-course {
-    font-size: 1.2rem;
-  }
-}
-
-/* Print Styles */
 @media print {
+  .certificate-container .hero-section,
+  .certificate-checker,
+  .verification-status,
+  .no-certificate {
+    display: none;
+  }
+
   .certificate-container {
     max-width: 100%;
+    padding: 0;
   }
 
-  .hero-section,
-  .checker-card,
-  .admin-form-card,
-  .certificates-table-card {
-    box-shadow: none;
+  .certificate-display {
+    margin: 0;
   }
 
   .certificate-document {
-    border: 2px solid #667eea;
+    box-shadow: none;
+    border: 1px solid var(--paper-ink);
     page-break-inside: avoid;
   }
-
-  .check-button,
-  .submit-button {
-    display: none;
-  }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .checker-card,
-  .admin-form-card,
-  .certificates-table-card,
-  .no-certificate {
-    background: #1a202c;
-  }
-
-  .checker-card h3,
-  .admin-form-card h3,
-  .certificates-table-card h3,
-  .no-certificate h3 {
-    color: #e2e8f0;
-  }
-
-  .checker-description,
-  .no-certificate p {
-    color: #cbd5e0;
-  }
-
-  /* Certificate already has dark background by default */
-
-  .certificates-table {
-    background: #1a202c !important;
-  }
-
-  .certificates-table td {
-    color: #e2e8f0 !important;
-    border-bottom-color: #2d3748 !important;
-  }
-
-  .certificates-table tbody tr {
-    background: #1a202c;
-  }
-
-  .certificates-table tbody tr:hover {
-    background: rgba(102, 126, 234, 0.15) !important;
-  }
-
-  .credential-id {
-    color: #90cdf4 !important;
-  }
-
-  .no-certificates {
-    color: #cbd5e0;
-  }
-
-  /* Fix MUI TextField input text visibility in dark mode */
-  .certificate-container .MuiTextField-root .MuiInputBase-input,
-  .certificate-container .MuiOutlinedInput-input,
-  .certificate-container .MuiInputBase-input {
-    color: #e2e8f0 !important;
-  }
-
-  .certificate-container .MuiTextField-root .MuiInputLabel-root,
-  .certificate-container .MuiInputLabel-root {
-    color: #a0aec0 !important;
-  }
-
-  .certificate-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
-  .certificate-container .MuiInputLabel-root.Mui-focused {
-    color: #667eea !important;
-  }
-
-  .certificate-container .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(160, 174, 192, 0.4) !important;
-  }
-
-  .certificate-container .MuiFormHelperText-root {
-    color: #a0aec0 !important;
-  }
-
-  /* Disabled input styling in dark mode - 50% opacity for disabled look */
-  .certificate-container .MuiOutlinedInput-root.Mui-disabled {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-  }
-
-  .certificate-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
-    color: rgba(226, 232, 240, 0.5) !important;
-    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
-  }
-
-  .certificate-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(226, 232, 240, 0.15) !important;
-  }
-
-  .certificate-container .MuiInputLabel-root.Mui-disabled {
-    color: rgba(203, 213, 224, 0.5) !important;
-  }
-
-  /* Date picker styling in dark mode */
-  .certificate-container input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7) sepia(0.1) saturate(0.5) hue-rotate(180deg);
-    cursor: pointer;
-  }
-
-  .certificate-container input[type="date"]::-webkit-calendar-picker-indicator:hover {
-    filter: invert(0.5) sepia(0.5) saturate(2) hue-rotate(200deg);
-  }
-}
-
-/* MUI Overrides */
-.certificate-container .MuiButton-root {
-  text-transform: none !important;
-  font-weight: 600 !important;
-}
-
-.certificate-container .MuiOutlinedInput-root {
-  border-radius: 12px !important;
-}
-
-.certificate-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #667eea !important;
-}
-
-.certificate-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #764ba2 !important;
-  border-width: 2px !important;
-}
-
-/* Accessibility */
-.check-button:focus,
-.submit-button:focus {
-  outline: 3px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-.verified-badge:focus {
-  outline: 2px solid rgba(132, 250, 176, 0.5);
-  outline-offset: 2px;
 }

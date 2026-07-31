@@ -289,7 +289,7 @@ const Voting = () => {
   return (
     <div className="voting-container">
       <HeroSection
-        title="🗳️ Democratic Voting System"
+        title="Democratic Voting System"
         description="Participate in transparent, blockchain-based democratic voting"
         contractAddress={VOTING_ADDRESS}
         contractName="Voting Contract"
@@ -302,10 +302,12 @@ const Voting = () => {
       <div className="voting-content">
         {/* Candidates Display */}
         <div className="candidates-section">
-          <h2 className="section-title">📋 Candidates</h2>
+          <h2 className="section-title">Candidates</h2>
           {candidates.length === 0 ? (
             <div className="no-candidates">
-              <div className="no-candidates-icon">🗳️</div>
+              <div className="no-candidates-icon">
+                <i className="fa fa-users" aria-hidden="true" />
+              </div>
               <h3>No Candidates Yet</h3>
               <p>
                 {isOwner
@@ -357,7 +359,7 @@ const Voting = () => {
                       }`}
                       disabled={submitting}
                     >
-                      {selectedCandidate === candidate.address ? '✓ Selected' : 'Select'}
+                      {selectedCandidate === candidate.address ? 'Selected' : 'Select'}
                     </Button>
                   </div>
                 );
@@ -371,7 +373,7 @@ const Voting = () => {
           {/* Vote Form */}
           {candidates.length > 0 && (
             <div className="vote-card">
-              <h3>🗳️ Cast Your Vote</h3>
+              <h3>Cast Your Vote</h3>
               <p className="vote-description">Select a candidate above, then submit your vote</p>
 
               {selectedCandidate && (
@@ -401,7 +403,7 @@ const Voting = () => {
           {/* Add Candidate Form (Owner Only) */}
           {isOwner && (
             <div className="add-candidate-card">
-              <h3>➕ Add Candidate</h3>
+              <h3>Add Candidate</h3>
               <p className="add-description">Add a new candidate to the voting pool</p>
 
               <form onSubmit={handleAddCandidate}>
@@ -432,7 +434,7 @@ const Voting = () => {
 
           {/* Voting Stats */}
           <div className="stats-card">
-            <h3>📊 Voting Statistics</h3>
+            <h3>Voting Statistics</h3>
             <div className="stats-grid">
               <div className="stat-item">
                 <div className="stat-value">{numberOfCandidates}</div>

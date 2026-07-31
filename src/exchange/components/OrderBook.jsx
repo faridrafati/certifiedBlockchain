@@ -73,7 +73,7 @@ const renderOrder = (order, props) => {
           cursor: canFill && !isFilling ? 'pointer' : 'not-allowed',
           opacity: canFill && !isFilling ? 1 : 0.5,
           '&:hover': {
-            backgroundColor: canFill && !isFilling ? 'rgba(102, 126, 234, 0.1)' : 'transparent'
+            backgroundColor: canFill && !isFilling ? 'rgba(124, 58, 237, 0.1)' : 'transparent'
           }
         }}
       >
@@ -146,7 +146,7 @@ const showOrderBook = (props) => {
             sx={{
               padding: 0,
               height: '3px',
-              background: 'linear-gradient(90deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.5) 50%, rgba(102, 126, 234, 0.3) 100%)',
+              background: 'linear-gradient(90deg, rgba(124, 58, 237, 0.3) 0%, rgba(99, 102, 241, 0.5) 50%, rgba(124, 58, 237, 0.3) 100%)',
               border: 'none'
             }}
           />
@@ -261,7 +261,7 @@ class OrderBook extends Component {
       <Card>
         <CardContent>
           <div className="card-header-custom">
-            📊 Order Book
+            Order Book
           </div>
           <TableContainer
             sx={{
@@ -273,14 +273,14 @@ class OrderBook extends Component {
                 width: '8px',
               },
               '&::-webkit-scrollbar-track': {
-                background: 'rgba(102, 126, 234, 0.1)',
+                background: 'rgba(124, 58, 237, 0.1)',
                 borderRadius: '4px',
               },
               '&::-webkit-scrollbar-thumb': {
-                background: 'rgba(102, 126, 234, 0.5)',
+                background: 'rgba(124, 58, 237, 0.5)',
                 borderRadius: '4px',
                 '&:hover': {
-                  background: 'rgba(102, 126, 234, 0.7)',
+                  background: 'rgba(124, 58, 237, 0.7)',
                 },
               },
             }}

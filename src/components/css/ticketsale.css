@@ -1,75 +1,13 @@
-/* Ticket Sale Styles */
+/**
+ * TicketSale (event ticketing) page styles — dark web3 operations theme.
+ * Consumes design tokens from index.css only. Hero styles are global.
+ * MUI colors come from the global dark MUI theme in index.jsx.
+ */
+
 .ticketsale-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  margin-bottom: 3rem;
-  color: white;
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-  animation: fadeInDown 0.6s ease-out;
-  text-align: center;
-}
-
-.hero-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.hero-title-row h1 {
-  margin: 0 !important;
-}
-
-.hero-refresh-btn {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.3s ease !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0;
-}
-
-.hero-refresh-btn svg {
-  font-size: 1.5rem !important;
-}
-
-.hero-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: rotate(180deg);
-}
-
-.hero-content h1 {
-  margin-bottom: 1rem;
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.hero-icon {
-  font-size: 3rem !important;
-  animation: float 3s ease-in-out infinite;
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 1.5rem;
-}
-
-/* Content Layout */
-.tickets-content {
-  animation: fadeInUp 0.6s ease-out;
+  padding: var(--space-6) var(--space-4);
 }
 
 /* Card Header Section */
@@ -77,163 +15,92 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .card-header-section h3 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d3748;
+  font-size: 1.35rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
 .section-icon {
-  color: #667eea !important;
+  color: var(--color-link) !important;
 }
 
 .refresh-btn {
-  color: #667eea !important;
-  transition: all 0.3s ease !important;
+  width: 44px;
+  height: 44px;
+  color: var(--color-link) !important;
+  transition: background-color var(--transition-fast), transform var(--transition-base) !important;
 }
 
 .refresh-btn:hover {
-  background: rgba(102, 126, 234, 0.1) !important;
+  background: var(--color-primary-soft) !important;
   transform: rotate(180deg);
 }
 
 .divider {
-  margin: 1.5rem 0 !important;
-  background: rgba(102, 126, 234, 0.1) !important;
+  margin: var(--space-5) 0 !important;
+  border-color: var(--color-border) !important;
 }
 
 .divider-small {
-  margin: 0.75rem 0 !important;
-  background: rgba(102, 126, 234, 0.1) !important;
+  margin: var(--space-3) 0 !important;
+  border-color: var(--color-border) !important;
 }
 
-/* Admin View Cards */
+/* Admin panels */
 .admin-actions-card,
-.transfer-ownership-card,
-.add-ticket-card,
-.tickets-table-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  margin-bottom: 2rem;
-  animation: scaleIn 0.5s ease-out;
+.add-ticket-card {
+  background-color: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  margin-bottom: var(--space-6);
 }
 
 .admin-actions-card .MuiCardContent-root,
-.transfer-ownership-card .MuiCardContent-root,
-.add-ticket-card .MuiCardContent-root,
-.tickets-table-card .MuiCardContent-root {
-  padding: 2rem !important;
+.add-ticket-card .MuiCardContent-root {
+  padding: var(--space-6) !important;
 }
 
-/* Admin Actions */
-.admin-actions {
+/* Admin Stats */
+.admin-stats {
   display: flex;
-  gap: 2rem;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
+  gap: var(--space-4);
 }
 
-.pause-switch {
-  margin: 0 !important;
-}
-
-.switch-label {
+.stat-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 700;
+  gap: var(--space-2);
   font-size: 1rem;
-  color: #2d3748;
+  font-weight: 600;
+  color: var(--color-text);
 }
 
-.switch-label svg {
-  font-size: 1.25rem;
+.stat-item svg {
+  color: var(--color-link);
 }
 
 /* Form Groups */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-5);
 }
 
 .submit-button {
-  padding: 0.875rem 2rem !important;
+  min-height: 48px;
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
-}
-
-.submit-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
-}
-
-.submit-button:disabled {
-  background: rgba(102, 126, 234, 0.3) !important;
-}
-
-/* Table Styles */
-.tickets-table {
-  border-radius: 12px !important;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
-}
-
-.tickets-table .MuiTableHead-root {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
-}
-
-.tickets-table .MuiTableHead-root .MuiTableCell-root {
-  font-weight: 700;
-  color: #2d3748;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.2);
-}
-
-.tickets-table .MuiTableBody-root .MuiTableRow-root {
-  transition: all 0.3s ease;
-}
-
-.tickets-table .MuiTableBody-root .MuiTableRow-root:hover {
-  background: rgba(102, 126, 234, 0.05);
-  transform: scale(1.01);
-}
-
-.tickets-table .MuiTableCell-root {
-  padding: 1rem !important;
-  font-size: 0.9rem;
-}
-
-.dna-cell {
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem !important;
-  color: #667eea;
-  font-weight: 600;
-}
-
-.address-cell {
-  font-family: 'Courier New', monospace;
-  font-size: 0.85rem !important;
-  color: #718096;
+  letter-spacing: 0.03em !important;
 }
 
 /* Marketplace View */
@@ -241,275 +108,200 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
-  padding: 1.5rem;
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
-  border-radius: 20px;
-  animation: fadeIn 0.5s ease-out;
+  margin-bottom: var(--space-6);
+  padding: var(--space-5);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
 }
 
 .marketplace-header h2 {
   margin: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #2d3748;
+  font-size: 1.5rem;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--space-3);
 }
 
-/* Paused Notice */
-.paused-notice {
-  background: linear-gradient(135deg, #f56565 0%, #c53030 100%);
-  color: white;
-  border-radius: 20px;
-  margin-bottom: 2rem;
-  box-shadow: 0 10px 40px rgba(245, 101, 101, 0.3);
-  animation: pulseGlow 2s ease-in-out infinite;
-}
-
-.paused-notice .MuiCardContent-root {
-  padding: 2rem !important;
-  text-align: center;
-}
-
-.pause-icon {
-  font-size: 3rem !important;
-  margin-bottom: 1rem;
-  animation: float 2s ease-in-out infinite;
-}
-
-.paused-notice h4 {
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-}
-
-.paused-notice p {
-  margin: 0;
-  font-size: 1rem;
-  opacity: 0.95;
-}
-
-/* Ticket Cards */
+/* Event Cards */
 .ticket-card {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-  animation: scaleIn 0.5s ease-out;
+  background-color: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
   overflow: hidden;
   height: 100%;
   display: flex;
   flex-direction: column;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base),
+    transform var(--transition-base);
 }
 
 .ticket-card:hover {
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
+  transform: translateY(-3px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-lg) !important;
 }
 
-/* Card Color Variations */
+/* Card accent variations — token-derived top borders only */
 .ticket-card.card-color-1 {
-  border-top: 4px solid #667eea;
+  border-top: 3px solid var(--color-primary);
 }
-.ticket-card.card-color-1 .ticket-info h4 {
-  color: #667eea;
-}
-.ticket-card.card-color-1:hover {
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-}
-
 .ticket-card.card-color-2 {
-  border-top: 4px solid #48bb78;
+  border-top: 3px solid var(--color-accent);
 }
-.ticket-card.card-color-2 .ticket-info h4 {
-  color: #38a169;
-}
-.ticket-card.card-color-2:hover {
-  box-shadow: 0 15px 50px rgba(72, 187, 120, 0.3);
-}
-
 .ticket-card.card-color-3 {
-  border-top: 4px solid #ed8936;
+  border-top: 3px solid var(--color-warning);
 }
-.ticket-card.card-color-3 .ticket-info h4 {
-  color: #dd6b20;
-}
-.ticket-card.card-color-3:hover {
-  box-shadow: 0 15px 50px rgba(237, 137, 54, 0.3);
-}
-
 .ticket-card.card-color-4 {
-  border-top: 4px solid #e53e3e;
+  border-top: 3px solid var(--color-danger);
 }
-.ticket-card.card-color-4 .ticket-info h4 {
-  color: #c53030;
-}
-.ticket-card.card-color-4:hover {
-  box-shadow: 0 15px 50px rgba(229, 62, 62, 0.3);
-}
-
 .ticket-card.card-color-5 {
-  border-top: 4px solid #9f7aea;
+  border-top: 3px solid var(--color-secondary);
 }
-.ticket-card.card-color-5 .ticket-info h4 {
-  color: #805ad5;
-}
-.ticket-card.card-color-5:hover {
-  box-shadow: 0 15px 50px rgba(159, 122, 234, 0.3);
-}
-
 .ticket-card.card-color-6 {
-  border-top: 4px solid #38b2ac;
-}
-.ticket-card.card-color-6 .ticket-info h4 {
-  color: #319795;
-}
-.ticket-card.card-color-6:hover {
-  box-shadow: 0 15px 50px rgba(56, 178, 172, 0.3);
-}
-
-.card-media {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
-  padding: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 200px;
-}
-
-.ticket-canvas {
-  width: 100% !important;
-  max-width: 200px;
-  height: auto !important;
-  image-rendering: pixelated;
-  image-rendering: -moz-crisp-edges;
-  image-rendering: crisp-edges;
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-top: 3px solid var(--color-info);
 }
 
 .ticket-card .MuiCardContent-root {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding: 1.5rem !important;
+  padding: var(--space-5) !important;
 }
 
 .ticket-info {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: var(--space-3);
   flex: 1;
+}
+
+.ticket-info h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--color-text);
+  text-align: center;
 }
 
 .card-bottom-section {
   margin-top: auto;
 }
 
-.ticket-info h4 {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #2d3748;
-  text-align: center;
-}
-
 .info-row {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0;
-  gap: 0.5rem;
+  padding: var(--space-2) 0;
+  gap: var(--space-2);
 }
 
 .info-row .info-icon {
-  color: #667eea;
+  color: var(--color-link);
   font-size: 1.1rem !important;
   flex-shrink: 0;
 }
 
 .info-row .info-label {
   font-size: 0.85rem;
-  color: #718096;
+  color: var(--color-text-muted);
   font-weight: 600;
   flex-shrink: 0;
 }
 
 .info-row .info-value {
   font-size: 0.9rem;
-  color: #2d3748;
+  color: var(--color-text);
   font-weight: 600;
   margin-left: auto;
   text-align: right;
 }
 
-.dna-text {
-  font-family: 'Courier New', monospace;
-  color: #667eea !important;
-  word-break: break-all;
+/* My Tickets strip on the event card */
+.my-tickets-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  margin-top: var(--space-2);
+  min-height: 44px;
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  border-radius: var(--radius-md);
 }
 
-.price-text {
-  color: #48bb78 !important;
+.my-tickets-info.clickable {
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.my-tickets-info.clickable:hover {
+  background: rgba(14, 165, 233, 0.2);
+  border-color: var(--color-info);
+  box-shadow: var(--shadow-sm);
+}
+
+.my-tickets-info .my-tickets-icon {
+  color: var(--color-info-text);
+  font-size: 1.25rem !important;
+}
+
+.my-tickets-info span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-info-text);
+}
+
+/* Price Display */
+.price-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) 0;
+}
+
+.price-label {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+.price-value {
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-success-text);
+}
+
+/* Buy CTA — violet primary from the MUI theme */
+.buy-button {
+  min-height: 48px;
   font-weight: 700 !important;
+  letter-spacing: 0.03em !important;
 }
 
-.address-text {
-  font-family: 'Courier New', monospace;
-  font-size: 0.8rem !important;
-}
-
-.owned-chip {
+/* Sold Out Chip */
+.soldout-chip {
+  width: 100%;
   font-weight: 700 !important;
   font-size: 1rem !important;
-  padding: 0.75rem 1.5rem !important;
+  padding: var(--space-3) var(--space-5) !important;
   height: auto !important;
-  width: 100%;
-  border-radius: 12px !important;
-}
-
-.buy-button {
-  padding: 0.75rem 1.5rem !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
-}
-
-.buy-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
-}
-
-.buy-button:disabled {
-  background: rgba(102, 126, 234, 0.3) !important;
+  border-radius: var(--radius-md) !important;
+  background: rgba(220, 38, 38, 0.15) !important;
+  color: var(--color-danger-text) !important;
+  border: 1px solid rgba(220, 38, 38, 0.4) !important;
 }
 
 /* Empty State */
 .empty-state {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.05) 0%,
-    rgba(118, 75, 162, 0.05) 100%
-  );
-  border-radius: 20px;
-  padding: 3rem 2rem;
+  background-color: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-7) var(--space-6);
   text-align: center;
-  animation: fadeIn 0.5s ease-out;
-}
-
-.tickets-table-card .empty-state {
-  margin-top: 1rem;
 }
 
 .empty-state .MuiCardContent-root {
@@ -518,493 +310,79 @@
 
 .empty-icon {
   font-size: 4rem !important;
-  color: rgba(102, 126, 234, 0.3);
-  margin-bottom: 1rem;
-  animation: float 3s ease-in-out infinite;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-4);
 }
 
 .empty-state h4 {
-  margin: 0 0 0.5rem;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d3748;
+  margin: 0 0 var(--space-2);
+  font-size: 1.35rem;
+  color: var(--color-text);
 }
 
 .empty-state p {
   margin: 0;
   font-size: 1rem;
-  color: #718096;
+  color: var(--color-text-secondary);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulseGlow {
-  0%,
-  100% {
-    box-shadow: 0 10px 40px rgba(245, 101, 101, 0.3);
-  }
-  50% {
-    box-shadow: 0 15px 50px rgba(245, 101, 101, 0.5);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 1200px) {
-  .admin-actions {
-    gap: 1.5rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .ticketsale-container {
-    padding: 1.5rem 1rem;
-  }
-
-  .hero-section {
-    padding: 2.5rem 1.5rem;
-  }
-
-  .admin-actions {
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .marketplace-header {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-}
-
-@media (max-width: 768px) {
-  .ticketsale-container {
-    padding: 1rem;
-  }
-
-  .hero-section {
-    padding: 2rem 1.5rem;
-  }
-
-  .hero-content h1 {
-    font-size: 1.75rem;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .hero-icon {
-    font-size: 2.5rem !important;
-  }
-
-  .hero-content p {
-    font-size: 1rem;
-  }
-
-  .card-header-section h3 {
-    font-size: 1.25rem;
-  }
-
-  .marketplace-header h2 {
-    font-size: 1.5rem;
-  }
-
-  .admin-actions-card .MuiCardContent-root,
-  .transfer-ownership-card .MuiCardContent-root,
-  .add-ticket-card .MuiCardContent-root,
-  .tickets-table-card .MuiCardContent-root {
-    padding: 1.5rem !important;
-  }
-
-  .tickets-table {
-    font-size: 0.85rem;
-  }
-
-  .tickets-table .MuiTableCell-root {
-    padding: 0.75rem !important;
-    font-size: 0.85rem;
-  }
-
-  .tickets-table .MuiTableHead-root .MuiTableCell-root {
-    font-size: 0.8rem;
-  }
-}
-
-@media (max-width: 800px) {
-  /* Stack admin stats and action buttons vertically on tablets/phones */
-  .admin-stats {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0.75rem;
-  }
-
-  .admin-stats .stat-item {
-    justify-content: center;
-  }
-
-  .admin-stats .MuiButton-root {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-content h1 {
-    font-size: 1.5rem;
-  }
-
-  .hero-icon {
-    font-size: 2rem !important;
-  }
-
-  .hero-content p {
-    font-size: 0.9rem;
-  }
-
-  .card-header-section {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .marketplace-header h2 {
-    font-size: 1.25rem;
-  }
-
-  .ticket-info h4 {
-    font-size: 1.1rem;
-  }
-
-  .info-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
-  .paused-notice h4 {
-    font-size: 1.25rem;
-  }
-
-  .paused-notice p {
-    font-size: 0.9rem;
-  }
-
-  .empty-state {
-    padding: 2rem 1rem;
-  }
-
-  .empty-icon {
-    font-size: 3rem !important;
-  }
-
-  .empty-state h4 {
-    font-size: 1.25rem;
-  }
-
-  .empty-state p {
-    font-size: 0.9rem;
-  }
-
-  /* Make table horizontally scrollable on very small screens */
-  .tickets-table-card {
-    overflow-x: auto;
-  }
-
-  .tickets-table .MuiTableCell-root {
-    padding: 0.5rem !important;
-    font-size: 0.75rem !important;
-    white-space: nowrap;
-  }
-
-  .tickets-table .MuiTableHead-root .MuiTableCell-root {
-    font-size: 0.7rem !important;
-  }
-
-  .dna-cell,
-  .address-cell {
-    font-size: 0.7rem !important;
-  }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .admin-actions-card,
-  .transfer-ownership-card,
-  .add-ticket-card,
-  .tickets-table-card,
-  .ticket-card {
-    background: #1a202c;
-  }
-
-  .card-header-section h3,
-  .marketplace-header h2,
-  .ticket-info h4,
-  .empty-state h4 {
-    color: #e2e8f0;
-  }
-
-  .switch-label,
-  .empty-state p {
-    color: #cbd5e0;
-  }
-
-  /* Event card info - light colors for dark mode */
-  .info-row .info-label {
-    color: #a0aec0;
-  }
-
-  .info-row .info-value {
-    color: #e2e8f0;
-  }
-
-  .info-row .info-icon {
-    color: #a78bfa;
-  }
-
-  .tickets-table .MuiTableHead-root .MuiTableCell-root {
-    color: #e2e8f0;
-  }
-
-  .tickets-table .MuiTableBody-root .MuiTableRow-root:hover {
-    background: rgba(102, 126, 234, 0.15);
-  }
-
-  .card-media {
-    background: rgba(102, 126, 234, 0.15);
-  }
-
-  .empty-state {
-    background: rgba(102, 126, 234, 0.1);
-  }
-
-  /* Card Color Variations Dark Mode */
-  .ticket-card.card-color-1 .ticket-info h4 {
-    color: #818cf8;
-  }
-  .ticket-card.card-color-1 {
-    border-top-color: #818cf8;
-  }
-
-  .ticket-card.card-color-2 .ticket-info h4 {
-    color: #68d391;
-  }
-  .ticket-card.card-color-2 {
-    border-top-color: #68d391;
-  }
-
-  .ticket-card.card-color-3 .ticket-info h4 {
-    color: #f6ad55;
-  }
-  .ticket-card.card-color-3 {
-    border-top-color: #f6ad55;
-  }
-
-  .ticket-card.card-color-4 .ticket-info h4 {
-    color: #fc8181;
-  }
-  .ticket-card.card-color-4 {
-    border-top-color: #fc8181;
-  }
-
-  .ticket-card.card-color-5 .ticket-info h4 {
-    color: #b794f4;
-  }
-  .ticket-card.card-color-5 {
-    border-top-color: #b794f4;
-  }
-
-  .ticket-card.card-color-6 .ticket-info h4 {
-    color: #4fd1c5;
-  }
-  .ticket-card.card-color-6 {
-    border-top-color: #4fd1c5;
-  }
-
-  /* Fix MUI TextField input text visibility in dark mode */
-  .ticketsale-container .MuiTextField-root .MuiInputBase-input,
-  .ticketsale-container .MuiOutlinedInput-input,
-  .ticketsale-container .MuiInputBase-input {
-    color: #e2e8f0 !important;
-  }
-
-  .ticketsale-container .MuiTextField-root .MuiInputLabel-root,
-  .ticketsale-container .MuiInputLabel-root {
-    color: #a0aec0 !important;
-  }
-
-  .ticketsale-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
-  .ticketsale-container .MuiInputLabel-root.Mui-focused {
-    color: #667eea !important;
-  }
-
-  .ticketsale-container .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(160, 174, 192, 0.4) !important;
-  }
-
-  .ticketsale-container .MuiFormHelperText-root {
-    color: #a0aec0 !important;
-  }
-
-  /* Disabled input styling in dark mode - 50% opacity for disabled look */
-  .ticketsale-container .MuiOutlinedInput-root.Mui-disabled {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-  }
-
-  .ticketsale-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
-    color: rgba(226, 232, 240, 0.5) !important;
-    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
-  }
-
-  .ticketsale-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(226, 232, 240, 0.15) !important;
-  }
-
-  .ticketsale-container .MuiInputLabel-root.Mui-disabled {
-    color: rgba(203, 213, 224, 0.5) !important;
-  }
-}
-
-/* MUI Overrides */
-.ticketsale-container .MuiButton-root {
-  text-transform: none !important;
-  font-weight: 600 !important;
-}
-
-.ticketsale-container .MuiOutlinedInput-root {
-  border-radius: 12px !important;
-}
-
-.ticketsale-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #667eea !important;
-}
-
-.ticketsale-container
-  .MuiOutlinedInput-root.Mui-focused
-  .MuiOutlinedInput-notchedOutline {
-  border-color: #764ba2 !important;
-  border-width: 2px !important;
-}
-
-.ticketsale-container .MuiTextField-root {
-  margin-bottom: 0 !important;
-}
-
-.ticketsale-container .MuiIconButton-root {
-  transition: all 0.3s ease !important;
-}
-
-/* Accessibility */
-.submit-button:focus,
-.buy-button:focus {
-  outline: 3px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-.ticket-card:focus-within {
-  outline: 2px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
+/* ------------------------------------------------------ */
 /* Seat Selection Dialog */
+
 .seat-dialog .MuiPaper-root {
-  border-radius: 20px !important;
+  background-color: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg) !important;
   max-width: 700px !important;
 }
 
 .seat-dialog-title {
   display: flex !important;
   align-items: center !important;
-  gap: 0.75rem !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: white !important;
-  padding: 1.25rem 1.5rem !important;
+  gap: var(--space-3) !important;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text) !important;
+  padding: var(--space-4) var(--space-5) !important;
 }
 
 .seat-dialog-title .dialog-icon {
   font-size: 1.75rem !important;
+  color: var(--color-link);
 }
 
 .seat-dialog-content {
-  padding: 1.5rem !important;
-  background: #f8fafc;
+  padding: var(--space-5) !important;
 }
 
 .dialog-event-name {
   text-align: center;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #2d3748;
-  margin: 0 0 1.5rem 0;
+  color: var(--color-text);
+  margin: var(--space-3) 0 var(--space-5) 0;
 }
 
 /* Stage */
 .stage-container {
   display: flex;
   justify-content: center;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-6);
   perspective: 400px;
 }
 
 .stage {
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 0.75rem 3rem;
+  background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-primary-active) 100%);
+  color: var(--color-on-primary);
+  padding: var(--space-3) var(--space-7);
   border-radius: 0 0 100px 100px;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.9rem;
-  letter-spacing: 2px;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  box-shadow: var(--shadow-md);
   transform: rotateX(10deg);
 }
 
@@ -1017,14 +395,14 @@
   justify-content: flex-start;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  padding: 0.5rem;
+  padding: var(--space-2);
   max-width: 100%;
 }
 
 .seat-map {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
   align-items: center;
   margin: 0 auto;
 }
@@ -1032,101 +410,127 @@
 .seat-row {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .seats {
   display: flex;
-  gap: 0.35rem;
+  gap: 6px;
   justify-content: center;
 }
 
 .row-number {
   width: 24px;
   text-align: center;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   font-weight: 600;
-  color: #718096;
+  color: var(--color-text-muted);
 }
 
 /* Individual Seat */
 .seat {
-  width: 32px;
-  height: 32px;
+  position: relative;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px 6px 8px 8px;
+  border-radius: 6px 6px 10px 10px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .seat svg {
-  font-size: 1.25rem !important;
+  font-size: 1.35rem !important;
 }
 
 .seat.available {
-  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e0 100%);
-  color: #718096;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-muted);
 }
 
 .seat.available:hover {
-  background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  color: var(--color-link-hover);
+  transform: scale(1.08);
 }
 
+/* Taken: dimmed, dashed border + diagonal slash as non-color cues */
 .seat.taken {
-  background: linear-gradient(180deg, #fc8181 0%, #e53e3e 100%);
-  color: white;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  color: rgba(148, 163, 184, 0.35);
   cursor: not-allowed;
+}
+
+.seat.taken::after,
+.seat-icon.taken::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 12%;
+  right: 12%;
+  height: 2px;
+  background: var(--color-text-muted);
+  transform: rotate(-45deg);
+  border-radius: var(--radius-full);
+  pointer-events: none;
 }
 
 .seat.selected,
 .seat.available.selected {
-  background: linear-gradient(180deg, #48bb78 0%, #38a169 100%) !important;
-  color: white !important;
-  transform: scale(1.15);
-  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.5);
+  background: var(--color-primary) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: var(--color-on-primary) !important;
+  transform: scale(1.1);
+  box-shadow: var(--shadow-glow);
 }
 
 .seat.selected svg,
 .seat.available.selected svg {
-  color: white !important;
+  color: var(--color-on-primary) !important;
 }
 
+/* Your seats: info-blue, clickable to transfer */
 .seat.mine {
-  background: linear-gradient(180deg, #63b3ed 0%, #3182ce 100%);
-  color: white;
-  cursor: default;
-  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.4);
+  background: rgba(14, 165, 233, 0.18);
+  border: 1px solid var(--color-info);
+  color: var(--color-info-text);
+  cursor: pointer;
 }
 
-.seat.mine svg {
-  color: white !important;
+.seat.mine:hover {
+  background: rgba(14, 165, 233, 0.3);
+  transform: scale(1.08);
+  box-shadow: var(--shadow-sm);
 }
 
 /* Legend */
 .seat-legend {
   display: flex;
   justify-content: center;
-  gap: 2rem;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-2);
   font-size: 0.85rem;
-  color: #4a5568;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
 .seat-icon {
+  position: relative;
   width: 28px;
   height: 28px;
   display: flex;
@@ -1140,23 +544,27 @@
 }
 
 .seat-icon.available {
-  background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e0 100%);
-  color: #718096;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-muted);
 }
 
 .seat-icon.taken {
-  background: linear-gradient(180deg, #fc8181 0%, #e53e3e 100%);
-  color: white;
+  background: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  color: rgba(148, 163, 184, 0.35);
 }
 
 .seat-icon.selected {
-  background: linear-gradient(180deg, #48bb78 0%, #38a169 100%);
-  color: white;
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary-hover);
+  color: var(--color-on-primary);
 }
 
 .seat-icon.mine {
-  background: linear-gradient(180deg, #63b3ed 0%, #3182ce 100%);
-  color: white;
+  background: rgba(14, 165, 233, 0.18);
+  border: 1px solid var(--color-info);
+  color: var(--color-info-text);
 }
 
 /* Transfer Hint */
@@ -1164,195 +572,104 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(99, 179, 237, 0.15) 0%, rgba(49, 130, 206, 0.15) 100%);
-  border: 1px solid rgba(49, 130, 206, 0.3);
-  border-radius: 10px;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  background: rgba(14, 165, 233, 0.12);
+  border: 1px solid rgba(14, 165, 233, 0.35);
+  border-radius: var(--radius-md);
   font-size: 0.85rem;
-  color: #3182ce;
+  color: var(--color-info-text);
 }
 
 .transfer-hint .hint-icon {
   font-size: 1.1rem !important;
-  color: #3182ce;
+  color: var(--color-info-text);
 }
 
 /* Selected Seat Info */
 .selected-seat-info {
   text-align: center;
-  margin-top: 1.25rem;
-  padding: 1rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-top: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
 }
 
 .selected-seat-info p {
   margin: 0;
   font-size: 0.95rem;
-  color: #4a5568;
+  color: var(--color-text-secondary);
 }
 
 .selected-seat-info strong {
-  color: #38a169;
+  font-family: var(--font-mono);
+  color: var(--color-success-text);
 }
 
 .selected-seat-info .seat-count {
-  color: #667eea;
+  color: var(--color-link);
   font-weight: 600;
 }
 
-/* Dialog Actions */
+/* Seat Dialog Actions */
 .seat-dialog-actions {
-  padding: 1rem 1.5rem !important;
-  gap: 0.75rem !important;
-  background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+  padding: var(--space-4) var(--space-5) !important;
+  gap: var(--space-3) !important;
+  border-top: 1px solid var(--color-border);
 }
 
-.seat-dialog-actions .MuiButton-contained {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 10px !important;
-  padding: 0.5rem 1.5rem !important;
-  font-weight: 600 !important;
-}
-
-.seat-dialog-actions .MuiButton-contained:hover:not(:disabled) {
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
-}
-
-/* Admin Stats */
-.admin-stats {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
-.stat-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2d3748;
-}
-
-.stat-item svg {
-  color: #667eea;
-}
-
-/* Price Display */
-.price-display {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-}
-
-.price-label {
-  font-size: 0.9rem;
-  color: #718096;
-  font-weight: 600;
-}
-
-.price-value {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #48bb78;
-}
-
-/* Sold Out Chip */
-.soldout-chip {
-  width: 100%;
-  font-weight: 700 !important;
-  font-size: 1rem !important;
-  padding: 0.75rem 1.5rem !important;
-  height: auto !important;
-  border-radius: 12px !important;
-}
-
-/* My Tickets Info on Event Card */
-.my-tickets-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  margin-top: 0.5rem;
-  background: linear-gradient(135deg, rgba(99, 179, 237, 0.15) 0%, rgba(49, 130, 206, 0.15) 100%);
-  border-radius: 10px;
-  border: 1px solid rgba(49, 130, 206, 0.3);
-}
-
-.my-tickets-info.clickable {
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.my-tickets-info.clickable:hover {
-  background: linear-gradient(135deg, rgba(99, 179, 237, 0.25) 0%, rgba(49, 130, 206, 0.25) 100%);
-  border-color: rgba(49, 130, 206, 0.5);
-  box-shadow: 0 2px 8px rgba(49, 130, 206, 0.3);
-}
-
-.my-tickets-info .my-tickets-icon {
-  color: #3182ce;
-  font-size: 1.25rem !important;
-}
-
-.my-tickets-info span {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #3182ce;
-}
-
+/* ------------------------------------------------------ */
 /* Success Dialog */
+
 .success-dialog .MuiPaper-root {
-  border-radius: 20px !important;
+  background-color: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg) !important;
 }
 
 .success-dialog-title {
   display: flex !important;
   align-items: center !important;
-  gap: 0.75rem !important;
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
-  color: white !important;
-  padding: 1.25rem 1.5rem !important;
+  gap: var(--space-3) !important;
+  background: var(--color-accent-soft);
+  border-bottom: 1px solid rgba(34, 197, 94, 0.4);
+  color: var(--color-success-text) !important;
+  padding: var(--space-4) var(--space-5) !important;
   font-size: 1.25rem !important;
 }
 
 .success-dialog-title .success-icon {
   font-size: 2rem !important;
+  color: var(--color-success-text);
 }
 
 .success-dialog-content {
-  padding: 1.5rem !important;
+  padding: var(--space-5) !important;
   text-align: center;
 }
 
 .success-details {
-  background: linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(56, 161, 105, 0.1) 100%);
-  border-radius: 16px;
-  padding: 1.5rem;
-  margin-bottom: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin: var(--space-4) 0;
 }
 
 .success-details h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #2d3748;
+  margin: 0 0 var(--space-4) 0;
+  font-size: 1.2rem;
 }
 
 .success-info-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(72, 187, 120, 0.2);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .success-info-row:last-child {
@@ -1361,72 +678,74 @@
 
 .success-label {
   font-size: 0.9rem;
-  color: #718096;
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
 .success-value {
+  font-family: var(--font-mono);
   font-size: 0.95rem;
   font-weight: 600;
-  color: #2d3748;
+  color: var(--color-text);
 }
 
 .success-value.price {
-  color: #38a169;
+  color: var(--color-success-text);
   font-size: 1.1rem;
 }
 
 .success-message {
-  margin: 1rem 0 0 0;
+  margin: var(--space-4) 0 0 0;
   font-size: 0.9rem;
-  color: #718096;
+  color: var(--color-text-secondary);
 }
 
 .success-dialog-actions {
-  padding: 1rem 1.5rem !important;
+  padding: var(--space-4) var(--space-5) !important;
+  border-top: 1px solid var(--color-border);
 }
 
-.success-dialog-actions .MuiButton-contained {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%) !important;
-  border-radius: 10px !important;
-  padding: 0.75rem 1.5rem !important;
-  font-weight: 600 !important;
-}
-
+/* ------------------------------------------------------ */
 /* Transfer Dialog */
+
 .transfer-dialog .MuiPaper-root {
-  border-radius: 20px !important;
+  background-color: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg) !important;
 }
 
 .transfer-dialog-title {
   display: flex !important;
   align-items: center !important;
-  gap: 0.75rem !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: white !important;
-  padding: 1.25rem 1.5rem !important;
+  gap: var(--space-3) !important;
+  background: var(--color-primary-soft);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text) !important;
+  padding: var(--space-4) var(--space-5) !important;
   font-size: 1.25rem !important;
 }
 
 .transfer-dialog-title .transfer-icon {
   font-size: 1.75rem !important;
+  color: var(--color-link);
 }
 
 .transfer-dialog-content {
-  padding: 1.5rem !important;
+  padding: var(--space-5) !important;
 }
 
 .transfer-details {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: 16px;
-  padding: 1.5rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  margin-top: var(--space-4);
 }
 
 .transfer-details h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #2d3748;
+  margin: 0 0 var(--space-4) 0;
+  font-size: 1.2rem;
   text-align: center;
 }
 
@@ -1434,255 +753,136 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0;
+  padding: var(--space-2) 0;
 }
 
 .transfer-label {
   font-size: 0.9rem;
-  color: #718096;
+  color: var(--color-text-muted);
   font-weight: 500;
 }
 
 .transfer-value {
+  font-family: var(--font-mono);
   font-size: 1rem;
   font-weight: 600;
-  color: #667eea;
+  color: var(--color-link);
 }
 
 .transfer-dialog-actions {
-  padding: 1rem 1.5rem !important;
-  gap: 0.75rem !important;
+  padding: var(--space-4) var(--space-5) !important;
+  gap: var(--space-3) !important;
+  border-top: 1px solid var(--color-border);
 }
 
-.transfer-dialog-actions .MuiButton-contained {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 10px !important;
-  padding: 0.5rem 1.5rem !important;
+/* ------------------------------------------------------ */
+/* MUI polish (scoped; colors come from the global theme) */
+
+.ticketsale-container .MuiButton-root,
+.seat-dialog .MuiButton-root,
+.success-dialog .MuiButton-root,
+.transfer-dialog .MuiButton-root {
+  text-transform: none !important;
   font-weight: 600 !important;
+  min-height: 44px;
+  border-radius: var(--radius-md) !important;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast),
+    transform var(--transition-fast) !important;
 }
 
-/* Make mine seats clickable for transfer */
-.seat.mine {
-  cursor: pointer;
+.ticketsale-container .MuiButton-root:focus-visible,
+.seat-dialog .MuiButton-root:focus-visible,
+.success-dialog .MuiButton-root:focus-visible,
+.transfer-dialog .MuiButton-root:focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
 }
 
-.seat.mine:hover {
-  transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(49, 130, 206, 0.5);
+.ticketsale-container .MuiOutlinedInput-root,
+.transfer-dialog .MuiOutlinedInput-root {
+  border-radius: var(--radius-md) !important;
 }
 
-/* Seat Dialog Dark Mode */
-@media (prefers-color-scheme: dark) {
-  .seat-dialog .MuiPaper-root {
-    background: #1a202c !important;
+.ticketsale-container .MuiTextField-root {
+  margin-bottom: 0 !important;
+}
+
+.ticket-card:focus-within {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/* ------------------------------------------------------ */
+/* Responsive Design */
+
+@media (max-width: 992px) {
+  .ticketsale-container {
+    padding: var(--space-5) var(--space-4);
   }
 
-  .seat-dialog-content {
-    background: #2d3748 !important;
-  }
-
-  .dialog-event-name {
-    color: #e2e8f0;
-  }
-
-  .seat.available {
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
-    color: #a0aec0;
-  }
-
-  .seat.available:hover {
-    background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-    color: white;
-  }
-
-  .seat.selected,
-  .seat.available.selected {
-    background: linear-gradient(180deg, #48bb78 0%, #38a169 100%) !important;
-    color: white !important;
-  }
-
-  .seat.taken {
-    background: linear-gradient(180deg, #fc8181 0%, #c53030 100%);
-    color: white;
-  }
-
-  .seat-legend {
-    border-top-color: #4a5568;
-  }
-
-  .legend-item {
-    color: #cbd5e0;
-  }
-
-  .seat-icon.available {
-    background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
-    color: #a0aec0;
-  }
-
-  .seat-icon.taken {
-    background: linear-gradient(180deg, #fc8181 0%, #c53030 100%);
-    color: white;
-  }
-
-  .seat-icon.selected {
-    background: linear-gradient(180deg, #48bb78 0%, #38a169 100%);
-    color: white;
-  }
-
-  .seat-icon.mine {
-    background: linear-gradient(180deg, #63b3ed 0%, #2b6cb0 100%);
-    color: white;
-  }
-
-  .selected-seat-info {
-    background: #1a202c;
-  }
-
-  /* Success Dialog Dark Mode */
-  .success-dialog .MuiPaper-root {
-    background: #1a202c !important;
-  }
-
-  .success-dialog-content {
-    background: #2d3748 !important;
-  }
-
-  .success-details {
-    background: rgba(72, 187, 120, 0.15);
-  }
-
-  .success-details h3 {
-    color: #e2e8f0;
-  }
-
-  .success-info-row {
-    border-bottom-color: rgba(72, 187, 120, 0.3);
-  }
-
-  .success-label {
-    color: #a0aec0;
-  }
-
-  .success-value {
-    color: #e2e8f0;
-  }
-
-  .success-message {
-    color: #a0aec0;
-  }
-
-  .success-dialog-actions {
-    background: #2d3748 !important;
-  }
-
-  /* Transfer Dialog Dark Mode */
-  .transfer-dialog .MuiPaper-root {
-    background: #1a202c !important;
-  }
-
-  .transfer-dialog-content {
-    background: #2d3748 !important;
-  }
-
-  .transfer-details {
-    background: rgba(102, 126, 234, 0.15);
-  }
-
-  .transfer-details h3 {
-    color: #e2e8f0;
-  }
-
-  .transfer-label {
-    color: #a0aec0;
-  }
-
-  .transfer-value {
-    color: #a78bfa;
-  }
-
-  .transfer-dialog-actions {
-    background: #2d3748 !important;
-  }
-
-  /* My Tickets Info Dark Mode */
-  .my-tickets-info {
-    background: linear-gradient(135deg, rgba(99, 179, 237, 0.2) 0%, rgba(49, 130, 206, 0.2) 100%);
-    border-color: rgba(99, 179, 237, 0.4);
-  }
-
-  .my-tickets-info .my-tickets-icon {
-    color: #63b3ed;
-  }
-
-  .my-tickets-info span {
-    color: #63b3ed;
-  }
-
-  /* Transfer Hint Dark Mode */
-  .transfer-hint {
-    background: linear-gradient(135deg, rgba(99, 179, 237, 0.2) 0%, rgba(49, 130, 206, 0.2) 100%);
-    border-color: rgba(99, 179, 237, 0.4);
-    color: #63b3ed;
-  }
-
-  .transfer-hint .hint-icon {
-    color: #63b3ed;
-  }
-
-  .selected-seat-info p {
-    color: #cbd5e0;
-  }
-
-  .seat-dialog-actions {
-    background: #2d3748 !important;
-    border-top-color: #4a5568 !important;
-  }
-
-  .row-number {
-    color: #a0aec0;
-  }
-
-  .stat-item {
-    color: #e2e8f0;
+  .marketplace-header {
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
   }
 }
 
-/* Responsive Seat Dialog */
+@media (max-width: 800px) {
+  /* Stack admin stats and action buttons vertically on tablets/phones */
+  .admin-stats {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-3);
+  }
+
+  .admin-stats .stat-item {
+    justify-content: center;
+  }
+
+  .admin-stats .MuiButton-root {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .ticketsale-container {
+    padding: var(--space-4);
+  }
+
+  .card-header-section h3 {
+    font-size: 1.2rem;
+  }
+
+  .marketplace-header h2 {
+    font-size: 1.3rem;
+  }
+
+  .admin-actions-card .MuiCardContent-root,
+  .add-ticket-card .MuiCardContent-root {
+    padding: var(--space-5) !important;
+  }
+}
+
 @media (max-width: 600px) {
   .seat-dialog .MuiPaper-root {
-    margin: 1rem !important;
+    margin: var(--space-4) !important;
     width: calc(100% - 2rem) !important;
     max-width: calc(100% - 2rem) !important;
     max-height: calc(100% - 2rem) !important;
   }
 
-  /* Touch-friendly dialog actions (44px minimum tap target) */
-  .seat-dialog-actions .MuiButton-root,
-  .success-dialog-actions .MuiButton-root,
-  .transfer-dialog-actions .MuiButton-root {
-    min-height: 44px;
-  }
-
-  .seat {
-    width: 26px;
-    height: 26px;
-  }
-
-  .seat svg {
-    font-size: 1rem !important;
-  }
-
+  /* Seats keep the 44px touch target; the map scrolls inside
+     .seat-map-container (overflow-x: auto) when it doesn't fit */
   .seats {
-    gap: 0.25rem;
+    gap: 4px;
   }
 
   .seat-row {
-    gap: 0.35rem;
+    gap: 6px;
   }
 
   .seat-legend {
-    gap: 1rem;
-    flex-wrap: wrap;
+    gap: var(--space-4);
   }
 
   .legend-item {
@@ -1699,42 +899,76 @@
   }
 
   .stage {
-    padding: 0.5rem 2rem;
+    padding: var(--space-2) var(--space-6);
     font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-header-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .marketplace-header h2 {
+    font-size: 1.15rem;
+  }
+
+  .ticket-info h4 {
+    font-size: 1.05rem;
+  }
+
+  .info-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .info-row .info-value {
+    margin-left: 0;
+    text-align: left;
+  }
+
+  .empty-state {
+    padding: var(--space-6) var(--space-4);
+  }
+
+  .empty-icon {
+    font-size: 3rem !important;
+  }
+
+  .empty-state h4 {
+    font-size: 1.2rem;
+  }
+
+  .empty-state p {
+    font-size: 0.9rem;
   }
 }
 
 @media (max-width: 400px) {
   .seat-dialog .MuiPaper-root {
-    margin: 0.5rem !important;
+    margin: var(--space-2) !important;
     width: calc(100% - 1rem) !important;
     max-width: calc(100% - 1rem) !important;
     max-height: calc(100% - 1rem) !important;
   }
 
   .seat-dialog-content {
-    padding: 0.75rem !important;
+    padding: var(--space-3) !important;
   }
 
   .seat-dialog-actions {
-    padding: 0.75rem 1rem !important;
-  }
-
-  .seat {
-    width: 22px;
-    height: 22px;
-  }
-
-  .seat svg {
-    font-size: 0.85rem !important;
+    padding: var(--space-3) var(--space-4) !important;
   }
 
   .seats {
-    gap: 0.2rem;
+    gap: 3px;
   }
 
   .seat-row {
-    gap: 0.25rem;
+    gap: 4px;
   }
 
   .row-number {
@@ -1743,7 +977,7 @@
   }
 
   .seat-legend {
-    gap: 0.5rem 0.75rem;
+    gap: var(--space-2) var(--space-3);
   }
 
   .legend-item {
@@ -1751,40 +985,11 @@
   }
 
   .selected-seat-info {
-    padding: 0.75rem;
+    padding: var(--space-3);
   }
 
   .selected-seat-info p {
     font-size: 0.85rem;
     word-wrap: break-word;
-  }
-}
-
-/* Print Styles */
-@media print {
-  .ticketsale-container {
-    max-width: 100%;
-  }
-
-  .hero-section,
-  .admin-actions-card,
-  .transfer-ownership-card,
-  .add-ticket-card,
-  .tickets-table-card,
-  .ticket-card {
-    box-shadow: none;
-    border: 1px solid #e2e8f0;
-  }
-
-  .admin-actions,
-  .marketplace-header .refresh-btn,
-  .card-header-section .refresh-btn,
-  .submit-button,
-  .buy-button {
-    display: none;
-  }
-
-  .ticket-card {
-    page-break-inside: avoid;
   }
 }

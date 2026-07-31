@@ -592,7 +592,7 @@ const TicketSale = () => {
   return (
     <div className="ticketsale-container">
       <HeroSection
-        title="📅 Event Tickets"
+        title="Event Tickets"
         description="Buy tickets for events secured on the blockchain"
         contractAddress={TICKETSALE_ADDRESS}
         contractName="Event Tickets"

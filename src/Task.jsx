@@ -267,7 +267,7 @@ const Task = () => {
   return (
     <div className="task-container">
       <HeroSection
-        title="📝 Todo Manager"
+        title="Todo Manager"
         description="Manage your tasks on the blockchain with transparency and permanence"
         contractAddress={TASK_ADDRESS}
         contractName="Task Contract"
@@ -278,8 +278,8 @@ const Task = () => {
       />
 
       <div className="task-content">
-        <div className="add-task-card">
-          <h3>➕ Add New Task</h3>
+        <div className="add-task-card surface-panel">
+          <h3>Add New Task</h3>
           <p className="add-task-description">
             Create a new task with a deadline
           </p>
@@ -324,9 +324,9 @@ const Task = () => {
           </form>
         </div>
 
-        <div className="tasks-section">
+        <div className="tasks-section surface-panel">
           <div className="tasks-header">
-            <h3>📋 Your Tasks</h3>
+            <h3>Your Tasks</h3>
             <span className="tasks-count">
               {tasks.filter((task) => !task.isDeleted).length} task
               {tasks.filter((task) => !task.isDeleted).length !== 1 ? 's' : ''}
@@ -335,7 +335,9 @@ const Task = () => {
 
           {tasks.length === 0 ? (
             <div className="no-tasks">
-              <div className="no-tasks-icon">✨</div>
+              <div className="no-tasks-icon">
+                <i className="fa fa-tasks" aria-hidden="true"></i>
+              </div>
               <h4>No Tasks Yet</h4>
               <p>Add your first task to get started!</p>
             </div>

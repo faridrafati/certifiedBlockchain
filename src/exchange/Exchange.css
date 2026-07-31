@@ -1,133 +1,43 @@
-/* Exchange with DappToken Style - Dark Theme with MUI Components */
+/**
+ * Exchange.css — DEX trading page (order book, candlestick chart, order
+ * forms, trades). Consumes the global design tokens from index.css only.
+ * Layout: full-width Binance-style grid; panels are dark elevated surfaces.
+ * The hero is the global .hero-section (styled in index.css).
+ */
 
-/* Main Container */
+/* ------------------------------------------------------ */
+/* -- PAGE CONTAINER & LAYOUT -- */
+
 .exchange-container {
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-  padding: 2rem 1rem;
+  padding: var(--space-5) var(--space-4) var(--space-7);
 }
 
-/* Hero Section - DappToken Style */
-.exchange-hero {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  margin: 0 auto 3rem auto;
+/* Wide trading page: align the shared hero with the 1800px content grid.
+   (Layout only — visual hero styling stays global in index.css.) */
+.exchange-container .hero-section {
   max-width: 1800px;
-  color: white;
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-  animation: fadeInDown 0.6s ease-out;
-  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.exchange-hero .hero-content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.exchange-hero .hero-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.exchange-hero .hero-title-row h1 {
-  margin: 0 !important;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.exchange-hero .hero-icon {
-  font-size: 3rem !important;
-  color: white;
-}
-
-.exchange-hero .hero-refresh-btn {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.3s ease !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0;
-}
-
-.exchange-hero .hero-refresh-btn svg {
-  font-size: 1.5rem !important;
-}
-
-.exchange-hero .hero-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: rotate(180deg);
-}
-
-.exchange-hero .hero-content h1 {
-  margin-bottom: 1rem;
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  color: white;
-}
-
-.exchange-hero .hero-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 0;
-  color: white;
-}
-
-/* Hero Responsive */
-@media (max-width: 768px) {
-  .exchange-hero {
-    border-radius: 16px;
-    padding: 2rem 1.5rem;
-    margin-bottom: 2rem;
-  }
-
-  .exchange-hero .hero-title-row {
-    flex-wrap: wrap;
-    gap: 0.75rem;
-  }
-
-  .exchange-hero .hero-content h1 {
-    font-size: 1.75rem !important;
-  }
-
-  .exchange-hero .hero-icon {
-    font-size: 2.5rem !important;
-  }
-
-  .exchange-hero .hero-content p {
-    font-size: 1rem;
-  }
-
-  .exchange-hero .hero-refresh-btn {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  .exchange-hero .hero-refresh-btn svg {
-    font-size: 1.25rem !important;
-  }
-}
-
-/* Content Grid Layout (Binance-style Trading Interface) */
+/* Content grid (Binance-style trading interface) */
 .exchange-content {
   max-width: 1800px;
   margin: 0 auto;
-  padding: 2rem 1rem;
   display: grid;
   grid-template-columns: minmax(280px, 1.2fr) minmax(500px, 3fr) minmax(280px, 1.2fr);
   grid-template-rows: auto auto;
-  gap: 1rem;
-  animation: fadeInUp 0.6s ease-out;
+  gap: var(--space-4);
+  animation: exchange-fade-up 0.5s ease-out;
   grid-template-areas:
     "orderbook pricechart trades"
     "neworder mytransactions balance";
 }
 
-/* Assign grid areas to components */
+/* Assign grid areas to components (DOM order: chart, orderbook, trades,
+   neworder, balance, mytransactions) */
 .exchange-content > :nth-child(1) { grid-area: pricechart; }
 .exchange-content > :nth-child(2) { grid-area: orderbook; }
 .exchange-content > :nth-child(3) { grid-area: trades; }
@@ -135,90 +45,10 @@
 .exchange-content > :nth-child(5) { grid-area: balance; }
 .exchange-content > :nth-child(6) { grid-area: mytransactions; }
 
-/* Responsive Design */
-@media (max-width: 1400px) {
-  .exchange-content {
-    grid-template-columns: minmax(250px, 1fr) minmax(400px, 2.5fr) minmax(250px, 1fr);
-    gap: 0.75rem;
-  }
-}
-
-@media (max-width: 1200px) {
-  .exchange-content {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto auto;
-    grid-template-areas:
-      "pricechart pricechart"
-      "mytransactions mytransactions"
-      "orderbook trades"
-      "neworder balance";
-    gap: 0.75rem;
-  }
-}
-
-@media (max-width: 992px) {
-  .exchange-content {
-    /* minmax(0, 1fr) prevents wide table/chart content from forcing horizontal overflow */
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "pricechart"
-      "orderbook"
-      "trades"
-      "neworder"
-      "balance"
-      "mytransactions";
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .exchange-container {
-    padding: 1rem;
-  }
-
-  .exchange-content {
-    gap: 0.75rem;
-  }
-
-  /* Adjust chart height on tablets */
-  .exchange-content > :nth-child(1) {
-    min-height: 450px;
-  }
-
-  .exchange-container .chart-wrapper {
-    min-height: 320px;
-  }
-}
-
-@media (max-width: 480px) {
-  .exchange-container {
-    padding: 0.5rem;
-  }
-
-  .exchange-content {
-    gap: 0.5rem;
-  }
-
-  /* Smaller chart on mobile */
-  .exchange-content > :nth-child(1) {
-    min-height: 400px;
-  }
-
-  .exchange-container .chart-wrapper {
-    min-height: 280px;
-  }
-
-  .exchange-container .price-display {
-    padding: 10px 16px;
-    font-size: 1.1rem;
-  }
-}
-
-/* Animations */
-@keyframes fadeInUp {
+@keyframes exchange-fade-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -226,252 +56,251 @@
   }
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes exchange-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+/* ------------------------------------------------------ */
+/* -- PANELS (MUI Card → token surfaces) -- */
 
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* ===== MUI COMPONENT DARK THEME OVERRIDES ===== */
-
-/* MUI Card Components */
 .exchange-container .MuiCard-root {
-  background: rgba(30, 30, 46, 0.95) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3) !important;
-  transition: all 0.3s ease !important;
-  animation: fadeInUp 0.6s ease-out;
+  background: var(--color-bg-elevated) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--color-text) !important;
+  transition: border-color var(--transition-base), box-shadow var(--transition-base) !important;
 }
 
 .exchange-container .MuiCard-root:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.2) !important;
-  border-color: rgba(102, 126, 234, 0.3);
+  border-color: var(--color-border-strong) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 
 .exchange-container .MuiCardContent-root {
-  color: #e0e7ff !important;
-  padding: 18px !important;
+  color: var(--color-text-secondary) !important;
+  padding: var(--space-4) !important;
 }
 
-/* Card Headers (custom) */
+/* Panel headers */
 .exchange-container .card-header-custom {
-  padding: 12px 18px;
-  background: rgba(102, 126, 234, 0.15);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  color: #e0e7ff;
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text);
   text-transform: uppercase;
-  border-radius: 20px 20px 0 0;
-  margin: -18px -18px 18px -18px;
+  border-radius: calc(var(--radius-lg) - 1px) calc(var(--radius-lg) - 1px) 0 0;
+  margin: calc(-1 * var(--space-4)) calc(-1 * var(--space-4)) var(--space-4);
 }
 
-/* MUI Tabs */
+/* ------------------------------------------------------ */
+/* -- TABS (Buy / Sell, Deposit / Withdraw) -- */
+
 .exchange-container .MuiTabs-root {
-  border-bottom: 2px solid rgba(102, 126, 234, 0.3) !important;
-  margin-bottom: 16px !important;
-  min-height: 42px !important;
+  border-bottom: 1px solid var(--color-border-strong) !important;
+  margin-bottom: var(--space-4) !important;
+  min-height: 44px !important;
 }
 
 .exchange-container .MuiTab-root {
-  color: #a5b4fc !important;
+  color: var(--color-text-secondary) !important;
+  font-family: var(--font-body) !important;
   font-weight: 600 !important;
   font-size: 0.9rem !important;
   text-transform: none !important;
-  min-height: 42px !important;
+  min-height: 44px !important;
   padding: 10px 20px !important;
-  transition: all 0.3s ease !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  transition: color var(--transition-fast), background-color var(--transition-fast) !important;
 }
 
 .exchange-container .MuiTab-root:hover {
-  color: #e0e7ff !important;
-  background-color: rgba(102, 126, 234, 0.1) !important;
+  color: var(--color-text) !important;
+  background-color: var(--color-primary-soft) !important;
 }
 
 .exchange-container .MuiTab-root.Mui-selected {
-  color: #fff !important;
+  color: var(--color-text) !important;
 }
 
 .exchange-container .MuiTabs-indicator {
-  background-color: #667eea !important;
+  background-color: var(--color-primary) !important;
   height: 3px !important;
 }
 
-/* Tab Panels */
 .exchange-container .tab-panel {
-  animation: fadeIn 0.3s ease-out;
+  animation: exchange-fade-in 0.25s ease-out;
 }
 
-/* MUI TextField */
+/* ------------------------------------------------------ */
+/* -- FORM FIELDS (MUI TextField) -- */
+
 .exchange-container .MuiTextField-root {
   width: 100%;
   margin-bottom: 0 !important;
 }
 
 .exchange-container .MuiOutlinedInput-root {
-  background-color: rgba(30, 30, 46, 0.8) !important;
-  border-radius: 12px !important;
-  color: #e0e7ff !important;
-  transition: all 0.3s ease !important;
+  background-color: var(--color-surface) !important;
+  border-radius: var(--radius-md) !important;
+  color: var(--color-text) !important;
+  transition: box-shadow var(--transition-fast) !important;
 }
 
 .exchange-container .MuiOutlinedInput-input {
-  color: #e0e7ff !important;
+  color: var(--color-text) !important;
+  font-family: var(--font-mono) !important;
   font-size: 0.95rem !important;
+  min-height: 1.4em;
 }
 
 .exchange-container .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(102, 126, 234, 0.3) !important;
-  transition: all 0.3s ease !important;
+  border-color: var(--color-border-strong) !important;
+  transition: border-color var(--transition-fast) !important;
 }
 
 .exchange-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(102, 126, 234, 0.5) !important;
+  border-color: var(--color-primary-hover) !important;
 }
 
 .exchange-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-  border-color: #667eea !important;
+  border-color: var(--color-primary) !important;
   border-width: 2px !important;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2) !important;
+}
+
+.exchange-container .MuiOutlinedInput-root.Mui-focused {
+  box-shadow: 0 0 0 3px var(--color-ring) !important;
 }
 
 .exchange-container .MuiOutlinedInput-root.Mui-disabled {
-  background-color: rgba(30, 30, 46, 0.5) !important;
+  background-color: var(--color-surface) !important;
   opacity: 0.6;
 }
 
 .exchange-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
-  color: rgba(224, 231, 255, 0.5) !important;
-  -webkit-text-fill-color: rgba(224, 231, 255, 0.5) !important;
+  color: var(--color-text-muted) !important;
+  -webkit-text-fill-color: var(--color-text-muted) !important;
 }
 
 .exchange-container .MuiInputLabel-root {
-  color: #a5b4fc !important;
+  color: var(--color-text-secondary) !important;
+  font-family: var(--font-body) !important;
   font-weight: 600 !important;
-  font-size: 0.85rem !important;
+  font-size: 0.9rem !important;
 }
 
 .exchange-container .MuiInputLabel-root.Mui-focused {
-  color: #667eea !important;
+  color: var(--color-link) !important;
 }
 
 .exchange-container .MuiInputLabel-root.Mui-disabled {
-  color: rgba(165, 180, 252, 0.5) !important;
+  color: var(--color-text-muted) !important;
 }
 
 .exchange-container .MuiFormHelperText-root {
-  color: #a5b4fc !important;
+  color: var(--color-text-muted) !important;
   font-size: 0.75rem !important;
   margin-top: 6px !important;
 }
 
-/* TextField Error States */
+/* Error states */
 .exchange-container .MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
-  border-color: rgba(239, 68, 68, 0.5) !important;
+  border-color: var(--color-danger) !important;
 }
 
 .exchange-container .MuiFormHelperText-root.Mui-error {
-  color: #ef4444 !important;
+  color: var(--color-danger-text) !important;
 }
 
-/* MUI Buttons */
+/* ------------------------------------------------------ */
+/* -- BUTTONS (MUI → token palette) -- */
+
 .exchange-container .MuiButton-root {
-  border-radius: 12px !important;
+  border-radius: var(--radius-md) !important;
   padding: 10px 24px !important;
+  min-height: 44px;
+  font-family: var(--font-body) !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.04em !important;
   font-size: 0.85rem !important;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  position: relative !important;
-  overflow: hidden !important;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast), box-shadow var(--transition-fast),
+    transform var(--transition-fast) !important;
+}
+
+.exchange-container .MuiButton-root:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
 }
 
 .exchange-container .MuiButton-root:disabled {
-  opacity: 0.6 !important;
+  opacity: 0.55 !important;
   cursor: not-allowed !important;
   transform: none !important;
 }
 
-/* Primary Button */
+.exchange-container .MuiButton-root.Mui-focusVisible {
+  box-shadow: 0 0 0 3px var(--color-ring) !important;
+}
+
+/* Primary (violet) */
 .exchange-container .MuiButton-containedPrimary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .exchange-container .MuiButton-containedPrimary:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5a52d5 0%, #6a3f92 100%) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+  background: var(--color-primary-hover) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
-/* Success Button */
+/* Success / buy CTA (signal green, dark text for AA contrast) */
 .exchange-container .MuiButton-containedSuccess {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+  background: var(--color-accent) !important;
+  color: var(--color-on-accent) !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4) !important;
-  color: #fff !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .exchange-container .MuiButton-containedSuccess:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6) !important;
+  background: var(--color-accent-hover) !important;
+  color: var(--color-on-accent) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
-/* Error/Danger Button */
+/* Error / sell */
 .exchange-container .MuiButton-containedError {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%) !important;
+  background: var(--color-danger) !important;
+  color: var(--color-on-primary) !important;
   border: none !important;
-  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4) !important;
-  color: #fff !important;
+  box-shadow: var(--shadow-sm) !important;
 }
 
 .exchange-container .MuiButton-containedError:hover:not(:disabled) {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%) !important;
-  transform: translateY(-2px) !important;
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6) !important;
+  background: color-mix(in srgb, var(--color-danger), black 18%) !important;
+  box-shadow: var(--shadow-md) !important;
 }
 
-/* Outlined Buttons */
+/* Outlined */
 .exchange-container .MuiButton-outlined {
-  border: 2px solid rgba(102, 126, 234, 0.5) !important;
-  color: #667eea !important;
+  border: 1px solid var(--color-primary) !important;
+  color: var(--color-link) !important;
 }
 
 .exchange-container .MuiButton-outlined:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.1) !important;
-  border-color: #667eea !important;
+  background: var(--color-primary-soft) !important;
+  border-color: var(--color-primary-hover) !important;
+  color: var(--color-link-hover) !important;
 }
 
-/* Button Sizes */
+/* Sizes */
 .exchange-container .MuiButton-sizeSmall {
   padding: 6px 16px !important;
   font-size: 0.75rem !important;
@@ -482,10 +311,8 @@
   font-size: 0.95rem !important;
 }
 
-/* MUI Tables */
-.exchange-container .MuiTable-root {
-  color: #e0e7ff !important;
-}
+/* ------------------------------------------------------ */
+/* -- TABLES (order book, trades, transactions) -- */
 
 .exchange-container .MuiTableContainer-root {
   background: transparent !important;
@@ -493,20 +320,23 @@
 }
 
 .exchange-container .MuiTableCell-root {
-  color: #e0e7ff !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: var(--color-text-secondary) !important;
+  border-bottom: 1px solid var(--color-border) !important;
   padding: 10px 8px !important;
-  font-size: 0.9rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.85rem !important;
 }
 
 .exchange-container .MuiTableCell-head {
-  color: #a5b4fc !important;
+  color: var(--color-text-muted) !important;
+  font-family: var(--font-body) !important;
   font-weight: 600 !important;
   text-transform: uppercase !important;
-  font-size: 0.85rem !important;
-  letter-spacing: 0.5px !important;
-  background: rgba(30, 30, 46, 0.95) !important;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.3) !important;
+  font-size: 0.75rem !important;
+  letter-spacing: 0.06em !important;
+  /* Opaque sticky header so rows don't show through while scrolling */
+  background: var(--color-bg-elevated) !important;
+  border-bottom: 1px solid var(--color-border-strong) !important;
   padding: 12px 8px !important;
   position: sticky !important;
   top: 0 !important;
@@ -514,27 +344,30 @@
 }
 
 .exchange-container .MuiTableRow-root {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-  animation: fadeIn 0.5s ease-out;
+  transition: background-color var(--transition-fast) !important;
 }
 
 .exchange-container .MuiTableRow-root.MuiTableRow-hover:hover {
-  background-color: rgba(102, 126, 234, 0.15) !important;
-  transform: scale(1.005);
+  background-color: var(--color-surface-hover) !important;
   cursor: pointer;
 }
 
-/* Table Empty States */
+/* Order book rows are clickable (fill order) */
+.exchange-container .order-book-order {
+  cursor: pointer;
+}
+
+/* Empty states */
 .exchange-container .table-empty-state {
   text-align: center;
-  padding: 40px 20px;
-  color: #a5b4fc;
+  padding: var(--space-6) var(--space-4);
+  color: var(--color-text-muted);
 }
 
 .exchange-container .table-empty-icon {
   font-size: 2.5rem !important;
-  opacity: 0.5;
-  margin-bottom: 12px;
+  opacity: 0.6;
+  margin-bottom: var(--space-3);
 }
 
 .exchange-container .table-empty-text {
@@ -542,171 +375,161 @@
   font-weight: 500;
 }
 
-/* MUI Tooltip */
+/* Cancel-order cell */
+.exchange-container .cancel-order-cell {
+  cursor: pointer;
+  color: var(--color-danger-text) !important;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.exchange-container .cancel-order-cell:hover {
+  color: var(--color-text) !important;
+  background-color: rgba(220, 38, 38, 0.15);
+}
+
+/* ------------------------------------------------------ */
+/* -- STATUS TEXT (buy/sell, up/down) -- */
+
+.exchange-container .text-success {
+  color: var(--color-success-text) !important;
+}
+
+.exchange-container .text-danger {
+  color: var(--color-danger-text) !important;
+}
+
+.exchange-container .text-primary {
+  color: var(--color-link) !important;
+}
+
+/* ------------------------------------------------------ */
+/* -- MISC MUI (tooltip, toggles, spinner, divider, type) -- */
+
 .exchange-container .MuiTooltip-tooltip {
-  background-color: rgba(30, 30, 46, 0.95) !important;
-  color: #e0e7ff !important;
+  background-color: var(--color-surface-solid) !important;
+  color: var(--color-text) !important;
   font-size: 0.85rem !important;
   font-weight: 500 !important;
-  padding: 8px 12px !important;
-  border: 1px solid rgba(102, 126, 234, 0.3) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  padding: var(--space-2) var(--space-3) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: var(--shadow-lg) !important;
 }
 
 .exchange-container .MuiTooltip-arrow {
-  color: rgba(30, 30, 46, 0.95) !important;
+  color: var(--color-surface-solid) !important;
 }
 
-/* MUI ToggleButton for asset selection */
+/* Asset toggle (ETH / DAPP) */
 .exchange-container .MuiToggleButtonGroup-root {
-  background: rgba(102, 126, 234, 0.1) !important;
-  border-radius: 8px !important;
-  padding: 4px !important;
-  gap: 4px !important;
+  background: var(--color-surface) !important;
+  border-radius: var(--radius-md) !important;
+  padding: var(--space-1) !important;
+  gap: var(--space-1) !important;
 }
 
 .exchange-container .MuiToggleButton-root {
-  color: #a5b4fc !important;
-  border: 1px solid rgba(102, 126, 234, 0.3) !important;
+  color: var(--color-text-secondary) !important;
+  border: 1px solid var(--color-border) !important;
+  font-family: var(--font-body) !important;
   font-weight: 600 !important;
-  border-radius: 6px !important;
+  border-radius: var(--radius-sm) !important;
   padding: 8px 16px !important;
-  transition: all 0.3s ease !important;
+  min-height: 44px;
+  transition: color var(--transition-fast), background-color var(--transition-fast),
+    border-color var(--transition-fast) !important;
   text-transform: uppercase !important;
   font-size: 0.85rem !important;
 }
 
 .exchange-container .MuiToggleButton-root:hover {
-  background: rgba(102, 126, 234, 0.2) !important;
+  background: var(--color-primary-soft) !important;
+  color: var(--color-text) !important;
 }
 
 .exchange-container .MuiToggleButton-root.Mui-selected {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: #fff !important;
+  background: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
   border-color: transparent !important;
 }
 
 .exchange-container .MuiToggleButton-root.Mui-selected:hover {
-  background: linear-gradient(135deg, #5a52d5 0%, #6a3f92 100%) !important;
+  background: var(--color-primary-hover) !important;
 }
 
-/* MUI CircularProgress */
+/* Loading */
 .exchange-container .MuiCircularProgress-root {
-  color: #667eea !important;
+  color: var(--color-primary) !important;
 }
 
-/* Spinner Container */
 .exchange-container .spinner-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+  padding: var(--space-6) var(--space-4);
   min-height: 200px;
 }
 
 .exchange-container .loading-text {
-  margin-top: 16px;
-  color: #a5b4fc;
+  margin-top: var(--space-4);
+  color: var(--color-text-muted);
   font-size: 0.9rem;
   font-weight: 500;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* MUI Divider */
 .exchange-container .MuiDivider-root {
-  background: rgba(102, 126, 234, 0.2) !important;
-  margin: 1.5rem 0 !important;
+  background: var(--color-border) !important;
+  margin: var(--space-5) 0 !important;
 }
 
-/* MUI Typography */
+/* Typography */
 .exchange-container .MuiTypography-root {
-  color: #e0e7ff !important;
+  color: var(--color-text) !important;
 }
 
 .exchange-container .MuiTypography-h5 {
   font-weight: 700 !important;
   font-size: 1.5rem !important;
-  margin-bottom: 1rem !important;
+  margin-bottom: var(--space-4) !important;
 }
 
 .exchange-container .MuiTypography-h6 {
   font-weight: 600 !important;
   font-size: 1.2rem !important;
-  margin-bottom: 0.75rem !important;
+  margin-bottom: var(--space-3) !important;
 }
 
 .exchange-container .MuiTypography-body2 {
-  color: #a5b4fc !important;
+  color: var(--color-text-secondary) !important;
   font-size: 0.875rem !important;
 }
 
-/* MUI Box */
+/* Info boxes (order totals, warnings) */
 .exchange-container .info-box {
-  padding: 12px 16px;
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.3);
-  border-radius: 8px;
-  margin: 12px 0;
-}
-
-.exchange-container .info-box-success {
-  background: rgba(16, 185, 129, 0.1);
-  border-color: rgba(16, 185, 129, 0.3);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin: var(--space-3) 0;
 }
 
 .exchange-container .info-box-error {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.3);
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.35);
 }
 
-/* Color Classes */
-.exchange-container .text-success {
-  color: #10b981 !important;
-}
+/* ------------------------------------------------------ */
+/* -- PRICE CHART -- */
 
-.exchange-container .text-danger {
-  color: #ef4444 !important;
-}
-
-.exchange-container .text-primary {
-  color: #667eea !important;
-}
-
-.exchange-container .text-muted {
-  color: #a5b4fc !important;
-}
-
-/* Cancel Order Hover Effect */
-.exchange-container .cancel-order-cell {
-  cursor: pointer;
-  color: #ef4444 !important;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.exchange-container .cancel-order-cell:hover {
-  color: #dc2626 !important;
-  transform: scale(1.2);
-  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
-}
-
-/* Price Chart Specific */
 .exchange-container .price-chart-container {
   width: 100%;
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-}
-
-.exchange-container .price-display {
-  padding: 12px 20px;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #667eea;
-  flex-shrink: 0;
 }
 
 .exchange-container .chart-wrapper {
@@ -716,7 +539,7 @@
   position: relative;
 }
 
-/* ApexCharts specific fixes */
+/* ApexCharts sizing fixes */
 .exchange-container .chart-wrapper .apexcharts-canvas {
   width: 100% !important;
 }
@@ -726,7 +549,29 @@
   height: 100% !important;
 }
 
-/* Ensure PriceChart card height and CardContent fills it */
+/* ApexCharts chrome on dark surfaces (tooltip + toolbar menu) */
+.exchange-container .apexcharts-tooltip {
+  background: var(--color-surface-solid) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  color: var(--color-text) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.exchange-container .apexcharts-menu {
+  background: var(--color-surface-solid) !important;
+  border: 1px solid var(--color-border-strong) !important;
+  color: var(--color-text-secondary) !important;
+}
+
+.exchange-container .apexcharts-menu-item:hover {
+  background: var(--color-surface-hover) !important;
+  color: var(--color-text) !important;
+}
+
+/* ------------------------------------------------------ */
+/* -- PANEL SIZING (grid children) -- */
+
+/* PriceChart card fills its cell */
 .exchange-content > :nth-child(1) {
   min-height: 400px;
 }
@@ -747,12 +592,10 @@
 
 .exchange-content > :nth-child(1) .card-header-custom {
   margin: 0;
-  border-radius: 20px 20px 0 0;
   flex-shrink: 0;
-  padding: 12px 18px;
 }
 
-/* OrderBook and Trades optimal heights */
+/* OrderBook and Trades: full-height flex cards with scrolling tables */
 .exchange-content > :nth-child(2) .MuiCard-root,
 .exchange-content > :nth-child(3) .MuiCard-root {
   height: 100%;
@@ -761,7 +604,6 @@
   flex-direction: column;
 }
 
-/* OrderBook and Trades - Remove padding, fill space */
 .exchange-content > :nth-child(2) .MuiCardContent-root,
 .exchange-content > :nth-child(3) .MuiCardContent-root {
   flex: 1;
@@ -774,166 +616,76 @@
 .exchange-content > :nth-child(2) .card-header-custom,
 .exchange-content > :nth-child(3) .card-header-custom {
   margin: 0;
-  border-radius: 20px 20px 0 0;
   flex-shrink: 0;
-  padding: 12px 18px;
 }
 
-/* OrderBook and Trades - TableContainer fills remaining space */
 .exchange-content > :nth-child(2) .MuiTableContainer-root,
 .exchange-content > :nth-child(3) .MuiTableContainer-root {
   flex: 1;
   overflow-y: auto;
 }
 
-/* NewOrder and Balance optimal heights */
+/* NewOrder, Balance, MyTransactions */
 .exchange-content > :nth-child(4) .MuiCard-root,
-.exchange-content > :nth-child(5) .MuiCard-root {
-  height: 100%;
-  min-height: 400px;
-}
-
-/* MyTransactions optimal height */
+.exchange-content > :nth-child(5) .MuiCard-root,
 .exchange-content > :nth-child(6) .MuiCard-root {
   height: 100%;
   min-height: 400px;
 }
 
-/* Custom Scrollbar */
-.exchange-container ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-.exchange-container ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 10px;
-}
-
-.exchange-container ::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.5);
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
-
-.exchange-container ::-webkit-scrollbar-thumb:hover {
-  background: rgba(102, 126, 234, 0.7);
-}
-
-/* Focus Styles for Accessibility */
-.exchange-container *:focus {
-  outline: 2px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-.exchange-container button:focus,
-.exchange-container .MuiButton-root:focus {
-  outline: 2px solid rgba(102, 126, 234, 0.7);
-  outline-offset: 2px;
-}
-
-/* Print Styles */
-@media print {
-  .exchange-container {
-    background: white;
-  }
-
-  .exchange-container .MuiCard-root {
-    box-shadow: none;
-    border: 1px solid #e2e8f0;
-  }
-
-  .exchange-container .MuiButton-root,
-  .exchange-container .MuiToggleButtonGroup-root {
-    display: none;
-  }
-}
-
-/* Smooth Transitions */
-* {
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Utility Classes */
-.exchange-container .mb-2 {
-  margin-bottom: 1rem !important;
-}
-
-.exchange-container .mb-3 {
-  margin-bottom: 1.5rem !important;
-}
-
-.exchange-container .mt-2 {
-  margin-top: 1rem !important;
-}
-
-.exchange-container .mt-3 {
-  margin-top: 1.5rem !important;
-}
-
-.exchange-container .p-2 {
-  padding: 1rem !important;
-}
-
-.exchange-container .p-3 {
-  padding: 1.5rem !important;
-}
-
-.exchange-container .text-center {
-  text-align: center !important;
-}
-
-.exchange-container .d-flex {
-  display: flex !important;
-}
-
-.exchange-container .justify-content-between {
-  justify-content: space-between !important;
-}
-
-.exchange-container .align-items-center {
-  align-items: center !important;
-}
-
-.exchange-container .w-100 {
-  width: 100% !important;
-}
-
-/* Balance Table Styling */
+/* Balance summary table */
 .exchange-container .balance-table {
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4);
 }
 
-.exchange-container .balance-table-cell {
-  padding: 8px !important;
-  font-size: 0.9rem !important;
+/* ------------------------------------------------------ */
+/* -- RESPONSIVE -- */
+
+@media (max-width: 1400px) {
+  .exchange-content {
+    grid-template-columns: minmax(250px, 1fr) minmax(400px, 2.5fr) minmax(250px, 1fr);
+    gap: var(--space-3);
+  }
 }
 
-.exchange-container .balance-label {
-  color: #a5b4fc !important;
-  font-weight: 600 !important;
-  text-transform: uppercase !important;
-  font-size: 0.75rem !important;
+@media (max-width: 1200px) {
+  .exchange-content {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+      "pricechart pricechart"
+      "mytransactions mytransactions"
+      "orderbook trades"
+      "neworder balance";
+    gap: var(--space-3);
+  }
 }
 
-.exchange-container .balance-value {
-  color: #667eea !important;
-  font-weight: 700 !important;
-  font-size: 1.1rem !important;
+@media (max-width: 992px) {
+  .exchange-content {
+    /* minmax(0, 1fr) prevents wide table/chart content from forcing horizontal overflow */
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "pricechart"
+      "orderbook"
+      "trades"
+      "neworder"
+      "balance"
+      "mytransactions";
+    gap: var(--space-4);
+  }
 }
-
-/* ===== MOBILE RESPONSIVE OVERRIDES ===== */
-/* Kept at the end of the file so they win over the base component
-   rules above (several earlier media rules were being overridden by
-   later base rules of equal specificity). Desktop (>1024px) untouched. */
 
 @media (max-width: 768px) {
+  .exchange-container {
+    padding: var(--space-4);
+  }
+
   /* Stack panels in a mobile-friendly order: act first (balance / new order),
      then chart, then market data */
   .exchange-content {
-    padding: 1rem 0;
+    gap: var(--space-3);
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
       "balance"
@@ -944,7 +696,6 @@
       "mytransactions";
   }
 
-  /* Chart heights on tablets/phones (base rules above set 400px) */
   .exchange-content > :nth-child(1) {
     min-height: 380px;
   }
@@ -965,20 +716,36 @@
 }
 
 @media (max-width: 480px) {
+  .exchange-container {
+    padding: var(--space-2);
+  }
+
   .exchange-content {
-    padding: 0.75rem 0.25rem;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   /* Tighter card padding on phones */
   .exchange-container .MuiCardContent-root {
-    padding: 12px !important;
+    padding: var(--space-3) !important;
   }
 
   .exchange-container .card-header-custom {
-    padding: 10px 12px;
-    margin: -12px -12px 12px -12px;
-    font-size: 0.9rem;
+    padding: 10px var(--space-3);
+    margin: calc(-1 * var(--space-3)) calc(-1 * var(--space-3)) var(--space-3);
+    font-size: 0.8rem;
+  }
+
+  /* Chart panel keeps its zero-padding layout */
+  .exchange-content > :nth-child(1) .MuiCardContent-root,
+  .exchange-content > :nth-child(2) .MuiCardContent-root,
+  .exchange-content > :nth-child(3) .MuiCardContent-root {
+    padding: 0 !important;
+  }
+
+  .exchange-content > :nth-child(1) .card-header-custom,
+  .exchange-content > :nth-child(2) .card-header-custom,
+  .exchange-content > :nth-child(3) .card-header-custom {
+    margin: 0;
   }
 
   /* Let cards shrink to their content instead of forcing tall blanks */
@@ -990,7 +757,6 @@
     min-height: 0;
   }
 
-  /* Chart card + wrapper sizing */
   .exchange-content > :nth-child(1) {
     min-height: 340px;
   }
@@ -999,34 +765,22 @@
     min-height: 280px;
   }
 
-  .exchange-container .price-display {
-    padding: 10px 12px;
-    font-size: 1.1rem;
-  }
-
   /* Tabs: tighter but with >= 44px tap targets */
-  .exchange-container .MuiTabs-root {
-    min-height: 44px !important;
-  }
-
   .exchange-container .MuiTab-root {
     padding: 8px 12px !important;
     font-size: 0.8rem !important;
     min-width: 60px !important;
-    min-height: 44px !important;
   }
 
   /* Buttons: tighter padding, preserve 44px tap target */
   .exchange-container .MuiButton-root {
     padding: 10px 16px !important;
     font-size: 0.8rem !important;
-    min-height: 44px;
   }
 
   /* Toggle buttons (ETH/DAPP): tighter padding, keep tap height */
   .exchange-container .MuiToggleButton-root {
-    padding: 8px 8px !important;
-    min-height: 44px;
+    padding: 8px !important;
   }
 
   /* Table cells: tighter padding and slightly smaller numbers */
@@ -1037,10 +791,9 @@
 
   .exchange-container .MuiTableCell-head {
     padding: 10px 4px !important;
-    font-size: 0.75rem !important;
+    font-size: 0.7rem !important;
   }
 
-  /* Body2 text (totals, warnings) scales down slightly */
   .exchange-container .MuiTypography-body2 {
     font-size: 0.8rem !important;
   }
@@ -1048,32 +801,9 @@
   .exchange-container .MuiTypography-h6 {
     font-size: 1.1rem !important;
   }
-
-  /* Balance summary table */
-  .exchange-container .balance-table-cell {
-    padding: 6px 4px !important;
-    font-size: 0.8rem !important;
-  }
-
-  .exchange-container .balance-value {
-    font-size: 1rem !important;
-  }
 }
 
 @media (max-width: 360px) {
-  .exchange-content {
-    padding: 0.5rem 0.125rem;
-  }
-
-  .exchange-container .MuiCardContent-root {
-    padding: 10px !important;
-  }
-
-  .exchange-container .card-header-custom {
-    padding: 8px 10px;
-    margin: -10px -10px 10px -10px;
-  }
-
   .exchange-content > :nth-child(1) {
     min-height: 300px;
   }
@@ -1094,11 +824,6 @@
 
   .exchange-container .MuiTableCell-root {
     padding: 6px 3px !important;
-    font-size: 0.75rem !important;
-  }
-
-  .exchange-container .balance-table-cell {
-    padding: 4px 2px !important;
     font-size: 0.75rem !important;
   }
 }

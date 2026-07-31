@@ -1073,7 +1073,7 @@ const ChatBoxStable = () => {
     return (
       <div className="chatbox-stable-container">
         <HeroSection
-          title="💬 Chat Box"
+          title="Chat Box"
           description="Secure blockchain messaging on Ethereum"
           contractAddress={CHATBOXPLUS_ADDRESS}
           contractName="Chat Box"
@@ -1099,7 +1099,7 @@ const ChatBoxStable = () => {
   return (
     <div className="chatbox-stable-container">
       <HeroSection
-        title="💬 Chat Box"
+        title="Chat Box"
         description="Secure blockchain messaging on Ethereum"
         contractAddress={CHATBOXPLUS_ADDRESS}
         contractName="Chat Box"

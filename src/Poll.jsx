@@ -94,31 +94,33 @@ const Poll = () => {
     theme: {
       mode: 'dark',
     },
+    // Chart colors mirror the design tokens in index.css
+    // (ApexCharts config is plain JS and cannot resolve CSS var() strings).
     xaxis: {
       categories: ['Option #1', 'Option #2', 'Option #3'],
       labels: {
         style: {
-          colors: '#a0aec0',
+          colors: '#94A3B8',
           fontSize: '12px',
         },
       },
       axisBorder: {
-        color: 'rgba(160, 174, 192, 0.3)',
+        color: 'rgba(148, 163, 184, 0.3)',
       },
       axisTicks: {
-        color: 'rgba(160, 174, 192, 0.3)',
+        color: 'rgba(148, 163, 184, 0.3)',
       },
     },
     yaxis: {
       labels: {
         style: {
-          colors: '#a0aec0',
+          colors: '#94A3B8',
           fontSize: '12px',
         },
       },
     },
     grid: {
-      borderColor: 'rgba(160, 174, 192, 0.2)',
+      borderColor: 'rgba(148, 163, 184, 0.2)',
       strokeDashArray: 4,
     },
     plotOptions: {
@@ -127,10 +129,10 @@ const Poll = () => {
         borderRadius: 8,
       },
     },
-    colors: ['#667eea', '#764ba2', '#48bb78'],
+    colors: ['#7C3AED', '#6366F1', '#22C55E'],
     legend: {
       labels: {
-        colors: '#e2e8f0',
+        colors: '#CBD5E1',
       },
     },
     dataLabels: {
@@ -138,7 +140,7 @@ const Poll = () => {
       style: {
         fontSize: '14px',
         fontWeight: 'bold',
-        colors: ['#ffffff'],
+        colors: ['#F8FAFC'],
       },
     },
   });
@@ -435,7 +437,7 @@ const Poll = () => {
   return (
     <div className="poll-container">
       <HeroSection
-        title="📊 Polling App"
+        title="Polling App"
         description="Create and vote on decentralized polls on the blockchain"
         contractAddress={POLL_ADDRESS}
         contractName="Poll Contract"
@@ -557,7 +559,9 @@ const Poll = () => {
             <div className="polls-list">
               {polls.length === 0 ? (
                 <div className="no-polls">
-                  <div className="no-polls-icon">📊</div>
+                  <div className="no-polls-icon">
+                    <i className="fa fa-bar-chart" aria-hidden="true" />
+                  </div>
                   <h4>No Polls Yet</h4>
                   <p>Create the first poll to get started!</p>
                 </div>
@@ -743,7 +747,9 @@ const Poll = () => {
               </>
             ) : (
               <div className="no-selection">
-                <div className="no-selection-icon">📊</div>
+                <div className="no-selection-icon">
+                  <i className="fa fa-hand-pointer-o" aria-hidden="true" />
+                </div>
                 <h4>Select a Poll</h4>
                 <p>Choose a poll from the list to view details and vote</p>
               </div>

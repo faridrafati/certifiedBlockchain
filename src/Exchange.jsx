@@ -82,7 +82,7 @@ class ExchangeApp extends Component {
     return (
       <div className="exchange-container">
         <HeroSection
-          title="🔄 Decentralized Exchange"
+          title="Decentralized Exchange"
           description="Trade DAPP/ETH tokens instantly with zero intermediaries"
           contractAddress={EXCHANGE_ADDRESS}
           contractName="Exchange Contract"

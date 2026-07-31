@@ -105,8 +105,8 @@ const NavBar = () => {
                   y2="32"
                   gradientUnits="userSpaceOnUse"
                 >
-                  <stop stopColor="#667eea" />
-                  <stop offset="1" stopColor="#764ba2" />
+                  <stop stopColor="#7C3AED" />
+                  <stop offset="1" stopColor="#6366F1" />
                 </linearGradient>
               </defs>
             </svg>
@@ -147,8 +147,8 @@ const NavBar = () => {
                 boxShadow: '0 12px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)',
                 overflow: 'visible',
                 mt: 1.5,
-                background: 'linear-gradient(135deg, #1e293b 0%, #334155 100%)',
-                border: '2px solid rgba(102, 126, 234, 0.5)'
+                background: 'var(--color-bg-elevated)',
+                border: '1px solid rgba(124, 58, 237, 0.5)'
               }
             }}
           >
@@ -164,7 +164,7 @@ const NavBar = () => {
                   letterSpacing: '0.5px'
                 }}
               >
-                🌐 Connect with us
+                Connect with us
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Box
@@ -270,43 +270,43 @@ const NavBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">💰</span>
+                  <i className="nav-icon fa fa-money" aria-hidden="true"></i>
                   Finance
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="financeDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/token">
-                      <span className="dropdown-icon">👛</span>
+                      <i className="dropdown-icon fa fa-credit-card" aria-hidden="true"></i>
                       Tokens Wallet
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/crowdSale">
-                      <span className="dropdown-icon">🚀</span>
+                      <i className="dropdown-icon fa fa-rocket" aria-hidden="true"></i>
                       Token CrowdSale
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/exchange">
-                      <span className="dropdown-icon">🔄</span>
+                      <i className="dropdown-icon fa fa-exchange" aria-hidden="true"></i>
                       DEX Exchange
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/auction">
-                      <span className="dropdown-icon">⚡</span>
+                      <i className="dropdown-icon fa fa-gavel" aria-hidden="true"></i>
                       Auction
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/ticketSale">
-                      <span className="dropdown-icon">🎟️</span>
+                      <i className="dropdown-icon fa fa-ticket" aria-hidden="true"></i>
                       Ticket Sale
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/tokenforge">
-                      <span className="dropdown-icon">🏭</span>
+                      <i className="dropdown-icon fa fa-industry" aria-hidden="true"></i>
                       Token Generator
                     </NavLink>
                   </li>
@@ -323,25 +323,25 @@ const NavBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">🗳️</span>
+                  <i className="nav-icon fa fa-university" aria-hidden="true"></i>
                   Governance
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="governanceDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/voting">
-                      <span className="dropdown-icon">✅</span>
+                      <i className="dropdown-icon fa fa-check-square-o" aria-hidden="true"></i>
                       Democratic Voting
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/weightedVoting">
-                      <span className="dropdown-icon">⚖️</span>
+                      <i className="dropdown-icon fa fa-balance-scale" aria-hidden="true"></i>
                       Weighted Voting
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/pollSurvey">
-                      <span className="dropdown-icon">📊</span>
+                      <i className="dropdown-icon fa fa-bar-chart" aria-hidden="true"></i>
                       Poll Survey
                     </NavLink>
                   </li>
@@ -358,19 +358,19 @@ const NavBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">💬</span>
+                  <i className="nav-icon fa fa-comments-o" aria-hidden="true"></i>
                   Communication
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="communicationDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/chat">
-                      <span className="dropdown-icon">📧</span>
+                      <i className="dropdown-icon fa fa-envelope-o" aria-hidden="true"></i>
                       Blockchain Email
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/chatBoxStable">
-                      <span className="dropdown-icon">💬</span>
+                      <i className="dropdown-icon fa fa-comment-o" aria-hidden="true"></i>
                       Chat Box
                     </NavLink>
                   </li>
@@ -387,19 +387,19 @@ const NavBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">🛒</span>
+                  <i className="nav-icon fa fa-shopping-cart" aria-hidden="true"></i>
                   Shopping
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="shoppingDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/petAdoption">
-                      <span className="dropdown-icon">🐕</span>
+                      <i className="dropdown-icon fa fa-paw" aria-hidden="true"></i>
                       Pet Adoption
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/doggiesShop">
-                      <span className="dropdown-icon">🐶</span>
+                      <i className="dropdown-icon fa fa-diamond" aria-hidden="true"></i>
                       Crypto Doggies
                     </NavLink>
                   </li>
@@ -416,19 +416,19 @@ const NavBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">📋</span>
+                  <i className="nav-icon fa fa-briefcase" aria-hidden="true"></i>
                   Services
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="servicesDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/certificate">
-                      <span className="dropdown-icon">🎓</span>
+                      <i className="dropdown-icon fa fa-graduation-cap" aria-hidden="true"></i>
                       Certificate
                     </NavLink>
                   </li>
                   <li>
                     <NavLink className="dropdown-item" to="/todo">
-                      <span className="dropdown-icon">✓</span>
+                      <i className="dropdown-icon fa fa-tasks" aria-hidden="true"></i>
                       Task Manager
                     </NavLink>
                   </li>
@@ -445,13 +445,13 @@ const NavBar = () => {
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
-                  <span className="nav-icon">🎮</span>
+                  <i className="nav-icon fa fa-gamepad" aria-hidden="true"></i>
                   Games
                 </a>
                 <ul className="dropdown-menu" aria-labelledby="gamesDropdown">
                   <li>
                     <NavLink className="dropdown-item" to="/guessing">
-                      <span className="dropdown-icon">🎯</span>
+                      <i className="dropdown-icon fa fa-bullseye" aria-hidden="true"></i>
                       Guessing Game
                     </NavLink>
                   </li>

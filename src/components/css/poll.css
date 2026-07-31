@@ -1,156 +1,95 @@
-/* Poll App Styles */
+/**
+ * @file poll.css
+ * @description Polling page — dark "web3 operations" theme.
+ * All colors/fonts/radii/shadows come from the design tokens in index.css.
+ * Hero styling is global (index.css); this file is layout + page components.
+ */
+
 .poll-container {
-  max-width: 1400px;
+  max-width: var(--container-max);
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: var(--space-6) var(--space-4);
 }
 
-/* Hero Section */
-.hero-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 24px;
-  padding: 3rem 2rem;
-  margin-bottom: 3rem;
-  color: white;
-  box-shadow: 0 15px 50px rgba(102, 126, 234, 0.3);
-  animation: fadeInDown 0.6s ease-out;
-  text-align: center;
-}
+/* ------------------------------------------------------ */
+/* -- ACTIONS -- */
 
-.hero-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.hero-title-row h1 {
-  margin: 0 !important;
-}
-
-.hero-refresh-btn {
-  color: white !important;
-  background: rgba(255, 255, 255, 0.15) !important;
-  transition: all 0.3s ease !important;
-  width: 40px !important;
-  height: 40px !important;
-  flex-shrink: 0;
-}
-
-.hero-refresh-btn svg {
-  font-size: 1.5rem !important;
-}
-
-.hero-refresh-btn:hover {
-  background: rgba(255, 255, 255, 0.25) !important;
-  transform: rotate(180deg);
-}
-
-.hero-content h1 {
-  margin-bottom: 1rem;
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.hero-content p {
-  font-size: 1.2rem;
-  opacity: 0.95;
-  margin-bottom: 1.5rem;
-}
-
-/* Poll Actions */
 .poll-actions {
   text-align: center;
-  margin-bottom: 2rem;
-  animation: fadeInUp 0.6s ease-out;
+  margin-bottom: var(--space-6);
 }
 
-.toggle-button {
-  padding: 1rem 3rem !important;
-  font-size: 1.1rem !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+.poll-container .toggle-button {
+  padding: var(--space-3) var(--space-6) !important;
+  min-height: 48px;
 }
 
-.toggle-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4) !important;
-}
+/* ------------------------------------------------------ */
+/* -- CREATE POLL -- */
 
-/* Create Poll Section */
 .create-poll-section {
   max-width: 700px;
   margin: 0 auto;
-  animation: fadeInUp 0.6s ease-out;
 }
 
-.create-poll-card {
-  background: white !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+.poll-container .create-poll-card {
+  background: var(--color-bg-elevated) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--color-text) !important;
   overflow: visible !important;
+  background-image: none !important;
 }
 
 .create-poll-card h3 {
-  color: #2d3748;
-  font-weight: 700;
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  margin-bottom: var(--space-2);
 }
 
 .create-description {
-  color: #718096;
-  font-size: 1rem;
-  margin-bottom: 2rem;
+  color: var(--color-text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: var(--space-6);
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: var(--space-5);
 }
 
-.divider {
-  margin: 1rem 0 !important;
-  font-weight: 700 !important;
-  color: #667eea !important;
+.poll-container .divider {
+  margin: var(--space-2) 0 !important;
+  font-weight: 600 !important;
+  color: var(--color-text-muted) !important;
 }
 
-.create-button {
-  margin-top: 1rem !important;
-  padding: 1rem 2rem !important;
-  font-size: 1.1rem !important;
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
+.poll-container .MuiDivider-root::before,
+.poll-container .MuiDivider-root::after {
+  border-color: var(--color-border) !important;
 }
 
-.create-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+.poll-container .create-button {
+  margin-top: var(--space-2) !important;
 }
 
-/* Poll Content Layout */
+/* ------------------------------------------------------ */
+/* -- POLL BROWSER LAYOUT -- */
+
 .poll-content {
   display: grid;
-  grid-template-columns: 400px 1fr;
-  gap: 2rem;
-  animation: fadeInUp 0.6s ease-out;
+  grid-template-columns: 380px 1fr;
+  gap: var(--space-6);
+  align-items: start;
 }
 
-/* Polls Sidebar */
+/* Polls sidebar */
 .polls-sidebar {
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -158,102 +97,71 @@
 }
 
 .polls-header {
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.1) 0%,
-    rgba(118, 75, 162, 0.1) 100%
-  );
-  padding: 1.5rem 2rem;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.1);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-4) var(--space-5);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-3);
 }
 
 .polls-header h3 {
   margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: #2d3748;
-}
-
-.polls-count {
-  font-weight: 700 !important;
-  font-size: 0.9rem !important;
-  padding: 0.5rem 1rem !important;
+  font-size: 1.15rem;
 }
 
 .polls-list {
   flex: 1;
   overflow-y: auto;
-  padding: 1rem;
+  padding: var(--space-4);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
-.polls-list::-webkit-scrollbar {
-  width: 8px;
-}
-
-.polls-list::-webkit-scrollbar-track {
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 10px;
-}
-
-.polls-list::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 10px;
-}
-
-/* Poll Cards */
-.poll-card {
+/* Poll cards (MUI Card) */
+.poll-container .poll-card {
   cursor: pointer;
-  transition: all 0.3s ease !important;
-  border-radius: 16px !important;
+  background: var(--color-surface) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: none !important;
+  color: var(--color-text) !important;
   overflow: hidden !important;
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.03) 0%,
-    rgba(118, 75, 162, 0.03) 100%
-  ) !important;
-  border: 2px solid transparent !important;
-  animation: slideIn 0.4s ease-out;
+  transition: background-color var(--transition-base), border-color var(--transition-base),
+    box-shadow var(--transition-base) !important;
 }
 
-.poll-card:hover {
-  border-color: rgba(102, 126, 234, 0.3) !important;
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.08) 0%,
-    rgba(118, 75, 162, 0.08) 100%
-  ) !important;
-  transform: translateY(-3px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2) !important;
+.poll-container .poll-card:hover {
+  background: var(--color-surface-hover) !important;
+  border-color: var(--color-border-strong) !important;
 }
 
-.poll-card.active {
-  border-color: #667eea !important;
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.12) 0%,
-    rgba(118, 75, 162, 0.12) 100%
-  ) !important;
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3) !important;
+.poll-container .poll-card.active {
+  background: var(--color-primary-soft) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+.poll-container .poll-card:focus-within {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 2px;
 }
 
 .poll-image {
   width: 100% !important;
   height: 120px !important;
   object-fit: cover !important;
-  border-bottom: 2px solid rgba(102, 126, 234, 0.1);
   display: block !important;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  transition: opacity 0.3s ease;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
+  transition: opacity var(--transition-base);
 }
 
 .poll-image:not([src]),
-.poll-image[src=""] {
+.poll-image[src=''] {
   display: none !important;
 }
 
@@ -262,56 +170,71 @@
 }
 
 .poll-card h6 {
-  margin: 0 0 0.75rem;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #2d3748;
+  margin: 0 0 var(--space-3);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
   line-height: 1.4;
 }
 
 .poll-meta {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--space-2);
   flex-wrap: wrap;
 }
 
-/* No Polls State */
-.no-polls {
+/* Empty states */
+.no-polls,
+.no-selection {
   text-align: center;
-  padding: 4rem 2rem;
-  color: #718096;
+  padding: var(--space-8) var(--space-5);
 }
 
-.no-polls-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-  opacity: 0.5;
-  animation: float 3s ease-in-out infinite;
+.no-selection {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
-.no-polls h4 {
-  color: #2d3748;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  font-size: 1.4rem;
+.no-polls-icon,
+.no-selection-icon {
+  font-size: 3rem;
+  color: var(--color-primary-hover);
+  opacity: 0.7;
+  margin-bottom: var(--space-4);
 }
 
-.no-polls p {
-  font-size: 1.1rem;
+.no-polls h4,
+.no-selection h4 {
+  font-size: 1.25rem;
+  margin: 0 0 var(--space-2);
 }
 
-/* Poll Main Area */
+.no-polls p,
+.no-selection p {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ------------------------------------------------------ */
+/* -- POLL DETAILS -- */
+
 .poll-main {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: var(--space-6);
 }
 
-/* Poll Details Card */
-.poll-details-card {
-  background: white !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
+.poll-container .poll-details-card,
+.poll-container .chart-card {
+  background: var(--color-bg-elevated) !important;
+  background-image: none !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-md) !important;
+  color: var(--color-text) !important;
   overflow: hidden !important;
 }
 
@@ -319,55 +242,47 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  gap: var(--space-4);
   flex-wrap: wrap;
-  gap: 1rem;
+  margin-bottom: var(--space-4);
 }
 
 .poll-details-header h3 {
-  margin: 0;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #2d3748;
   flex: 1;
-}
-
-.vote-status {
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  padding: 0.75rem 1.25rem !important;
+  margin: 0;
+  font-size: 1.4rem;
 }
 
 .poll-detail-image {
   width: 100% !important;
   height: 300px !important;
-  margin: 1.5rem 0;
-  border-radius: 12px !important;
+  margin: var(--space-5) 0;
+  border-radius: var(--radius-md) !important;
   object-fit: cover !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   display: block !important;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  transition: opacity 0.3s ease;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .poll-detail-image:not([src]),
-.poll-detail-image[src=""] {
+.poll-detail-image[src=''] {
   display: none !important;
 }
 
-.option-item {
-  margin: 0.75rem 0 !important;
-  padding: 1rem !important;
-  border-radius: 12px !important;
-  background: rgba(102, 126, 234, 0.03) !important;
-  border: 2px solid transparent !important;
-  transition: all 0.3s ease !important;
+/* Voting options */
+.poll-container .option-item {
+  margin: var(--space-2) 0 !important;
+  padding: var(--space-3) var(--space-4) !important;
+  border-radius: var(--radius-md) !important;
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  min-height: 44px;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast) !important;
 }
 
-.option-item:hover:not(.Mui-disabled) {
-  background: rgba(102, 126, 234, 0.08) !important;
-  border-color: rgba(102, 126, 234, 0.3) !important;
-  transform: translateX(5px);
+.poll-container .option-item:hover:not(.Mui-disabled) {
+  background: var(--color-surface-hover) !important;
+  border-color: var(--color-border-strong) !important;
 }
 
 .option-label {
@@ -375,232 +290,314 @@
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  gap: 1rem;
+  gap: var(--space-3);
 }
 
 .option-label span {
   font-size: 1rem;
-  font-weight: 600;
-  color: #2d3748;
+  font-weight: 500;
+  color: var(--color-text);
 }
 
-.vote-count {
+.poll-container .vote-count {
+  font-family: var(--font-mono) !important;
   font-weight: 700 !important;
-  background: rgba(102, 126, 234, 0.1) !important;
-  color: #667eea !important;
+  background: var(--color-primary-soft) !important;
+  color: var(--color-link) !important;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 50%, transparent) !important;
 }
 
-.vote-button {
-  margin-top: 1.5rem !important;
-  padding: 1rem 2rem !important;
-  font-size: 1.1rem !important;
+/* The option the user voted for — success accent */
+.poll-container .user-voted-option {
+  background: var(--color-accent-soft) !important;
+  border-color: color-mix(in srgb, var(--color-accent) 50%, transparent) !important;
+}
+
+.poll-container .your-vote-chip {
   font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 12px !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.5px !important;
-  transition: all 0.3s ease !important;
+  background: var(--color-accent) !important;
+  color: var(--color-on-accent) !important;
 }
 
-.vote-button:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+.poll-container .user-voted-option.Mui-disabled .option-label span,
+.poll-container .user-voted-option .MuiFormControlLabel-label {
+  color: var(--color-text) !important;
 }
 
-/* Already Voted Message */
+.poll-container .user-voted-option.Mui-disabled .MuiRadio-root {
+  color: var(--color-success-text) !important;
+}
+
+/* Already voted message */
 .already-voted-message {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  margin: 1rem 0;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-  border-radius: 12px;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  margin: var(--space-4) 0;
+  background: var(--color-accent-soft);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent);
+  border-radius: var(--radius-md);
 }
 
 .already-voted-message .voted-icon {
-  color: #667eea;
-  font-size: 1.5rem !important;
+  color: var(--color-success-text);
+  font-size: 1.4rem !important;
 }
 
 .already-voted-message span {
-  color: #667eea;
+  color: var(--color-success-text);
   font-weight: 600;
   font-size: 0.95rem;
 }
 
-/* User Voted Option Highlight */
-.user-voted-option {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.12) 0%, rgba(118, 75, 162, 0.12) 100%) !important;
-  border-color: rgba(102, 126, 234, 0.4) !important;
-}
-
-.your-vote-chip {
-  font-weight: 700 !important;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  color: white !important;
-  margin-right: 0.5rem !important;
-}
-
-/* Chart Card */
-.chart-card {
-  background: white !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1) !important;
-}
+/* ------------------------------------------------------ */
+/* -- CHART CARD -- */
 
 .chart-header {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
 }
 
 .chart-icon {
-  color: #667eea;
-  font-size: 2rem !important;
+  color: var(--color-primary-hover);
+  font-size: 1.75rem !important;
 }
 
 .chart-header h4 {
   margin: 0;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d3748;
+  font-size: 1.2rem;
 }
 
 .chart-wrapper {
-  margin: 1.5rem 0;
-  padding: 1rem;
-  background: linear-gradient(
-    135deg,
-    rgba(102, 126, 234, 0.02) 0%,
-    rgba(118, 75, 162, 0.02) 100%
-  );
-  border-radius: 12px;
+  margin: var(--space-4) 0;
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .chart-stats {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid rgba(102, 126, 234, 0.1);
+  gap: var(--space-3);
+  margin-top: var(--space-5);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
 }
 
 .stat-item {
   text-align: center;
-  padding: 1rem;
-  background: rgba(102, 126, 234, 0.05);
-  border-radius: 12px;
+  padding: var(--space-4) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.stat-item:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
 }
 
 .stat-label {
   display: block;
-  font-size: 0.85rem;
-  color: #718096;
+  font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.08em;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-2);
 }
 
 .stat-value {
   display: block;
-  font-size: 2rem;
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
   font-weight: 700;
-  color: #667eea;
+  color: var(--color-text);
 }
 
-/* No Selection State */
-.no-selection {
-  background: white;
-  border-radius: 20px;
-  padding: 4rem 2rem;
-  text-align: center;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+/* ------------------------------------------------------ */
+/* -- MUI BRIDGE (scoped to this page) -- */
+
+.poll-container .MuiButton-root {
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  text-transform: none !important;
+  border-radius: var(--radius-md) !important;
+  min-height: 44px;
+  letter-spacing: 0.01em !important;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast),
+    transform var(--transition-fast) !important;
 }
 
-.no-selection-icon {
-  font-size: 6rem;
-  opacity: 0.5;
-  margin-bottom: 1rem;
-  animation: float 3s ease-in-out infinite;
+.poll-container .MuiButton-contained {
+  box-shadow: none !important;
 }
 
-.no-selection h4 {
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: #2d3748;
-  margin: 0 0 0.5rem;
+.poll-container .MuiButton-containedPrimary {
+  background-color: var(--color-primary) !important;
+  color: var(--color-on-primary) !important;
 }
 
-.no-selection p {
-  font-size: 1.1rem;
-  color: #718096;
-  margin: 0;
+.poll-container .MuiButton-containedPrimary:hover:not(.Mui-disabled) {
+  background-color: var(--color-primary-hover) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-1px);
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.poll-container .MuiButton-containedSecondary {
+  background-color: var(--color-secondary) !important;
+  color: var(--color-on-primary) !important;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.poll-container .MuiButton-containedSecondary:hover:not(.Mui-disabled) {
+  background-color: color-mix(in srgb, var(--color-secondary) 85%, white) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-1px);
 }
 
-@keyframes fadeInDown {
-  from {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.poll-container .MuiButton-root.Mui-disabled {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text-muted) !important;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+/* Keep keyboard focus visible on MUI buttons (ButtonBase resets outline) */
+.poll-container .MuiButtonBase-root:focus-visible {
+  outline: 3px solid var(--color-ring) !important;
+  outline-offset: 2px;
 }
 
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
+/* Chips */
+.poll-container .MuiChip-colorPrimary {
+  background: var(--color-primary-soft) !important;
+  color: var(--color-link) !important;
+  border-color: color-mix(in srgb, var(--color-primary) 50%, transparent) !important;
 }
 
-/* Responsive Design */
+.poll-container .MuiChip-colorSuccess {
+  background: var(--color-accent-soft) !important;
+  color: var(--color-success-text) !important;
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, transparent) !important;
+}
+
+.poll-container .MuiChip-colorSuccess .MuiChip-icon {
+  color: var(--color-success-text) !important;
+}
+
+.poll-container .vote-status {
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  padding: var(--space-2) var(--space-2) !important;
+  height: auto !important;
+}
+
+.poll-container .polls-count {
+  font-family: var(--font-mono) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+}
+
+/* Radios */
+.poll-container .MuiRadio-root {
+  color: var(--color-text-muted) !important;
+}
+
+.poll-container .MuiRadio-root.Mui-checked {
+  color: var(--color-primary-hover) !important;
+}
+
+.poll-container .MuiFormControlLabel-root {
+  margin: 0 !important;
+}
+
+.poll-container .MuiFormControlLabel-label {
+  width: 100%;
+  color: var(--color-text) !important;
+}
+
+.poll-container .MuiFormControlLabel-root.Mui-disabled .MuiRadio-root {
+  color: rgba(148, 163, 184, 0.4) !important;
+}
+
+.poll-container .MuiFormControlLabel-root.Mui-disabled .MuiFormControlLabel-label,
+.poll-container .option-item.Mui-disabled .option-label span {
+  color: var(--color-text-muted) !important;
+}
+
+/* Text fields on dark surfaces */
+.poll-container .MuiTextField-root {
+  margin-bottom: 0 !important;
+}
+
+.poll-container .MuiOutlinedInput-root {
+  border-radius: var(--radius-md) !important;
+  background: var(--color-surface);
+}
+
+.poll-container .MuiInputBase-input {
+  color: var(--color-text) !important;
+}
+
+.poll-container .MuiInputBase-input::placeholder {
+  color: var(--color-text-muted) !important;
+  opacity: 1 !important;
+}
+
+.poll-container .MuiInputLabel-root {
+  color: var(--color-text-muted) !important;
+}
+
+.poll-container .MuiInputLabel-root.Mui-focused {
+  color: var(--color-link) !important;
+}
+
+.poll-container .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-border-strong) !important;
+}
+
+.poll-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary) !important;
+}
+
+.poll-container .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-primary) !important;
+  border-width: 2px !important;
+}
+
+.poll-container .MuiFormHelperText-root {
+  color: var(--color-text-muted) !important;
+}
+
+/* Disabled inputs */
+.poll-container .MuiOutlinedInput-root.Mui-disabled {
+  background-color: var(--color-surface) !important;
+}
+
+.poll-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
+  color: rgba(248, 250, 252, 0.45) !important;
+  -webkit-text-fill-color: rgba(248, 250, 252, 0.45) !important;
+}
+
+.poll-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
+  border-color: var(--color-border) !important;
+}
+
+.poll-container .MuiInputLabel-root.Mui-disabled {
+  color: rgba(148, 163, 184, 0.6) !important;
+}
+
+/* ------------------------------------------------------ */
+/* -- RESPONSIVE -- */
+
 @media (max-width: 1200px) {
   .poll-content {
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 340px 1fr;
   }
 }
 
@@ -616,20 +613,7 @@
 
 @media (max-width: 768px) {
   .poll-container {
-    padding: 1rem;
-  }
-
-  .hero-section {
-    padding: 2rem 1.5rem;
-  }
-
-  .toggle-button {
-    padding: 0.875rem 2rem !important;
-    font-size: 1rem !important;
-  }
-
-  .create-poll-section {
-    padding: 0 0.5rem;
+    padding: var(--space-4) var(--space-3);
   }
 
   .polls-sidebar {
@@ -637,10 +621,10 @@
   }
 
   .polls-header {
-    padding: 1rem 1.5rem;
+    padding: var(--space-3) var(--space-4);
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.75rem;
+    gap: var(--space-2);
   }
 
   .poll-details-header {
@@ -662,304 +646,48 @@
 }
 
 @media (max-width: 480px) {
-  .hero-content h1 {
-    font-size: 1.75rem;
-  }
-
-  .hero-content p {
-    font-size: 1rem;
-  }
-
   .polls-sidebar {
-    max-height: 300px;
+    max-height: 320px;
   }
 
-  .create-poll-card h3 {
-    font-size: 1.5rem;
-  }
-
+  .create-poll-card h3,
   .poll-details-header h3 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .poll-card h6 {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 
   .option-label {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.5rem;
+    gap: var(--space-2);
   }
 
   .option-label span {
     font-size: 0.95rem;
   }
 
-  .chart-wrapper {
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
   .chart-header h4 {
-    font-size: 1.3rem;
+    font-size: 1.05rem;
   }
 
   .stat-value {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
   }
 
-  .no-selection-icon,
-  .no-polls-icon {
-    font-size: 4rem;
+  .no-polls-icon,
+  .no-selection-icon {
+    font-size: 2.5rem;
   }
 
   .poll-detail-image {
     height: 200px !important;
-    margin: 1rem 0;
+    margin: var(--space-4) 0;
   }
 
   .poll-image {
     height: 80px !important;
-  }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .create-poll-card,
-  .poll-details-card,
-  .chart-card,
-  .polls-sidebar,
-  .no-selection {
-    background: #1a202c !important;
-  }
-
-  .polls-header {
-    background: rgba(102, 126, 234, 0.15);
-  }
-
-  .create-poll-card h3,
-  .polls-header h3,
-  .poll-details-header h3,
-  .chart-header h4,
-  .no-selection h4,
-  .no-polls h4,
-  .poll-card h6,
-  .option-label span {
-    color: #e2e8f0;
-  }
-
-  .create-description,
-  .no-selection p,
-  .no-polls p {
-    color: #cbd5e0;
-  }
-
-  .poll-card {
-    background: rgba(102, 126, 234, 0.08) !important;
-  }
-
-  .poll-card:hover {
-    background: rgba(102, 126, 234, 0.12) !important;
-  }
-
-  .poll-card.active {
-    background: rgba(102, 126, 234, 0.18) !important;
-  }
-
-  .option-item {
-    background: rgba(102, 126, 234, 0.08) !important;
-  }
-
-  .option-item:hover:not(.Mui-disabled) {
-    background: rgba(102, 126, 234, 0.15) !important;
-  }
-
-  .stat-item {
-    background: rgba(102, 126, 234, 0.1);
-  }
-
-  .chart-wrapper {
-    background: rgba(102, 126, 234, 0.05);
-  }
-
-  /* Fix MUI TextField input text visibility in dark mode */
-  .poll-container .MuiTextField-root .MuiInputBase-input,
-  .poll-container .MuiOutlinedInput-input,
-  .poll-container .MuiInputBase-input {
-    color: #e2e8f0 !important;
-  }
-
-  .poll-container .MuiTextField-root .MuiInputLabel-root,
-  .poll-container .MuiInputLabel-root {
-    color: #a0aec0 !important;
-  }
-
-  .poll-container .MuiTextField-root .MuiInputLabel-root.Mui-focused,
-  .poll-container .MuiInputLabel-root.Mui-focused {
-    color: #667eea !important;
-  }
-
-  .poll-container .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(160, 174, 192, 0.4) !important;
-  }
-
-  .poll-container .MuiFormHelperText-root {
-    color: #a0aec0 !important;
-  }
-
-  /* Disabled input styling in dark mode - 50% opacity for disabled look */
-  .poll-container .MuiOutlinedInput-root.Mui-disabled {
-    background-color: rgba(255, 255, 255, 0.02) !important;
-  }
-
-  .poll-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-input {
-    color: rgba(226, 232, 240, 0.5) !important;
-    -webkit-text-fill-color: rgba(226, 232, 240, 0.5) !important;
-  }
-
-  .poll-container .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline {
-    border-color: rgba(226, 232, 240, 0.15) !important;
-  }
-
-  .poll-container .MuiInputLabel-root.Mui-disabled {
-    color: rgba(203, 213, 224, 0.5) !important;
-  }
-
-  /* Radio button styling in dark mode - unchecked state */
-  .poll-container .MuiRadio-root {
-    color: rgba(160, 174, 192, 0.7) !important;
-  }
-
-  .poll-container .MuiFormControlLabel-label {
-    color: #e2e8f0 !important;
-  }
-
-  /* Disabled radio button styling in dark mode - when user has voted */
-  .poll-container .MuiFormControlLabel-root.Mui-disabled .MuiRadio-root {
-    color: rgba(160, 174, 192, 0.3) !important;
-  }
-
-  .poll-container .MuiFormControlLabel-root.Mui-disabled .MuiFormControlLabel-label {
-    color: rgba(226, 232, 240, 0.4) !important;
-  }
-
-  .poll-container .MuiFormControlLabel-root.Mui-disabled .MuiFormControlLabel-label .vote-count {
-    opacity: 0.5;
-  }
-
-  /* User voted option - keep it more visible in dark mode */
-  .poll-container .user-voted-option.Mui-disabled .MuiRadio-root {
-    color: rgba(102, 126, 234, 0.6) !important;
-  }
-
-  .poll-container .user-voted-option.Mui-disabled .MuiFormControlLabel-label {
-    color: rgba(226, 232, 240, 0.7) !important;
-  }
-
-  .poll-container .user-voted-option.Mui-disabled .MuiFormControlLabel-label .vote-count {
-    opacity: 0.8;
-  }
-
-  /* Already voted message in dark mode */
-  .already-voted-message {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%);
-    border-color: rgba(102, 126, 234, 0.3);
-  }
-
-  .already-voted-message span {
-    color: #a0aec0;
-  }
-
-  /* Option label text in dark mode */
-  .option-label span {
-    color: #e2e8f0;
-  }
-
-  .option-item.Mui-disabled .option-label span {
-    color: rgba(226, 232, 240, 0.4);
-  }
-
-  .user-voted-option.Mui-disabled .option-label span {
-    color: rgba(226, 232, 240, 0.7) !important;
-  }
-}
-
-/* MUI Overrides */
-.poll-container .MuiButton-root {
-  text-transform: none !important;
-  font-weight: 600 !important;
-}
-
-.poll-container .MuiOutlinedInput-root {
-  border-radius: 12px !important;
-}
-
-.poll-container .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-  border-color: #667eea !important;
-}
-
-.poll-container
-  .MuiOutlinedInput-root.Mui-focused
-  .MuiOutlinedInput-notchedOutline {
-  border-color: #764ba2 !important;
-  border-width: 2px !important;
-}
-
-.poll-container .MuiTextField-root {
-  margin-bottom: 0 !important;
-}
-
-.poll-container .MuiRadio-root.Mui-checked {
-  color: #667eea !important;
-}
-
-.poll-container .MuiFormControlLabel-root {
-  margin: 0 !important;
-}
-
-/* Accessibility */
-.toggle-button:focus,
-.create-button:focus,
-.vote-button:focus {
-  outline: 3px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-.poll-card:focus-within {
-  outline: 2px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-/* Print Styles */
-@media print {
-  .poll-container {
-    max-width: 100%;
-  }
-
-  .hero-section,
-  .create-poll-card,
-  .poll-details-card,
-  .chart-card,
-  .polls-sidebar {
-    box-shadow: none;
-    border: 1px solid #e2e8f0;
-  }
-
-  .poll-actions,
-  .toggle-button,
-  .create-button,
-  .vote-button {
-    display: none;
-  }
-
-  .poll-content {
-    grid-template-columns: 1fr;
-  }
-
-  .polls-list {
-    max-height: none;
-    overflow: visible;
   }
 }

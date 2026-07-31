@@ -387,7 +387,7 @@ const Auction = () => {
 
             <div className="auction-status">
               <span className={`status-badge ${isEnded ? 'ended' : 'active'}`}>
-                {isEnded ? '⏰ Auction Ended' : '🔥 Live Auction'}
+                {isEnded ? 'Auction Ended' : 'Live Auction'}
               </span>
               <p className="end-time">
                 {isEnded
@@ -405,7 +405,7 @@ const Auction = () => {
               </div>
               <div className="bidder-info">
                 {isBidder ? (
-                  <span className="your-bid">🎉 You are the highest bidder!</span>
+                  <span className="your-bid">You are the highest bidder!</span>
                 ) : (
                   <span className="other-bidder" title={highestBidder}>
                     Highest Bidder: {highestBidder.substring(0, 6)}...
@@ -490,7 +490,7 @@ const Auction = () => {
 
           <div className="admin-bid-info">
             <div className="admin-bid-section">
-              <h4>💰 Total Deposited Bid</h4>
+              <h4>Total Deposited Bid</h4>
               <div className="admin-bid-amount">
                 {web3 ? web3.utils.fromWei(highestBid, 'ether') : '0'} ETH
               </div>
@@ -508,7 +508,7 @@ const Auction = () => {
 
         <div className="admin-controls">
           <div className="control-card">
-            <h4>⏰ Set End Time</h4>
+            <h4>Set End Time</h4>
             <TextField
               label="End Time"
               type="datetime-local"
@@ -531,7 +531,7 @@ const Auction = () => {
           </div>
 
           <div className="control-card">
-            <h4>💰 Withdraw Bid</h4>
+            <h4>Withdraw Bid</h4>
             <TextField
               label="Withdraw Address"
               variant="outlined"
@@ -552,7 +552,7 @@ const Auction = () => {
           </div>
 
           <div className="control-card">
-            <h4>🎯 Auction Control</h4>
+            <h4>Auction Control</h4>
             <p className="status-text">
               Status: {auctionEnded ? 'Ended' : 'In Progress'}
             </p>

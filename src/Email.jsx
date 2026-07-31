@@ -527,7 +527,7 @@ const Email = () => {
     return (
       <div className="email-container">
         <HeroSection
-          title="📧 Blockchain Email"
+          title="Blockchain Email"
           description="Registration required to continue"
           contractAddress={EMAIL_ADDRESS}
           contractName="Blockchain Email"
@@ -560,7 +560,7 @@ const Email = () => {
   return (
     <div className="email-container">
       <HeroSection
-        title="📧 Blockchain Email"
+        title="Blockchain Email"
         description="Secure, decentralized messaging on the Ethereum blockchain"
         contractAddress={EMAIL_ADDRESS}
         contractName="Blockchain Email"
@@ -589,7 +589,9 @@ const Email = () => {
             <div className="messages-list">
               {inboxMessages.length === 0 ? (
                 <div className="no-messages">
-                  <div className="no-messages-icon">📭</div>
+                  <div className="no-messages-icon">
+                    <i className="fa fa-inbox" aria-hidden="true"></i>
+                  </div>
                   <h4>No Messages</h4>
                   <p>Your inbox is empty</p>
                 </div>
@@ -656,7 +658,9 @@ const Email = () => {
             <div className="messages-list">
               {outboxMessages.length === 0 ? (
                 <div className="no-messages">
-                  <div className="no-messages-icon">📮</div>
+                  <div className="no-messages-icon">
+                    <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
+                  </div>
                   <h4>No Sent Messages</h4>
                   <p>You haven't sent any messages yet</p>
                 </div>
@@ -702,7 +706,7 @@ const Email = () => {
 
         {/* Compose Section */}
         <div className="compose-section">
-          <h3>✉️ Compose Message</h3>
+          <h3>Compose Message</h3>
 
           <FormControl fullWidth className="contact-select">
             <InputLabel>Select Contact</InputLabel>

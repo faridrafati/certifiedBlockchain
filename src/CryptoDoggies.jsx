@@ -411,7 +411,7 @@ const CryptoDoggies = () => {
     return (
       <div className="cryptodoggies-container">
         <HeroSection
-          title="🐾 Doggies Admin"
+          title="Doggies Admin"
           description="Manage your NFT doggies collection"
           contractAddress={CRYPTODOGGIES_ADDRESS}
           contractName="Doggies Shop"
@@ -614,7 +614,7 @@ const CryptoDoggies = () => {
   return (
     <div className="cryptodoggies-container">
       <HeroSection
-        title="🐾 Doggies Shop"
+        title="Doggies Shop"
         description="Collect and trade unique NFT doggies on the blockchain"
         contractAddress={CRYPTODOGGIES_ADDRESS}
         contractName="Doggies Shop"

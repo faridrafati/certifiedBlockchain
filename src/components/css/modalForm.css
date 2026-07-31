@@ -1,197 +1,152 @@
-/* MetaMask Modal Styles */
+/**
+ * @file modalForm.css
+ * @description Wallet-connect (MetaMask) modal — dark elevated panel styled
+ * with the design tokens from index.css. The base .modal-content surface
+ * (elevated background, strong border, radius-lg, shadow-lg) comes from the
+ * Bootstrap bridge in index.css; this file adds the wallet modal's layout,
+ * header accent, status boxes and the non-bridged button variants.
+ */
 
-/* Modal Backdrop */
+/* Backdrop: darken + blur the app behind the modal */
 .metamask-modal ~ .modal-backdrop,
 .modal-backdrop.show {
-  background-color: rgba(0, 0, 0, 0.7) !important;
+  /* rgba of --color-bg (#0F172A) */
+  background-color: rgba(15, 23, 42, 0.8) !important;
   backdrop-filter: blur(8px) !important;
   -webkit-backdrop-filter: blur(8px) !important;
   opacity: 1 !important;
 }
 
+/* Surface is provided by the index.css bridge — just clip the accent hairline */
 .metamask-modal .modal-content {
-  border: none;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   overflow: hidden;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .metamask-modal-body {
-  padding: 3rem 2rem 2rem;
-  background: white;
   position: relative;
+  padding: var(--space-7) var(--space-6) var(--space-5);
 }
 
+/* Accent hairline across the modal top, matching the global hero */
 .metamask-modal-body::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary) 55%, transparent);
 }
 
 .modal-content-wrapper {
   text-align: center;
-  animation: modalFadeIn 0.4s ease-out;
+  animation: modalFadeIn 300ms ease-out;
 }
 
 .metamask-logo-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-5);
 }
 
 .metamask-logo {
-  width: 100px;
-  height: 100px;
+  width: 96px;
+  height: 96px;
   object-fit: contain;
-  filter: drop-shadow(0 8px 16px rgba(102, 126, 234, 0.3));
-  animation: logoFloat 3s ease-in-out infinite;
+  filter: drop-shadow(0 8px 24px rgba(124, 58, 237, 0.35));
   position: relative;
   z-index: 2;
 }
 
+/* Static ambient glow behind the logo (no looping animation) */
 .logo-pulse {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
-  animation: pulse 2s ease-out infinite;
+  width: 140px;
+  height: 140px;
+  border-radius: var(--radius-full);
+  background: radial-gradient(circle, var(--color-primary-soft) 0%, transparent 70%);
   z-index: 1;
+  pointer-events: none;
 }
 
+/* h3 — inherits Orbitron from the global heading rules */
 .modal-title {
-  font-size: 1.75rem;
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #2d3748;
-  margin-bottom: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
 }
 
 .modal-message {
   font-size: 1.05rem;
-  color: #4a5568;
+  color: var(--color-text-secondary);
   line-height: 1.6;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-4);
   white-space: pre-line;
 }
 
+/* Contextual info / warning boxes */
 .info-box {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: rgba(255, 193, 7, 0.1);
-  border-left: 4px solid #ffc107;
-  border-radius: 8px;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  /* rgba of --color-warning (#F59E0B) */
+  background: rgba(245, 158, 11, 0.12);
+  border-left: 3px solid var(--color-warning);
+  border-radius: var(--radius-sm);
   text-align: left;
-  margin-top: 1.5rem;
-  animation: slideInUp 0.4s ease-out 0.2s both;
+  margin-top: var(--space-5);
+  animation: modalSlideUp 300ms ease-out 100ms both;
 }
 
 .info-box svg {
   flex-shrink: 0;
-  color: #ffc107;
+  color: var(--color-warning-text);
   margin-top: 2px;
 }
 
 .info-box span {
   font-size: 0.9rem;
-  color: #4a5568;
+  color: var(--color-text-secondary);
   line-height: 1.5;
 }
 
 .info-box.warning {
-  background: rgba(220, 53, 69, 0.1);
-  border-left-color: #dc3545;
+  /* rgba of --color-danger (#DC2626) */
+  background: rgba(220, 38, 38, 0.12);
+  border-left-color: var(--color-danger);
 }
 
 .info-box.warning svg {
-  color: #dc3545;
+  color: var(--color-danger-text);
 }
 
 .metamask-modal-footer {
-  padding: 1.5rem 2rem;
-  border-top: 1px solid #e2e8f0;
-  background: #f7fafc;
+  padding: var(--space-5) var(--space-6);
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
   display: flex;
   justify-content: center;
 }
 
+/* Action button: color variants come from the Bootstrap bridge in index.css
+   (.btn-primary violet, .btn-success signal green) — this adds sizing only */
 .modal-action-button {
-  padding: 0.875rem 2.5rem;
-  font-size: 1.05rem;
+  padding: var(--space-3) var(--space-6);
+  font-size: 1rem;
   font-weight: 600;
-  border-radius: 12px;
-  border: none;
+  border-radius: var(--radius-md);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   min-width: 180px;
-}
-
-.modal-action-button.btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.modal-action-button.btn-primary:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #6a3c8f 100%);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-  transform: translateY(-2px);
-}
-
-.modal-action-button.btn-warning {
-  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-  color: #2d3748;
-  box-shadow: 0 4px 15px rgba(255, 193, 7, 0.3);
-}
-
-.modal-action-button.btn-warning:hover {
-  background: linear-gradient(135deg, #ffd699 0%, #fb9d6a 100%);
-  box-shadow: 0 6px 20px rgba(255, 193, 7, 0.4);
-  transform: translateY(-2px);
-}
-
-.modal-action-button.btn-info {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(79, 172, 254, 0.3);
-}
-
-.modal-action-button.btn-info:hover {
-  background: linear-gradient(135deg, #3d9ce3 0%, #00d9e5 100%);
-  box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
-  transform: translateY(-2px);
-}
-
-.modal-action-button.btn-success {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(56, 239, 125, 0.3);
-}
-
-.modal-action-button.btn-success:hover {
-  background: linear-gradient(135deg, #0e8377 0%, #2dd66a 100%);
-  box-shadow: 0 6px 20px rgba(56, 239, 125, 0.4);
-  transform: translateY(-2px);
-}
-
-.modal-action-button:active {
-  transform: translateY(0);
+  min-height: 48px;
 }
 
 .modal-action-button svg {
@@ -199,11 +154,39 @@
   vertical-align: middle;
 }
 
-/* Animations */
+/* Warning (Install) and info (Refresh) variants are not bridged globally —
+   map them to tokens, with dark text for AA contrast on the bright fills */
+.modal-action-button.btn-warning {
+  --bs-btn-bg: var(--color-warning);
+  --bs-btn-border-color: var(--color-warning);
+  --bs-btn-color: var(--color-bg);
+  --bs-btn-hover-bg: var(--color-warning-text);
+  --bs-btn-hover-border-color: var(--color-warning-text);
+  --bs-btn-hover-color: var(--color-bg);
+  --bs-btn-active-bg: var(--color-warning);
+  --bs-btn-active-border-color: var(--color-warning);
+  --bs-btn-active-color: var(--color-bg);
+  --bs-btn-focus-shadow-rgb: 245, 158, 11;
+}
+
+.modal-action-button.btn-info {
+  --bs-btn-bg: var(--color-info);
+  --bs-btn-border-color: var(--color-info);
+  --bs-btn-color: var(--color-bg);
+  --bs-btn-hover-bg: var(--color-info-text);
+  --bs-btn-hover-border-color: var(--color-info-text);
+  --bs-btn-hover-color: var(--color-bg);
+  --bs-btn-active-bg: var(--color-info);
+  --bs-btn-active-border-color: var(--color-info);
+  --bs-btn-active-color: var(--color-bg);
+  --bs-btn-focus-shadow-rgb: 14, 165, 233;
+}
+
+/* Entrance animations (run once) */
 @keyframes modalFadeIn {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: scale(0.96);
   }
   to {
     opacity: 1;
@@ -211,34 +194,10 @@
   }
 }
 
-@keyframes logoFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.6;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.3);
-    opacity: 0.3;
-  }
-  100% {
-    transform: translate(-50%, -50%) scale(1.6);
-    opacity: 0;
-  }
-}
-
-@keyframes slideInUp {
+@keyframes modalSlideUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(16px);
   }
   to {
     opacity: 1;
@@ -246,10 +205,10 @@
   }
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 576px) {
   .metamask-modal-body {
-    padding: 2rem 1.5rem 1.5rem;
+    padding: var(--space-6) var(--space-5) var(--space-4);
   }
 
   .metamask-logo {
@@ -258,92 +217,45 @@
   }
 
   .logo-pulse {
-    width: 80px;
-    height: 80px;
-  }
-
-  .modal-title {
-    font-size: 1.5rem;
-  }
-
-  .modal-message {
-    font-size: 0.95rem;
-  }
-
-  .modal-action-button {
-    padding: 0.75rem 2rem;
-    font-size: 0.95rem;
-    min-width: 150px;
-  }
-}
-
-@media (max-width: 360px) {
-  .metamask-modal-body {
-    padding: 1.5rem 1rem 1rem;
-  }
-
-  .metamask-modal-footer {
-    padding: 1rem 1.25rem;
-  }
-
-  .modal-action-button {
-    min-width: 140px;
-    padding: 0.75rem 1.5rem;
-    font-size: 0.9rem;
-  }
-
-  .metamask-logo,
-  .logo-pulse {
-    width: 70px;
-    height: 70px;
+    width: 112px;
+    height: 112px;
   }
 
   .modal-title {
     font-size: 1.3rem;
   }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-  .metamask-modal-body {
-    background: #1a202c;
-  }
-
-  .modal-title {
-    color: #e2e8f0;
-  }
 
   .modal-message {
-    color: #cbd5e0;
+    font-size: 0.95rem;
+  }
+
+  .modal-action-button {
+    width: 100%;
+    padding: var(--space-3) var(--space-5);
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .metamask-modal-body {
+    padding: var(--space-5) var(--space-4) var(--space-4);
   }
 
   .metamask-modal-footer {
-    background: #2d3748;
-    border-top-color: #4a5568;
+    padding: var(--space-4);
   }
 
-  .info-box {
-    background: rgba(255, 193, 7, 0.15);
+  .metamask-logo {
+    width: 70px;
+    height: 70px;
   }
 
-  .info-box span {
-    color: #e2e8f0;
+  .logo-pulse {
+    width: 96px;
+    height: 96px;
   }
-}
 
-/* Accessibility */
-.modal-action-button:focus {
-  outline: 3px solid rgba(102, 126, 234, 0.5);
-  outline-offset: 2px;
-}
-
-/* Legacy support */
-.display-lineBreak {
-  white-space: pre-line;
-}
-
-.metamaskPhoto {
-  width: 100px;
-  height: 100px;
-  object-fit: contain;
+  .modal-title {
+    font-size: 1.2rem;
+  }
 }

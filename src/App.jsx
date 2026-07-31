@@ -312,7 +312,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="colored"
+        theme="dark"
       />
 
       {/* Wallet connection modal */}

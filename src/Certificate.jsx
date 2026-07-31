@@ -378,7 +378,7 @@ const Certificate = () => {
     return (
       <div className="certificate-container">
         <HeroSection
-          title="🎓 Certificate Verification"
+          title="Certificate Verification"
           description="Verify the authenticity of blockchain-secured certificates"
           contractAddress={CERTIFICATE_ADDRESS}
           contractName="Certificate Contract"
@@ -389,8 +389,8 @@ const Certificate = () => {
         />
 
         <div className="certificate-checker">
-          <div className="checker-card">
-            <h3>🔍 Check Certificate</h3>
+          <div className="checker-card surface-panel">
+            <h3>Check Certificate</h3>
             <p className="checker-description">
               Enter the credential ID to verify certificate authenticity
             </p>
@@ -422,6 +422,10 @@ const Certificate = () => {
 
         {showCertificate && (
           <div className="certificate-display">
+            <div className="verification-status verified" role="status">
+              <i className="fa fa-check-circle" aria-hidden="true"></i>
+              <span>Certificate verified on-chain</span>
+            </div>
             <div className="certificate-document">
               {/* Header */}
               <h1 className="certificate-title">COURSE CERTIFICATE</h1>
@@ -488,8 +492,10 @@ const Certificate = () => {
         )}
 
         {!showCertificate && certificateInput && !submitting && verificationAttempted && (
-          <div className="no-certificate">
-            <div className="no-certificate-icon">❌</div>
+          <div className="no-certificate surface-panel">
+            <div className="no-certificate-icon">
+              <i className="fa fa-times-circle" aria-hidden="true"></i>
+            </div>
             <h3>Certificate Not Found</h3>
             <p>The credential ID you entered does not match any certificate in our system.</p>
           </div>
@@ -502,7 +508,7 @@ const Certificate = () => {
   return (
     <div className="certificate-container admin-view">
       <HeroSection
-        title="🎓 Certificate Admin Panel"
+        title="Certificate Admin Panel"
         description="Manage and issue blockchain certificates"
         contractAddress={CERTIFICATE_ADDRESS}
         contractName="Certificate Contract"
@@ -513,8 +519,8 @@ const Certificate = () => {
       />
 
       <div className="admin-content">
-        <div className="admin-form-card">
-          <h3>📝 Add New Certificate</h3>
+        <div className="admin-form-card surface-panel">
+          <h3>Add New Certificate</h3>
           <form onSubmit={handleAddCertificate}>
             <div className="form-row">
               <TextField
@@ -606,8 +612,8 @@ const Certificate = () => {
           </form>
         </div>
 
-        <div className="certificates-table-card">
-          <h3>📋 All Certificates</h3>
+        <div className="certificates-table-card surface-panel">
+          <h3>All Certificates</h3>
           {certificateList.length === 0 ? (
             <div className="no-certificates">
               <p>No certificates have been issued yet.</p>

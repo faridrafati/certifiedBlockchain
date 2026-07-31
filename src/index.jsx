@@ -21,12 +21,29 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter } from 'react-router-dom';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import App from './App';
 
-import './components/css/index.css';
+// Bootstrap first so the design-system sheet (index.css) can override it
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.bundle';
 import 'font-awesome/css/font-awesome.css';
+import './components/css/index.css';
+
+// MUI theme aligned with the design tokens in components/css/index.css
+const muiTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: { main: '#7C3AED' },
+    secondary: { main: '#22C55E' },
+    background: { default: '#0F172A', paper: '#171939' },
+    text: { primary: '#F8FAFC', secondary: '#CBD5E1' },
+  },
+  typography: {
+    fontFamily: "'Exo 2', system-ui, -apple-system, 'Segoe UI', sans-serif",
+  },
+  shape: { borderRadius: 12 },
+});
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -34,7 +51,9 @@ root.render(
   <React.StrictMode>
     {/* future flags opt in to v7 behavior and silence the upgrade warnings */}
     <HashRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-      <App />
+      <ThemeProvider theme={muiTheme}>
+        <App />
+      </ThemeProvider>
     </HashRouter>
   </React.StrictMode>
 );
