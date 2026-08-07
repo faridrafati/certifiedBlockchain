@@ -147,3 +147,60 @@ The repo has no test framework, so verification is explicit and manual:
 - Any on-chain interaction, wallet reads, or live contract analysis.
 - Solutions or exploit code for the levels — the page teaches the vulnerability and its fix, and defers the challenge itself to Ethernaut.
 - Changes to any existing page's styling or logic beyond the two `App.jsx` render conditions and the one `navBar.jsx` link.
+
+---
+
+## Addendum — 2026-08-07: reference sources beyond Ethernaut
+
+The page grows from a single Ethernaut list into five views, because the newly
+supplied sources answer different questions and flattening them into one list
+would destroy what makes each useful.
+
+| View | Source | Question it answers |
+|---|---|---|
+| Ethernaut Levels | ethernaut.openzeppelin.com | "Which classic vulnerability classes must I recognize?" (existing 41 entries) |
+| Hack Patterns | solidity-by-example.org/hacks | "Show me the attack as minimal runnable code." |
+| Pitfalls Checklist | Secureum "Security Pitfalls & Best Practices 101" | "What do I check before shipping?" |
+| Static Analysis | Slither detector documentation (crytic/slither) | "What will an automated tool flag, and how bad is it?" |
+| Standards | EEA EthTrust Security Levels | "What must hold for a contract to be certified at level [S]/[M]/[Q]?" |
+
+A sixth, smaller section — Audit Practice — sits inside the Standards view and
+draws on Polymarket's public `contract-security` registry to show how a live
+protocol actually documents security: every deployed contract listed with its
+audit reports, several independent auditors per contract, and separate diff
+reviews commissioned for upgrades.
+
+### Structure
+
+`Security.jsx` gains a tab bar under the header. Each tab owns a data module and
+a renderer; the existing Ethernaut view becomes the default tab, unchanged.
+
+```
+src/security/data/
+  hacks.js                     hack patterns with vulnerable/attacker/fixed code
+  pitfalls/part1|2|3.js        Secureum items, grouped by theme
+  detectors/high|medium|low|informational.js   Slither detectors by severity
+  standards.js                 EthTrust requirements by level
+  auditPractice.js             Polymarket-derived audit practice notes
+```
+
+### Per-view data shapes
+
+- **Hack** — `{ slug, name, category, summary, mechanism, prevention, vulnerable, attacker, fixed, refs }`. Reuses `SolidityCode`; adds a third `attacker` snippet since these hacks are best understood from the attacking contract's side.
+- **Pitfall** — `{ id, title, text, tags[], severity }`. Rendered as a dense, filterable checklist, not cards.
+- **Detector** — `{ check, title, severity, confidence, description, recommendation }`. Rendered as a sortable/filterable table with severity badges; `check` shown in `--font-mono` since it is the CLI identifier.
+- **Requirement** — `{ id, level: 'S'|'M'|'Q', title, statement, rationale, anchor }`. Grouped by level, each linking to its anchor in the EEA spec.
+- **Audit practice** — `{ title, detail, evidence }` short entries plus a link to the Polymarket registry.
+
+### Attribution
+
+Every view names its source in a header line with an outbound link, and states
+that content is summarized rather than reproduced. Slither detector text is
+paraphrased, not copied. EthTrust requirement statements are paraphrased with
+the requirement id preserved so readers can look up the normative text.
+
+### Constraint
+
+All of it stays wallet-free, token-styled, and dependency-free — the tab bar is
+plain React state with `role="tablist"`, and each tab panel gets `role="tabpanel"`
+with `aria-labelledby` pointing at its tab.
