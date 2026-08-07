@@ -397,10 +397,14 @@
   color: var(--color-text-muted);
 }
 
+/* min-height, not padding: these links sit in a centred flex row next to a pill
+   tag, so growing the box vertically lifts them to the 44px touch floor without
+   pushing the row's items apart. */
 .level-refs a {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+  min-height: 44px;
   color: var(--color-link);
 }
 
@@ -652,5 +656,786 @@
   .category-chip {
     font-size: 0.8rem;
     padding: var(--space-2) var(--space-3);
+  }
+}
+
+/* ====================================================== */
+/* == TABBED VIEWS ====================================== */
+/*
+ * Everything below serves the four non-Ethernaut tabs (hack patterns, pitfalls
+ * checklist, static analysis, standards) plus the tab bar itself. Same rule as
+ * above: tokens only, no raw color values, and severity is always carried by a
+ * word as well as a hue.
+ */
+
+/* ------------------------------------------------------ */
+/* -- TAB BAR -- */
+
+/* The strip scrolls on its own axis so five tabs at 375px never widen the page
+   body. min-width: max-content on the inner row keeps them on one line. */
+.security-tabs-wrap {
+  overflow-x: auto;
+  margin-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.security-tabs {
+  display: flex;
+  gap: var(--space-1);
+  min-width: max-content;
+}
+
+.security-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: 2px solid transparent;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  color: var(--color-text-secondary);
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.security-tab:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+.security-tab.is-active {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  color: var(--color-link);
+}
+
+/* The wrapper clips on the x axis, so an outset ring on the first or last tab
+   would be cut off. Inset it — never removed, just moved inside. */
+.security-tab:focus-visible {
+  outline-offset: -3px;
+}
+
+/* Bootstrap's reboot already hides [hidden], but .level-body needed this
+   restated and the panel is the same shape of rule; keep them consistent. */
+.security-panel[hidden] {
+  display: none;
+}
+
+/* The panel is a tab stop (WCAG: the panel content must be reachable after the
+   tab list), so it needs a visible ring of its own. */
+.security-panel:focus-visible {
+  outline-offset: 4px;
+  border-radius: var(--radius-lg);
+}
+
+/* ------------------------------------------------------ */
+/* -- VIEW HEADER + ATTRIBUTION -- */
+
+/* Wrapper every non-Ethernaut panel renders into. flow-root keeps the first
+   and last child margins inside the section instead of collapsing through the
+   panel, which has neither padding nor border to stop them. */
+.security-view {
+  display: flow-root;
+}
+
+.view-head {
+  margin-bottom: var(--space-5);
+}
+
+.view-head h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+
+.view-head h2 .fa {
+  color: var(--color-link);
+}
+
+.view-lede {
+  max-width: 80ch;
+  margin: 0 0 var(--space-4);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-text-secondary);
+}
+
+.view-lede code {
+  padding: 1px var(--space-2);
+  background: var(--color-surface);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  color: var(--color-link);
+}
+
+/* Attribution line. Present on every view — the sources are the reason any of
+   this is trustworthy, so they are never a footnote. */
+.source-note {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  max-width: 90ch;
+  margin: 0 0 var(--space-5);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.source-note > .fa {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-link);
+}
+
+.source-note a {
+  color: var(--color-link);
+}
+
+.source-note a:hover {
+  color: var(--color-link-hover);
+}
+
+.source-note a .fa {
+  margin-left: var(--space-2);
+  font-size: 0.85em;
+}
+
+/* ------------------------------------------------------ */
+/* -- VIEW FILTERS -- */
+
+.view-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.view-filter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 190px;
+}
+
+.view-filter--grow {
+  flex: 1 1 260px;
+}
+
+.view-filter-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.view-result-count {
+  margin: 0 0 var(--space-2) auto;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------ */
+/* -- SEVERITY BADGES -- */
+
+/* The word is always in the badge; the border and text hue only reinforce it,
+   so the rating survives greyscale and colour-blind rendering (WCAG 1.4.1).
+   Backgrounds stay on --color-surface for every level: differentiating with
+   tinted fills would need raw rgba values that no token supplies. */
+.sev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.sev-badge--high {
+  border-color: var(--color-danger);
+  color: var(--color-danger-text);
+}
+
+.sev-badge--medium {
+  border-color: var(--color-warning);
+  color: var(--color-warning-text);
+}
+
+.sev-badge--low {
+  border-color: var(--color-info);
+  color: var(--color-info-text);
+}
+
+.sev-badge--info,
+.sev-badge--informational {
+  border-color: var(--color-border-strong);
+  color: var(--color-text-muted);
+}
+
+.sev-badge--optimization {
+  border-color: var(--color-accent);
+  color: var(--color-success-text);
+}
+
+/* ------------------------------------------------------ */
+/* -- HACK CARDS -- */
+
+/* A level card's meta column is two text spans, so the shared baseline
+   alignment is right for it. A hack card leads with a Font Awesome glyph
+   instead of a number, and that glyph's baseline sits below the text baseline;
+   centre the row so the icon lines up with the name. */
+.hack-card .level-meta {
+  align-items: center;
+}
+
+.hack-icon {
+  color: var(--color-link);
+}
+
+.hack-class {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* Victim and attacker side by side, the hardened rewrite spanning underneath. */
+.code-triple {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.code-triple .sol-code--fixed {
+  grid-column: 1 / -1;
+}
+
+/* ------------------------------------------------------ */
+/* -- DETECTOR TABLE -- */
+
+.table-scroll {
+  overflow-x: auto;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+/* Scrollable region carrying tabindex="0"; inset ring because the container
+   clips its own rounded corners. */
+.table-scroll:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--radius-lg);
+}
+
+.detector-table {
+  width: 100%;
+  min-width: 900px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+}
+
+.detector-table caption {
+  caption-side: top;
+  padding: var(--space-4);
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detector-table th,
+.detector-table td {
+  padding: var(--space-3) var(--space-4);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.detector-table thead th {
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--color-border-strong);
+}
+
+/* The sort control fills its heading cell, so the cell gives up its padding and
+   the button carries it — that way the whole heading is the touch target, not
+   just the few characters of label text. */
+.detector-table thead th.col-sortable {
+  padding: 0;
+}
+
+.col-sort {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 44px;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.col-sort:hover {
+  background: var(--color-surface-hover);
+  color: var(--color-text);
+}
+
+/* The button fills the cell, so the ring goes inside it — an outward offset
+   would be clipped by the table's horizontal scroll container. */
+.col-sort:focus-visible {
+  outline-offset: -3px;
+}
+
+/* Colour is the last channel here, never the only one: the sorted column is
+   named in the caption, exposed as aria-sort, and repeated as visually hidden
+   text inside the button. */
+.col-sort.is-sorted,
+.col-sort.is-sorted .fa {
+  color: var(--color-link);
+}
+
+.col-sort .fa {
+  margin-left: auto;
+  color: var(--color-text-muted);
+}
+
+.detector-table tbody tr:last-child th,
+.detector-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.detector-table tbody tr:hover {
+  background: var(--color-surface-hover);
+}
+
+/* The check id is what a reader types into the CLI, so it stays monospaced. */
+.detector-check {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--color-link);
+  white-space: nowrap;
+}
+
+.detector-confidence {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.detector-desc {
+  max-width: 62ch;
+  margin: 0 0 var(--space-2);
+  line-height: 1.55;
+  color: var(--color-text-secondary);
+}
+
+.detector-fix {
+  max-width: 62ch;
+  margin: 0;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.detector-fix-label {
+  margin-right: var(--space-2);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-success-text);
+}
+
+/* ------------------------------------------------------ */
+/* -- PITFALL CHECKLIST -- */
+
+.pitfall-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pitfall-item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.pitfall-num {
+  min-width: 3ch;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-align: right;
+  color: var(--color-link);
+}
+
+/* The 1fr column of the row. Grid items default to min-width: auto, so without
+   this a long unbroken token in an item's text would widen the row past the
+   viewport instead of wrapping inside it. */
+.pitfall-body {
+  min-width: 0;
+}
+
+/* Restate the body face and cancel the display letter-spacing the global h3
+   rule applies; the visual weight of a checklist row is not a section heading. */
+.pitfall-title {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-text);
+}
+
+.pitfall-text {
+  max-width: 85ch;
+  margin: 0 0 var(--space-3);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.pitfall-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.pitfall-tag {
+  padding: 2px var(--space-3);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* ------------------------------------------------------ */
+/* -- STANDARDS -- */
+
+.standards-block {
+  margin-bottom: var(--space-7);
+}
+
+.standards-subhead {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-4);
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--color-text);
+}
+
+.standards-subhead .fa {
+  color: var(--color-link);
+}
+
+.level-explainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-4);
+}
+
+.level-info-card {
+  padding: var(--space-5);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-left: 3px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+}
+
+.level-info-card h4 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-text);
+}
+
+.level-info-card p {
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+/* The bracketed letter is the spec's own shorthand ([S]/[M]/[Q]); keeping it
+   monospaced marks it as an identifier rather than a decoration. */
+.level-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px var(--space-3);
+  background: var(--color-primary-soft);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-link);
+}
+
+.req-group {
+  margin-bottom: var(--space-7);
+}
+
+.req-group-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  padding-bottom: var(--space-3);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.req-group-head .standards-subhead {
+  margin-bottom: 0;
+}
+
+.req-group-count {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+}
+
+.req-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.req-item {
+  padding: var(--space-4);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+/* Centre rather than baseline: the id beside the title is a 44px touch target
+   (below), and baseline alignment would drop the title to the bottom of it. */
+.req-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+/* The only link inside a requirement row, and small monospaced type, so it
+   needs the 44px floor stated for every other control on the page. min-width
+   and overflow-wrap let the longest requirement ids break instead of pushing
+   the row wider than a 375px viewport. */
+.req-id {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--color-link);
+}
+
+.req-id:hover {
+  color: var(--color-link-hover);
+}
+
+.req-item h4 {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-text);
+}
+
+.req-statement {
+  max-width: 85ch;
+  margin: 0 0 var(--space-2);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.req-rationale {
+  max-width: 85ch;
+  margin: 0;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.req-rationale-label {
+  margin-right: var(--space-2);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-4);
+}
+
+.practice-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+.practice-card h4 {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: normal;
+  color: var(--color-text);
+}
+
+.practice-detail {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+}
+
+.practice-evidence {
+  margin: 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.practice-evidence-label {
+  margin-right: var(--space-2);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* ------------------------------------------------------ */
+/* -- RESPONSIVE (tabbed views) -- */
+
+@media (max-width: 1024px) {
+  .code-triple {
+    grid-template-columns: 1fr;
+  }
+
+  .level-explainer {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Matches the .level-card-toggle reflow above: identity and class on row 1,
+     summary underneath. */
+  .hack-class {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .view-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .view-result-count {
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .security-tab {
+    font-size: 0.82rem;
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .pitfall-item {
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  .practice-card,
+  .level-info-card {
+    padding: var(--space-4);
   }
 }
