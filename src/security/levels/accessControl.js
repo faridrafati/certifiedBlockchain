@@ -116,11 +116,12 @@ export const LEVELS = [
     category: 'access-control',
     summary: 'An owner check on tx.origin trusts the whole call chain, not the caller in front of it.',
     attack:
-      'The ownership check reads tx.origin, the externally owned account that signed the ' +
-      'transaction, instead of msg.sender, the immediate caller. tx.origin stays the victim EOA ' +
-      'through every nested CALL, so any contract the owner is persuaded to interact with — an ' +
-      'airdrop claim, a swap router — can relay a call to changeOwner and satisfy the require. ' +
-      'This is also why tx.origin phishing survives however careful the owner is about approvals.',
+      'The contract decides authorization by comparing tx.origin, the externally owned account ' +
+      'that signed the transaction, against msg.sender, the immediate caller. tx.origin stays the ' +
+      'victim EOA through every nested CALL, so the two values differ exactly when a contract sits ' +
+      'in the middle — and any contract the owner is persuaded to interact with, an airdrop claim ' +
+      'or a swap router, can relay the ownership call from that position. This is also why ' +
+      'tx.origin phishing survives however careful the owner is about approvals.',
     prevention:
       'Authorize on msg.sender, never tx.origin: msg.sender names the contract or account directly ' +
       'in front of you and cannot be inherited by an intermediary. Use OpenZeppelin Ownable with ' +
