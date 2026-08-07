@@ -238,6 +238,14 @@
   background: var(--color-surface-hover);
 }
 
+/* The toggle fills the card, and .level-card clips overflow, so the global
+   ring (outline-offset: 2px) would be painted outside the clip and vanish.
+   Draw the same ring inside the button instead — inset, never removed. */
+.level-card-toggle:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--radius-lg);
+}
+
 .level-meta {
   display: inline-flex;
   align-items: baseline;
@@ -333,18 +341,23 @@
   border-top: 1px solid var(--color-border);
 }
 
-.level-detail-block h4 {
+/* h3, not h4: the page runs h1 (hero) -> h2 (category) -> h3 (detail block),
+   so heading levels never skip a step for screen-reader navigation. The global
+   h3 rule in index.css uses --font-display; restate the body face and cancel
+   its letter-spacing so the visual treatment is unchanged. */
+.level-detail-block h3 {
   display: flex;
   align-items: center;
   gap: var(--space-2);
   font-family: var(--font-body);
   font-size: 0.95rem;
   font-weight: 600;
+  letter-spacing: normal;
   color: var(--color-text);
   margin-bottom: var(--space-2);
 }
 
-.level-detail-block h4 .fa {
+.level-detail-block h3 .fa {
   color: var(--color-link);
 }
 
@@ -465,6 +478,12 @@
   color: var(--color-text);
 }
 
+/* .sol-code clips overflow and its rounded top-right corner cuts the outer
+   ring; inset it so the whole indicator stays visible. */
+.sol-copy-btn:focus-visible {
+  outline-offset: -2px;
+}
+
 .sol-pre {
   margin: 0;
   padding: var(--space-4);
@@ -474,6 +493,13 @@
   line-height: 1.6;
   tab-size: 4;
   color: var(--color-text);
+}
+
+/* The block scrolls horizontally, so it carries tabindex="0" to stay reachable
+   by keyboard (WCAG 2.1.1). Its ring is inset for the same clipping reason. */
+.sol-pre:focus-visible {
+  outline-offset: -3px;
+  border-radius: var(--radius-md);
 }
 
 .sol-pre code {
@@ -535,6 +561,11 @@
 .security-empty p {
   margin: 0;
   color: var(--color-text-secondary);
+}
+
+/* Bootstrap's default .btn is ~38px tall; hold the 44px touch-target floor. */
+.security-empty .btn {
+  min-height: 44px;
 }
 
 /* ------------------------------------------------------ */

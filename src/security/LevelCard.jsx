@@ -41,11 +41,11 @@ const LevelCard = ({ level, category }) => {
 
       <div id={panelId} className="level-body" hidden={!open}>
         <div className="level-detail-block">
-          <h4><i className="fa fa-crosshairs" aria-hidden="true" /> How the attack works</h4>
+          <h3><i className="fa fa-crosshairs" aria-hidden="true" /> How the attack works</h3>
           <p>{level.attack}</p>
         </div>
         <div className="level-detail-block">
-          <h4><i className="fa fa-shield" aria-hidden="true" /> How to prevent it</h4>
+          <h3><i className="fa fa-shield" aria-hidden="true" /> How to prevent it</h3>
           <p>{level.prevention}</p>
         </div>
         <div className="code-pair">

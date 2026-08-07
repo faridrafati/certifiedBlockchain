@@ -51,7 +51,9 @@ const SolidityCode = ({ code, variant = 'vulnerable', label }) => {
           {copyLabel}
         </button>
       </div>
-      <pre className="sol-pre">
+      {/* tabIndex keeps the horizontally scrollable block reachable by keyboard
+          (WCAG 2.1.1); without it, only a mouse can reach overflowing lines. */}
+      <pre className="sol-pre" tabIndex={0}>
         <code>
           {tokens.map((token, i) =>
             token.type === 'plain' ? (
