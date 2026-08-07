@@ -14,7 +14,7 @@ export const LEVELS = [
     category: 'dos',
     summary: 'Refunding the previous king inline lets that king reject the payment and freeze the throne forever.',
     attack:
-      'The receive() function refunds the incumbent with payable(king).transfer(prize) before it crowns ' +
+      'The receive() function pays the incumbent out with payable(king).transfer(...) before it crowns ' +
       'the challenger, which puts the old king code on the critical path of every future bid. transfer ' +
       'forwards a 2300 gas stipend and bubbles up any failure, so an attacker takes the throne from a ' +
       'contract that has no receive or fallback function — or one that simply reverts — and every later ' +

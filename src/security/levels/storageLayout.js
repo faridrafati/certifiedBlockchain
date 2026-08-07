@@ -217,12 +217,13 @@ contract Proxy {
 }
 
 contract Preservation {
-    address public lib;                 // slot 0  <- clobbered first
-    address public owner;               // slot 1
-    uint256 storedTime;                 // slot 2  <- clobbered second
+    address public lib1;                // slot 0  <- clobbered first
+    address public lib2;                // slot 1
+    address public owner;               // slot 2  <- clobbered second
+    uint256 storedTime;                 // slot 3
 
     function setFirstTime(uint256 t) external {
-        (bool ok,) = lib.delegatecall(
+        (bool ok,) = lib1.delegatecall(
             abi.encodeWithSignature("setTime(uint256)", t)
         );
         require(ok, "delegatecall failed");
