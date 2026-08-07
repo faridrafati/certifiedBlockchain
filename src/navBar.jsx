@@ -457,6 +457,14 @@ const NavBar = () => {
                   </li>
                 </ul>
               </li>
+
+              {/* Security - public reference page, no wallet required */}
+              <li className="nav-item">
+                <NavLink className="nav-link" to="/security">
+                  <i className="nav-icon fa fa-shield" aria-hidden="true"></i>
+                  Security
+                </NavLink>
+              </li>
             </ul>
           </div>
         </div>

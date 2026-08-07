@@ -33,7 +33,7 @@
  */
 
 import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import detectEthereumProvider from '@metamask/detect-provider';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -62,6 +62,11 @@ const DappTokenSale = lazy(() => import('./dappTokenSale'));
 const TicketSale = lazy(() => import('./TicketSale'));
 const Exchange = lazy(() => import('./Exchange'));
 const TokenForge = lazy(() => import('./TokenForge'));
+const Security = lazy(() => import('./security/Security'));
+
+// Content-only routes that must render without a wallet. The connect modal and
+// the blur gate are skipped for these; every other route stays gated.
+const PUBLIC_ROUTES = ['/security'];
 
 /**
  * Main Application Component
@@ -90,6 +95,9 @@ function App() {
   // Ref mirroring currentAccount so event listeners registered once on mount
   // always see the latest value instead of a stale closure
   const currentAccountRef = useRef(null);
+
+  const location = useLocation();
+  const isPublicRoute = PUBLIC_ROUTES.includes(location.pathname);
 
   // Initialize MetaMask connection on component mount
   useEffect(() => {
@@ -316,7 +324,7 @@ function App() {
       />
 
       {/* Wallet connection modal */}
-      {modalNeed && (
+      {modalNeed && !isPublicRoute && (
         <div className="fade-in">
           <ModalForm
             message={message}
@@ -327,7 +335,7 @@ function App() {
       )}
 
       {/* Main application content */}
-      <div className={`fade-in app-content ${modalNeed ? 'blurred-content' : ''}`}>
+      <div className={`fade-in app-content ${modalNeed && !isPublicRoute ? 'blurred-content' : ''}`}>
         <NavBar />
         <Suspense fallback={<LoadingSpinner message="Loading page..." />}>
         <Routes>
@@ -362,6 +370,7 @@ function App() {
                 {/* Services Routes */}
                 <Route path="/certificate" element={<Certificate />} />
                 <Route path="/todo" element={<Task />} />
+                <Route path="/security" element={<Security />} />
 
                 {/* Games Routes */}
                 <Route path="/guessing" element={<GuessingGame />} />
