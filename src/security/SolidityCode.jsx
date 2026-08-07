@@ -41,15 +41,27 @@ const SolidityCode = ({ code, variant = 'vulnerable', label }) => {
           />
           {label || defaultLabel}
         </span>
+        {/* The visible label changes with state, so the accessible name has to
+            carry that word too — otherwise the name stops containing the visible
+            label once it reads "Copied" (WCAG 2.5.3, Label in Name). */}
         <button
           type="button"
           className="sol-copy-btn"
           onClick={handleCopy}
-          aria-label={`Copy ${(label || defaultLabel).toLowerCase()} code to clipboard`}
+          aria-label={`${copyLabel} ${(label || defaultLabel).toLowerCase()} code to clipboard`}
         >
           <i className="fa fa-clipboard" aria-hidden="true" />
           {copyLabel}
         </button>
+        {/* A changed accessible name is not reliably announced; a live status
+            node is. Empty while idle so nothing is spoken on first render. */}
+        <span className="visually-hidden" role="status">
+          {copyState === 'copied'
+            ? 'Copied to clipboard'
+            : copyState === 'failed'
+              ? 'Copy failed'
+              : ''}
+        </span>
       </div>
       {/* tabIndex keeps the horizontally scrollable block reachable by keyboard
           (WCAG 2.1.1); without it, only a mouse can reach overflowing lines. */}

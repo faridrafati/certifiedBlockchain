@@ -230,9 +230,9 @@ contract Elevator {
       'The gate proves the caller is an externally owned account with extcodesize(caller()) == 0. An ' +
       'account only receives its runtime code after its constructor returns, so a contract that makes ' +
       'the call from inside its own constructor reports a code size of zero and walks through. The same ' +
-      'contract satisfies msg.sender != tx.origin, and the final gate is a plain XOR: the key is ' +
-      'uint64(bytes8(keccak256(abi.encodePacked(address(this))))) ^ type(uint64).max, computable in that ' +
-      'very constructor.',
+      'contract satisfies msg.sender != tx.origin, and the final gate is a plain XOR against a hash of ' +
+      'the caller’s own address — public data the caller can hash itself, so the "key" is arithmetic ' +
+      'the attacking constructor derives rather than a secret it has to learn.',
     prevention:
       'There is no reliable on-chain test for "the caller is an EOA" — extcodesize, code.length, and ' +
       'msg.sender == tx.origin all fail against constructor calls, and account abstraction breaks the ' +
@@ -347,10 +347,10 @@ contract Elevator {
     attack:
       'The contract accepts any address as its solver and later casts it to an interface. The EVM has ' +
       'no notion of a type at an address — four-byte selector dispatch is a Solidity convention, not a ' +
-      'protocol rule. A hand-assembled runtime of ten bytes (PUSH1 0x2a, PUSH1 0x80, MSTORE, PUSH1 0x20, ' +
-      'PUSH1 0x80, RETURN) ignores calldata completely and returns 42 to every call, deployed by ' +
-      'initcode that CODECOPYs those bytes and RETURNs them. "It implements the interface" is not a fact ' +
-      'the caller can check.',
+      'protocol rule. A runtime of roughly ten hand-assembled bytes — write the constant into memory, ' +
+      'then RETURN that word — ignores calldata completely and answers every call the same way, ' +
+      'deployed by initcode that CODECOPYs those bytes and RETURNs them. "It implements the interface" ' +
+      'is not a fact the caller can check.',
     prevention:
       'Never assume an address implements the interface you cast it to. Require code.length != 0 before ' +
       'calling, treat return data as untrusted (check returndatasize and decode defensively), and where ' +
