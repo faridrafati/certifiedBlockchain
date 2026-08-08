@@ -223,7 +223,7 @@ certifiedblockchain/
 ├── run.bat / run.sh             # Cross-platform launchers
 ├── vite.config.js               # Vite configuration
 ├── .env.example                 # Environment variable template
-├── seed.txt                     # Committed test mnemonic - see Security below
+├── seed.txt                     # Local only, untracked - compromised, see Security
 ├── *.md, projectSteps.txt       # Assorted development notes from earlier work
 └── README.md                    # This file
 ```
@@ -492,9 +492,12 @@ npm run dev
 ## Security
 
 - Never commit private keys or seed phrases. `.gitignore` covers `.env`,
-  `seed.txt`, `*.mnemonic`, and `*.key` - but note that `seed.txt` was committed
-  in the initial commit and is still tracked, so `.gitignore` does not exclude
-  it. Treat any key derived from it as public and never fund it.
+  `seed.txt`, `*.mnemonic`, and `*.key`.
+- **`seed.txt` was committed in the initial commit and has since been
+  untracked.** Removing it from the index stops future commits from carrying it,
+  but it remains in the git history and in any existing clone or fork. Treat the
+  mnemonic and every key derived from it as public: move any funds off that
+  wallet and never fund it again.
 - Always verify contract addresses
 - Test on testnets before mainnet
 - Use environment variables for sensitive data
